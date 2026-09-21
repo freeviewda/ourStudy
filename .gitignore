@@ -1,0 +1,18 @@
+# Jupyter Notebook & Checkpoints
+*.ipynb
+.ipynb_checkpoints/
+
+# Python Scripts & Cache
+*.py
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Temporary & Environment files
+.env
+.venv/
+env/
+venv/
+.DS_Store
+Thumbs.db
