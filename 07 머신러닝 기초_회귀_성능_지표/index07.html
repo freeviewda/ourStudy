@@ -1,0 +1,2507 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>머신러닝 기초: 회귀 모델 성능 평가 지표 (Regression Metrics) 인터랙티브 듀얼 뷰어</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Pretendard:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" id="prism-theme" />
+
+  <style>
+    :root[data-theme="dark"] {
+      --bg-base: #0b0f19;
+      --bg-surface: #111827;
+      --bg-card: #1f2937;
+      --bg-card-hover: #283548;
+      --bg-code: #0d1117;
+      --border-subtle: #2d3748;
+      --border-accent: #3b82f6;
+      
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --text-dim: #6b7280;
+      
+      --accent-primary: #38bdf8;
+      --accent-primary-hover: #0ea5e9;
+      --accent-secondary: #818cf8;
+      --accent-success: #34d399;
+      --accent-warning: #fbbf24;
+      --accent-glow: rgba(56, 189, 248, 0.25);
+      
+      --pill-bg: rgba(56, 189, 248, 0.15);
+      --pill-border: rgba(56, 189, 248, 0.4);
+      --pill-text: #7dd3fc;
+      --pill-hover-bg: rgba(56, 189, 248, 0.3);
+      
+      --table-th-bg: #1e293b;
+      --table-td-stripe: #151e2e;
+      --table-border: #334155;
+      
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -2px rgba(0, 0, 0, 0.4);
+      --shadow-glow: 0 0 20px rgba(56, 189, 248, 0.4);
+    }
+
+    :root[data-theme="light"] {
+      --bg-base: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-card: #f1f5f9;
+      --bg-card-hover: #e2e8f0;
+      --bg-code: #1e293b;
+      --border-subtle: #e2e8f0;
+      --border-accent: #2563eb;
+      
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-dim: #94a3b8;
+      
+      --accent-primary: #0284c7;
+      --accent-primary-hover: #0369a1;
+      --accent-secondary: #6366f1;
+      --accent-success: #059669;
+      --accent-warning: #d97706;
+      --accent-glow: rgba(2, 132, 199, 0.2);
+      
+      --pill-bg: #e0f2fe;
+      --pill-border: #7dd3fc;
+      --pill-text: #0369a1;
+      --pill-hover-bg: #bae6fd;
+      
+      --table-th-bg: #f1f5f9;
+      --table-td-stripe: #f8fafc;
+      --table-border: #e2e8f0;
+      
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --shadow-glow: 0 0 20px rgba(2, 132, 199, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 15px;
+    }
+
+    body {
+      font-family: 'Pretendard', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      line-height: 1.6;
+      transition: background-color 0.25s ease, color 0.25s ease;
+      min-height: 100vh;
+    }
+
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(17, 24, 39, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+      transition: background-color 0.25s ease;
+    }
+    :root[data-theme="light"] .app-header {
+      background: rgba(255, 255, 255, 0.88);
+    }
+
+    .header-main-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1720px;
+      margin: 0 auto;
+      padding: 0.85rem 1.5rem;
+      gap: 1.5rem;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-icon {
+      font-size: 1.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+    }
+
+    .brand-titles h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+    }
+
+    .brand-titles p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .stats-pill {
+      display: inline-block;
+      padding: 0.15rem 0.55rem;
+      border-radius: 9999px;
+      background: var(--pill-bg);
+      border: 1px solid var(--pill-border);
+      color: var(--pill-text);
+      font-weight: 600;
+      font-size: 0.75rem;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .search-box-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-input {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 0.45rem 0.85rem 0.45rem 2rem;
+      color: var(--text-main);
+      font-size: 0.85rem;
+      outline: none;
+      width: 230px;
+      transition: all 0.2s ease;
+    }
+    .search-input:focus {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+      width: 290px;
+    }
+    .search-icon {
+      position: absolute;
+      left: 0.65rem;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      pointer-events: none;
+    }
+
+    .theme-toggle-btn, .expand-all-btn, .home-hub-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 0.45rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .theme-toggle-btn:hover, .expand-all-btn:hover, .home-hub-btn:hover {
+      background: var(--bg-card);
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+    }
+
+    .steps-nav-bar {
+      display: flex;
+      align-items: center;
+      overflow-x: auto;
+      max-width: 1720px;
+      margin: 0 auto;
+      padding: 0.35rem 1.5rem 0.65rem 1.5rem;
+      gap: 0.6rem;
+      scrollbar-width: thin;
+    }
+    .steps-nav-bar::-webkit-scrollbar {
+      height: 4px;
+    }
+    .steps-nav-bar::-webkit-scrollbar-thumb {
+      background: var(--border-subtle);
+      border-radius: 4px;
+    }
+
+    .step-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.35rem 0.75rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+    .step-nav-item:hover {
+      color: var(--accent-primary);
+      border-color: var(--accent-primary);
+      background: var(--bg-card);
+      transform: translateY(-1px);
+    }
+    .step-nav-item.active {
+      background: var(--accent-primary);
+      color: #ffffff;
+      border-color: var(--accent-primary);
+      box-shadow: 0 2px 8px var(--accent-glow);
+    }
+    .step-nav-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.2);
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+    .nav-note-badge {
+      font-size: 0.7rem;
+      padding: 0.1rem 0.4rem;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .app-main {
+      max-width: 1720px;
+      margin: 1.5rem auto 4rem auto;
+      padding: 0 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    .step-section {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    .step-section:hover {
+      border-color: rgba(56, 189, 248, 0.35);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .step-section-header {
+      padding: 1.25rem 1.75rem;
+      background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-surface) 100%);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .step-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .step-number-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+      color: #ffffff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      border-radius: 6px;
+      letter-spacing: 0.03em;
+    }
+
+    .step-title-text {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.01em;
+    }
+
+    .step-summary-desc {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
+    .step-dual-grid {
+      display: grid;
+      grid-template-columns: 50% 50%;
+      min-height: 480px;
+    }
+    @media (max-width: 1180px) {
+      .step-dual-grid {
+        grid-template-columns: 100%;
+      }
+    }
+
+    .grid-col-code {
+      border-right: 1px solid var(--border-subtle);
+      padding: 1.5rem;
+      background: var(--bg-base);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      overflow-x: hidden;
+    }
+    @media (max-width: 1180px) {
+      .grid-col-code {
+        border-right: none;
+        border-bottom: 2px dashed var(--border-subtle);
+      }
+    }
+
+    .grid-col-notes {
+      padding: 1.5rem;
+      background: var(--bg-surface);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .col-sticky-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-dim);
+      padding-bottom: 0.65rem;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .code-cell-wrapper {
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      background: var(--bg-code);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+
+    .cell-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 0.85rem;
+      background: rgba(255, 255, 255, 0.04);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .cell-badge {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--accent-primary);
+    }
+
+    .copy-code-btn {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--text-muted);
+      border-radius: 4px;
+      padding: 0.2rem 0.5rem;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .copy-code-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+      border-color: var(--accent-primary);
+    }
+
+    .code-editor-look {
+      position: relative;
+    }
+
+    .code-editor-look pre {
+      margin: 0 !important;
+      padding: 1rem !important;
+      background: transparent !important;
+      font-family: 'Fira Code', monospace !important;
+      font-size: 0.88rem !important;
+      line-height: 1.6 !important;
+      overflow-x: auto;
+    }
+
+    .code-kw-interactive {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 1px 6px;
+      margin: 0 2px;
+      background: var(--pill-bg);
+      border: 1px solid var(--pill-border);
+      border-radius: 4px;
+      color: var(--pill-text) !important;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+    .code-kw-interactive:hover {
+      background: var(--pill-hover-bg);
+      border-color: var(--accent-primary);
+      color: #ffffff !important;
+      transform: translateY(-1px) scale(1.03);
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+    .code-kw-interactive.active-target {
+      background: var(--accent-primary);
+      color: #ffffff !important;
+      box-shadow: 0 0 16px var(--accent-primary);
+      animation: pulse-glow 1.5s infinite;
+    }
+
+    .kw-sparkle {
+      font-size: 0.72rem;
+      filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.6));
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 8px var(--accent-primary); }
+      50% { box-shadow: 0 0 20px var(--accent-primary); }
+    }
+
+    .cell-outputs-container {
+      border-top: 1px solid var(--border-subtle);
+      background: var(--bg-surface);
+    }
+
+    .outputs-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.45rem 0.85rem;
+      background: var(--bg-card);
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .toggle-output-btn {
+      background: transparent;
+      border: none;
+      color: var(--accent-primary);
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .outputs-body {
+      padding: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .output-type-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-dim);
+      margin-bottom: 0.4rem;
+    }
+
+    .stream-output pre, .text-output pre {
+      background: #090d16;
+      border: 1px solid #1e293b;
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.84rem;
+      color: #38bdf8;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .table-responsive-wrapper {
+      max-width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--table-border);
+      border-radius: 8px;
+      background: var(--bg-surface);
+      box-shadow: var(--shadow-sm);
+    }
+
+    table.modern-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      text-align: right;
+    }
+    table.modern-table th, table.modern-table td {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--table-border);
+      white-space: nowrap;
+    }
+    table.modern-table thead th {
+      background: var(--table-th-bg);
+      color: var(--text-main);
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+    }
+    table.modern-table tbody tr:nth-child(even) {
+      background: var(--table-td-stripe);
+    }
+    table.modern-table tbody tr:hover {
+      background: rgba(56, 189, 248, 0.12);
+    }
+    table.modern-table th:first-child, table.modern-table td:first-child {
+      text-align: center;
+      font-weight: 600;
+      background: var(--table-th-bg);
+    }
+
+    .plot-img-container {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+      background: #ffffff;
+      padding: 0.5rem;
+      cursor: pointer;
+      display: inline-block;
+      max-width: 100%;
+    }
+    .zoomable-plot {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.2s ease;
+    }
+    .plot-img-container:hover .zoomable-plot {
+      transform: scale(1.015);
+    }
+    .img-zoom-overlay {
+      position: absolute;
+      bottom: 0.75rem;
+      right: 0.75rem;
+      background: rgba(0, 0, 0, 0.75);
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.3rem 0.65rem;
+      border-radius: 20px;
+      backdrop-filter: blur(4px);
+      pointer-events: none;
+    }
+
+    .cell-markdown-box {
+      padding: 0.75rem 1rem;
+      background: var(--bg-card);
+      border-left: 4px solid var(--accent-primary);
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .notes-panel-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .notes-tabs-header {
+      margin-bottom: 1.25rem;
+    }
+
+    .tabs-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent-primary);
+      margin-bottom: 0.65rem;
+    }
+
+    .tabs-scroll-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .func-tab-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 0.45rem 0.85rem;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+    }
+    .func-tab-btn:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent-primary);
+      color: var(--text-main);
+    }
+    .func-tab-btn.active {
+      background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+      color: #ffffff;
+      border-color: transparent;
+      box-shadow: 0 4px 12px var(--accent-glow);
+    }
+
+    .notes-panes-wrapper {
+      flex: 1;
+      position: relative;
+    }
+
+    .func-note-pane {
+      display: none;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      animation: fadeIn 0.25s ease-out;
+    }
+    .func-note-pane.active {
+      display: block;
+    }
+    .func-note-pane.highlight-pulse {
+      animation: pulse-border 1.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse-border {
+      0% { box-shadow: 0 0 0 4px var(--accent-primary); border-color: var(--accent-primary); }
+      100% { box-shadow: var(--shadow-sm); border-color: var(--border-subtle); }
+    }
+
+    .note-meta-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding-bottom: 0.85rem;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 1.25rem;
+    }
+
+    .note-target-badge {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .note-target-badge code {
+      font-family: 'Fira Code', monospace;
+      color: var(--accent-primary);
+      background: var(--bg-base);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .note-time-badge {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      background: var(--bg-base);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+    }
+
+    .note-body-content {
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: var(--text-main);
+    }
+
+    .note-h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin: 1rem 0 0.75rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .note-h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin: 1.2rem 0 0.65rem 0;
+    }
+    .note-h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--accent-primary);
+      margin: 1.4rem 0 0.6rem 0;
+      padding-bottom: 0.3rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .note-h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin: 0.8rem 0 0.4rem 0;
+    }
+
+    .note-p {
+      margin-bottom: 0.85rem;
+    }
+
+    .note-list {
+      margin: 0.5rem 0 1rem 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .note-list-item {
+      list-style-type: disc;
+    }
+
+    .inline-code {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85em;
+      background: var(--bg-base);
+      color: var(--accent-primary);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .note-code-block {
+      background: var(--bg-code);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+      margin: 0.85rem 0;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.84rem;
+      overflow-x: auto;
+    }
+
+    .note-divider {
+      border: none;
+      height: 1px;
+      background: var(--border-subtle);
+      margin: 1.25rem 0;
+    }
+
+    .note-footer-actions {
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px dashed var(--border-subtle);
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .jump-to-code-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      color: var(--accent-primary);
+      padding: 0.35rem 0.75rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .jump-to-code-btn:hover {
+      background: var(--accent-primary);
+      color: #ffffff;
+      border-color: var(--accent-primary);
+    }
+
+    .notes-empty-guide {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+    }
+    .guide-icon {
+      font-size: 3rem;
+      margin-bottom: 0.75rem;
+    }
+    .notes-empty-guide h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.5rem;
+    }
+    .notes-empty-guide p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+    .lib-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+      text-align: left;
+    }
+    .lib-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .lib-card strong {
+      color: var(--accent-primary);
+      font-family: 'Fira Code', monospace;
+    }
+
+    .lightbox-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.88);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .lightbox-modal.active {
+      display: flex;
+    }
+    .lightbox-content {
+      max-width: 90vw;
+      max-height: 85vh;
+      object-fit: contain;
+      border-radius: 10px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+      background: #ffffff;
+      padding: 1rem;
+    }
+    .lightbox-close-btn {
+      position: absolute;
+      top: 1.5rem;
+      right: 2rem;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #ffffff;
+      font-size: 1.5rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+    .lightbox-close-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.1);
+    }
+
+    .toast-msg {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--text-main);
+      color: var(--bg-base);
+      padding: 0.65rem 1.25rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      box-shadow: var(--shadow-lg);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.25s ease;
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .toast-msg.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="app-header">
+    <div class="header-main-bar">
+      <div class="brand-wrap">
+        <div class="brand-icon">📊</div>
+        <div class="brand-titles">
+          <h1>머신러닝 기초: 회귀 모델 성능 평가 지표 (Regression Metrics)</h1>
+          <p>
+            <span>인터랙티브 듀얼 학습 뷰어</span>
+            <span class="stats-pill">8개 파이프라인 단계 (준비+7단계)</span>
+            <span class="stats-pill">34개 AI 상세 해설 노트 연결</span>
+            <span class="stats-pill">MAE · MSE · RMSE · MAPE · RMSLE · R² · Adj-R²</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <a href="../index.html" class="home-hub-btn" title="메인 학습 포털로 이동">🏠 메인 포털</a>
+        <div class="search-box-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="global-search" class="search-input" placeholder="함수 검색 (ex: r2_score, rmse...)" oninput="filterFunctions(this.value)" />
+        </div>
+        <button class="expand-all-btn" onclick="toggleAllOutputs()">결과 전체 펼치기</button>
+        <button class="theme-toggle-btn" id="theme-btn" onclick="toggleTheme()">☀️ 테마 전환</button>
+      </div>
+    </div>
+
+    <nav class="steps-nav-bar" id="steps-nav">
+      <a href="#step0" class="step-nav-item" data-step="step0"><span class="step-nav-num">0</span><span class="step-nav-label">라이브러리 Import</span></a><a href="#step1" class="step-nav-item" data-step="step1"><span class="step-nav-num">1</span><span class="step-nav-label">데이터 로드 및 기본 구조 확인</span><span class="nav-note-badge">7개 해설</span></a><a href="#step2" class="step-nav-item" data-step="step2"><span class="step-nav-num">2</span><span class="step-nav-label">학습용 및 테스트용 데이터 분할</span><span class="nav-note-badge">5개 해설</span></a><a href="#step3" class="step-nav-item" data-step="step3"><span class="step-nav-num">3</span><span class="step-nav-label">선형 회귀 모델 객체 생성 및 학습</span><span class="nav-note-badge">2개 해설</span></a><a href="#step4" class="step-nav-item" data-step="step4"><span class="step-nav-num">4</span><span class="step-nav-label">테스트 데이터 예측값 산출</span><span class="nav-note-badge">1개 해설</span></a><a href="#step5" class="step-nav-item" data-step="step5"><span class="step-nav-num">5</span><span class="step-nav-label">오차 기반 대표 평가지표</span><span class="nav-note-badge">6개 해설</span></a><a href="#step6" class="step-nav-item" data-step="step6"><span class="step-nav-num">6</span><span class="step-nav-label">상대 비율 및 로그 기반 지표</span><span class="nav-note-badge">9개 해설</span></a><a href="#step7" class="step-nav-item" data-step="step7"><span class="step-nav-num">7</span><span class="step-nav-label">모델 설명력 및 적합도 평가</span><span class="nav-note-badge">4개 해설</span></a>
+    </nav>
+  </header>
+
+  <main class="app-main">
+    <section class="step-section" id="step0"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">준비 단계</span><h2 class="step-title-text">라이브러리 Import (Library Import)</h2></div><p class="step-summary-desc">NumPy, Pandas, Matplotlib, Seaborn, Scikit-Learn 등 회귀 모델 분석 및 평가지표 산출 필수 패키지 로드</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 실행 코드 및 결과 (Jupyter Notebook)</div><div class="cell-markdown-box"><h3 class="note-h3">라이브러리 import</h3></div><div class="code-cell-wrapper" id="cell-3"><div class="cell-header"><span class="cell-badge">In [3]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import koreanize_matplotlib
+import seaborn as sns
+from sklearn.datasets import load_diabetes
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error</code></pre></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (Markdown)</div><div class="notes-panel-container"><div class="notes-empty-guide"><div class="guide-icon">📚</div><h3>회귀 평가 환경 및 라이브러리 안내</h3><p>이 단계에서는 선형 회귀 모델의 예측 성능을 다각도로 정량 평가하기 위한 필수 파이썬 패키지를 로드합니다.</p><div class="lib-cards-grid"><div class="lib-card"><strong>koreanize-matplotlib</strong>: 차트 및 시각화 작성 시 한글 폰트 깨짐 현상을 원클릭으로 자동 방지해 주는 필수 유틸리티 패키지</div><div class="lib-card"><strong>sklearn.datasets.load_diabetes</strong>: 442명 당뇨병 환자의 건강 진단 지표와 질병 진행도를 담은 표준 회귀용 벤치마크 데이터셋</div><div class="lib-card"><strong>sklearn.linear_model.LinearRegression</strong>: 최소제곱법(OLS)을 활용해 독립변수와 종속변수 간의 최적 선형 관계식을 학습하는 회귀 모델</div><div class="lib-card"><strong>sklearn.model_selection.train_test_split</strong>: 일반화 성능 검증을 위해 데이터를 학습용(80%)과 테스트용(20%)으로 분할하는 도구</div><div class="lib-card"><strong>sklearn.metrics (회귀 평가지표 모듈)</strong>: MAE, MSE, RMSE, MAPE, RMSLE, R2 Score 등 예측 오차의 크기와 모델 설명력을 산출하는 핵심 패키지</div><div class="lib-card"><strong>numpy & pandas</strong>: 고성능 수치 배열 연산(오차 제곱근 계산, 음수 보정) 및 구조화된 테이블 데이터 핸들링 도구</div></div></div></div></div></div></section><section class="step-section" id="step1"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">1단계</span><h2 class="step-title-text">데이터 로드 및 기본 구조 확인 (Data Loading & Inspection)</h2></div><p class="step-summary-desc">Scikit-Learn 당뇨병(load_diabetes) 데이터셋 로드, 독립변수 특성(X) 및 종속변수 타깃(y) 분리, DataFrame 변환 및 샘플 확인(df.head)</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 실행 코드 및 결과 (Jupyter Notebook)</div><div class="cell-markdown-box"><h3 class="note-h3">1. 데이터 로드 및 확인</h3></div><div class="code-cell-wrapper" id="cell-5"><div class="cell-header"><span class="cell-badge">In [5]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">diabetes = <span class="code-kw-interactive" data-step="step1" data-tab="step1-load_diabetes-922_122256" data-func="load_diabetes" title="💡 클릭하여 우측 'load_diabetes' 상세 해설 보기">load_diabetes<span class="kw-sparkle">💡</span></span>()
+X = <span class="code-kw-interactive" data-step="step1" data-tab="step1-diabetes_data-922_122310" data-func="diabetes.data" title="💡 클릭하여 우측 'diabetes.data' 상세 해설 보기">diabetes.data<span class="kw-sparkle">💡</span></span>
+y = <span class="code-kw-interactive" data-step="step1" data-tab="step1-diabetes_target-922_122319" data-func="diabetes.target" title="💡 클릭하여 우측 'diabetes.target' 상세 해설 보기">diabetes.target<span class="kw-sparkle">💡</span></span>
+feature_names = <span class="code-kw-interactive" data-step="step1" data-tab="step1-diabetes_feature_names-922_122330" data-func="diabetes.feature_names" title="💡 클릭하여 우측 'diabetes.feature_names' 상세 해설 보기">diabetes.feature_names<span class="kw-sparkle">💡</span></span></code></pre></div></div><div class="code-cell-wrapper" id="cell-6"><div class="cell-header"><span class="cell-badge">In [6]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">df = <span class="code-kw-interactive" data-step="step1" data-tab="step1-pd_DataFrame-922_122346" data-func="pd.DataFrame" title="💡 클릭하여 우측 'pd.DataFrame' 상세 해설 보기">pd.DataFrame<span class="kw-sparkle">💡</span></span>(X, columns=feature_names)
+df[&#x27;target&#x27;] = y
+<span class="code-kw-interactive" data-step="step1" data-tab="step1-display-922_122448" data-func="display" title="💡 클릭하여 우측 'display' 상세 해설 보기">display<span class="kw-sparkle">💡</span></span>(<span class="code-kw-interactive" data-step="step1" data-tab="step1-df_head-922_122413" data-func="df.head" title="💡 클릭하여 우측 'df.head' 상세 해설 보기">df.head<span class="kw-sparkle">💡</span></span>())</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item html-table-output"><div class="output-type-tag">Interactive DataFrame / Diagram</div><div class="table-responsive-wrapper"><table border="1" class="dataframe modern-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>age</th>
+      <th>sex</th>
+      <th>bmi</th>
+      <th>bp</th>
+      <th>s1</th>
+      <th>s2</th>
+      <th>s3</th>
+      <th>s4</th>
+      <th>s5</th>
+      <th>s6</th>
+      <th>target</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.038076</td>
+      <td>0.050680</td>
+      <td>0.061696</td>
+      <td>0.021872</td>
+      <td>-0.044223</td>
+      <td>-0.034821</td>
+      <td>-0.043401</td>
+      <td>-0.002592</td>
+      <td>0.019907</td>
+      <td>-0.017646</td>
+      <td>151.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-0.001882</td>
+      <td>-0.044642</td>
+      <td>-0.051474</td>
+      <td>-0.026328</td>
+      <td>-0.008449</td>
+      <td>-0.019163</td>
+      <td>0.074412</td>
+      <td>-0.039493</td>
+      <td>-0.068332</td>
+      <td>-0.092204</td>
+      <td>75.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.085299</td>
+      <td>0.050680</td>
+      <td>0.044451</td>
+      <td>-0.005670</td>
+      <td>-0.045599</td>
+      <td>-0.034194</td>
+      <td>-0.032356</td>
+      <td>-0.002592</td>
+      <td>0.002861</td>
+      <td>-0.025930</td>
+      <td>141.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-0.089063</td>
+      <td>-0.044642</td>
+      <td>-0.011595</td>
+      <td>-0.036656</td>
+      <td>0.012191</td>
+      <td>0.024991</td>
+      <td>-0.036038</td>
+      <td>0.034309</td>
+      <td>0.022688</td>
+      <td>-0.009362</td>
+      <td>206.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.005383</td>
+      <td>-0.044642</td>
+      <td>-0.036385</td>
+      <td>0.021872</td>
+      <td>0.003935</td>
+      <td>0.015596</td>
+      <td>0.008142</td>
+      <td>-0.002592</td>
+      <td>-0.031988</td>
+      <td>-0.046641</td>
+      <td>135.0</td>
+    </tr>
+  </tbody>
+</table></div></div></div></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (Markdown)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (7)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step1" data-tab="step1-load_diabetes-922_122256" onclick="switchTab('step1', 'step1-load_diabetes-922_122256')"><span class="tab-func-name">load_diabetes</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-diabetes_data-922_122310" onclick="switchTab('step1', 'step1-diabetes_data-922_122310')"><span class="tab-func-name">diabetes.data</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-diabetes_target-922_122319" onclick="switchTab('step1', 'step1-diabetes_target-922_122319')"><span class="tab-func-name">diabetes.target</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-diabetes_feature_names-922_122330" onclick="switchTab('step1', 'step1-diabetes_feature_names-922_122330')"><span class="tab-func-name">diabetes.feature_names</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-pd_DataFrame-922_122346" onclick="switchTab('step1', 'step1-pd_DataFrame-922_122346')"><span class="tab-func-name">pd.DataFrame</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-df_head-922_122413" onclick="switchTab('step1', 'step1-df_head-922_122413')"><span class="tab-func-name">df.head</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-display-922_122448" onclick="switchTab('step1', 'step1-display-922_122448')"><span class="tab-func-name">display</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step1-load_diabetes-922_122256"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>load_diabetes</code></div><div class="note-time-badge">⏱ 2026-09-22 12:22:56</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: load_diabetes</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-22 12:22:56</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">load_diabetes</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">안녕하세요! 파이썬을 배우시면서 데이터 분석의 첫걸음을 내딛고 계시군요. 정말 잘하고 계셔요.</p>
+<p class="note-p">load_diabetes는 마치 선생님이 요리 실습을 위해 미리 손질해 둔 신선한 재료 바구니를 통째로 내어주시는 것과 같아요. 우리가 직접 당뇨병 환자들의 데이터를 일일이 모으는 번거로움 없이, 연습용 데이터를 바로 꺼내 쓸 수 있도록 준비해 주는 고마운 도구랍니다. 주로 머신러닝 모델을 처음 공부하거나, 내가 만든 알고리즘이 데이터를 얼마나 잘 분석하는지 테스트해보고 싶을 때 사용해요.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'load_diabetes', 'step1-load_diabetes-922_122256')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step1-diabetes_data-922_122310"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>diabetes.data</code></div><div class="note-time-badge">⏱ 2026-09-22 12:23:10</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: diabetes.data</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-22 12:23:10</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">diabetes.data</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p"><code class="inline-code">diabetes.data</code>는 당뇨병 환자들의 나이, 혈압, BMI 등 건강 검진 수치들만 쏙쏙 뽑아 모아둔 마법의 건강 검진표 묶음이라고 생각하시면 돼요.</p>
+<p class="note-p">이 도구는 AI에게 환자들의 실제 데이터를 보여주고 앞으로 당뇨병이 어떻게 될지 공부시키거나 예측해 보고 싶을 때 주로 사용한답니다. 즉, 컴퓨터가 분석할 수 있도록 숫자 형태로 잘 정리된 순수한 재료 상자 역할을 하는 아주 고마운 녀석이에요.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'diabetes.data', 'step1-diabetes_data-922_122310')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step1-diabetes_target-922_122319"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>diabetes.target</code></div><div class="note-time-badge">⏱ 2026-09-22 12:23:19</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: diabetes.target</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-22 12:23:19</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">diabetes.target</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">diabetes.target은 머신러닝 공부를 시작할 때 자주 쓰는 당뇨병 환자의 실제 병세(질병 진행 정도)를 숫자로 기록해 둔 정답 노트 같은 친구랍니다.</p>
+<p class="note-p">우리가 컴퓨터에게 &quot;이 환자들은 나중에 병이 얼마나 심해졌을까?&quot; 하고 맞추기 훈련을 시킬 때, 진짜 정답이 무엇인지 알려주는 기준점 역할을 한답니다.</p>
+<p class="note-p">주로 인공지능 모델이 예측을 잘했는지 채점하거나, 환자의 데이터와 정답을 짝지어 공부시킬 때 사용해요.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'diabetes.target', 'step1-diabetes_target-922_122319')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step1-diabetes_feature_names-922_122330"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>diabetes.feature_names</code></div><div class="note-time-badge">⏱ 2026-09-22 12:23:30</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: diabetes.feature_names</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-22 12:23:30</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">diabetes.feature_names</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">diabetes.feature_names는 당뇨병 데이터라는 큰 도감에서 각각의 데이터가 무엇을 뜻하는지 알려주는 이름표 목록이에요. 예를 들어 나이, 혈압, 체중처럼 데이터의 기둥마다 붙어 있는 제목들을 쏙쏙 뽑아내는 역할을 한답니다. 데이터 분석을 시작할 때 표의 각 칸이 무엇을 나타내는지 궁금할 때 주로 사용해요.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'diabetes.feature_names', 'step1-diabetes_feature_names-922_122330')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step1-pd_DataFrame-922_122346"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>pd.DataFrame</code></div><div class="note-time-badge">⏱ 2026-09-22 12:23:46</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: pd.DataFrame</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-22 12:23:46</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">pd.DataFrame</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">파이썬 데이터 분석에서 가장 많이 쓰이는 필수 함수 중 하나인 <code class="inline-code">pd.DataFrame</code>에 대한 상세 해설입니다. 초보자의 눈높이에 맞춰 쉽고 명쾌하게 정리해 드릴게요!</p>
+<hr class="note-divider" />
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">pd.DataFrame</code>은 파이썬의 대표적인 데이터 분석 라이브러리인 <strong>Pandas</strong>에서 <strong>엑셀 스프레드시트와 같은 2차원 표(Table) 형태의 데이터 구조(DataFrame)를 생성하는 함수</strong>입니다. 행(Row)과 열(Column)로 이루어진 표를 만들어 데이터를 보기 쉽고 효율적으로 다룰 수 있게 해줍니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">제시해주신 코드 <code class="inline-code">df = pd.DataFrame(X, columns=feature_names)</code>에서 사용된 두 가지 인자의 역할은 다음과 같습니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong>첫 번째 인자: <code class="inline-code">X</code> (데이터 본문)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 표 안에 채워넣을 <strong>실제 데이터</strong>입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 주로 파이썬의 리스트(List), 넘파이 배열(NumPy Array), 또는 딕셔너리 형태의 데이터가 들어갑니다. 이 데이터가 표의 내용물(행과 열의 값들)이 됩니다.</li>
+</ul>
+<ul class="note-list">
+<li class="note-list-item"><strong>두 번째 인자: <code class="inline-code">columns=feature_names</code> (열 이름 지정)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 표의 <strong>각 열(Column)에 이름을 붙여주는</strong> 인자입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> <code class="inline-code">feature_names</code> 변수에 들어있는 리스트(예: <code class="inline-code">[&#x27;나이&#x27;, &#x27;키&#x27;, &#x27;몸무게&#x27;]</code>)를 가져와서, 데이터의 각 세로 줄(열)의 제목으로 지정합니다. 이 이름표가 붙어야 나중에 어떤 데이터가 어떤 특징을 의미하는지 쉽게 알 수 있습니다.</li>
+</ul>
+<hr class="note-divider" />
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<ul class="note-list">
+<li class="note-list-item"><strong>할당 변수: <code class="inline-code">df</code></strong></li>
+<li class="note-list-item"><strong>역할:</strong> <code class="inline-code">pd.DataFrame</code> 함수가 만들어낸 <strong>최종 2차원 표(DataFrame) 객체가 저장되는 변수</strong>입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 이제 앞으로 <code class="inline-code">df</code>라는 이름을 통해 이 표를 조회하고, 수정하고, 분석하는 다양한 작업(예: <code class="inline-code">df.head()</code>, <code class="inline-code">df.describe()</code> 등)을 수행할 수 있게 됩니다.</li>
+</ul></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'pd.DataFrame', 'step1-pd_DataFrame-922_122346')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step1-df_head-922_122413"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>df.head</code></div><div class="note-time-badge">⏱ 2026-09-22 12:24:13</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: df.head</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-22 12:24:13</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">df.head</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">파이썬 데이터 분석에서 가장 많이 쓰이는 <code class="inline-code">df.head()</code> 코드에 대해 초보자도 쉽게 이해할 수 있도록 상세히 해설해 드리겠습니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">df.head()</code>는 판다스(Pandas) 데이터프레임의 <strong>가장 처음 5개의 행(Row)을 보여주는 함수</strong>입니다. 데이터 분석을 시작할 때 데이터가 어떻게 생겼는지, 어떤 열(Column)들이 있는지 전체적인 구조를 빠르게 파악용으로 주로 사용합니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">제시해주신 코드 <code class="inline-code">df.head()</code> 안을 살펴보면 <strong>괄호 안에 아무런 값(인자)도 들어가 있지 않습니다.</strong></p>
+<ul class="note-list">
+<li class="note-list-item"><strong>인자가 없을 때의 기본값:</strong></li>
+<li class="note-list-item">아무 숫도 넣지 않고 빈 괄호 <code class="inline-code">()</code>만 적어두면, 판다스는 <strong>기본값으로 5</strong>를 적용합니다. 즉, 데이터의 <strong>처음부터 5번째 행까지</strong>를 화면에 보여줍니다.</li>
+<li class="note-list-item"><strong>만약 개수를 바꾸고 싶다면? (참고 팁):</strong></li>
+<li class="note-list-item">만약 처음 10개의 데이터를 보고 싶다면 <code class="inline-code">df.head(10)</code>처럼 괄호 안에 원하는 숫자를 넣을 수 있습니다. 반대로 마지막 5개를 보고 싶다면 <code class="inline-code">df.tail()</code>을 사용합니다.</li>
+</ul>
+<hr class="note-divider" />
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p">이 코드에서는 함수가 반환하는 결과를 변수에 따로 저장하지 않고, 주피터 노트북 등의 화면에 곧바로 예쁘게 출력해 주는 <code class="inline-code">display()</code> 함수 안에 넣었습니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong>반환되는 데이터의 형태:</strong></li>
+<li class="note-list-item">원본 데이터프레임(<code class="inline-code">df</code>)의 <strong>상위 5개 행과 모든 열</strong>로 이루어진 <strong>새로운 작은 데이터프레임</strong>이 반환됩니다.</li>
+<li class="note-list-item"><strong>동작 방식:</strong></li>
+<li class="note-list-item">데이터를 직접 수정(<code class="inline-code">df</code>를 바꾸는 것)하는 것이 아니라, 단순히 <strong>눈으로 확인할 수 있게 복사해서 보여주는 역할</strong>만 하므로 원본 데이터는 안전하게 그대로 유지됩니다.</li>
+</ul></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'df.head', 'step1-df_head-922_122413')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step1-display-922_122448"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>display</code></div><div class="note-time-badge">⏱ 2026-09-22 12:24:48</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: display</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-22 12:24:48</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">display</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">안녕하세요! 파이썬을 배우시는 초보자분들의 눈높이에 맞춰, 질문해주신 코드 <code class="inline-code">display(df.head())</code>를 아주 쉽고 명쾌하게 해설해 드리겠습니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">display()</code> 함수는 <strong>주피터 노트북(Jupyter Notebook) 환경에서 파이썬 객체(데이터, 이미지, HTML 등)를 보기 좋게 화면에 출력해주는 마법 같은 함수</strong>입니다. 일반적인 <code class="inline-code">print()</code> 함수보다 데이터를 훨씬 깔끔하고 예쁘게 시각화해 줍니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">이번 코드에서는 <code class="inline-code">display()</code> 함수 안에 <code class="inline-code">df.head()</code>라는 또 다른 함수(메서드)가 통째로 인자로 들어가 있습니다. 하나씩 뜯어볼까요?</p>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">df</code> (데이터프레임, DataFrame)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 판다스(Pandas) 라이브러리를 통해 불러온 표 형태의 데이터(엑셀 시트와 비슷함) 전체를 의미합니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">.head()</code> (헤드 메서드)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 거대한 데이터 전체를 다 보여주면 화면이 복잡해지므로, <strong>데이터의 가장 위쪽(Head) 행 5개만 쏙 뽑아오는</strong> 기능입니다. (참고로 괄호 안에 숫자를 넣으면 원하는 개수만큼 볼 수 있어요. 예: <code class="inline-code">df.head(10)</code>)</li>
+</ul>
+<p class="note-p">&gt; <strong>💡 종합 해석:</strong> &quot;내 데이터(<code class="inline-code">df</code>)의 가장 앞부분 5줄을(<code class="inline-code">df.head()</code>) 화면에 예쁘게 보여줘(<code class="inline-code">display</code>)!&quot; 라는 뜻이 됩니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<ul class="note-list">
+<li class="note-list-item"><strong>반환값 없음 (None)</strong></li>
+<li class="note-list-item"><code class="inline-code">display()</code> 함수는 화면에 결과를 <strong>&#x27;보여주는 역할&#x27;</strong>만 할 뿐, 새로운 데이터를 만들어서 돌려주거나(반환) 변수에 저장하는 기능을 하지 않습니다.</li>
+<li class="note-list-item">따라서 이 코드가 실행된 후에는 화면에 표가 나타날 뿐, 메모리에 새로 저장되는 값은 없습니다. (데이터를 확인용으로 눈으로만 슥 볼 때 주로 사용합니다!)</li>
+</ul></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'display', 'step1-display-922_122448')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section><section class="step-section" id="step2"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">2단계</span><h2 class="step-title-text">학습용 및 테스트용 데이터 분할 (Train-Test Split)</h2></div><p class="step-summary-desc">train_test_split을 사용하여 80:20 비율로 데이터를 분할하고, 모델 과적합 방지 및 일반화 평가를 위한 데이터셋 Shape 검증</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 실행 코드 및 결과 (Jupyter Notebook)</div><div class="cell-markdown-box"><h3 class="note-h3">2. 학습 데이터 분할</h3></div><div class="code-cell-wrapper" id="cell-8"><div class="cell-header"><span class="cell-badge">In [8]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">X_train, X_test, y_train, y_test = <span class="code-kw-interactive" data-step="step2" data-tab="step2-train_test_split-922_122512" data-func="train_test_split" title="💡 클릭하여 우측 'train_test_split' 상세 해설 보기">train_test_split<span class="kw-sparkle">💡</span></span>(
+    X, y, test_size=0.2, random_state=42
+)
+<span class="code-kw-interactive" data-step="step2" data-tab="step2-X_train_shape-922_122530" data-func="X_train.shape" title="💡 클릭하여 우측 'X_train.shape' 상세 해설 보기">X_train.shape<span class="kw-sparkle">💡</span></span>, <span class="code-kw-interactive" data-step="step2" data-tab="step2-X_test_shape-922_122539" data-func="X_test.shape" title="💡 클릭하여 우측 'X_test.shape' 상세 해설 보기">X_test.shape<span class="kw-sparkle">💡</span></span>, <span class="code-kw-interactive" data-step="step2" data-tab="step2-y_train_shape-922_122546" data-func="y_train.shape" title="💡 클릭하여 우측 'y_train.shape' 상세 해설 보기">y_train.shape<span class="kw-sparkle">💡</span></span>, <span class="code-kw-interactive" data-step="step2" data-tab="step2-y_test_shape-922_122557" data-func="y_test.shape" title="💡 클릭하여 우측 'y_test.shape' 상세 해설 보기">y_test.shape<span class="kw-sparkle">💡</span></span></code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item text-output"><div class="output-type-tag">Execution Result</div><pre>((353, 10), (89, 10), (353,), (89,))</pre></div></div></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (Markdown)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (5)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step2" data-tab="step2-train_test_split-922_122512" onclick="switchTab('step2', 'step2-train_test_split-922_122512')"><span class="tab-func-name">train_test_split</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-X_train_shape-922_122530" onclick="switchTab('step2', 'step2-X_train_shape-922_122530')"><span class="tab-func-name">X_train.shape (학습 문제)</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-X_test_shape-922_122539" onclick="switchTab('step2', 'step2-X_test_shape-922_122539')"><span class="tab-func-name">X_test.shape (시험 문제)</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-y_train_shape-922_122546" onclick="switchTab('step2', 'step2-y_train_shape-922_122546')"><span class="tab-func-name">y_train.shape (학습 정답)</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-y_test_shape-922_122557" onclick="switchTab('step2', 'step2-y_test_shape-922_122557')"><span class="tab-func-name">y_test.shape (시험 정답)</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step2-train_test_split-922_122512"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>train_test_split</code></div><div class="note-time-badge">⏱ 2026-09-22 12:25:12</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: train_test_split</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-22 12:25:12</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">train_test_split</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">파이썬 머신러닝에서 가장 많이 쓰이는 함수 중 하나인 <code class="inline-code">train_test_split</code>에 대한 상세 해설입니다. 초보자도 쉽게 이해할 수 있도록 차근차근 설명해 드릴게요!</p>
+<hr class="note-divider" />
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">train_test_split</code>은 머신러닝 모델을 학습시키기 위해 <strong>전체 데이터를 &#x27;공부용(훈련) 데이터&#x27;와 &#x27;시험용(테스트) 데이터&#x27;로 무작위로 나누어 주는 함수</strong>입니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><em>비유하자면, 문제집의 문제 중 80%는 연습문제(훈련용)로 풀고, 남은 20%는 실전 모의고사(테스트용)로 남겨두어 실력을 평가하는 것과 같습니다.</em></li>
+</ul>
+<hr class="note-divider" />
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">코드에 사용된 각 인자들이 어떤 역할을 하는지 살펴볼까요?</p>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">X</code></strong></li>
+<li class="note-list-item"><strong>의미:</strong> 독립 변수(Feature), 즉 모델이 예측을 위해 사용하는 <strong>&#x27;문제(질문)&#x27;</strong> 데이터입니다. (예: 집의 평수, 방 개수, 위치 등)</li>
+<li class="note-list-item"><strong><code class="inline-code">y</code></strong></li>
+<li class="note-list-item"><strong>의미:</strong> 종속 변수(Label/Target), 즉 모델이 맞혀야 하는 <strong>&#x27;정답&#x27;</strong> 데이터입니다. (예: 해당 집의 실제 가격)</li>
+<li class="note-list-item"><strong><code class="inline-code">test_size=0.2</code></strong></li>
+<li class="note-list-item"><strong>의미:</strong> 전체 데이터를 훈련용과 테스트용으로 나눌 때, <strong>테스트용(시험용) 데이터의 비율</strong>을 결정합니다.</li>
+<li class="note-list-item"><strong>설정된 값의 의미:</strong> <code class="inline-code">0.2</code>는 전체 데이터의 <strong>20%</strong>를 테스트용으로 쓰겠다는 뜻입니다. (자동으로 남은 80%인 <code class="inline-code">0.8</code>은 훈련용으로 배분됩니다.)</li>
+<li class="note-list-item"><strong><code class="inline-code">random_state=42</code></strong></li>
+<li class="note-list-item"><strong>의미:</strong> 데이터를 무작위로 섞을 때 사용하는 <strong>&#x27;랜덤 시드(씨앗)&#x27;</strong> 값입니다.</li>
+<li class="note-list-item"><strong>설정된 값의 의미:</strong> 컴퓨터가 데이터를 섞을 때 매번 다르게 섞이면 코드를 실행할 때마다 결과가 달라져 디버깅(오류 수정)이 어려워집니다. <code class="inline-code">42</code>라는 고정된 번호를 부여함으로써, <strong>코드를 몇 번을 다시 실행해도 항상 똑같은 방식으로 데이터를 섞이도록 고정</strong>해 주는 역할을 합니다. (숫자 42는 관습적으로 자주 쓰이는 숫자이며, 다른 숫자로 바꾸어도 상관없습니다.)</li>
+</ul>
+<p class="note-p"><em>(참고로 질문에 언급하신 <code class="inline-code">stratify</code> 인자는 이 코드에 없지만, 데이터를 나눌 때 정답(y)의 비율이 훈련셋과 테스트셋에 골고루 들어가도록 유지하고 싶을 때 <code class="inline-code">stratify=y</code> 형태로 추가해서 사용합니다.)</em></p>
+<hr class="note-divider" />
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p">이 함수는 총 4개의 묶음 데이터를 반환하며, 이를 파이썬의 <strong>튜플 언패킹(Unpacking)</strong> 기능을 통해 4개의 변수에 나누어 담게 됩니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">X_train</code> (훈련용 문제)</strong></li>
+<li class="note-list-item">전체 &#x27;문제(X)&#x27; 데이터 중 <strong>80%</strong>에 해당하는 데이터입니다. 모델이 패턴을 학습할 때 사용합니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">X_test</code> (테스트용 문제)</strong></li>
+<li class="note-list-item">전체 &#x27;문제(X)&#x27; 데이터 중 <strong>20%</strong>에 해당하는 데이터입니다. 모델에게 문제만 주고 나중에 정답을 잘 맞히는지 시험할 때 사용합니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">y_train</code> (훈련용 정답)</strong></li>
+<li class="note-list-item"><code class="inline-code">X_train</code>에 짝이 되는 <strong>&#x27;정답(y)&#x27;</strong> 데이터(80%)입니다. 모델이 공부할 때 &quot;이 문제의 정답은 이거야!&quot;라고 알려주는 용도입니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">y_test</code> (테스트용 정답)</strong></li>
+<li class="note-list-item"><code class="inline-code">X_test</code>에 짝이 되는 <strong>&#x27;정답(y)&#x27;</strong> 데이터(20%)입니다. 나중에 모델이 푼 시험 성적을 채점할 때 기준이 되는 정답지입니다.</li>
+</ul></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step2', 'train_test_split', 'step2-train_test_split-922_122512')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step2-X_train_shape-922_122530"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>X_train.shape</code></div><div class="note-time-badge">⏱ 2026-09-22 12:25:30</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: X_train.shape</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-22 12:25:30</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">X_train.shape</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">X_train.shape은 우리가 공부에 사용할 문제집의 전체 규모가 어떻게 되는지, 즉 &#x27;문제집의 가로 세로 크기(몇 문제의 몇 가지 정보가 있는지)&#x27;를 한눈에 확인하고 싶을 때 사용하는 도구예요.</p>
+<p class="note-p">우리가 새로운 문제집을 풀기 전에 문제가 총 몇 개 들어있고 보기는 몇 개인지 차례를 훑어보는 것처럼, 머신러닝 모델에게 공부를 시키기 전 데이터의 생김새와 크기를 꼼꼼히 점검할 때 쓴답니다.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step2', 'X_train.shape', 'step2-X_train_shape-922_122530')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step2-X_test_shape-922_122539"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>X_test.shape</code></div><div class="note-time-badge">⏱ 2026-09-22 12:25:39</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: X_test.shape</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-22 12:25:39</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">X_test.shape</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">X_test.shape은 AI 공부에 쓸 시험 문제들이 가로세로 몇 장씩 쌓여 있는지, 즉 데이터의 전체 크기와 모양을 한눈에 알려주는 이름표 같은 역할을 해요.</p>
+<p class="note-p">우리가 새로운 물건을 사기 전에 가로, 세로, 높이 크기를 먼저 확인해보는 것처럼, 머신러닝 모델에 시험(테스트)을 보기 전 데이터가 우리가 생각한 대로 잘 준비되었는지 확인하고 싶을 때 주로 사용한답니다.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step2', 'X_test.shape', 'step2-X_test_shape-922_122539')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step2-y_train_shape-922_122546"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>y_train.shape</code></div><div class="note-time-badge">⏱ 2026-09-22 12:25:46</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: y_train.shape</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-22 12:25:46</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">y_train.shape</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">y_train.shape은 우리가 공부할 정답지 묶음이 과연 몇 장이고 어떻게 생겼는지 그 전체 크기와 모양을 한눈에 확인해 보는 마법의 거울 같은 존재예요.</p>
+<p class="note-p">주로 머신러닝 모델에게 공부를 시키기 직전에 정답 데이터가 우리가 준비한 문제지와 짝이 잘 맞는지, 그리고 개수는 충분한지 최종 점검할 때 쓴답니다.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step2', 'y_train.shape', 'step2-y_train_shape-922_122546')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step2-y_test_shape-922_122557"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>y_test.shape</code></div><div class="note-time-badge">⏱ 2026-09-22 12:25:57</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: y_test.shape</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-22 12:25:57</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">y_test.shape</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">안녕하세요! y_test.shape은 우리가 공부한 시험 문제의 정답지가 총 몇 개인지, 그리고 몇 줄로 되어 있는지 그 크기와 전체적인 생김새를 확인해 주는 마법의 거울 같은 친구랍니다.</p>
+<p class="note-p">인공지능에게 공부를 시킨 뒤, 너 이 시험 문제의 정답지(y_test) 크기가 우리 테스트할 데이터랑 딱 잘 맞는지 최종적으로 확인할 때 쓴답니다. 복잡하게 생각하지 말고, 정답 상자를 열어보고 &#x27;아, 정답이 총 몇 문제 들어있구나!&#x27; 하고 개수를 세어보는 거랑 똑같아요.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step2', 'y_test.shape', 'step2-y_test_shape-922_122557')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section><section class="step-section" id="step3"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">3단계</span><h2 class="step-title-text">선형 회귀 모델 객체 생성 및 학습 (Linear Regression Modeling)</h2></div><p class="step-summary-desc">LinearRegression 인스턴스를 생성하고 fit() 메서드로 학습 데이터를 이용해 최소제곱법(OLS) 기반 최적 회귀선 학습</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 실행 코드 및 결과 (Jupyter Notebook)</div><div class="cell-markdown-box"><h3 class="note-h3">3. 선형 회귀 모델 학습</h3></div><div class="code-cell-wrapper" id="cell-10"><div class="cell-header"><span class="cell-badge">In [10]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">lr = <span class="code-kw-interactive" data-step="step3" data-tab="step3-LinearRegression-922_122614" data-func="LinearRegression" title="💡 클릭하여 우측 'LinearRegression' 상세 해설 보기">LinearRegression<span class="kw-sparkle">💡</span></span>()
+<span class="code-kw-interactive" data-step="step3" data-tab="step3-lr_fit-922_122628" data-func="lr.fit" title="💡 클릭하여 우측 'lr.fit' 상세 해설 보기">lr.fit<span class="kw-sparkle">💡</span></span>(X_train, y_train)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item html-table-output"><div class="output-type-tag">Interactive DataFrame / Diagram</div><style>#sk-container-id-1 {
+  /* Definition of color scheme common for light and dark mode */
+  --sklearn-color-text: #000;
+  --sklearn-color-text-muted: #666;
+  --sklearn-color-line: gray;
+  /* Definition of color scheme for unfitted estimators */
+  --sklearn-color-unfitted-level-0: #fff5e6;
+  --sklearn-color-unfitted-level-1: #f6e4d2;
+  --sklearn-color-unfitted-level-2: #ffe0b3;
+  --sklearn-color-unfitted-level-3: chocolate;
+  /* Definition of color scheme for fitted estimators */
+  --sklearn-color-fitted-level-0: #f0f8ff;
+  --sklearn-color-fitted-level-1: #d4ebff;
+  --sklearn-color-fitted-level-2: #b3dbfd;
+  --sklearn-color-fitted-level-3: cornflowerblue;
+
+  /* Specific color for light theme */
+  --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, white)));
+  --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-icon: #696969;
+
+  @media (prefers-color-scheme: dark) {
+    /* Redefinition of color scheme for dark theme */
+    --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, #111)));
+    --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-icon: #878787;
+  }
+}
+
+#sk-container-id-1 {
+  color: var(--sklearn-color-text);
+}
+
+#sk-container-id-1 pre {
+  padding: 0;
+}
+
+#sk-container-id-1 input.sk-hidden--visually {
+  border: 0;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+#sk-container-id-1 div.sk-dashed-wrapped {
+  border: 1px dashed var(--sklearn-color-line);
+  margin: 0 0.4em 0.5em 0.4em;
+  box-sizing: border-box;
+  padding-bottom: 0.4em;
+  background-color: var(--sklearn-color-background);
+}
+
+#sk-container-id-1 div.sk-container {
+  /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
+     but bootstrap.min.css set `[hidden] { display: none !important; }`
+     so we also need the `!important` here to be able to override the
+     default hidden behavior on the sphinx rendered scikit-learn.org.
+     See: https://github.com/scikit-learn/scikit-learn/issues/21755 */
+  display: inline-block !important;
+  position: relative;
+}
+
+#sk-container-id-1 div.sk-text-repr-fallback {
+  display: none;
+}
+
+div.sk-parallel-item,
+div.sk-serial,
+div.sk-item {
+  /* draw centered vertical line to link estimators */
+  background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));
+  background-size: 2px 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+/* Parallel-specific style estimator block */
+
+#sk-container-id-1 div.sk-parallel-item::after {
+  content: "";
+  width: 100%;
+  border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
+  flex-grow: 1;
+}
+
+#sk-container-id-1 div.sk-parallel {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background-color: var(--sklearn-color-background);
+  position: relative;
+}
+
+#sk-container-id-1 div.sk-parallel-item {
+  display: flex;
+  flex-direction: column;
+}
+
+#sk-container-id-1 div.sk-parallel-item:first-child::after {
+  align-self: flex-end;
+  width: 50%;
+}
+
+#sk-container-id-1 div.sk-parallel-item:last-child::after {
+  align-self: flex-start;
+  width: 50%;
+}
+
+#sk-container-id-1 div.sk-parallel-item:only-child::after {
+  width: 0;
+}
+
+/* Serial-specific style estimator block */
+
+#sk-container-id-1 div.sk-serial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--sklearn-color-background);
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
+
+/* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is
+clickable and can be expanded/collapsed.
+- Pipeline and ColumnTransformer use this feature and define the default style
+- Estimators will overwrite some part of the style using the `sk-estimator` class
+*/
+
+/* Pipeline and ColumnTransformer style (default) */
+
+#sk-container-id-1 div.sk-toggleable {
+  /* Default theme specific background. It is overwritten whether we have a
+  specific estimator or a Pipeline/ColumnTransformer */
+  background-color: var(--sklearn-color-background);
+}
+
+/* Toggleable label */
+#sk-container-id-1 label.sk-toggleable__label {
+  cursor: pointer;
+  display: flex;
+  width: 100%;
+  margin-bottom: 0;
+  padding: 0.5em;
+  box-sizing: border-box;
+  text-align: center;
+  align-items: start;
+  justify-content: space-between;
+  gap: 0.5em;
+}
+
+#sk-container-id-1 label.sk-toggleable__label .caption {
+  font-size: 0.6rem;
+  font-weight: lighter;
+  color: var(--sklearn-color-text-muted);
+}
+
+#sk-container-id-1 label.sk-toggleable__label-arrow:before {
+  /* Arrow on the left of the label */
+  content: "▸";
+  float: left;
+  margin-right: 0.25em;
+  color: var(--sklearn-color-icon);
+}
+
+#sk-container-id-1 label.sk-toggleable__label-arrow:hover:before {
+  color: var(--sklearn-color-text);
+}
+
+/* Toggleable content - dropdown */
+
+#sk-container-id-1 div.sk-toggleable__content {
+  max-height: 0;
+  max-width: 0;
+  overflow: hidden;
+  text-align: left;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-1 div.sk-toggleable__content.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-1 div.sk-toggleable__content pre {
+  margin: 0.2em;
+  border-radius: 0.25em;
+  color: var(--sklearn-color-text);
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-1 div.sk-toggleable__content.fitted pre {
+  /* unfitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-1 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  /* Expand drop-down */
+  max-height: 200px;
+  max-width: 100%;
+  overflow: auto;
+}
+
+#sk-container-id-1 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  content: "▾";
+}
+
+/* Pipeline/ColumnTransformer-specific style */
+
+#sk-container-id-1 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-1 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator-specific style */
+
+/* Colorize estimator box */
+#sk-container-id-1 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-1 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+#sk-container-id-1 div.sk-label label.sk-toggleable__label,
+#sk-container-id-1 div.sk-label label {
+  /* The background is the default theme color */
+  color: var(--sklearn-color-text-on-default-background);
+}
+
+/* On hover, darken the color of the background */
+#sk-container-id-1 div.sk-label:hover label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+/* Label box, darken color on hover, fitted */
+#sk-container-id-1 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator label */
+
+#sk-container-id-1 div.sk-label label {
+  font-family: monospace;
+  font-weight: bold;
+  display: inline-block;
+  line-height: 1.2em;
+}
+
+#sk-container-id-1 div.sk-label-container {
+  text-align: center;
+}
+
+/* Estimator-specific */
+#sk-container-id-1 div.sk-estimator {
+  font-family: monospace;
+  border: 1px dotted var(--sklearn-color-border-box);
+  border-radius: 0.25em;
+  box-sizing: border-box;
+  margin-bottom: 0.5em;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-1 div.sk-estimator.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+/* on hover */
+#sk-container-id-1 div.sk-estimator:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-1 div.sk-estimator.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Specification for estimator info (e.g. "i" and "?") */
+
+/* Common style for "i" and "?" */
+
+.sk-estimator-doc-link,
+a:link.sk-estimator-doc-link,
+a:visited.sk-estimator-doc-link {
+  float: right;
+  font-size: smaller;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1em;
+  height: 1em;
+  width: 1em;
+  text-decoration: none !important;
+  margin-left: 0.5em;
+  text-align: center;
+  /* unfitted */
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+  color: var(--sklearn-color-unfitted-level-1);
+}
+
+.sk-estimator-doc-link.fitted,
+a:link.sk-estimator-doc-link.fitted,
+a:visited.sk-estimator-doc-link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+div.sk-estimator:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover,
+div.sk-label-container:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover,
+div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+/* Span, style for the box shown on hovering the info icon */
+.sk-estimator-doc-link span {
+  display: none;
+  z-index: 9999;
+  position: relative;
+  font-weight: normal;
+  right: .2ex;
+  padding: .5ex;
+  margin: .5ex;
+  width: min-content;
+  min-width: 20ex;
+  max-width: 50ex;
+  color: var(--sklearn-color-text);
+  box-shadow: 2pt 2pt 4pt #999;
+  /* unfitted */
+  background: var(--sklearn-color-unfitted-level-0);
+  border: .5pt solid var(--sklearn-color-unfitted-level-3);
+}
+
+.sk-estimator-doc-link.fitted span {
+  /* fitted */
+  background: var(--sklearn-color-fitted-level-0);
+  border: var(--sklearn-color-fitted-level-3);
+}
+
+.sk-estimator-doc-link:hover span {
+  display: block;
+}
+
+/* "?"-specific style due to the `<a>` HTML tag */
+
+#sk-container-id-1 a.estimator_doc_link {
+  float: right;
+  font-size: 1rem;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1rem;
+  height: 1rem;
+  width: 1rem;
+  text-decoration: none;
+  /* unfitted */
+  color: var(--sklearn-color-unfitted-level-1);
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+}
+
+#sk-container-id-1 a.estimator_doc_link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+#sk-container-id-1 a.estimator_doc_link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+#sk-container-id-1 a.estimator_doc_link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+}
+</style><div id="sk-container-id-1" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>LinearRegression()</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-1" type="checkbox" checked><label for="sk-estimator-id-1" class="sk-toggleable__label fitted sk-toggleable__label-arrow"><div><div>LinearRegression</div></div><div><a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.6/modules/generated/sklearn.linear_model.LinearRegression.html">?<span>Documentation for LinearRegression</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></div></label><div class="sk-toggleable__content fitted"><pre>LinearRegression()</pre></div> </div></div></div></div></div></div></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (Markdown)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (2)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step3" data-tab="step3-LinearRegression-922_122614" onclick="switchTab('step3', 'step3-LinearRegression-922_122614')"><span class="tab-func-name">LinearRegression</span></button><button class="func-tab-btn " data-step="step3" data-tab="step3-lr_fit-922_122628" onclick="switchTab('step3', 'step3-lr_fit-922_122628')"><span class="tab-func-name">lr.fit (X_train, y_train)</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step3-LinearRegression-922_122614"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>LinearRegression</code></div><div class="note-time-badge">⏱ 2026-09-22 12:26:14</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: LinearRegression</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-22 12:26:14</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">LinearRegression</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">LinearRegression은 마치 키가 크면 몸무게도 많이 나갈 것처럼, 데이터들 사이에 숨겨진 일정한 비례 관계를 찾아내어 미래의 값을 예측해 주는 똑똑한 점쟁이 같은 친구랍니다.</p>
+<p class="note-p">예를 들어 공부한 시간에 따른 시험 점수를 예측하거나, 집의 크기에 따른 아파트 가격을 알아내고 싶을 때 아주 유용하게 쓰인답니다.</p>
+<p class="note-p">지금 작성하신 코드는 그 점쟁이를 우리 집 거실로 초대해서 &quot;자, 이제 예측을 시작해 볼까?&quot; 하고 준비시키는 첫 번째 단계라고 생각하시면 돼요.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step3', 'LinearRegression', 'step3-LinearRegression-922_122614')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step3-lr_fit-922_122628"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>lr.fit</code></div><div class="note-time-badge">⏱ 2026-09-22 12:26:28</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: lr.fit</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-22 12:26:28</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">lr.fit</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">파이썬 머신러닝 코드에서 가장 많이 사용되는 <strong><code class="inline-code">lr.fit(X_train, y_train)</code></strong> 코드에 대한 상세 해설입니다. 초보자의 눈높이에 맞춰 하나씩 쉽고 명쾌하게 설명해 드릴게요!</p>
+<hr class="note-divider" />
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">lr.fit()</code>은 컴퓨터(머신러닝 모델)에게 <strong>&quot;문제지와 정답지를 줄 테니 열심히 공부해서 규칙을 찾아내(학습해)!&quot;</strong>라고 명령하는 함수입니다.</p>
+<p class="note-p">여기서 <code class="inline-code">lr</code>은 선형 회귀(Linear Regression) 또는 로지스틱 회귀(Logistic Regression) 모델을 의미하고, <code class="inline-code">.fit()</code>은 데이터를 모델에 맞춰 학습(훈련)시키는 핵심 과정입니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">괄호 안(<code class="inline-code"> </code>)에 들어간 두 개의 인자는 모델을 가르치기 위한 <strong>&#x27;교재&#x27;</strong>와 <strong>&#x27;모범 답안&#x27;</strong>입니다. 각각의 역할은 다음과 같습니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">X_train</code> (학습용 독립 변수 / 문제지)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 모델이 정답을 맞히기 위해 참고해야 할 <strong>&#x27;문제(특징, Feature)&#x27;</strong> 데이터입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 예를 들어 집값 예측 모델이라면, 집의 크기, 방의 개수,築年数(지은 지 오래된 정도) 등이 담긴 표(DataFrame 또는 2차원 배열) 형태의 데이터입니다.</li>
+</ul>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">y_train</code> (학습용 종속 변수 / 정답지)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 위 문제(<code class="inline-code">X_train</code>)에 대응하는 실제 <strong>&#x27;정답(라벨, Label, Target)&#x27;</strong> 데이터입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 앞선 예시에서 실제 집값(가격)이 얼마였는지가 담긴 1차원 배열(List 또는 Series) 형태의 데이터입니다. 모델은 <code class="inline-code">X_train</code>을 보고 예측을 한 뒤, <code class="inline-code">y_train</code>과 비교하며 자기가 얼마나 틀렸는지 수정해 나갑니다.</li>
+</ul>
+<hr class="note-divider" />
+<h3 class="note-h3">3. 📤 반환값 및 후속 상태</h3>
+<p class="note-p"><code class="inline-code">lr.fit()</code> 함수는 새로운 데이터를 리턴(반환)하기보다는, <strong>자신(모델 <code class="inline-code">lr</code>)의 내부 상태를 업데이트</strong>하는 방식으로 작동합니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong>학습된 모델 (<code class="inline-code">lr</code>)</strong></li>
+<li class="note-list-item"><code class="inline-code">fit</code> 함수가 실행되고 나면, 변수 <code class="inline-code">lr</code>은 단순한 빈 모델이 아니라 <strong>&#x27;학습이 완료된 똑똑한 모델&#x27;</strong>로 변신합니다.</li>
+<li class="note-list-item">이제 이 모델은 <strong>&quot;아, 집 크기가 크고 방이 많을수록 가격이 비싸지는구나!&quot;</strong> 하는 공식을 스스로 깨우친 상태가 됩니다.</li>
+<li class="note-list-item">따라서 이 다음 줄의 코드에서는 보통 학습이 끝난 모델에게 새로운 문제(<code class="inline-code">X_test</code>)를 풀게 시키는 예측 코드(<code class="inline-code">lr.predict(X_test)</code>)가 이어지게 됩니다.</li>
+</ul></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step3', 'lr.fit', 'step3-lr_fit-922_122628')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section><section class="step-section" id="step4"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">4단계</span><h2 class="step-title-text">테스트 데이터 예측값 산출 (Model Prediction)</h2></div><p class="step-summary-desc">학습된 모델의 predict() 메서드로 미지의 테스트 데이터(X_test)에 대한 예측 타깃값(y_pred) 산출</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 실행 코드 및 결과 (Jupyter Notebook)</div><div class="cell-markdown-box"><h3 class="note-h3">4. 예측</h3></div><div class="code-cell-wrapper" id="cell-12"><div class="cell-header"><span class="cell-badge">In [12]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">y_pred = <span class="code-kw-interactive" data-step="step4" data-tab="step4-lr_predict-922_122655" data-func="lr.predict" title="💡 클릭하여 우측 'lr.predict' 상세 해설 보기">lr.predict<span class="kw-sparkle">💡</span></span>(X_test)</code></pre></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (Markdown)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (1)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step4" data-tab="step4-lr_predict-922_122655" onclick="switchTab('step4', 'step4-lr_predict-922_122655')"><span class="tab-func-name">lr.predict (X_test)</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step4-lr_predict-922_122655"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>lr.predict</code></div><div class="note-time-badge">⏱ 2026-09-22 12:26:55</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: lr.predict</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-22 12:26:55</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">lr.predict</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">파이썬 머신러닝 코드에서 사용된 <code class="inline-code">y_pred = lr.predict(X_test)</code> 문맥에 대해 초보자의 눈높이에 맞춰 쉽고 명쾌하게 해설해 드리겠습니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">lr.predict()</code>는 <strong>학습이 완료된 머신러닝 모델(Linear Regression 또는 Logistic Regression 등)에게 새로운 질문(문제)을 던지고, 그에 대한 모델의 예측값을 얻어내는 핵심 함수</strong>입니다.</p>
+<p class="note-p">시험에 비유하자면, 열심히 공부한 학생(모델)에게 새로운 모의고사 문제지를 풀게 하고 답안을 제출받는 과정입니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">이 코드에서 괄호 안에 들어간 인자는 <code class="inline-code">X_test</code> 단 하나입니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">X_test</code> (테스트 데이터의 특징/문제 데이터)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 모델이 <strong>한 번도 보지 못한 새로운 데이터</strong>입니다. 보통 전체 데이터 중 학습에 쓰이지 않고 아껴둔 테스트용 데이터셋을 의미합니다.</li>
+<li class="note-list-item"><strong>설정된 값의 의미:</strong> &quot;이 문제들을 보고 네가 학습한 지식을 바탕으로 정답을 맞춰봐!&quot;라고 모델에게 던져주는 <strong>입력값(Feature)</strong>들의 모음입니다. (예: 집의 평수, 방 개수 등이 담긴 표 형태의 데이터)</li>
+</ul>
+<hr class="note-divider" />
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p">함수가 실행된 후 등호(<code class="inline-code">=</code>)를 기준으로 왼쪽에 있는 변수에 결과가 저장됩니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">y_pred</code> (예상되는 정답/예측값)</strong></li>
+<li class="note-list-item"><strong>설정된 값의 의미:</strong> <code class="inline-code">lr.predict(X_test)</code>가 계산을 끝내고 <strong>우리에게 돌려준 결과물(Prediction)</strong>입니다.</li>
+<li class="note-list-item"><strong>어떤 데이터인가요?:</strong> 모델이 <code class="inline-code">X_test</code>를 바탕으로 &quot;이 데이터의 결과는 이럴 것이다!&quot;라고 예측한 값들의 모음입니다.</li>
+<li class="note-list-item">만약 선형 회귀(Linear Regression) 모델이었다면: 집값 예측 가격 (예: 3억, 5억 등 연속된 숫자)</li>
+<li class="note-list-item">만약 로지스틱 회귀(Logistic Regression) 모델이었다면: 분류 결과 (예: 0 또는 1, 합격/불합격 등)</li>
+</ul>
+<hr class="note-divider" />
+<h3 class="note-h3">💡 한눈에 보는 요약</h3>
+<p class="note-p">&gt; <strong>&quot;모델(<code class="inline-code">lr</code>)에게 안 풀어본 문제(<code class="inline-code">X_test</code>)를 풀게 해서, 그 결과로 나온 예측 답안(<code class="inline-code">y_pred</code>)을 받아오는 코드입니다!&quot;</strong></p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step4', 'lr.predict', 'step4-lr_predict-922_122655')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section><section class="step-section" id="step5"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">5단계</span><h2 class="step-title-text">오차 기반 대표 평가지표 (MAE, MSE, RMSE)</h2></div><p class="step-summary-desc">실제값과 예측값의 차이를 측정하는 평균 절대 오차(MAE), 큰 오차에 페널티를 주는 평균 제곱 오차(MSE), 원 단위 복원 평균 제곱근 오차(RMSE) 계산</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 실행 코드 및 결과 (Jupyter Notebook)</div><div class="cell-markdown-box"><h3 class="note-h3">5. 오차 기반 지표(MAE, MSE, RMSE)</h3></div><div class="code-cell-wrapper" id="cell-14"><div class="cell-header"><span class="cell-badge">In [14]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">from <span class="code-kw-interactive" data-step="step5" data-tab="step5-sklearn_metrics-922_122717" data-func="sklearn.metrics" title="💡 클릭하여 우측 'sklearn.metrics' 상세 해설 보기">sklearn.metrics<span class="kw-sparkle">💡</span></span> import <span class="code-kw-interactive" data-step="step5" data-tab="step5-mean_absolute_error-922_122834" data-func="mean_absolute_error" title="💡 클릭하여 우측 'mean_absolute_error' 상세 해설 보기">mean_absolute_error<span class="kw-sparkle">💡</span></span>, <span class="code-kw-interactive" data-step="step5" data-tab="step5-mean_squared_error-922_122850" data-func="mean_squared_error" title="💡 클릭하여 우측 'mean_squared_error' 상세 해설 보기">mean_squared_error<span class="kw-sparkle">💡</span></span>, r2_score, mean_absolute_percentage_error, mean_squared_log_error
+
+# 1. MAE (Mean Absolute Error): 오차의 절대값 평균
+# 특징: 직관적이며, 이상치에 덜 민감함
+mae = <span class="code-kw-interactive" data-step="step5" data-tab="step5-mean_absolute_error-922_122834" data-func="mean_absolute_error" title="💡 클릭하여 우측 'mean_absolute_error' 상세 해설 보기">mean_absolute_error<span class="kw-sparkle">💡</span></span>(y_test, y_pred)
+
+# 2. MSE (Mean Squared Error): 오차 제곱의 평균
+# 특징: 이상치(큰 오차)에 민감하게 반응하여 페널티를 부여
+mse = <span class="code-kw-interactive" data-step="step5" data-tab="step5-mean_squared_error-922_122850" data-func="mean_squared_error" title="💡 클릭하여 우측 'mean_squared_error' 상세 해설 보기">mean_squared_error<span class="kw-sparkle">💡</span></span>(y_test, y_pred)
+
+# 3. RMSE (Root Mean Squared Error): MSE의 제곱근
+# 특징: MSE의 단위를 다시 원래 데이터 단위로 맞춤. 큰 오차에 민감함.
+rmse = <span class="code-kw-interactive" data-step="step5" data-tab="step5-np_sqrt-922_122902" data-func="np.sqrt" title="💡 클릭하여 우측 'np.sqrt' 상세 해설 보기">np.sqrt<span class="kw-sparkle">💡</span></span>(mse)
+
+print(f&quot;1. MAE  (평균 절대 오차)   : {mae:.4f}&quot;)
+print(f&quot;2. MSE  (평균 제곱 오차)   : {mse:.4f}&quot;)
+print(f&quot;3. RMSE (평균 제곱근 오차) : {rmse:.4f}&quot;)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output (콘솔 출력)</div><pre>1. MAE  (평균 절대 오차)   : 42.7941
+2. MSE  (평균 제곱 오차)   : 2900.1936
+3. RMSE (평균 제곱근 오차) : 53.8534
+</pre></div></div></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (Markdown)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (6)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step5" data-tab="step5-sklearn_metrics-922_122717" onclick="switchTab('step5', 'step5-sklearn_metrics-922_122717')"><span class="tab-func-name">sklearn.metrics (평가지표 모듈)</span></button><button class="func-tab-btn " data-step="step5" data-tab="step5-mean_absolute_error-922_122735" onclick="switchTab('step5', 'step5-mean_absolute_error-922_122735')"><span class="tab-func-name">MAE (개요: 평균 절대 오차)</span></button><button class="func-tab-btn " data-step="step5" data-tab="step5-mean_squared_error-922_122743" onclick="switchTab('step5', 'step5-mean_squared_error-922_122743')"><span class="tab-func-name">MSE (개요: 평균 제곱 오차)</span></button><button class="func-tab-btn " data-step="step5" data-tab="step5-mean_absolute_error-922_122834" onclick="switchTab('step5', 'step5-mean_absolute_error-922_122834')"><span class="tab-func-name">MAE 계산 (실제값 vs 예측값)</span></button><button class="func-tab-btn " data-step="step5" data-tab="step5-mean_squared_error-922_122850" onclick="switchTab('step5', 'step5-mean_squared_error-922_122850')"><span class="tab-func-name">MSE 계산 (오차 제곱 페널티)</span></button><button class="func-tab-btn " data-step="step5" data-tab="step5-np_sqrt-922_122902" onclick="switchTab('step5', 'step5-np_sqrt-922_122902')"><span class="tab-func-name">np.sqrt (RMSE 제곱근 오차)</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step5-sklearn_metrics-922_122717"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>sklearn.metrics</code></div><div class="note-time-badge">⏱ 2026-09-22 12:27:17</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: sklearn.metrics</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-22 12:27:17</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">sklearn.metrics</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">안녕하세요! 초보자분들을 위해 아주 다정하고 쉽게 설명해 드릴게요.</p>
+<p class="note-p">우리가 만든 인공지능 모델이 공부를 얼마나 잘했는지, 즉 정답과 얼마나 비슷한지 채점해 주는 성적표 같은 도구 모음이 바로 sklearn.metrics랍니다. 선생님이 학생의 시험지를 채점하듯, 우리 모델이 예측한 값과 실제 정답을 비교해서 얼마나 잘 맞혔는지 점수로 매기고 싶을 때 사용해요.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step5', 'sklearn.metrics', 'step5-sklearn_metrics-922_122717')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step5-mean_absolute_error-922_122735"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>mean_absolute_error</code></div><div class="note-time-badge">⏱ 2026-09-22 12:27:35</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: mean_absolute_error</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-22 12:27:35</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">mean_absolute_error</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">mean_absolute_error는 우리가 예상한 값과 실제 값 사이의 오차, 즉 얼마나 빗나갔는지를 &#x27;절대적인 평균&#x27;으로 구해주는 아주 착한 친구예요. 마치 내가 오늘 날씨를 25도로 예상했는데 실제로는 20도였다면 5도만큼 틀렸다고 정직하게 계산해 주는 것과 같아요. 인공지능이나 통계 모델이 만든 예측이 실제 결과와 비교해서 평균적으로 얼마나 틀렸는지 그 정확도를 평가하고 싶을 때 주로 사용한답니다.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step5', 'mean_absolute_error', 'step5-mean_absolute_error-922_122735')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step5-mean_squared_error-922_122743"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>mean_squared_error</code></div><div class="note-time-badge">⏱ 2026-09-22 12:27:43</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: mean_squared_error</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-22 12:27:43</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">mean_squared_error</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">mean_squared_error는 우리가 만든 인공지능 예측 모델이 진짜 정답과 얼마나 차이가 나는지, 즉 얼마나 틀렸는지를 점수로 매겨주는 채점관 같은 친구예요.</p>
+<p class="note-p">시험을 볼 때 칠칠맞게 크게 틀릴수록 점수가 더 많이 깎이는 것처럼, 이 함수는 오차가 클수록 그 값을 제곱해서 벌점을 더 크게 주기 때문에 모델이 큰 실수를 줄이도록 도와줄 때 쓴답니다.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step5', 'mean_squared_error', 'step5-mean_squared_error-922_122743')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step5-mean_absolute_error-922_122834"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>mean_absolute_error</code></div><div class="note-time-badge">⏱ 2026-09-22 12:28:34</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: mean_absolute_error</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-22 12:28:34</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">mean_absolute_error</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">파이썬 머신러닝 코드에서 사용된 <strong><code class="inline-code">mean_absolute_error</code></strong> 함수와 인자에 대한 상세 해설입니다. 초보자분들도 쉽게 이해하실 수 있도록 항목별로 친절하게 설명해 드릴게요!</p>
+<hr class="note-divider" />
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">mean_absolute_error</code> (줄여서 <strong>MAE</strong>)는 머신러닝 모델이 예측한 값과 실제 정답이 <strong>&#x27;얼마나 엇나갔는지(오차)&#x27;를 측정해 주는 평가 지표 함수</strong>입니다.</p>
+<ul class="note-list">
+<li class="note-list-item">쉽게 말해, <strong>&quot;우리 모델이 예측한 가격이나 수치가 실제 값과 평균적으로 얼마나 차이가 나는가?&quot;</strong>를 알려주는 몽둥이 같은 지표입니다. (값이 0에 가까울수록 완벽하게 예측한 것입니다.)</li>
+</ul>
+<hr class="note-divider" />
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">코드 <code class="inline-code">mean_absolute_error(y_test, y_pred)</code>에서 괄호 안에 들어간 두 개의 인자는 오차를 계산하기 위해 반드시 필요한 <strong>실제 정답</strong>과 <strong>모델의 예측값</strong>입니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">y_test</code> (첫 번째 인자)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 머신러닝 모델에게 보여준 적 없는 <strong>&#x27;진짜 정답&#x27;</strong> 데이터입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 테스트 데이터셋(Test Set)의 실제 결과값들이 들어있는 리스트나 배열입니다. 모델이 맞혀야 하는 최종 목표물이라고 생각하시면 됩니다.</li>
+</ul>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">y_pred</code> (두 번째 인자)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 모델이 열심히 공부한 뒤, <code class="inline-code">y_test</code>를 보고 <strong>&#x27;예측해 낸 값&#x27;</strong>입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 모델이 <code class="inline-code">X_test</code>라는 문제를 풀고 써낸 답안지입니다.</li>
+</ul>
+<p class="note-p">&gt; 💡 <strong>동작 원리:</strong> 함수는 <code class="inline-code">y_test</code>(정답)와 <code class="inline-code">y_pred</code>(내 답안)의 각 숫자를 1:1로 비교하여 <strong>차이(절대값)를 구한 뒤, 그 오차들의 평균</strong>을 냅니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p">함수가 계산을 끝마치고 우리에게 돌려주는 결과물(<code class="inline-code">return</code>)이 어떤 것인지 설명해 드릴게요.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">mae</code> (할당된 변수)</strong></li>
+<li class="note-list-item"><strong>반환되는 데이터:</strong> 계산된 <strong>평균 절대 오차(Mean Absolute Error)의 최종 숫자값</strong>이 이 변수에 저장됩니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 예를 들어 <code class="inline-code">mae</code>를 출력했을 때 <code class="inline-code">3.5</code>가 나왔다면, 이 모델은 예측을 할 때마다 실제 값과 평균적으로 <strong>3.5 정도의 오차</strong>를 낸다고 해석할 수 있습니다. (예: 집값을 예측하는데 평균 350만 원씩 빗나갔다 등)</li>
+</ul></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step5', 'mean_absolute_error', 'step5-mean_absolute_error-922_122834')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step5-mean_squared_error-922_122850"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>mean_squared_error</code></div><div class="note-time-badge">⏱ 2026-09-22 12:28:50</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: mean_squared_error</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-22 12:28:50</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">mean_squared_error</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">파이썬 머신러닝 코드에서 자주 사용되는 <code class="inline-code">mean_squared_error</code> 함수에 대한 상세 해설입니다. 초보자도 쉽게 이해할 수 있도록 항목별로 친절하게 설명해 드릴게요!</p>
+<hr class="note-divider" />
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">mean_squared_error</code>(평균 제곱 오차, 줄여서 MSE)는 <strong>머신러닝 모델이 예측한 값(<code class="inline-code">y_pred</code>)과 실제 정답(<code class="inline-code">y_test</code>) 사이의 오차를 평가하는 함수</strong>입니다.</p>
+<p class="note-p">값이 작을수록 모델이 정답을 잘 맞췄다는 뜻(성능이 좋음)이며, 회귀(Regression) 모델의 성능을 측정할 때 가장 널리 쓰이는 지표 중 하나입니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">제공해주신 코드 <code class="inline-code">mean_squared_error(y_test, y_pred)</code>에서 사용된 두 개의 입력 인자의 역할은 다음과 같습니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong>첫 번째 인자: <code class="inline-code">y_test</code> (실제 값)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 모델이 아직 보지 못한 테스트 데이터의 <strong>진짜 정답(Target)</strong> 값입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 평가의 기준이 되는 절대적인 데이터로, 예측값이 이 정답과 얼마나 가까운지 비교하는 기준점이 됩니다.</li>
+</ul>
+<ul class="note-list">
+<li class="note-list-item"><strong>두 번째 인자: <code class="inline-code">y_pred</code> (예측 값)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 머신러닝 모델이 <code class="inline-code">X_test</code> 데이터를 바탕으로 <strong>예측해 낸 값</strong>입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 모델이 얼마나 잘 학습했는지를 보여주는 결과물이며, 이 값이 <code class="inline-code">y_test</code>와 얼마나 일치하는지 계산하게 됩니다.</li>
+</ul>
+<p class="note-p">&gt; 💡 <strong>작동 원리 요약:</strong></p>
+<p class="note-p">&gt; 각 데이터마다 <code class="inline-code">(실제 값 - 예측 값)</code>을 구한 뒤, 음수가 나오는 것을 방지하고 오차가 클수록 더 큰 페널티를 주기 위해 <strong>제곱</strong>을 합니다. 이 제곱한 오차들의 <strong>평균</strong>을 구해서 최종 점수(<code class="inline-code">mse</code>)로 돌려줍니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p">함수가 계산을 끝내고 반환하는 결과값이 저장되는 변수에 대한 설명입니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong>할당 변수: <code class="inline-code">mse</code></strong></li>
+<li class="note-list-item"><strong>데이터 종류:</strong> 소수점 형태의 실수(Float) 단일 값입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 모델의 예측 오차 평균을 나타냅니다. 예를 들어 이 값이 <code class="inline-code">2.5</code>라면, 모델의 예측이 평균적으로 실제 정답과 제곱 오차 기준 2.5 정도의 차이를 보인다는 것을 의미합니다. (이 값이 <code class="inline-code">0</code>에 가까울수록 완벽한 모델입니다.)</li>
+</ul></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step5', 'mean_squared_error', 'step5-mean_squared_error-922_122850')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step5-np_sqrt-922_122902"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>np.sqrt</code></div><div class="note-time-badge">⏱ 2026-09-22 12:29:02</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: np.sqrt</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-22 12:29:02</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">np.sqrt</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">파이썬 머신러닝 및 데이터 분석 코드에서 자주 사용되는 <code class="inline-code">np.sqrt(mse)</code> 코드에 대해 초보자의 눈높이에 맞춰 쉽고 명쾌하게 해설해 드리겠습니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<ul class="note-list">
+<li class="note-list-item"><strong>함수 설명:</strong> <code class="inline-code">np.sqrt</code>는 파이썬의 대표적인 수치 계산 라이브러리인 NumPy(넘파이)에서 제공하는 수학 함수로, <strong>전달된 숫자(또는 배열)의 제곱근(Square Root)을 계산</strong>해 줍니다.</li>
+<li class="note-list-item"><strong>코드의 목적:</strong> 머신러닝 모델의 성능을 평가할 때 주로 사용하는 <strong>MSE(평균 제곱 오차, Mean Squared Error)</strong> 값에 제곱근을 씌워, 원래의 단위와 일치하는 <strong>RMSE(제곱근 평균 제곱 오차, Root Mean Squared Error)</strong>를 구하기 위해 사용됩니다.</li>
+</ul>
+<hr class="note-divider" />
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">이 코드에서 괄호 안에 전달된 인자는 단 하나입니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">mse</code> (Mean Squared Error, 평균 제곱 오차)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 모델이 예측한 값과 실제 정답 간의 오차를 제곱한 뒤, 그 평균을 낸 값입니다.</li>
+<li class="note-list-item"><strong>설정된 값의 의미:</strong> 오차를 &#x27;제곱&#x27;했기 때문에 원래 데이터의 단위와 달라진 상태(예: 가격 예측이라면 단위가 &#x27;원^2&#x27;이 됨)입니다. 이 <code class="inline-code">mse</code> 값을 <code class="inline-code">np.sqrt</code>의 입력으로 넣어주어 원래의 단위(예: &#x27;원&#x27;)로 되돌리는 준비를 합니다.</li>
+</ul>
+<hr class="note-divider" />
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p">함수가 실행된 후 결과값이 담기는 변수에 대한 설명입니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">rmse</code> (Root Mean Squared Error, 제곱근 평균 제곱 오차)</strong></li>
+<li class="note-list-item"><strong>반환되는 데이터:</strong> <code class="inline-code">mse</code> 값에 제곱근(<code class="inline-code">sqrt</code>)을 씌운 최종 결과값이 실수(Float) 형태로 반환되어 <code class="inline-code">rmse</code> 변수에 저장됩니다.</li>
+<li class="note-list-item"><strong>데이터의 의미:</strong> 모델의 예측 오차가 평균적으로 어느 정도 어긋나는지를 <strong>원래 데이터와 동일한 단위</strong>로 보여줍니다. 이 값이 0에 가까울수록 모델의 예측 성능이 우수함을 의미합니다.</li>
+</ul></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step5', 'np.sqrt', 'step5-np_sqrt-922_122902')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section><section class="step-section" id="step6"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">6단계</span><h2 class="step-title-text">상대 비율 및 로그 기반 지표 (MAPE, RMSLE)</h2></div><p class="step-summary-desc">스케일 무관 비교를 위한 백분율 오차(MAPE)와 이상치/과소예측 왜곡을 방지하는 로그 오차(RMSLE) 계산 및 음수 예측값 보정 처리</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 실행 코드 및 결과 (Jupyter Notebook)</div><div class="cell-markdown-box"><h3 class="note-h3">6. 비율 및 로그 기반 지표 (MAPE, RMSLE)</h3></div><div class="code-cell-wrapper" id="cell-16"><div class="cell-header"><span class="cell-badge">In [16]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 4. MAPE (Mean Absolute Percentage Error): 평균 절대 백분율 오차
+# 특징: 오차를 퍼센트(%)로 표현하여 스케일이 다른 모델과 비교 용이
+mape = <span class="code-kw-interactive" data-step="step6" data-tab="step6-mean_absolute_percentage_error-922_122923" data-func="mean_absolute_percentage_error" title="💡 클릭하여 우측 'mean_absolute_percentage_error' 상세 해설 보기">mean_absolute_percentage_error<span class="kw-sparkle">💡</span></span>(y_test, y_pred)
+
+# 5. RMSLE (Root Mean Squared Log Error): 평균 제곱근 로그 오차
+# 특징: 과소예측(Underestimation)에 더 큰 페널티, 값의 범위가 클 때 유용
+# (주의: 음수가 있을 경우 오류 발생 가능하므로 보통 np.log1p 사용, 여기서는 sklearn 함수 사용)
+# 데이터에 음수가 없어야 하므로 확인
+if (y_test &lt; 0).<span class="code-kw-interactive" data-step="step6" data-tab="step6-any-922_123004" data-func="any" title="💡 클릭하여 우측 'any' 상세 해설 보기">any<span class="kw-sparkle">💡</span></span>() or (y_pred &lt; 0).<span class="code-kw-interactive" data-step="step6" data-tab="step6-any-922_123004" data-func="any" title="💡 클릭하여 우측 'any' 상세 해설 보기">any<span class="kw-sparkle">💡</span></span>():
+    print(&quot;음수 값이 있어 RMSLE 계산 시 주의 필요 (값을 보정합니다)&quot;)
+    # 음수 예측값이 나올 경우 0으로 보정 (RMSLE 계산을 위해)
+    y_pred_safe = <span class="code-kw-interactive" data-step="step6" data-tab="step6-np_maximum-922_123015" data-func="np.maximum" title="💡 클릭하여 우측 'np.maximum' 상세 해설 보기">np.maximum<span class="kw-sparkle">💡</span></span>(y_pred, 0)
+    rmsle = <span class="code-kw-interactive" data-step="step6" data-tab="step6-np_sqrt-922_123118" data-func="np.sqrt" title="💡 클릭하여 우측 'np.sqrt' 상세 해설 보기">np.sqrt<span class="kw-sparkle">💡</span></span>(<span class="code-kw-interactive" data-step="step6" data-tab="step6-mean_squared_log_error-922_123058" data-func="mean_squared_log_error" title="💡 클릭하여 우측 'mean_squared_log_error' 상세 해설 보기">mean_squared_log_error<span class="kw-sparkle">💡</span></span>(y_test, y_pred_safe))
+else:
+    rmsle = <span class="code-kw-interactive" data-step="step6" data-tab="step6-np_sqrt-922_123118" data-func="np.sqrt" title="💡 클릭하여 우측 'np.sqrt' 상세 해설 보기">np.sqrt<span class="kw-sparkle">💡</span></span>(<span class="code-kw-interactive" data-step="step6" data-tab="step6-mean_squared_log_error-922_123058" data-func="mean_squared_log_error" title="💡 클릭하여 우측 'mean_squared_log_error' 상세 해설 보기">mean_squared_log_error<span class="kw-sparkle">💡</span></span>(y_test, y_pred))
+
+print(f&quot;4. MAPE  (평균 절대 비율 오차): {mape:.4f} ({mape*100:.2f}%)&quot;)
+print(f&quot;5. RMSLE (평균 제곱근 로그 오차): {rmsle:.4f}&quot;)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output (콘솔 출력)</div><pre>4. MAPE  (평균 절대 비율 오차): 0.3750 (37.50%)
+5. RMSLE (평균 제곱근 로그 오차): 0.4207
+</pre></div></div></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (Markdown)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (9)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step6" data-tab="step6-mean_absolute_percentage_error-922_122802" onclick="switchTab('step6', 'step6-mean_absolute_percentage_error-922_122802')"><span class="tab-func-name">MAPE (개요: 백분율 오차)</span></button><button class="func-tab-btn " data-step="step6" data-tab="step6-mean_squared_log_error-922_122809" onclick="switchTab('step6', 'step6-mean_squared_log_error-922_122809')"><span class="tab-func-name">RMSLE (개요: 로그 오차)</span></button><button class="func-tab-btn " data-step="step6" data-tab="step6-mean_absolute_percentage_error-922_122923" onclick="switchTab('step6', 'step6-mean_absolute_percentage_error-922_122923')"><span class="tab-func-name">MAPE 계산 (상대 비율 오차)</span></button><button class="func-tab-btn " data-step="step6" data-tab="step6-any-922_123004" onclick="switchTab('step6', 'step6-any-922_123004')"><span class="tab-func-name">any (음수값 유무 검사)</span></button><button class="func-tab-btn " data-step="step6" data-tab="step6-np_maximum-922_123015" onclick="switchTab('step6', 'step6-np_maximum-922_123015')"><span class="tab-func-name">np.maximum (음수 0 보정)</span></button><button class="func-tab-btn " data-step="step6" data-tab="step6-mean_squared_log_error-922_123040" onclick="switchTab('step6', 'step6-mean_squared_log_error-922_123040')"><span class="tab-func-name">MSLE (보정값 safe 계산)</span></button><button class="func-tab-btn " data-step="step6" data-tab="step6-mean_squared_log_error-922_123058" onclick="switchTab('step6', 'step6-mean_squared_log_error-922_123058')"><span class="tab-func-name">MSLE (일반값 계산)</span></button><button class="func-tab-btn " data-step="step6" data-tab="step6-np_sqrt-922_123109" onclick="switchTab('step6', 'step6-np_sqrt-922_123109')"><span class="tab-func-name">np.sqrt (보정 RMSLE 산출)</span></button><button class="func-tab-btn " data-step="step6" data-tab="step6-np_sqrt-922_123118" onclick="switchTab('step6', 'step6-np_sqrt-922_123118')"><span class="tab-func-name">np.sqrt (일반 RMSLE 산출)</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step6-mean_absolute_percentage_error-922_122802"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>mean_absolute_percentage_error</code></div><div class="note-time-badge">⏱ 2026-09-22 12:28:02</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: mean_absolute_percentage_error</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-22 12:28:02</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">mean_absolute_percentage_error</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">우리가 날씨나 시험 점수를 예측할 때 실제 값과 얼마나 차이가 나는지 궁금하잖아요?</p>
+<p class="note-p">이 친구는 예측한 값이 실제 값과 비교해서 평균적으로 &#x27;몇 퍼센트(%)&#x27;나 빗나갔는지를 백분율로 알려주는 아주 친절한 측정 도구랍니다.</p>
+<p class="note-p">예를 들어, 진짜 내일 기온이 20도인데 10도로 예측했다면 50% 틀렸다고 솔직하게 비율로 짚어주기 때문에, 서로 다른 크기의 데이터를 비교할 때 아주 유용하게 쓰여요.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step6', 'mean_absolute_percentage_error', 'step6-mean_absolute_percentage_error-922_122802')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step6-mean_squared_log_error-922_122809"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>mean_squared_log_error</code></div><div class="note-time-badge">⏱ 2026-09-22 12:28:09</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: mean_squared_log_error</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-22 12:28:09</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">mean_squared_log_error</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">mean_squared_log_error는 우리가 예측한 값과 실제 값 사이에 얼마나 큰 차이가 나는지 점수를 매겨주는 착한 채점표예요.</p>
+<p class="note-p">실제 값에 로그를 씌워서 계산하기 때문에, 큰 숫자보다는 작은 숫자들 사이의 오차에 조금 더 민감하게 반응하여 비율적인 차이를 중요하게 볼 때 쓰인답니다.</p>
+<p class="note-p">예를 들어 집값을 예측할 때 1억짜리 집을 2억으로 틀린 것과, 10억짜리 집을 11억으로 틀린 것의 억울함이 다를 때 이 친구를 불러서 확인해 보면 아주 딱 좋아요.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step6', 'mean_squared_log_error', 'step6-mean_squared_log_error-922_122809')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step6-mean_absolute_percentage_error-922_122923"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>mean_absolute_percentage_error</code></div><div class="note-time-badge">⏱ 2026-09-22 12:29:23</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: mean_absolute_percentage_error</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-22 12:29:23</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">mean_absolute_percentage_error</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">파이썬 머신러닝 분석에서 자주 사용되는 <code class="inline-code">mean_absolute_percentage_error</code> 함수에 대한 상세 해설입니다. 초보자의 눈높이에 맞춰 쉽고 명쾌하게 정리해 드릴게요!</p>
+<hr class="note-divider" />
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">mean_absolute_percentage_error</code>(줄여서 <strong>MAPE</strong>)는 머신러닝 모델이 예측한 값(<code class="inline-code">y_pred</code>)이 실제 정답(<code class="inline-code">y_test</code>)과 비교했을 때 <strong>&quot;평균적으로 몇 % 정도 틀렸는지&quot;</strong>를 백분율(%)로 계산해 주는 성능 평가 함수입니다.</p>
+<p class="note-p">값이 0에 가까울수록 모델의 예측 성능이 완벽하다는 뜻입니다. (예: MAPE가 <code class="inline-code">0.05</code>라면 평균적으로 5% 정도 오차가 있다는 의미입니다.)</p>
+<hr class="note-divider" />
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">코드에서 함수 괄호 안에 들어간 <code class="inline-code">y_test</code>와 <code class="inline-code">y_pred</code>의 역할은 다음과 같습니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">y_test</code> (실제값 / True Values)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 모델이 맞혀야 하는 <strong>진짜 정답 데이터</strong>입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 테스트셋(Test Set)에 해당하는 실제 타겟값(예: 실제 집값, 실제 수요량 등)이 들어있습니다. 모델을 평가하기 위한 기준점 역할을 합니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">y_pred</code> (예측값 / Predicted Values)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 학습을 마친 머신러닝 모델이 <strong>예측해 낸 값</strong>입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> <code class="inline-code">y_test</code>에 대응하는 입력 데이터를 모델에 넣었을 때 모델이 출력한 결과값입니다.</li>
+</ul>
+<p class="note-p">&gt; 💡 <strong>한 줄 요약:</strong> &quot;진짜 정답(<code class="inline-code">y_test</code>)과 모델이 예측한 값(<code class="inline-code">y_pred</code>)을 서로 비교하여 오차를 계산하겠다&quot;는 뜻입니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p">함수가 계산을 끝내고 결과로 돌려주는 값과 이를 담는 변수에 대한 설명입니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">mape</code> (평균 절대 백분율 오차 결과값)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 함수가 계산한 <strong>최종 오차율(점수)</strong>을 고스란히 담아두는 변수입니다.</li>
+<li class="note-list-item"><strong>데이터 형태:</strong> 보통 소수점 형태의 실수(Float)로 반환됩니다. (예: <code class="inline-code">0.082</code> -&gt; 약 8.2%의 오차)</li>
+<li class="note-list-item"><strong>활용:</strong> 이 변수(<code class="inline-code">mape</code>)를 출력(<code class="inline-code">print(mape)</code>)해 보면 우리 모델이 얼마나 일을 잘했는지 숫자로 바로 확인할 수 있습니다.</li>
+</ul></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step6', 'mean_absolute_percentage_error', 'step6-mean_absolute_percentage_error-922_122923')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step6-any-922_123004"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>any</code></div><div class="note-time-badge">⏱ 2026-09-22 12:30:04</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: any</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-22 12:30:04</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">any</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">제시해주신 파이썬 코드 문맥인 <strong><code class="inline-code">if (y_test &lt; 0).any() or (y_pred &lt; 0).any():</code></strong> 에서 사용된 외부 함수 <code class="inline-code">any()</code>에 대해 초보자의 눈높이에 맞춰 친절하고 명쾌하게 해설해 드리겠습니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p">파이썬의 내장 함수 혹은 데이터 분석 라이브러리(Pandas, NumPy)의 <code class="inline-code">.any()</code> 메서드는 <strong>주어진 조건(True/False) 중 단 하나라도 참(True)인 것이 있다면 최종적으로 참(True)을 반환</strong>하는 검사 함수입니다.</p>
+<p class="note-p">위 코드에서는 실제 정답 데이터(<code class="inline-code">y_test</code>)나 예측값 데이터(<code class="inline-code">y_pred</code>) 중에 <strong>0보다 작은 음수가 단 하나라도 포함되어 있는지</strong>를 확인하기 위해 사용되었습니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p"><em>(※ 참고: <code class="inline-code">.any()</code> 메서드 자체는 괄호 안에 아무런 값도 넣지 않고 호출하는 경우가 많습니다. 대신, 이 함수가 실행되기 <strong>전 단계에서 수행되는 조건식과 배열 데이터</strong>가 핵심적인 입력 역할을 합니다.)</em></p>
+<p class="note-p">코드에 등장하는 구성 요소들을 하나씩 뜯어보면 다음과 같습니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">y_test</code> / <code class="inline-code">y_pred</code> (대상 데이터)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 머신러닝 모델의 실제 정답 데이터(<code class="inline-code">y_test</code>)와 모델이 예측해낸 값(<code class="inline-code">y_pred</code>)입니다. 보통 수많은 숫자들로 이루어진 묶음(NumPy 배열 또는 Pandas 시리즈) 형태입니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">&lt; 0</code> (조건식)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 데이터 묶음 안의 <strong>모든 숫자들</strong>을 대상으로 &quot;너 0보다 작니?&quot;라고 개별적으로 물어보는 연산입니다.</li>
+<li class="note-list-item">이 연산을 거치면 데이터의 모양은 그대로 유지된 채, 각각의 자리에 <code class="inline-code">True</code>(0보다 작음) 또는 <code class="inline-code">False</code>(0 이상임)가 담긴 불리언(Boolean) 배열로 변환됩니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">.any()</code> (메서드)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 앞서 만들어진 <code class="inline-code">True</code>/<code class="inline-code">Fasle</code> 뭉치를 스캔하여, <strong>&quot;이 중에 <code class="inline-code">True</code>가 단 하나라도 있어?&quot;</strong>라고 최종 심사를 합니다.</li>
+<li class="note-list-item">만약 음수가 하나라도 발견되어 <code class="inline-code">True</code>가 하나라도 존재한다면, <code class="inline-code">.any()</code>는 <strong><code class="inline-code">True</code></strong>를 반환합니다.</li>
+</ul>
+<hr class="note-divider" />
+<h3 class="note-h3">3. 📤 반환값 및 조건문의 동작 결과</h3>
+<p class="note-p"><code class="inline-code">.any()</code> 함수가 최종적으로 반환하는 값은 오직 <strong><code class="inline-code">True</code> 또는 <code class="inline-code">False</code> (불리언 타입)</strong> 단일 값입니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong>반환값이 <code class="inline-code">True</code>인 경우:</strong></li>
+<li class="note-list-item"><code class="inline-code">y_test</code>나 <code class="inline-code">y_pred</code> 안에 <strong>음수(-)가 최소 하나 이상 존재</strong>한다는 뜻입니다.</li>
+<li class="note-list-item">이 경우 <code class="inline-code">if</code>문 안의 조건이 충족되므로, 그 아래에 있는 예외 처리 코드(예: 에러 발생시키기, 경고 문구 출력하기 등)가 실행됩니다. (보통 가격이나 횟수 등 음수가 나오면 안 되는 데이터를 다룰 때 오류를 잡기 위한 안전장치로 쓰입니다.)</li>
+<li class="note-list-item"><strong>반환값이 <code class="inline-code">False</code>인 경우:</strong></li>
+<li class="note-list-item">음수가 전혀 없고 모든 값이 0 이상이라는 정상적인 상태를 뜻합니다. <code class="inline-code">if</code>문을 통과하고 다음 코드로 정상 진행됩니다.</li>
+</ul></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step6', 'any', 'step6-any-922_123004')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step6-np_maximum-922_123015"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>np.maximum</code></div><div class="note-time-badge">⏱ 2026-09-22 12:30:15</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: np.maximum</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-22 12:30:15</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">np.maximum</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">파이썬 코드로 머신러닝이나 데이터 분석을 하다 보면 자주 마주치는 <code class="inline-code">np.maximum(y_pred, 0)</code> 코드에 대해 초보자분들도 한눈에 이해하실 수 있도록 알기 쉽게 정리해 드릴게요!</p>
+<hr class="note-divider" />
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">np.maximum()</code>은 NumPy 라이브러리에서 제공하는 함수로, <strong>전달된 두 개의 값(또는 배열)을 비교하여 요소별로 더 큰 값을 선택해 반환</strong>하는 역할을 합니다.</p>
+<p class="note-p">위 코드에서는 예측값(<code class="inline-code">y_pred</code>)과 <code class="inline-code">0</code>을 비교하여, 음수일 경우 0으로 만들어 주고 양수는 그대로 유지하는 <strong>ReLU(Rectified Linear Unit) 활성화 함수와 같은 작업</strong>을 수행합니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">코드 <code class="inline-code">np.maximum(y_pred, 0)</code> 안에는 총 2개의 인자가 전달되었습니다. 각각의 역할은 다음과 같습니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong>첫 번째 인자: <code class="inline-code">y_pred</code></strong></li>
+<li class="note-list-item"><strong>역할:</strong> 모델이 예측한 값들이 담긴 데이터(주로 NumPy 배열 형태)입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 이 배열 안에 들어있는 숫자들 중에서 0과 비교해 큰 값을 골라내게 됩니다.</li>
+<li class="note-list-item"><strong>두 번째 인자: <code class="inline-code">0</code></strong></li>
+<li class="note-list-item"><strong>역할:</strong> 기준점이 되는 숫자(또는 배열)입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> <code class="inline-code">y_pred</code> 안의 각 요소들과 <code class="inline-code">0</code>을 하나씩 비교합니다. 만약 <code class="inline-code">y_pred</code>의 값이 <code class="inline-code">-3</code>이라면 <code class="inline-code">0</code>이 더 크기 때문에 <code class="inline-code">0</code>이 선택되고, <code class="inline-code">5</code>라면 <code class="inline-code">5</code>가 더 크기 때문에 <code class="inline-code">5</code>가 그대로 유지됩니다. (즉, <strong>&quot;최소한 0은 보장해 줘!&quot;</strong>라는 뜻입니다.)</li>
+</ul>
+<hr class="note-divider" />
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p">함수가 실행된 결과는 <strong><code class="inline-code">y_pred_safe</code></strong>라는 새로운 변수에 저장됩니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong>할당 변수: <code class="inline-code">y_pred_safe</code></strong></li>
+<li class="note-list-item"><strong>설명:</strong> 원본 예측값(<code class="inline-code">y_pred</code>)에 있던 <strong>음수들이 모두 <code class="inline-code">0</code>으로 바뀐 새로운 배열</strong>입니다.</li>
+<li class="note-list-item"><strong>왜 이런 작업을 할까요?</strong> 데이터 분석이나 머신러닝 모델(예: 가격 예측, 수요 예측 등)에서 &quot;마이너스(-)&quot;가 나올 수 없는 값(음수면 안 되는 값)을 다룰 때, 혹시 모를 음수 예측 에러를 방지(<code class="inline-code">safe</code>)하기 위해 최소값을 0으로 강제 보정해 준 결과물입니다.</li>
+</ul></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step6', 'np.maximum', 'step6-np_maximum-922_123015')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step6-mean_squared_log_error-922_123040"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>mean_squared_log_error</code></div><div class="note-time-badge">⏱ 2026-09-22 12:30:40</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: mean_squared_log_error</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-22 12:30:40</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">mean_squared_log_error</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">제시해주신 파이썬 코드 문맥(<code class="inline-code">rmsle = np.sqrt(mean_squared_log_error(y_test, y_pred_safe))</code>)에서 사용된 <strong><code class="inline-code">mean_squared_log_error</code></strong> 함수와 관련 내용에 대해 초보자의 눈높이에 맞춰 쉽고 명쾌하게 해설해 드리겠습니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><strong><code class="inline-code">mean_squared_log_error</code></strong>(줄여서 <strong>MSLE</strong>)는 머신러닝에서 예측값의 성능을 평가할 때 사용하는 <strong>평가지표 함수</strong>입니다.</p>
+<p class="note-p">실제 값과 예측 값에 각각 로그(Log)를 취한 뒤, 그 차이의 제곱에 대한 평균을 구합니다. 큰 값과 작은 값의 차이를 비율(percentage) 관점에서 공평하게 평가하고 싶을 때 주로 사용됩니다. (코드 전체에서는 여기에 제곱근을 씌워 RMSLE를 구하고 있습니다.)</p>
+<hr class="note-divider" />
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">이 함수에 전달된 두 개의 인자는 모델의 성능을 비교하기 위한 핵심 데이터입니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong>첫 번째 인자: <code class="inline-code">y_test</code> (정답 / 실제 값)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 머신러닝 모델이 맞추어야 하는 <strong>실제 정답 데이터</strong>입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 테스트 데이터셋에 해당하는 실제 타겟값(Target)들이 들어있으며, 모델 평가의 기준점이 됩니다.</li>
+</ul>
+<ul class="note-list">
+<li class="note-list-item"><strong>두 번째 인자: <code class="inline-code">y_pred_safe</code> (모델의 예측 값)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 모델이 <code class="inline-code">y_test</code>를 보고 <strong>예측해 낸 값</strong>입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 여기서 <code class="inline-code">_safe</code>라는 이름이 붙은 것으로 보아, 로그 함수 계산 시 에러(0 이하의 값 입력 등)를 방지하기 위해 안전하게 전처리(값의 보정 등)가 완료된 예측값일 가능성이 높습니다.</li>
+</ul>
+<hr class="note-divider" />
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p">함수가 계산을 마치고 최종적으로 반환하는 결과값과 이를 받는 변수에 대한 설명입니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong>반환값: MSLE (평균 제곱 로그 오차)</strong></li>
+<li class="note-list-item">함수는 <code class="inline-code">y_test</code>와 <code class="inline-code">y_pred_safe</code> 사이의 오차를 계산하여 <strong>하나의 숫자(실수, Float)</strong>로 반환합니다. 값이 0에 가까울수록 모델이 예측을 완벽하게 잘했다고 볼 수 있습니다.</li>
+</ul>
+<ul class="note-list">
+<li class="note-list-item"><strong>할당 변수: <code class="inline-code">rmsle</code></strong></li>
+<li class="note-list-item"><strong>역할:</strong> 함수가 반환한 값에 <code class="inline-code">np.sqrt()</code>(제곱근, Root)를 씌운 최종 결과가 저장되는 변수입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> &#x27;Root Mean Squared Logarithmic Error&#x27;의 약자로, 오차의 왜곡을 줄이고 원래 데이터 단위와 유사하게 해석할 수 있도록 만든 최종 평가 점수가 이 변수에 담기게 됩니다.</li>
+</ul></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step6', 'mean_squared_log_error', 'step6-mean_squared_log_error-922_123040')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step6-mean_squared_log_error-922_123058"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>mean_squared_log_error</code></div><div class="note-time-badge">⏱ 2026-09-22 12:30:58</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: mean_squared_log_error</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-22 12:30:58</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">mean_squared_log_error</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">파이썬 코드에서 사용된 <strong><code class="inline-code">mean_squared_log_error</code></strong> 함수와 주변 문맥에 대해 초보자의 눈높이에 맞춰 쉽고 명쾌하게 설명해 드리겠습니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">mean_squared_log_error</code> (줄여서 <strong>MSLE</strong>)는 <strong>실제 값($y$)과 예측 값($\hat{y}$) 사이의 &#x27;로그 오차&#x27;에 대한 제곱 평균</strong>을 계산해 주는 머신러닝 평가 지표 함수입니다.</p>
+<p class="note-p">주로 집값 예측이나 매출 예측처럼 <strong>&quot;큰 값의 오차는 덜 중요하게 여기고, 비율적인 오차(작은 값의 오차)를 더 민감하게 평가하고 싶을 때&quot;</strong> 사용합니다. 여기에 <code class="inline-code">np.sqrt</code>를 씌워 최종적으로 <strong>RMSLE(Root Mean Squared Logarithmic Error)</strong> 값을 구하고 있습니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">제공해주신 코드 <code class="inline-code">mean_squared_log_error(y_test, y_pred)</code>에 전달된 두 개의 인자의 역할은 다음과 같습니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong>첫 번째 인자: <code class="inline-code">y_test</code> (정답)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 모델이 예측해야 하는 <strong>실제 정답 데이터(True Values)</strong>입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 테스트 데이터셋에 해당하는 실제 타겟값들이 들어있는 배열(Array)이나 시리즈(Series) 형태의 데이터입니다.</li>
+<li class="note-list-item"><strong>두 번째 인자: <code class="inline-code">y_pred</code> (예측값)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 머신러닝/딥러닝 모델이 <code class="inline-code">y_test</code>를 보고 <strong>예측해 낸 값(Predicted Values)</strong>입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 모델이 학습을 마치고 테스트셋에 대해 추론한 결과값들이 들어있는 배열입니다.</li>
+</ul>
+<p class="note-p">&gt; <strong>💡 요약:</strong> <code class="inline-code">y_test</code>(진짜)와 <code class="inline-code">y_pred</code>(가짜/예측)를 비교해서 &quot;모델이 얼마나 오답을 냈는지&quot;를 수치로 채점하기 위해 두 값을 나란히 전달한 것입니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p">함수 전체를 감싸고 있는 문맥을 포함하여, 데이터가 어떻게 흘러가는지 설명해 드립니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong>함수의 반환값 (MSLE 값):</strong></li>
+<li class="note-list-item"><code class="inline-code">mean_squared_log_error(y_test, y_pred)</code> 함수는 계산된 <strong>로그 오차 제곱 평균값(단일 숫자, float)</strong>을 반환합니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">np.sqrt(...)</code> (제곱근 적용):</strong></li>
+<li class="note-list-item">함수가 반환한 값에 루트(<code class="inline-code">np.sqrt</code>)를 씌워, 제곱 때문에 부풀려졌던 단위를 원래 데이터의 단위 수준으로 돌려놓습니다.</li>
+<li class="note-list-item"><strong>할당 변수: <code class="inline-code">rmsle</code></strong></li>
+<li class="note-list-item">최종적으로 계산된 <strong>RMSLE(Root Mean Squared Log Error) 최종 점수</strong>가 이 변수에 저장됩니다.</li>
+<li class="note-list-item">이 값이 <strong>0에 가까울수록 모델이 예측을 완벽하게 잘했다</strong>는 뜻이고, 값이 클수록 예측 오차가 크다는 의미입니다.</li>
+</ul></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step6', 'mean_squared_log_error', 'step6-mean_squared_log_error-922_123058')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step6-np_sqrt-922_123109"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>np.sqrt</code></div><div class="note-time-badge">⏱ 2026-09-22 12:31:09</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: np.sqrt</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-22 12:31:09</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">np.sqrt</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">파이썬 머신러닝/데이터 분석 코드에서 자주 사용되는 <code class="inline-code">np.sqrt</code> 함수와 그 주변 문맥에 대해 초보자의 눈높이에 맞춰 친절하고 명쾌하게 해설해 드리겠습니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">np.sqrt</code>는 무엇인가요?</strong></li>
+<li class="note-list-item"><code class="inline-code">np.sqrt</code>는 파이썬의 대표적인 수치 계산 라이브러리인 <strong>NumPy(넘파이)</strong>의 <strong>제곱근(Square Root)</strong> 계산 함수입니다.</li>
+<li class="note-list-item">전달된 숫자나 배열의 <strong>양의 제곱근 값을 계산</strong>하여 반환해 줍니다 (예: <code class="inline-code">np.sqrt(9)</code>는 <code class="inline-code">3.0</code>을 반환). 머신러닝 평가 지표인 RMSLE(Root Mean Squared Logarithmic Error)를 구할 때 마지막 단계로 오차의 제곱 평균에 루트를 씌우기 위해 사용됩니다.</li>
+</ul>
+<hr class="note-divider" />
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p"><code class="inline-code">np.sqrt()</code> 괄호 안에는 하나의 커다란 값이 전달되고 있습니다. 바로 <code class="inline-code">mean_squared_log_error(y_test, y_pred_safe)</code>의 결과값입니다. 이를 하나씩 뜯어보면 다음과 같습니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">mean_squared_log_error</code> (MSLE 함수)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 실제 값과 예측 값 사이의 로그 오차(Log Error)를 구한 뒤, 그 오차들의 <strong>평균 제곱(Mean Squared)</strong>을 계산해 주는 머신러닝 평가 함수입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 값이 클 때와 작을 때의 오차 페널티를 조정하여, 특히 큰 값과 작은 값의 차이가 공정하게 반영되도록 돕습니다.</li>
+</ul>
+<ul class="note-list">
+<li class="note-list-item"><strong>첫 번째 인자: <code class="inline-code">y_test</code></strong></li>
+<li class="note-list-item"><strong>역할:</strong> 우리가 맞혀야 하는 <strong>실제 정답 데이터</strong>입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 모델이 학습에 사용하지 않고 숨겨두었던 테스트 셋의 실제 타겟값(Target)들이 들어있는 배열입니다.</li>
+</ul>
+<ul class="note-list">
+<li class="note-list-item"><strong>두 번째 인자: <code class="inline-code">y_pred_safe</code></strong></li>
+<li class="note-list-item"><strong>역할:</strong> 모델이 예측해 낸 <strong>예측값 데이터</strong>입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 머신러닝 모델이 <code class="inline-code">y_test</code>를 보고 예측한 결과값입니다. 여기서 <code class="inline-code">_safe</code>가 붙은 이유는 로그(Log) 계산 시 0이나 음수가 들어가서 에러가 나는 것을 방지(안전하게 처리)한 예측값임을 뜻합니다.</li>
+</ul>
+<p class="note-p">&gt; <strong>💡 전체 흐름 요약:</strong></p>
+<p class="note-p">&gt; <code class="inline-code">y_test</code>(정답)와 <code class="inline-code">y_pred_safe</code>(예측값)를 비교해 MSLE(로그 오차의 제곱 평균)를 구한 뒤, 마지막에 <strong><code class="inline-code">np.sqrt</code>를 씌워 최종 RMSLE(제곱근 로그 오차)</strong>를 완성하는 구조입니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p"><code class="inline-code">np.sqrt(...)</code> 연산이 모두 끝난 최종 결과물이 대입되는 변수입니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong>할당 변수: <code class="inline-code">rmsle</code></strong></li>
+<li class="note-list-item"><strong>어떤 데이터인가요?</strong></li>
+<li class="note-list-item">최종적으로 계산된 <strong>RMSLE(Root Mean Squared Logarithmic Error)</strong> 수치(실수형 데이터, float)가 담깁니다.</li>
+<li class="note-list-item"><strong>값의 의미:</strong></li>
+<li class="note-list-item">이 값이 <strong>0에 가까울수록</strong> 모델이 정답을 완벽하게 맞혔(오차가 거의 없었)다는 뜻입니다.</li>
+<li class="note-list-item">제곱근을 다시 씌워주었기 때문에, 원래 데이터의 단위와 비슷해져서 모델의 성능을 직관적으로 평가하기에 좋습니다.</li>
+</ul></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step6', 'np.sqrt', 'step6-np_sqrt-922_123109')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step6-np_sqrt-922_123118"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>np.sqrt</code></div><div class="note-time-badge">⏱ 2026-09-22 12:31:18</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: np.sqrt</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-22 12:31:18</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">np.sqrt</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">파이썬 코드에서 사용된 <strong><code class="inline-code">np.sqrt</code></strong> 함수와 주변 문맥에 대해 초보자의 눈높이에 맞춰 쉽고 명쾌하게 해설해 드리겠습니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">np.sqrt</code></strong>는 파이썬의 대표적인 수치 계산 라이브러리인 NumPy(넘파이)에서 제공하는 <strong>제곱근(Square Root) 계산 함수</strong>입니다.</li>
+<li class="note-list-item">전달된 숫자(또는 배열)의 양의 제곱근 값을 계산하여 반환해 줍니다. 여기서는 머신러닝 모델의 성능 평가 지표 중 하나인 <strong>RMSLE(Root Mean Squared Logarithmic Error)</strong>를 최종 완성하기 위해 사용되었습니다.</li>
+</ul>
+<hr class="note-divider" />
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p"><code class="inline-code">np.sqrt()</code> 괄호 안에는 하나의 값이 전달되고 있습니다. 바로 <code class="inline-code">mean_squared_log_error(y_test, y_pred)</code>의 결과값입니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong>전달된 값:</strong> <code class="inline-code">mean_squared_log_error(y_test, y_pred)</code> (줄여서 MSLE)</li>
+<li class="note-list-item"><strong>역할:</strong> 실제 값(<code class="inline-code">y_test</code>)과 모델이 예측한 값(<code class="inline-code">y_pred</code>) 사이의 <strong>&#x27;로그 오차 제곱 평균&#x27;</strong>을 계산합니다. 값에 로그를 취해 계산하기 때문에, 큰 값의 오차에 지나치게 민감하게 반응하는 것을 방지하고 비율적인 오차를 평가할 때 유용합니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">np.sqrt</code>의 역할:</strong> MSLE 값은 제곱(Squared)이 포함된 상태이므로, 원래의 단위와 오차 크기로 되돌리기 위해 <strong>이 값에 루트(제곱근)를 씌워주는 것</strong>이 <code class="inline-code">np.sqrt</code>의 최종 역할입니다. (이 과정을 거쳐 완성된 지표가 바로 <strong>RMSLE</strong>가 됩니다.)</li>
+</ul>
+<hr class="note-divider" />
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p">이 코드 한 줄에서 계산된 최종 결과는 <strong><code class="inline-code">rmsle</code></strong>라는 변수에 저장됩니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong>할당 변수:</strong> <code class="inline-code">rmsle</code></li>
+<li class="note-list-item"><strong>어떤 데이터인가?:</strong> 실제 정답(<code class="inline-code">y_test</code>)과 모델의 예측값(<code class="inline-code">y_pred</code>) 사이의 최종 <strong>RMSLE(Root Mean Squared Log Error) 점수(숫자)</strong>가 담깁니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 이 값이 <strong>0에 가까울수록</strong> 모델이 실제값과 거의 오차 없이 정확하게 예측했다는 뜻을 의미합니다.</li>
+</ul></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step6', 'np.sqrt', 'step6-np_sqrt-922_123118')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section><section class="step-section" id="step7"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">7단계</span><h2 class="step-title-text">모델 설명력 및 적합도 평가 (R2 & Adjusted R2 Score)</h2></div><p class="step-summary-desc">종속변수의 전체 분산 중 모델이 설명하는 비율인 결정계수(R2 Score)와 독립변수 추가에 따른 왜곡을 통계적으로 보정한 수정 결정계수 산출</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 실행 코드 및 결과 (Jupyter Notebook)</div><div class="cell-markdown-box"><h3 class="note-h3">7. 모델 설명력 평가 (R2, Adjusted R2)</h3></div><div class="code-cell-wrapper" id="cell-18"><div class="cell-header"><span class="cell-badge">In [18]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 6. R2 Score (결정 계수)
+# 특징: 데이터의 분산을 모델이 얼마나 설명하는지 (1에 가까울수록 좋음)
+r2 = <span class="code-kw-interactive" data-step="step7" data-tab="step7-r2_score-922_123133" data-func="r2_score" title="💡 클릭하여 우측 'r2_score' 상세 해설 보기">r2_score<span class="kw-sparkle">💡</span></span>(y_test, y_pred)
+
+# 7. Adjusted R2 Score (수정된 결정 계수)
+# 특징: 독립 변수의 개수가 늘어날 때 발생하는 R2 스코어의 증가를 보정 (회귀 분석 모델 간 비교에 유용)
+
+n = <span class="code-kw-interactive" data-step="step7" data-tab="step7-len-922_123144" data-func="len" title="💡 클릭하여 우측 'len' 상세 해설 보기">len<span class="kw-sparkle">💡</span></span>(y_train)  # 학습 데이터의 관측치 수
+p = <span class="code-kw-interactive" data-step="step7" data-tab="step7-X_train_shape-922_123155" data-func="X_train.shape" title="💡 클릭하여 우측 'X_train.shape' 상세 해설 보기">X_train.shape<span class="kw-sparkle">💡</span></span>[1]  # 독립 변수의 수
+
+adjusted_r2 = 1 - (1 - r2) * (n - 1) / (n - p - 1)
+
+print(f&quot;6. R-squared (Scikit-Learn) : {r2:.4f}&quot;)
+print(f&quot;7. Adjusted R-squared (Formula): {adjusted_r2:.4f}&quot;)
+</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output (콘솔 출력)</div><pre>6. R-squared (Scikit-Learn) : 0.4526
+7. Adjusted R-squared (Formula): 0.4366
+</pre></div></div></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (Markdown)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (4)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step7" data-tab="step7-r2_score-922_122752" onclick="switchTab('step7', 'step7-r2_score-922_122752')"><span class="tab-func-name">R2 Score (개요: 결정 계수)</span></button><button class="func-tab-btn " data-step="step7" data-tab="step7-r2_score-922_123133" onclick="switchTab('step7', 'step7-r2_score-922_123133')"><span class="tab-func-name">R2 Score 계산 (모델 설명력)</span></button><button class="func-tab-btn " data-step="step7" data-tab="step7-len-922_123144" onclick="switchTab('step7', 'step7-len-922_123144')"><span class="tab-func-name">len (학습 표본수 n)</span></button><button class="func-tab-btn " data-step="step7" data-tab="step7-X_train_shape-922_123155" onclick="switchTab('step7', 'step7-X_train_shape-922_123155')"><span class="tab-func-name">X_train.shape (독립변수수 p)</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step7-r2_score-922_122752"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>r2_score</code></div><div class="note-time-badge">⏱ 2026-09-22 12:27:52</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: r2_score</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-22 12:27:52</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">r2_score</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">r2_score는 우리가 만든 인공지능 예측 모델이 실제 정답을 얼마나 정확하게 잘 맞혔는지 100점 만점의 시험 점수로 환산해서 알려주는 고마운 채점관 같은 친구랍니다.</p>
+<p class="note-p">마치 선생님이 학생의 모의고사 성적을 보고 &quot;이 학생은 이번 시험에서 전체 성장의 85%를 설명할 만큼 실력이 아주 훌륭하네!&quot;라고 평가해 주는 것과 같지요.</p>
+<p class="note-p">주로 머신러닝으로 집값이나 점수처럼 숫자를 예측하는 모델을 만들었을 때, 우리 모델이 얼마나 쓸모 있는 실력을 갖추었는지 객관적인 성능을 확인하고 싶을 때 쓴답니다.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step7', 'r2_score', 'step7-r2_score-922_122752')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step7-r2_score-922_123133"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>r2_score</code></div><div class="note-time-badge">⏱ 2026-09-22 12:31:33</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: r2_score</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-22 12:31:33</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">r2_score</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">파이썬 머신러닝에서 자주 쓰이는 <strong><code class="inline-code">r2_score</code></strong> 함수에 대해 초보자도 이해하기 쉽게 차근차근 설명해 드릴게요!</p>
+<hr class="note-divider" />
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">r2_score</code>는 회귀 모델(숫자를 예측하는 모델)이 <strong>만들어낸 예측값이 실제 데이터를 얼마나 잘 설명하는지(성능이 얼마나 좋은지) 평가</strong>해 주는 함수입니다.</p>
+<ul class="note-list">
+<li class="note-list-item">결과값(R-squared, 결정계수)은 보통 <strong>0에서 1 사이</strong>의 값을 가지며, <strong>1에 가까울수록 모델의 예측 성능이 완벽하다</strong>는 뜻입니다.</li>
+</ul>
+<hr class="note-divider" />
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">제공해주신 코드 <code class="inline-code">r2_score(y_test, y_pred)</code>에서 사용된 두 가지 입력 인자의 역할은 다음과 같습니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">y_test</code> (첫 번째 인자)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 실제 정답 데이터입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 모델이 맞혀야 하는 진짜 현실의 값들(예: 실제 집값, 실제 시험 점수 등)이 들어있는 리스트나 배열입니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">y_pred</code> (두 번째 인자)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 모델이 예측한 값입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 우리가 만든 머신러닝 모델이 <code class="inline-code">y_test</code>를 보고 &quot;이럴 것이다!&quot;라고 추측해 낸 값들입니다.</li>
+</ul>
+<p class="note-p">&gt; 💡 <strong>요약하자면:</strong> &quot;진짜 정답(<code class="inline-code">y_test</code>)과 모델이 예상한 값(<code class="inline-code">y_pred</code>)을 서로 비교해서 점수를 매겨줘!&quot; 라는 뜻입니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p">코드에서 함수가 실행된 후 결과를 담는 변수인 <strong><code class="inline-code">r2</code></strong>에 대한 설명입니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">r2</code> (반환값)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 모델의 예측 정확도를 나타내는 <strong>결정계수(R² Score)</strong> 점수가 저장됩니다.</li>
+<li class="note-list-item"><strong>의미:</strong></li>
+<li class="note-list-item"><code class="inline-code">1.0</code>에 가까울수록: 모델이 정답을 기가 막히게 잘 맞혔습니다.</li>
+<li class="note-list-item"><code class="inline-code">0.0</code> 주변: 모델이 데이터를 전혀 예측하지 못하고 헤매고 있습니다. (평균값으로 대충 찍는 것과 비슷한 수준)</li>
+<li class="note-list-item"><code class="inline-code">음수(-)인 경우</code>: 모델이 평균값으로 예측하는 것보다도 못하게 엉터리로 예측하고 있다는 뜻입니다.</li>
+</ul></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step7', 'r2_score', 'step7-r2_score-922_123133')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step7-len-922_123144"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>len</code></div><div class="note-time-badge">⏱ 2026-09-22 12:31:44</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: len</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-22 12:31:44</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">len</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">파이썬 코드에서 사용된 <code class="inline-code">len(y_train)</code> 문맥에 대해 초보자분들도 쉽게 이해하실 수 있도록 항목별로 친절하게 정리해 드립니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">len()</code> 함수는 파이썬의 <strong>기본 내장 함수(Built-in Function)</strong>로, 전달받은 데이터(객체)의 <strong>길이나 전체 아이템(요소)의 개수를 세어 반환</strong>해 주는 역할을 합니다. 머신러닝에서는 주로 데이터셋에 <strong>데이터(행)가 몇 개 들어있는지(관측치 수)</strong>를 확인할 때 아주 유용하게 쓰입니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">이 코드에서 <code class="inline-code">len()</code> 함수에 전달된 인자는 단 하나입니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">y_train</code></strong></li>
+<li class="note-list-item"><strong>역할:</strong> 머신러닝 모델을 학습시킬 때 사용하는 <strong>&#x27;정답(Target) 데이터&#x27;</strong>입니다. 보통 1차원 배열(리스트나 판다스 Series 등)의 형태로 존재합니다.</li>
+<li class="note-list-item"><strong>의미:</strong> <code class="inline-code">len()</code> 함수는 이 <code class="inline-code">y_train</code> 안에 들어있는 정답의 총 개수, 즉 <strong>학습용 데이터가 몇 개인지</strong>를 세기 위해 입력되었습니다. 예를 들어, <code class="inline-code">y_train</code>에 800개의 정답 라벨이 들어있다면, <code class="inline-code">len(y_train)</code>은 숫자 <code class="inline-code">800</code>을 계산해 냅니다.</li>
+</ul>
+<hr class="note-divider" />
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p">함수가 실행된 후 결과값이 어떻게 저장되는지 살펴봅니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">n</code></strong></li>
+<li class="note-list-item"><strong>역할:</strong> <code class="inline-code">len(y_train)</code>이 반환한 <strong>정수(Integer) 형태의 결과값이 저장되는 변수</strong>입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 위에서 예로 든 것처럼 <code class="inline-code">y_train</code>의 길이가 800이라면, 변수 <code class="inline-code">n</code>에는 <code class="inline-code">800</code>이라는 숫자가 담깁니다. 이 변수 <code class="inline-code">n</code>은 이후 코드에서 데이터의 전체 개수를 활용해 반복문을 돌거나, 비율을 계산하는 등 다양한 곳에 활용될 수 있습니다.</li>
+</ul></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step7', 'len', 'step7-len-922_123144')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step7-X_train_shape-922_123155"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>X_train.shape</code></div><div class="note-time-badge">⏱ 2026-09-22 12:31:55</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: X_train.shape</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-22 12:31:55</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">X_train.shape</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">X_train.shape은 우리가 공부에 사용할 문제집의 전체 규모가 어떻게 되는지, 즉 &#x27;문제집의 가로 세로 크기(몇 문제의 몇 가지 정보가 있는지)&#x27;를 한눈에 확인하고 싶을 때 사용하는 도구예요.</p>
+<p class="note-p">우리가 새로운 문제집을 풀기 전에 문제가 총 몇 개 들어있고 보기는 몇 개인지 차례를 훑어보는 것처럼, 머신러닝 모델에게 공부를 시키기 전 데이터의 생김새와 크기를 꼼꼼히 점검할 때 쓴답니다.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step7', 'X_train.shape', 'step7-X_train_shape-922_123155')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section>
+  </main>
+
+  <div class="lightbox-modal" id="lightbox" onclick="closeLightbox()">
+    <button class="lightbox-close-btn">&times;</button>
+    <img src="" class="lightbox-content" id="lightbox-img" onclick="event.stopPropagation()" alt="Enlarged Plot" />
+  </div>
+
+  <div class="toast-msg" id="toast">✅ 알림 메시지</div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('study_theme_07', next);
+      
+      const btn = document.getElementById('theme-btn');
+      btn.textContent = next === 'dark' ? '☀️ 라이트 모드' : '🌙 다크 모드';
+      showToast(next === 'dark' ? '🌙 다크 테마 적용됨' : '☀️ 라이트 테마 적용됨');
+    }
+
+    (function initTheme() {
+      const saved = localStorage.getItem('study_theme_07') || localStorage.getItem('study_theme');
+      if (saved) {
+        document.documentElement.setAttribute('data-theme', saved);
+        const btn = document.getElementById('theme-btn');
+        if (btn) btn.textContent = saved === 'dark' ? '☀️ 라이트 모드' : '🌙 다크 모드';
+      }
+    })();
+
+    function switchTab(stepId, tabId) {
+      const stepElem = document.getElementById(stepId);
+      if (!stepElem) return;
+
+      const tabBtns = stepElem.querySelectorAll('.func-tab-btn');
+      tabBtns.forEach(btn => {
+        if (btn.getAttribute('data-tab') === tabId) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+
+      const panes = stepElem.querySelectorAll('.func-note-pane');
+      panes.forEach(pane => {
+        if (pane.id === tabId) {
+          pane.classList.add('active');
+          pane.classList.remove('highlight-pulse');
+          void pane.offsetWidth;
+          pane.classList.add('highlight-pulse');
+        } else {
+          pane.classList.remove('active');
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const kwSpans = document.querySelectorAll('.code-kw-interactive');
+      kwSpans.forEach(span => {
+        span.addEventListener('click', (e) => {
+          const stepId = span.getAttribute('data-step');
+          const tabId = span.getAttribute('data-tab');
+          const funcName = span.getAttribute('data-func');
+
+          kwSpans.forEach(s => s.classList.remove('active-target'));
+          span.classList.add('active-target');
+
+          switchTab(stepId, tabId);
+
+          if (window.innerWidth <= 1180) {
+            const notePane = document.getElementById(tabId);
+            if (notePane) {
+              notePane.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          }
+
+          showToast("💡 '" + funcName + "' AI 학습 노트로 이동");
+        });
+      });
+    });
+
+    function highlightMatchingKeyword(stepId, funcName, tabId) {
+      const stepElem = document.getElementById(stepId);
+      if (!stepElem) return;
+
+      const kwSpans = stepElem.querySelectorAll('.code-kw-interactive');
+      let found = false;
+
+      // 1순위: tabId 일치하는 스팬
+      if (tabId) {
+        kwSpans.forEach(span => {
+          if (span.getAttribute('data-tab') === tabId) {
+            span.classList.add('active-target');
+            span.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            found = true;
+          } else {
+            span.classList.remove('active-target');
+          }
+        });
+      }
+
+      // 2순위: funcName 일치하는 첫 번째 스팬
+      if (!found) {
+        for (let span of kwSpans) {
+          if (span.getAttribute('data-func') === funcName) {
+            span.classList.add('active-target');
+            span.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            found = true;
+            break;
+          }
+        }
+      }
+
+      if (found) {
+        showToast("🔍 좌측 코드에서 '" + funcName + "' 위치 강조");
+      }
+    }
+
+    function copyCode(btn) {
+      const cellWrapper = btn.closest('.code-cell-wrapper');
+      const codeBlock = cellWrapper.querySelector('pre code');
+      if (codeBlock) {
+        const text = codeBlock.innerText;
+        navigator.clipboard.writeText(text).then(() => {
+          const original = btn.textContent;
+          btn.textContent = '✅ 복사됨!';
+          btn.style.borderColor = 'var(--accent-success)';
+          btn.style.color = 'var(--accent-success)';
+          setTimeout(() => {
+            btn.textContent = original;
+            btn.style.borderColor = '';
+            btn.style.color = '';
+          }, 2000);
+          showToast('📋 코드가 클립보드에 복사되었습니다.');
+        });
+      }
+    }
+
+    function toggleOutput(btn) {
+      const container = btn.closest('.cell-outputs-container');
+      const body = container.querySelector('.outputs-body');
+      if (body.style.display === 'none') {
+        body.style.display = 'flex';
+        btn.textContent = '접기 ▲';
+      } else {
+        body.style.display = 'none';
+        btn.textContent = '펼치기 ▼';
+      }
+    }
+
+    let allExpanded = true;
+    function toggleAllOutputs() {
+      const allBodies = document.querySelectorAll('.outputs-body');
+      const allBtns = document.querySelectorAll('.toggle-output-btn');
+      allExpanded = !allExpanded;
+
+      allBodies.forEach(b => b.style.display = allExpanded ? 'flex' : 'none');
+      allBtns.forEach(btn => btn.textContent = allExpanded ? '접기 ▲' : '펼치기 ▼');
+      
+      const toggleAllBtn = document.querySelector('.expand-all-btn');
+      toggleAllBtn.textContent = allExpanded ? '결과 전체 접기' : '결과 전체 펼치기';
+      showToast(allExpanded ? '⚡ 모든 실행 결과가 펼쳐졌습니다.' : '⚡ 모든 실행 결과가 접혔습니다.');
+    }
+
+    function openLightbox(src) {
+      const lb = document.getElementById('lightbox');
+      const img = document.getElementById('lightbox-img');
+      img.src = src;
+      lb.classList.add('active');
+    }
+    function closeLightbox() {
+      const lb = document.getElementById('lightbox');
+      lb.classList.remove('active');
+    }
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+
+    function filterFunctions(query) {
+      const q = query.trim().toLowerCase();
+      const tabBtns = document.querySelectorAll('.func-tab-btn');
+      const sections = document.querySelectorAll('.step-section');
+
+      if (!q) {
+        tabBtns.forEach(b => b.style.display = '');
+        sections.forEach(s => s.style.opacity = '1');
+        return;
+      }
+
+      tabBtns.forEach(b => {
+        const text = b.textContent.toLowerCase();
+        if (text.includes(q)) {
+          b.style.display = '';
+          b.style.border = '2px solid var(--accent-primary)';
+        } else {
+          b.style.display = 'none';
+          b.style.border = '';
+        }
+      });
+    }
+
+    window.addEventListener('scroll', () => {
+      const sections = document.querySelectorAll('.step-section');
+      const navLinks = document.querySelectorAll('.step-nav-item');
+      let currentId = '';
+
+      sections.forEach(s => {
+        const rect = s.getBoundingClientRect();
+        if (rect.top <= 200 && rect.bottom >= 200) {
+          currentId = s.id;
+        }
+      });
+
+      if (currentId) {
+        navLinks.forEach(link => {
+          if (link.getAttribute('data-step') === currentId) {
+            link.classList.add('active');
+          } else {
+            link.classList.remove('active');
+          }
+        });
+      }
+    });
+
+    let toastTimeout = null;
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        t.classList.remove('show');
+      }, 2500);
+    }
+  </script>
+</body>
+</html>
