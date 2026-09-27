@@ -4,7 +4,6 @@
 
 # Python Scripts & Cache
 *.py
-!build_viewer.py
 __pycache__/
 *.pyc
 *.pyo

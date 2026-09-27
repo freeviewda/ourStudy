@@ -1,0 +1,1816 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>머신러닝 기초: 데이터셋 및 데이터 분할 (Dataset & Split) 인터랙티브 뷰어</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Pretendard:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" id="prism-theme" />
+
+  <style>
+    :root[data-theme="dark"] {
+      --bg-base: #0b0f19;
+      --bg-surface: #111827;
+      --bg-card: #1f2937;
+      --bg-card-hover: #283548;
+      --bg-code: #0d1117;
+      --border-subtle: #2d3748;
+      --border-accent: #3b82f6;
+      
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --text-dim: #6b7280;
+      
+      --accent-primary: #38bdf8;
+      --accent-primary-hover: #0ea5e9;
+      --accent-secondary: #818cf8;
+      --accent-success: #34d399;
+      --accent-warning: #fbbf24;
+      --accent-glow: rgba(56, 189, 248, 0.25);
+      
+      --pill-bg: rgba(56, 189, 248, 0.15);
+      --pill-border: rgba(56, 189, 248, 0.4);
+      --pill-text: #7dd3fc;
+      --pill-hover-bg: rgba(56, 189, 248, 0.3);
+      
+      --table-th-bg: #1e293b;
+      --table-td-stripe: #151e2e;
+      --table-border: #334155;
+      
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -2px rgba(0, 0, 0, 0.4);
+      --shadow-glow: 0 0 20px rgba(56, 189, 248, 0.4);
+    }
+
+    :root[data-theme="light"] {
+      --bg-base: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-card: #f1f5f9;
+      --bg-card-hover: #e2e8f0;
+      --bg-code: #1e293b;
+      --border-subtle: #e2e8f0;
+      --border-accent: #2563eb;
+      
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-dim: #94a3b8;
+      
+      --accent-primary: #0284c7;
+      --accent-primary-hover: #0369a1;
+      --accent-secondary: #6366f1;
+      --accent-success: #059669;
+      --accent-warning: #d97706;
+      --accent-glow: rgba(2, 132, 199, 0.2);
+      
+      --pill-bg: #e0f2fe;
+      --pill-border: #7dd3fc;
+      --pill-text: #0369a1;
+      --pill-hover-bg: #bae6fd;
+      
+      --table-th-bg: #f1f5f9;
+      --table-td-stripe: #f8fafc;
+      --table-border: #e2e8f0;
+      
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --shadow-glow: 0 0 20px rgba(2, 132, 199, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 15px;
+    }
+
+    body {
+      font-family: 'Pretendard', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      line-height: 1.6;
+      transition: background-color 0.25s ease, color 0.25s ease;
+      min-height: 100vh;
+    }
+
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(17, 24, 39, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+      transition: background-color 0.25s ease;
+    }
+    :root[data-theme="light"] .app-header {
+      background: rgba(255, 255, 255, 0.88);
+    }
+
+    .header-main-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1720px;
+      margin: 0 auto;
+      padding: 0.85rem 1.5rem;
+      gap: 1.5rem;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-icon {
+      font-size: 1.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+    }
+
+    .brand-titles h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+    }
+
+    .brand-titles p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .stats-pill {
+      display: inline-block;
+      padding: 0.15rem 0.55rem;
+      border-radius: 9999px;
+      background: var(--pill-bg);
+      border: 1px solid var(--pill-border);
+      color: var(--pill-text);
+      font-weight: 600;
+      font-size: 0.75rem;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .search-box-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-input {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 0.45rem 0.85rem 0.45rem 2rem;
+      color: var(--text-main);
+      font-size: 0.85rem;
+      outline: none;
+      width: 220px;
+      transition: all 0.2s ease;
+    }
+    .search-input:focus {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+      width: 280px;
+    }
+    .search-icon {
+      position: absolute;
+      left: 0.65rem;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      pointer-events: none;
+    }
+
+    .theme-toggle-btn, .expand-all-btn, .home-hub-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 0.45rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .theme-toggle-btn:hover, .expand-all-btn:hover, .home-hub-btn:hover {
+      background: var(--bg-card);
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+    }
+
+    .steps-nav-bar {
+      display: flex;
+      align-items: center;
+      overflow-x: auto;
+      max-width: 1720px;
+      margin: 0 auto;
+      padding: 0.35rem 1.5rem 0.65rem 1.5rem;
+      gap: 0.6rem;
+      scrollbar-width: thin;
+    }
+    .steps-nav-bar::-webkit-scrollbar {
+      height: 4px;
+    }
+    .steps-nav-bar::-webkit-scrollbar-thumb {
+      background: var(--border-subtle);
+      border-radius: 4px;
+    }
+
+    .step-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.35rem 0.75rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+    .step-nav-item:hover {
+      color: var(--accent-primary);
+      border-color: var(--accent-primary);
+      background: var(--bg-card);
+      transform: translateY(-1px);
+    }
+    .step-nav-item.active {
+      background: var(--accent-primary);
+      color: #ffffff;
+      border-color: var(--accent-primary);
+      box-shadow: 0 2px 8px var(--accent-glow);
+    }
+    .step-nav-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.2);
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+    .nav-note-badge {
+      font-size: 0.7rem;
+      padding: 0.1rem 0.4rem;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .app-main {
+      max-width: 1720px;
+      margin: 1.5rem auto 4rem auto;
+      padding: 0 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    .step-section {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    .step-section:hover {
+      border-color: rgba(56, 189, 248, 0.35);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .step-section-header {
+      padding: 1.25rem 1.75rem;
+      background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-surface) 100%);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .step-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .step-number-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+      color: #ffffff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      border-radius: 6px;
+      letter-spacing: 0.03em;
+    }
+
+    .step-title-text {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.01em;
+    }
+
+    .step-summary-desc {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
+    .step-dual-grid {
+      display: grid;
+      grid-template-columns: 50% 50%;
+      min-height: 480px;
+    }
+    @media (max-width: 1180px) {
+      .step-dual-grid {
+        grid-template-columns: 100%;
+      }
+    }
+
+    .grid-col-code {
+      border-right: 1px solid var(--border-subtle);
+      padding: 1.5rem;
+      background: var(--bg-base);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      overflow-x: hidden;
+    }
+    @media (max-width: 1180px) {
+      .grid-col-code {
+        border-right: none;
+        border-bottom: 2px dashed var(--border-subtle);
+      }
+    }
+
+    .grid-col-notes {
+      padding: 1.5rem;
+      background: var(--bg-surface);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .col-sticky-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-dim);
+      padding-bottom: 0.65rem;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .code-cell-wrapper {
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      background: var(--bg-code);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+
+    .cell-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 0.85rem;
+      background: rgba(255, 255, 255, 0.04);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .cell-badge {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--accent-primary);
+    }
+
+    .copy-code-btn {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--text-muted);
+      border-radius: 4px;
+      padding: 0.2rem 0.5rem;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .copy-code-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+      border-color: var(--accent-primary);
+    }
+
+    .code-editor-look {
+      position: relative;
+    }
+
+    .code-editor-look pre {
+      margin: 0 !important;
+      padding: 1rem !important;
+      background: transparent !important;
+      font-family: 'Fira Code', monospace !important;
+      font-size: 0.88rem !important;
+      line-height: 1.6 !important;
+      overflow-x: auto;
+    }
+
+    .code-kw-interactive {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 1px 6px;
+      margin: 0 2px;
+      background: var(--pill-bg);
+      border: 1px solid var(--pill-border);
+      border-radius: 4px;
+      color: var(--pill-text) !important;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+    .code-kw-interactive:hover {
+      background: var(--pill-hover-bg);
+      border-color: var(--accent-primary);
+      color: #ffffff !important;
+      transform: translateY(-1px) scale(1.03);
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+    .code-kw-interactive.active-target {
+      background: var(--accent-primary);
+      color: #ffffff !important;
+      box-shadow: 0 0 16px var(--accent-primary);
+      animation: pulse-glow 1.5s infinite;
+    }
+
+    .kw-sparkle {
+      font-size: 0.72rem;
+      filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.6));
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 8px var(--accent-primary); }
+      50% { box-shadow: 0 0 20px var(--accent-primary); }
+    }
+
+    .cell-outputs-container {
+      border-top: 1px solid var(--border-subtle);
+      background: var(--bg-surface);
+    }
+
+    .outputs-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.45rem 0.85rem;
+      background: var(--bg-card);
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .toggle-output-btn {
+      background: transparent;
+      border: none;
+      color: var(--accent-primary);
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .outputs-body {
+      padding: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .output-type-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-dim);
+      margin-bottom: 0.4rem;
+    }
+
+    .stream-output pre, .text-output pre {
+      background: #090d16;
+      border: 1px solid #1e293b;
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.82rem;
+      color: #38bdf8;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .table-responsive-wrapper {
+      max-width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--table-border);
+      border-radius: 8px;
+      background: var(--bg-surface);
+      box-shadow: var(--shadow-sm);
+    }
+
+    table.modern-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      text-align: right;
+    }
+    table.modern-table th, table.modern-table td {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--table-border);
+      white-space: nowrap;
+    }
+    table.modern-table thead th {
+      background: var(--table-th-bg);
+      color: var(--text-main);
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+    }
+    table.modern-table tbody tr:nth-child(even) {
+      background: var(--table-td-stripe);
+    }
+    table.modern-table tbody tr:hover {
+      background: rgba(56, 189, 248, 0.12);
+    }
+    table.modern-table th:first-child, table.modern-table td:first-child {
+      text-align: center;
+      font-weight: 600;
+      background: var(--table-th-bg);
+    }
+
+    .cell-markdown-box {
+      padding: 0.75rem 1rem;
+      background: var(--bg-card);
+      border-left: 4px solid var(--accent-primary);
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .notes-panel-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .notes-tabs-header {
+      margin-bottom: 1.25rem;
+    }
+
+    .tabs-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent-primary);
+      margin-bottom: 0.65rem;
+    }
+
+    .tabs-scroll-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .func-tab-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 0.45rem 0.85rem;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+    }
+    .func-tab-btn:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent-primary);
+      color: var(--text-main);
+    }
+    .func-tab-btn.active {
+      background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+      color: #ffffff;
+      border-color: transparent;
+      box-shadow: 0 4px 12px var(--accent-glow);
+    }
+
+    .notes-panes-wrapper {
+      flex: 1;
+      position: relative;
+    }
+
+    .func-note-pane {
+      display: none;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      animation: fadeIn 0.25s ease-out;
+    }
+    .func-note-pane.active {
+      display: block;
+    }
+    .func-note-pane.highlight-pulse {
+      animation: pulse-border 1.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse-border {
+      0% { box-shadow: 0 0 0 4px var(--accent-primary); border-color: var(--accent-primary); }
+      100% { box-shadow: var(--shadow-sm); border-color: var(--border-subtle); }
+    }
+
+    .note-meta-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding-bottom: 0.85rem;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 1.25rem;
+    }
+
+    .note-target-badge {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .note-target-badge code {
+      font-family: 'Fira Code', monospace;
+      color: var(--accent-primary);
+      background: var(--bg-base);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .note-time-badge {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      background: var(--bg-base);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+    }
+
+    .note-body-content {
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: var(--text-main);
+    }
+
+    .note-h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin: 1rem 0 0.75rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .note-h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin: 1.2rem 0 0.65rem 0;
+    }
+    .note-h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--accent-primary);
+      margin: 1.4rem 0 0.6rem 0;
+      padding-bottom: 0.3rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .note-h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin: 0.8rem 0 0.4rem 0;
+    }
+
+    .note-p {
+      margin-bottom: 0.85rem;
+    }
+
+    .note-list {
+      margin: 0.5rem 0 1rem 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .note-list-item {
+      list-style-type: disc;
+    }
+
+    .inline-code {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85em;
+      background: var(--bg-base);
+      color: var(--accent-primary);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .note-code-block {
+      background: var(--bg-code);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+      margin: 0.85rem 0;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.84rem;
+      overflow-x: auto;
+    }
+
+    .note-divider {
+      border: none;
+      height: 1px;
+      background: var(--border-subtle);
+      margin: 1.25rem 0;
+    }
+
+    .note-footer-actions {
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px dashed var(--border-subtle);
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .jump-to-code-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      color: var(--accent-primary);
+      padding: 0.35rem 0.75rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .jump-to-code-btn:hover {
+      background: var(--accent-primary);
+      color: #ffffff;
+      border-color: var(--accent-primary);
+    }
+
+    .toast-msg {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--text-main);
+      color: var(--bg-base);
+      padding: 0.65rem 1.25rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      box-shadow: var(--shadow-lg);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.25s ease;
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .toast-msg.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="app-header">
+    <div class="header-main-bar">
+      <div class="brand-wrap">
+        <div class="brand-icon">📂</div>
+        <div class="brand-titles">
+          <h1>01. 머신러닝 기초: 데이터셋 (Dataset & Split)</h1>
+          <p>
+            <span>인터랙티브 듀얼 학습 뷰어</span>
+            <span class="stats-pill">4개 파이프라인 단계</span>
+            <span class="stats-pill">21개 AI 해설 노트 연결</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <a href="../index.html" class="home-hub-btn" title="메인 학습 포털로 이동">🏠 메인 포털</a>
+        <div class="search-box-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="global-search" class="search-input" placeholder="함수 검색 (ex: split, shape...)" oninput="filterFunctions(this.value)" />
+        </div>
+        <button class="expand-all-btn" onclick="toggleAllOutputs()">결과 전체 펼치기</button>
+        <button class="theme-toggle-btn" id="theme-btn" onclick="toggleTheme()">☀️ 테마 전환</button>
+      </div>
+    </div>
+
+    <nav class="steps-nav-bar" id="steps-nav">
+      <a href="#step1" class="step-nav-item" data-step="step1"><span class="step-nav-num">1</span><span class="step-nav-label">필수 라이브러리 및 Pima 데이터셋 로드</span><span class="nav-note-badge">6개 해설</span></a><a href="#step2" class="step-nav-item" data-step="step2"><span class="step-nav-num">2</span><span class="step-nav-label">특성</span><span class="nav-note-badge">5개 해설</span></a><a href="#step3" class="step-nav-item" data-step="step3"><span class="step-nav-num">3</span><span class="step-nav-label">검증 데이터셋 3단 분할 6:2:2</span><span class="nav-note-badge">4개 해설</span></a><a href="#step4" class="step-nav-item" data-step="step4"><span class="step-nav-num">4</span><span class="step-nav-label">분할 데이터셋 레이블 빈도 및 비율 분석</span><span class="nav-note-badge">6개 해설</span></a>
+    </nav>
+  </header>
+
+  <main class="app-main">
+    <section class="step-section" id="step1"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">1단계</span><h2 class="step-title-text">필수 라이브러리 및 Pima 데이터셋 로드 (Data Loading)</h2></div><p class="step-summary-desc">Pandas, Scikit-Learn을 로드하고 UCI Pima Indians 당뇨병 CSV 데이터를 로드하여 컬럼명 지정 및 head(), info() 구조 점검</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 실행 코드 및 결과 (Jupyter Notebook)</div><div class="code-cell-wrapper" id="cell-1"><div class="cell-header"><span class="cell-badge">In [1]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 1. 필요한 라이브러리 및 데이터 로드
+import <span class="code-kw-interactive" data-step="step1" data-tab="step1-pandas-927_134620" data-func="pandas" title="💡 클릭하여 우측 'pandas' 해설 보기">pandas<span class="kw-sparkle">💡</span></span> as pd
+from <span class="code-kw-interactive" data-step="step1" data-tab="step1-sklearn_model_selection-927_134645" data-func="sklearn.model_selection" title="💡 클릭하여 우측 'sklearn.model_selection' 해설 보기">sklearn.model_selection<span class="kw-sparkle">💡</span></span> import <span class="code-kw-interactive" data-step="step1" data-tab="step1-train_test_split-927_134707" data-func="train_test_split" title="💡 클릭하여 우측 'train_test_split' 해설 보기">train_test_split<span class="kw-sparkle">💡</span></span>
+
+# Pima Indian Diabetes Dataset 로드 (UCI Machine Learning Repository)
+# 데이터셋은 헤더가 없으므로, 컬럼명을 직접 지정
+pima_columns = [&#x27;pregnancies&#x27;, &#x27;glucose&#x27;, &#x27;blood_pressure&#x27;, &#x27;skin_thickness&#x27;, &#x27;insulin&#x27;, &#x27;bmi&#x27;, &#x27;diabetes_pedigree_function&#x27;, &#x27;age&#x27;, &#x27;outcome&#x27;]
+pima_data_url = &#x27;https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.data.csv&#x27;
+pima_df = <span class="code-kw-interactive" data-step="step1" data-tab="step1-pd_read_csv-927_134739" data-func="pd.read_csv" title="💡 클릭하여 우측 'pd.read_csv' 해설 보기">pd.read_csv<span class="kw-sparkle">💡</span></span>(pima_data_url, names=pima_columns)
+
+</code></pre></div></div><div class="code-cell-wrapper" id="cell-2"><div class="cell-header"><span class="cell-badge">In [2]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"><span class="code-kw-interactive" data-step="step1" data-tab="step1-pima_df_head-927_150157" data-func="pima_df.head" title="💡 클릭하여 우측 'pima_df.head' 해설 보기">pima_df.head<span class="kw-sparkle">💡</span></span>()</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item html-table-output"><div class="output-type-tag">DataFrame Display</div><div class="table-responsive-wrapper"><table border="1" class="dataframe modern-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>pregnancies</th>
+      <th>glucose</th>
+      <th>blood_pressure</th>
+      <th>skin_thickness</th>
+      <th>insulin</th>
+      <th>bmi</th>
+      <th>diabetes_pedigree_function</th>
+      <th>age</th>
+      <th>outcome</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>6</td>
+      <td>148</td>
+      <td>72</td>
+      <td>35</td>
+      <td>0</td>
+      <td>33.6</td>
+      <td>0.627</td>
+      <td>50</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>85</td>
+      <td>66</td>
+      <td>29</td>
+      <td>0</td>
+      <td>26.6</td>
+      <td>0.351</td>
+      <td>31</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>8</td>
+      <td>183</td>
+      <td>64</td>
+      <td>0</td>
+      <td>0</td>
+      <td>23.3</td>
+      <td>0.672</td>
+      <td>32</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1</td>
+      <td>89</td>
+      <td>66</td>
+      <td>23</td>
+      <td>94</td>
+      <td>28.1</td>
+      <td>0.167</td>
+      <td>21</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0</td>
+      <td>137</td>
+      <td>40</td>
+      <td>35</td>
+      <td>168</td>
+      <td>43.1</td>
+      <td>2.288</td>
+      <td>33</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table></div></div></div></div></div><div class="code-cell-wrapper" id="cell-3"><div class="cell-header"><span class="cell-badge">In [3]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"><span class="code-kw-interactive" data-step="step1" data-tab="step1-pima_df_info-927_150220" data-func="pima_df.info" title="💡 클릭하여 우측 'pima_df.info' 해설 보기">pima_df.info<span class="kw-sparkle">💡</span></span>()</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>&lt;class &#x27;pandas.core.frame.DataFrame&#x27;&gt;
+RangeIndex: 768 entries, 0 to 767
+Data columns (total 9 columns):
+ #   Column                      Non-Null Count  Dtype  
+---  ------                      --------------  -----  
+ 0   pregnancies                 768 non-null    int64  
+ 1   glucose                     768 non-null    int64  
+ 2   blood_pressure              768 non-null    int64  
+ 3   skin_thickness              768 non-null    int64  
+ 4   insulin                     768 non-null    int64  
+ 5   bmi                         768 non-null    float64
+ 6   diabetes_pedigree_function  768 non-null    float64
+ 7   age                         768 non-null    int64  
+ 8   outcome                     768 non-null    int64  
+dtypes: float64(2), int64(7)
+memory usage: 54.1 KB
+</pre></div></div></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (Markdown)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (6)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step1" data-tab="step1-pandas-927_134620" onclick="switchTab('step1', 'step1-pandas-927_134620')"><span class="tab-func-name">pandas (개요)</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-pd_read_csv-927_134739" onclick="switchTab('step1', 'step1-pd_read_csv-927_134739')"><span class="tab-func-name">pd.read_csv</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-pima_df_head-927_150157" onclick="switchTab('step1', 'step1-pima_df_head-927_150157')"><span class="tab-func-name">pima_df.head</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-pima_df_info-927_150220" onclick="switchTab('step1', 'step1-pima_df_info-927_150220')"><span class="tab-func-name">pima_df.info</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_model_selection-927_134645" onclick="switchTab('step1', 'step1-sklearn_model_selection-927_134645')"><span class="tab-func-name">sklearn.model_selection</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-train_test_split-927_134707" onclick="switchTab('step1', 'step1-train_test_split-927_134707')"><span class="tab-func-name">train_test_split (소개)</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step1-pandas-927_134620"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>pandas</code></div><div class="note-time-badge">⏱ 2026-09-27 13:46:20</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: pandas</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 13:46:20</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">pandas</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">안녕하세요! 파이썬에서 데이터를 다룰 때 꼭 필요한 마법 같은 도구인 &#x27;판다스(pandas)&#x27;에 대해 친절하게 설명해 드릴게요.</p>
+<p class="note-p">판다스는 마치 컴퓨터 안에 들어있는 엄청나게 거대한 &#x27;엑셀 장부&#x27;라고 생각하시면 아주 쉬워요. 복잡하고 지저분한 표나 데이터들을 깔끔하게 정리하고, 우리가 원하는 대로 쉽게 계산하거나 분석할 수 있도록 도와주는 역할을 한답니다.</p>
+<p class="note-p">엑셀 파일이나 CSV 파일처럼 표로 된 데이터를 불러와서 수정하거나, 통계를 내고 싶을 때 언제든 꺼내 쓰는 필수 영양제 같은 친구예요! 지금 작성하신 &#x27;import pandas as pd&#x27;는 앞으로 이 멋진 엑셀 장부를 쓰기 위해 내 작업상 위에 살짝 꺼내두는 준비 과정이랍니다.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'pandas')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step1-pd_read_csv-927_134739"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>pd.read_csv</code></div><div class="note-time-badge">⏱ 2026-09-27 13:47:39</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: pd.read_csv</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 13:47:39</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">pd.read_csv</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">파이썬의 데이터 분석 라이브러리인 판다스(Pandas)에서 가장 많이 쓰이는 함수 중 하나인 <code class="inline-code">pd.read_csv</code>에 대한 상세 해설입니다. 초보자의 눈높이에 맞춰 친절하고 명쾌하게 정리해 드릴게요!</p>
+<hr class="note-divider" />
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">pd.read_csv</code>는 <strong>컴마(,) 등으로 값이 구분되어 있는 텍스트 파일(CSV 파일)이나 웹상의 데이터 주소(URL)를 읽어와서, 파이썬에서 다루기 쉬운 표 형태의 데이터 구조(DataFrame)로 변환해 주는 함수</strong>입니다. 엑셀 파일을 열듯이 데이터를 판다스 전용 표로 척척 바꿔준다고 생각하시면 됩니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">제공해주신 코드 <code class="inline-code">pd.read_csv(pima_data_url, names=pima_columns)</code>에는 총 2개의 인자가 사용되었습니다. 하나씩 살펴볼까요?</p>
+<ul class="note-list">
+<li class="note-list-item"><strong>첫 번째 인자: <code class="inline-code">pima_data_url</code> (위치 인자)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 읽어들일 데이터가 어디에 있는지 알려주는 <strong>파일 경로 또는 웹 주소(URL)</strong>입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 이 코드에서는 <code class="inline-code">pima_data_url</code>이라는 변수에 담긴 인터넷 주소(URL)에 접속하여 그곳에 있는 CSV 데이터를 다운로드받아 읽어오라는 뜻입니다.</li>
+</ul>
+<ul class="note-list">
+<li class="note-list-item"><strong>두 번째 인자: <code class="inline-code">names=pima_columns</code> (키워드 인자)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 데이터에 <strong>열(Column, 컬럼) 이름(제목)</strong>을 새로 지정해 주는 인자입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 만약 불러온 원본 데이터 파일에 맨 첫 줄(헤더)에 컬럼 이름이 없거나, 혹은 원래 이름 대신 우리가 원하는 보기 쉬운 이름으로 바꿔서 넣고 싶을 때 사용합니다. <code class="inline-code">pima_columns</code>라는 변수에 들어 있는 리스트(예: <code class="inline-code">[&#x27;Pregnancies&#x27;, &#x27;Glucose&#x27;, ...]</code>)를 각 열의 이름으로 싹 붙여주게 됩니다.</li>
+</ul>
+<hr class="note-divider" />
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p">함수가 실행된 후 결과를 받아 저장하는 변수(<code class="inline-code">pima_df</code>)가 어떤 데이터인지 설명해 드릴게요.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong>할당 변수: <code class="inline-code">pima_df</code></strong></li>
+<li class="note-list-item"><strong>이름의 뜻:</strong> Pima(데이터셋 이름) + df(DataFrame의 줄임말)</li>
+<li class="note-list-item"><strong>데이터의 정체:</strong> <code class="inline-code">pd.read_csv</code> 함수가 웹에서 데이터를 읽어와서 만든 <strong>판다스 데이터프레임(DataFrame) 객체</strong>가 이 변수에 통째로 저장됩니다.</li>
+<li class="note-list-item"><strong>결과적으로:</strong> 이제 <code class="inline-code">pima_df</code>는 행과 열이 있는 엑셀 시트처럼 변해 있어서, 데이터를 눈으로 확인하거나(<code class="inline-code">pima_df.head()</code>), 평균을 구하거나(<code class="inline-code">pima_df.mean()</code>), 머신러닝 모델에 넣기 위해 가공하는 등의 모든 작업을 자유롭게 할 수 있게 됩니다.</li>
+</ul></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'pd.read_csv')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step1-pima_df_head-927_150157"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>pima_df.head</code></div><div class="note-time-badge">⏱ 2026-09-27 15:01:57</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: pima_df.head</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:01:57</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">pima_df.head</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">안녕하세요! pima_df.head()라는 코드는 거대한 데이터 상자 속에서 딱 처음 5개의 내용물만 꺼내어 미리 살짝 맛보는 시식 코너 같은 역할을 해요.</p>
+<p class="note-p">우리가 새로운 물건을 샀을 때 설명서 전체를 읽기 전에 겉모습부터 훑어보는 것처럼, 이 코드는 데이터가 어떻게 생겼는지 그 모양과 형식을 빠르게 파악하고 싶을 때 쓴답니다. 복잡한 데이터 분석을 시작하기 전에 내가 가진 재료가 잘 들어왔는지 눈으로 먼저 확인하고 싶을 때 아주 유용하게 쓰이는 친절한 도구예요.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'pima_df.head')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step1-pima_df_info-927_150220"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>pima_df.info</code></div><div class="note-time-badge">⏱ 2026-09-27 15:02:20</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: pima_df.info</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:02:20</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">pima_df.info</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">pima_df.info()는 우리가 새로운 공책을 샀을 때 첫 페이지나 목차를 펴서 몇 페이지까지 있는지, 각 단원이 무엇에 관한 내용인지 쓱 훑어보는 것과 같아요.</p>
+<p class="note-p">우리 표 안에 어떤 제목들이 들어 있는지, 비어 있는 칸은 없는지, 숫자인지 글자인지 전체적인 살림살이를 한눈에 보여주는 역할을 한답니다.</p>
+<p class="note-p">주로 분석을 시작하기 전에 데이터가 잘 들어왔는지, 이상한 곳은 없는지 전체적인 건강 검진을 하고 싶을 때 쓴답니다.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'pima_df.info')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step1-sklearn_model_selection-927_134645"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>sklearn.model_selection</code></div><div class="note-time-badge">⏱ 2026-09-27 13:46:45</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: sklearn.model_selection</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 13:46:45</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">sklearn.model_selection</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">우리가 공부를 열심히 했는지 확인하려고 선생님이 예상 문제집을 주시는 것처럼, sklearn.model_selection은 컴퓨터에게 공부할 문제와 실력을 테스트할 시험 문제를 공평하게 나눠주는 마법의 도구 상자랍니다.</p>
+<p class="note-p">그중에서 지금 쓰신 train_test_split이라는 기능은 전체 데이터 중에서 80퍼센트는 공부용 교재로, 나머지 20퍼센트는 진짜 실력 테스트용 시험지로 깔끔하게 쪼개주는 역할을 해요.</p>
+<p class="note-p">인공지능 모델을 만들어서 얘가 진짜로 제대로 배웠는지, 아니면 그냥 정답을 외운 건지 공정하게 시험을 치르고 싶을 때 꼭 사용한답니다.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'sklearn.model_selection')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step1-train_test_split-927_134707"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>train_test_split</code></div><div class="note-time-badge">⏱ 2026-09-27 13:47:07</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: train_test_split</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 13:47:07</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">train_test_split</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">train_test_split은 가지고 있는 전체 데이터를 공부용(훈련용)과 시험용으로 척척 나누어 주는 고마운 도구랍니다.</p>
+<p class="note-p">마치 선생님이 학생에게 예상 문제집을 줄 때, 절반은 미리 공부하도록 주고 나머지 절반은 실력 테스트용으로 아껴두는 것과 같아요.</p>
+<p class="note-p">인공지능 모델을 만들기 전에 데이터가 잘 만들어졌는지 공정하게 시험해 보고 싶을 때 꼭 사용한답니다.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'train_test_split')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section><section class="step-section" id="step2"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">2단계</span><h2 class="step-title-text">특성(X)/타깃(y) 분리 및 훈련/테스트 8:2 분할 (Train-Test Split)</h2></div><p class="step-summary-desc">drop('outcome')으로 특성 행렬 X와 레이블 y를 분리하고, stratify=y 층화추출을 적용하여 80:20 비율 분할 및 Shape 검증</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 실행 코드 및 결과 (Jupyter Notebook)</div><div class="code-cell-wrapper" id="cell-6"><div class="cell-header"><span class="cell-badge">In [6]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># Feature(X)과 Target(y) 분리
+X = <span class="code-kw-interactive" data-step="step2" data-tab="step2-pima_df_drop-927_150250" data-func="pima_df.drop" title="💡 클릭하여 우측 'pima_df.drop' 해설 보기">pima_df.drop<span class="kw-sparkle">💡</span></span>(&#x27;outcome&#x27;, axis=1)
+y = pima_df[&#x27;outcome&#x27;]
+
+# 2. 훈련/테스트 데이터 분할 (8:2 비율)
+X_train, X_test, y_train, y_test = <span class="code-kw-interactive" data-step="step2" data-tab="step2-train_test_split-927_150338" data-func="train_test_split" title="💡 클릭하여 우측 'train_test_split' 해설 보기">train_test_split<span class="kw-sparkle">💡</span></span>(
+    X, y,
+    test_size=0.2,
+    random_state=42,
+    stratify=y # 분류 문제이므로 stratify 적용
+)
+
+# 3. 분할 결과 확인
+print(&quot;Original data shape:&quot;, <span class="code-kw-interactive" data-step="step2" data-tab="step2-X_shape-927_150405" data-func="X.shape" title="💡 클릭하여 우측 'X.shape' 해설 보기">X.shape<span class="kw-sparkle">💡</span></span>)
+print(&quot;X_train shape:&quot;, <span class="code-kw-interactive" data-step="step2" data-tab="step2-X_train_shape-927_150419" data-func="X_train.shape" title="💡 클릭하여 우측 'X_train.shape' 해설 보기">X_train.shape<span class="kw-sparkle">💡</span></span>)
+print(&quot;X_test shape:&quot;, <span class="code-kw-interactive" data-step="step2" data-tab="step2-X_test_shape-927_150433" data-func="X_test.shape" title="💡 클릭하여 우측 'X_test.shape' 해설 보기">X_test.shape<span class="kw-sparkle">💡</span></span>)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>Original data shape: (768, 8)
+X_train shape: (614, 8)
+X_test shape: (154, 8)
+</pre></div></div></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (Markdown)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (5)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step2" data-tab="step2-X_shape-927_150405" onclick="switchTab('step2', 'step2-X_shape-927_150405')"><span class="tab-func-name">X.shape</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-X_test_shape-927_150433" onclick="switchTab('step2', 'step2-X_test_shape-927_150433')"><span class="tab-func-name">X_test.shape (8:2)</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-X_train_shape-927_150419" onclick="switchTab('step2', 'step2-X_train_shape-927_150419')"><span class="tab-func-name">X_train.shape</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-pima_df_drop-927_150250" onclick="switchTab('step2', 'step2-pima_df_drop-927_150250')"><span class="tab-func-name">pima_df.drop</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-train_test_split-927_150338" onclick="switchTab('step2', 'step2-train_test_split-927_150338')"><span class="tab-func-name">train_test_split (8:2)</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step2-X_shape-927_150405"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>X.shape</code></div><div class="note-time-badge">⏱ 2026-09-27 15:04:05</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: X.shape</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:04:05</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">X.shape</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">X.shape은 파이썬에서 데이터가 가로와 세로로 각각 몇 칸씩 이루어져 있는지, 그 크기와 모양을 알려주는 고마운 친구예요. 마치 거대한 상자를 열어보기 전에 겉면에 적힌 &#x27;가로 몇 개, 세로 몇 개&#x27;라는 설명서를 읽어보는 것과 같답니다. 주로 우리가 분석하려는 데이터가 컴퓨터에게 잘 들어갔는지, 찌그러지지 않고 반듯한 모양을 잘 유지하고 있는지 확인할 때 쓴답니다.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step2', 'X.shape')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step2-X_test_shape-927_150433"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>X_test.shape</code></div><div class="note-time-badge">⏱ 2026-09-27 15:04:33</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: X_test.shape</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:04:33</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">X_test.shape</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">X_test.shape은 AI 공부에 쓸 시험 문제들이 가로세로 몇 장씩 쌓여 있는지, 즉 데이터의 전체 크기와 모양을 한눈에 알려주는 이름표 같은 역할을 해요.</p>
+<p class="note-p">우리가 새로운 물건을 사기 전에 가로, 세로, 높이 크기를 먼저 확인해보는 것처럼, 머신러닝 모델에 시험(테스트)을 보기 전 데이터가 우리가 생각한 대로 잘 준비되었는지 확인하고 싶을 때 주로 사용한답니다.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step2', 'X_test.shape')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step2-X_train_shape-927_150419"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>X_train.shape</code></div><div class="note-time-badge">⏱ 2026-09-27 15:04:19</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: X_train.shape</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:04:19</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">X_train.shape</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">X_train.shape은 우리가 공부에 사용할 문제집의 전체 규모가 어떻게 되는지, 즉 &#x27;문제집의 가로 세로 크기(몇 문제의 몇 가지 정보가 있는지)&#x27;를 한눈에 확인하고 싶을 때 사용하는 도구예요.</p>
+<p class="note-p">우리가 새로운 문제집을 풀기 전에 문제가 총 몇 개 들어있고 보기는 몇 개인지 차례를 훑어보는 것처럼, 머신러닝 모델에게 공부를 시키기 전 데이터의 생김새와 크기를 꼼꼼히 점검할 때 쓴답니다.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step2', 'X_train.shape')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step2-pima_df_drop-927_150250"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>pima_df.drop</code></div><div class="note-time-badge">⏱ 2026-09-27 15:02:50</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: pima_df.drop</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:02:50</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">pima_df.drop</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">파이썬 데이터 분석에서 자주 쓰이는 <code class="inline-code">pima_df.drop</code> 코드에 대한 상세 해설입니다. 초보자의 눈높이에 맞춰 하나씩 쉽고 명쾌하게 풀어드릴게요!</p>
+<hr class="note-divider" />
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">pima_df.drop()</code>은 판다스(Pandas) 데이터프레임에서 <strong>특정 행(Row)이나 열(Column)을 삭제(추출)할 때 사용하는 함수</strong>입니다.</p>
+<p class="note-p">제공된 코드에서는 머신러닝 모델에 학습시킬 <strong>입력 데이터(Features)를 만들기 위해</strong> 정답 데이터에 해당하는 열을 쏙 빼내는 작업(데이터 정제)을 하고 있습니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">코드 <code class="inline-code">pima_df.drop(&#x27;outcome&#x27;, axis=1)</code>에 전달된 인자들의 의미는 다음과 같습니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong>첫 번째 인자 (<code class="inline-code">&#x27;outcome&#x27;</code>)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 삭제하고자 하는 대상의 이름(열 이름 또는 행 이름)을 지정합니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 여기서는 <code class="inline-code">&#x27;outcome&#x27;</code>이라는 이름을 가진 열(Column)을 지우겠다고 지정한 것입니다. 보통 머신러닝에서 <code class="inline-code">outcome</code>은 예측해야 할 정답(Label/Target) 데이터인 경우가 많으므로, 문제지(입력 데이터)를 만들기 위해 이 열을 통째로 떼어내는 것입니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">axis=1</code></strong></li>
+<li class="note-list-item"><strong>역할:</strong> 삭제할 방향(축)을 지정해 줍니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 판다스에서 <code class="inline-code">axis=0</code>은 <strong>행(Row, 가로줄)</strong>을 의미하고, <code class="inline-code">axis=1</code>은 <strong>열(Column, 세로줄)</strong>을 의미합니다. 따라서 <code class="inline-code">axis=1</code>은 &quot;&#x27;outcome&#x27;이라는 이름을 가진 <strong>세로 열</strong>을 통째로 날려라&quot;라는 뜻이 됩니다.</li>
+</ul>
+<hr class="note-divider" />
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p">코드 전체의 결과가 어떻게 처리되는지 살펴봅니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">X</code></strong></li>
+<li class="note-list-item"><strong>설명:</strong> <code class="inline-code">pima_df</code> 데이터프레임에서 <code class="inline-code">&#x27;outcome&#x27;</code> 열(정답)이 <strong>제거된 나머지 모든 열(특성, Feature)</strong>들이 담기는 변수입니다.</li>
+<li class="note-list-item"><strong>데이터의 성격:</strong> 머신러닝 모델에게 &quot;이러한 조건들(나이, 혈압, 당뇨 수치 등)을 보고 결과를 맞춰봐!&quot;라고 던져주는 <strong>문제지(입력 데이터 세트)</strong> 역할을 하게 됩니다.</li>
+</ul></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step2', 'pima_df.drop')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step2-train_test_split-927_150338"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>train_test_split</code></div><div class="note-time-badge">⏱ 2026-09-27 15:03:38</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: train_test_split</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:03:38</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">train_test_split</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">파이썬 머신러닝에서 데이터 분석을 할 때 가장 많이 사용하는 함수 중 하나인 <code class="inline-code">train_test_split</code>에 대해 초보자의 눈높이에 맞춰 친절하고 명쾌하게 설명해 드리겠습니다!</p>
+<hr class="note-divider" />
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">train_test_split</code>은 가지고 있는 전체 데이터(<code class="inline-code">X</code>, <code class="inline-code">y</code>)를 <strong>머신러닝 모델을 학습시키기 위한 데이터(Train)</strong>와 <strong>모델의 성능을 평가하기 위한 테스트 데이터(Test)</strong>로 무작위로 쪼개주는(Split) 함수입니다. 보통 뼈대 역할을 하는 머신러닝 라이브러리인 <code class="inline-code">scikit-learn(sklearn)</code>에서 가져와서 사용합니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">코드에 사용된 5가지 인자가 각각 어떤 역할을 하는지 살펴볼까요?</p>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">X</code></strong>: <strong>독립 변수(특징, Feature)</strong></li>
+<li class="note-list-item">AI가 정답을 맞추기 위해 보는 &#x27;문제집&#x27;과 같습니다. (예: 집의 크기, 방 개수, 위치 등이 담긴 표)</li>
+<li class="note-list-item"><strong><code class="inline-code">y</code></strong>: <strong>종속 변수(라벨, Label, Target)</strong></li>
+<li class="note-list-item">AI가 맞혀야 하는 &#x27;정답지&#x27;입니다. (예: 실제 집 가격)</li>
+<li class="note-list-item"><strong><code class="inline-code">test_size=0.2</code></strong>: <strong>테스트 데이터의 비율</strong></li>
+<li class="note-list-item">전체 데이터 중 <strong>20%(0.2)</strong>를 시험용(Test)으로 빼놓겠다는 뜻입니다. 자연스럽게 나머지 80%는 공부용(Train)으로 사용됩니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">random_state=42</code></strong>: <strong>랜덤 시드(씨앗) 값</strong></li>
+<li class="note-list-item">데이터를 섞을 때 <strong>랜덤으로 섞되, 항상 똑같이 섞이도록 고정</strong>해 주는 역할입니다. 컴퓨터의 랜덤은 사실 가짜(의사 난수)라서 이 숫자를 지정해 주면, 코드를 언제 다시 실행해도 나와 내 친구가 똑같은 데이터 셋으로 공부할 수 있게 됩니다. (42는 관습적으로 자주 쓰는 숫자일 뿐, 다른 숫자를 써도 무방합니다.)</li>
+<li class="note-list-item"><strong><code class="inline-code">stratify=y</code></strong>: <strong>계층적 샘플링(층화 추출) 설정</strong></li>
+<li class="note-list-item">주석에 적힌 대로 <strong>분류(Classification) 문제</strong>에서 아주 중요한 역할입니다. 예를 들어 정답(<code class="inline-code">y</code>)에 고양이와 강아지 사진이 9:1 비율로 있다면, 훈련 데이터와 테스트 데이터에도 이 비율(9:1)이 똑같이 유지되도록 공평하게 쪼개 줍니다. 한쪽으로 데이터가 치우치는 것을 방지합니다.</li>
+</ul>
+<hr class="note-divider" />
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p">함수가 실행되면 총 4개의 묶음 데이터가 튀어나오고, 좌변의 변수들에 순서대로 쏙쏙(Unpacking) 담깁니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">X_train</code> (학습용 특징)</strong>: 전체 문제집(<code class="inline-code">X</code>) 중 80%에 해당하는 공부용 문제입니다. AI가 이 데이터로 패턴을 학습합니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">X_test</code> (테스트용 특징)</strong>: 전체 문제집(<code class="inline-code">X</code>) 중 20%에 해당하는 시험용 문제입니다. AI에게 이 문제를 풀게 한 뒤 정답을 숨겨두고 얼마나 맞히나 채점합니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">y_train</code> (학습용 정답)</strong>: <code class="inline-code">X_train</code>에 짝이 되는 정답지입니다. AI가 공부할 때 &quot;이 문제는 답이 이거구나&quot; 하고 정답을 확인하는 용도입니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">y_test</code> (테스트용 정답)</strong>: <code class="inline-code">X_test</code>에 짝이 되는 진짜 정답지입니다. AI가 시험을 다 본 후, 진짜 채점을 매길 때 사용합니다.</li>
+</ul></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step2', 'train_test_split')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section><section class="step-section" id="step3"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">3단계</span><h2 class="step-title-text">검증 데이터셋 3단 분할 6:2:2 (Train-Val-Test Split)</h2></div><p class="step-summary-desc">훈련 데이터(80%)에서 25%를 떼어내어 최종 훈련(60%), 검증(20%), 테스트(20%)의 표준 3단 데이터셋 분할 체계 구축</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 실행 코드 및 결과 (Jupyter Notebook)</div><div class="code-cell-wrapper" id="cell-7"><div class="cell-header"><span class="cell-badge">In [7]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 이전 단계에서 X_train, y_train을 추가로 분할
+# test_size=0.25 -&gt; 80% 중 25%를 검증셋으로 할당 (전체의 20%)
+X_train_final, X_val, y_train_final, y_val = <span class="code-kw-interactive" data-step="step3" data-tab="step3-train_test_split-927_150946" data-func="train_test_split" title="💡 클릭하여 우측 'train_test_split' 해설 보기">train_test_split<span class="kw-sparkle">💡</span></span>(
+    X_train, y_train,
+    test_size=0.25,
+    random_state=42,
+    stratify=y_train # 분류 문제이므로 stratify 적용
+)
+
+# 최종 분할 결과 확인 (6:2:2)
+print(&quot;X_train_final shape:&quot;, <span class="code-kw-interactive" data-step="step3" data-tab="step3-X_train_final_shape-927_151024" data-func="X_train_final.shape" title="💡 클릭하여 우측 'X_train_final.shape' 해설 보기">X_train_final.shape<span class="kw-sparkle">💡</span></span>) # 60%
+print(&quot;X_val shape:&quot;, <span class="code-kw-interactive" data-step="step3" data-tab="step3-X_val_shape-927_151035" data-func="X_val.shape" title="💡 클릭하여 우측 'X_val.shape' 해설 보기">X_val.shape<span class="kw-sparkle">💡</span></span>)                 # 20%
+print(&quot;X_test shape:&quot;, <span class="code-kw-interactive" data-step="step3" data-tab="step3-X_test_shape-927_151055" data-func="X_test.shape" title="💡 클릭하여 우측 'X_test.shape' 해설 보기">X_test.shape<span class="kw-sparkle">💡</span></span>)               # 20%</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>X_train_final shape: (460, 8)
+X_val shape: (154, 8)
+X_test shape: (154, 8)
+</pre></div></div></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (Markdown)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (4)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step3" data-tab="step3-X_test_shape-927_151055" onclick="switchTab('step3', 'step3-X_test_shape-927_151055')"><span class="tab-func-name">X_test.shape (6:2:2)</span></button><button class="func-tab-btn " data-step="step3" data-tab="step3-X_train_final_shape-927_151024" onclick="switchTab('step3', 'step3-X_train_final_shape-927_151024')"><span class="tab-func-name">X_train_final.shape</span></button><button class="func-tab-btn " data-step="step3" data-tab="step3-X_val_shape-927_151035" onclick="switchTab('step3', 'step3-X_val_shape-927_151035')"><span class="tab-func-name">X_val.shape</span></button><button class="func-tab-btn " data-step="step3" data-tab="step3-train_test_split-927_150946" onclick="switchTab('step3', 'step3-train_test_split-927_150946')"><span class="tab-func-name">train_test_split (6:2:2)</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step3-X_test_shape-927_151055"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>X_test.shape</code></div><div class="note-time-badge">⏱ 2026-09-27 15:10:55</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: X_test.shape</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:10:55</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">X_test.shape</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">X_test.shape은 AI 공부에 쓸 시험 문제들이 가로세로 몇 장씩 쌓여 있는지, 즉 데이터의 전체 크기와 모양을 한눈에 알려주는 이름표 같은 역할을 해요.</p>
+<p class="note-p">우리가 새로운 물건을 사기 전에 가로, 세로, 높이 크기를 먼저 확인해보는 것처럼, 머신러닝 모델에 시험(테스트)을 보기 전 데이터가 우리가 생각한 대로 잘 준비되었는지 확인하고 싶을 때 주로 사용한답니다.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step3', 'X_test.shape')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step3-X_train_final_shape-927_151024"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>X_train_final.shape</code></div><div class="note-time-badge">⏱ 2026-09-27 15:10:24</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: X_train_final.shape</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:10:24</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">X_train_final.shape</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">안녕하세요! 궁금해하신 코드에 대해 쉽고 친근하게 설명해 드릴게요.</p>
+<p class="note-p">이 코드는 쉽게 비유하자면 커다란 바둑판이나 엑셀 표의 크기를 재어주는 세로 가로 줄자 같다고 생각하시면 돼요. 내가 만든 표에 세로로 몇 줄이 들어있고, 가로로 몇 칸이 그려져 있는지 전체적인 판의 크기를 확인해 주는 친절한 도구랍니다.</p>
+<p class="note-p">X_train_final.shape는 인공지능을 학습시킬 최종 데이터 표의 전체적인 크기, 즉 데이터 개수(행)와 정보 종류(열)가 몇 개씩 있는지 확인해 주는 역할을 해요. 데이터를 여러 단계로 깔끔하게 정리한 후, AI에게 공부시키기 직전에 계획한 대로 데이터가 빠짐없이 잘 준비되었는지 최종 점검할 때 사용합니다. 만약 출력 결과가 (1000, 5)라면 1000명의 정보가 5가지 항목으로 예쁘게 정리되어 있다는 뜻이에요.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step3', 'X_train_final.shape')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step3-X_val_shape-927_151035"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>X_val.shape</code></div><div class="note-time-badge">⏱ 2026-09-27 15:10:35</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: X_val.shape</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:10:35</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">X_val.shape</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">X_val.shape는 마치 택배 상자에 적힌 가로, 세로, 높이 치수처럼 우리가 가진 데이터가 전체 몇 개이고 각각 크기가 어떻게 되는지 그 크기 정보를 알려주는 아주 친절한 안내판 같은 역할을 한답니다.</p>
+<p class="note-p">주로 머신러닝 모델에게 공부를 시키거나 시험을 보기 전에, 데이터가 우리가 생각한 모양과 크기로 아주 잘 준비되었는지 꼼꼼하게 확인하고 싶을 때 쓴답니다.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step3', 'X_val.shape')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step3-train_test_split-927_150946"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>train_test_split</code></div><div class="note-time-badge">⏱ 2026-09-27 15:09:46</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: train_test_split</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:09:46</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">train_test_split</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">제공해주신 코드 문맥을 바탕으로 <code class="inline-code">train_test_split</code> 함수와 각 인자, 반환값을 초보자의 눈높이에 맞춰 친절하고 명쾌하게 정리해 드릴게요.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">📌 1. 함수 개요</h3>
+<p class="note-p"><strong><code class="inline-code">train_test_split</code></strong>은 머신러닝 라이브러리인 Scikit-learn에서 제공하는 함수로, <strong>전체 데이터를 모델 학습용(Train)과 성능 검증용(Validation/Test) 데이터로 분할해 주는 함수</strong>입니다.</p>
+<p class="note-p">마치 시험공부를 할 때 전체 문제집에서 75%는 &#x27;공부용&#x27;으로 풀고, 나머지 25%는 실력을 테스트하기 위한 &#x27;모의고사용&#x27;으로 남겨두는 것과 같습니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">🔍 2. 입력 인자(매개변수) 분석</h3>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">X_train</code>, <code class="inline-code">y_train</code> (분할할 원본 데이터)</strong></li>
+<li class="note-list-item"><strong><code class="inline-code">X_train</code> (문제집/피처)</strong>: 모델이 학습하거나 예측할 때 참고하는 입력 데이터(독립변수)입니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">y_train</code> (정답지/타깃)</strong>: 모델이 맞춰야 하는 정답 레이블(종속변수)입니다.</li>
+<li class="note-list-item"><em>참고: 여기서는 이미 한 번 분할된 Train 데이터를 모의고사(검증용) 데이터로 또 한 번 쪼개기 위해 전달되었습니다.</em></li>
+</ul>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">test_size=0.25</code> (분할 비율)</strong></li>
+<li class="note-list-item">전체 데이터 중 <strong>검증용(Validation) 데이터로 25%를 떼어놓겠다</strong>는 의미입니다.</li>
+<li class="note-list-item">남은 <strong>75%</strong>는 최종 학습용 데이터(<code class="inline-code">X_train_final</code>, <code class="inline-code">y_train_final</code>)로 배정됩니다.</li>
+</ul>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">random_state=42</code> (난수 시드 / 고정값)</strong></li>
+<li class="note-list-item">데이터를 섞어서 나눌 때 사용하는 <strong>&#x27;랜덤 규칙의 고유 번호&#x27;</strong>입니다.</li>
+<li class="note-list-item">컴퓨터는 난수를 생성해 무작위로 섞는데, 이 숫자를 <code class="inline-code">42</code>로 고정해 두면 <strong>언제, 어디서, 누가 코드를 다시 실행해도 항상 똑같은 데이터들로 분할</strong>됩니다. (실험 결과의 재현성을 위해 필수적인 설정입니다.)</li>
+</ul>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code"># stratify=y_train</code> (계층적 분할 - 현재 주석 처리됨)</strong></li>
+<li class="note-list-item"><strong>역할</strong>: 정답(<code class="inline-code">y_train</code>) 클래스의 비율을 분할 후에도 그대로 유지해 주는 옵션입니다.</li>
+<li class="note-list-item"><strong>예시</strong>: 만약 정답지에 &#x27;정상&#x27;이 90%, &#x27;사기(이상치)&#x27;가 10% 들어있다면, 쪼개진 학습셋과 검증셋 모두에 정확히 <strong>9:1</strong> 비율로 들어가도록 배분합니다.</li>
+<li class="note-list-item"><strong>팁</strong>: 주석의 메모처럼 분류(Classification) 문제, 특히 특정 클래스가 적은 불균형 데이터에서는 주석을 풀고 적용하는 것이 모델 성능 평가에 훨씬 유리합니다.</li>
+</ul>
+<hr class="note-divider" />
+<h3 class="note-h3">📤 3. 반환값 및 할당 변수 분석</h3>
+<p class="note-p">함수가 실행되면 데이터가 <strong>4개의 덩어리</strong>로 나뉘어 순서대로 반환(언패킹)됩니다.</p>
+<p class="note-p">1.  <strong><code class="inline-code">X_train_final</code> (최종 학습용 문제집)</strong></p>
+<ul class="note-list">
+<li class="note-list-item">입력된 <code class="inline-code">X_train</code> 중 <strong>75%</strong>에 해당하는 데이터입니다.</li>
+<li class="note-list-item">모델이 패턴을 학습하는 데 실제로 사용됩니다.</li>
+</ul>
+<p class="note-p">2.  <strong><code class="inline-code">X_val</code> (검증용 문제집)</strong></p>
+<ul class="note-list">
+<li class="note-list-item">입력된 <code class="inline-code">X_train</code> 중 <strong>25%</strong>에 해당하는 데이터입니다.</li>
+<li class="note-list-item">학습에는 관여하지 않고, 모델이 공부를 잘했는지 모의고사를 치를 때 사용됩니다.</li>
+</ul>
+<p class="note-p">3.  <strong><code class="inline-code">y_train_final</code> (최종 학습용 정답지)</strong></p>
+<ul class="note-list">
+<li class="note-list-item"><code class="inline-code">X_train_final</code>에 1:1로 대응되는 <strong>75%</strong>의 정답 데이터입니다.</li>
+</ul>
+<p class="note-p">4.  <strong><code class="inline-code">y_val</code> (검증용 정답지)</strong></p>
+<ul class="note-list">
+<li class="note-list-item"><code class="inline-code">X_val</code>에 1:1로 대응되는 <strong>25%</strong>의 정답 데이터입니다.</li>
+<li class="note-list-item">모의고사(X_val)를 푼 모델의 답안지와 비교하여 점수를 매길 때(채점용) 사용됩니다.</li>
+</ul></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step3', 'train_test_split')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section><section class="step-section" id="step4"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">4단계</span><h2 class="step-title-text">분할 데이터셋 레이블 빈도 및 비율 분석 (Stratified Check)</h2></div><p class="step-summary-desc">학습셋(y_train_final), 검증셋(y_val), 평가셋(y_test)의 당뇨병 양성/음성 클래스 비율이 원본과 동일하게 유지되었는지 value_counts로 검증</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 실행 코드 및 결과 (Jupyter Notebook)</div><div class="cell-markdown-box"><h3 class="note-h3"><code class="inline-code">y_train_final</code> 빈도 및 비율 분석</h3></div><div class="code-cell-wrapper" id="cell-9"><div class="cell-header"><span class="cell-badge">In [9]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">print(&#x27;y_train_final 빈도 분석:&#x27;)
+display(<span class="code-kw-interactive" data-step="step4" data-tab="step4-y_train_final_value_counts-927_151129" data-func="y_train_final.value_counts" title="💡 클릭하여 우측 'y_train_final.value_counts' 해설 보기">y_train_final.value_counts<span class="kw-sparkle">💡</span></span>().sort_index())
+
+print(&#x27;\ny_train_final 비율 분석:&#x27;)
+display(<span class="code-kw-interactive" data-step="step4" data-tab="step4-y_train_final_value_counts-927_151129" data-func="y_train_final.value_counts" title="💡 클릭하여 우측 'y_train_final.value_counts' 해설 보기">y_train_final.value_counts<span class="kw-sparkle">💡</span></span>(normalize=True).sort_index())</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (4)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>y_train_final 빈도 분석:
+</pre></div><div class="output-item html-table-output"><div class="output-type-tag">DataFrame Display</div><div class="table-responsive-wrapper"><table border="1" class="dataframe modern-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>count</th>
+    </tr>
+    <tr>
+      <th>outcome</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>300</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>160</td>
+    </tr>
+  </tbody>
+</table></div></div><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>
+y_train_final 비율 분석:
+</pre></div><div class="output-item html-table-output"><div class="output-type-tag">DataFrame Display</div><div class="table-responsive-wrapper"><table border="1" class="dataframe modern-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>proportion</th>
+    </tr>
+    <tr>
+      <th>outcome</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.652174</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.347826</td>
+    </tr>
+  </tbody>
+</table></div></div></div></div></div><div class="cell-markdown-box"><h3 class="note-h3"><code class="inline-code">y_val</code> 빈도 및 비율 분석</h3></div><div class="code-cell-wrapper" id="cell-11"><div class="cell-header"><span class="cell-badge">In [11]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">print(&#x27;y_val 빈도 분석:&#x27;)
+display(<span class="code-kw-interactive" data-step="step4" data-tab="step4-y_val_value_counts-927_151442" data-func="y_val.value_counts" title="💡 클릭하여 우측 'y_val.value_counts' 해설 보기">y_val.value_counts<span class="kw-sparkle">💡</span></span>().sort_index())
+
+print(&#x27;\ny_val 비율 분석:&#x27;)
+display(<span class="code-kw-interactive" data-step="step4" data-tab="step4-y_val_value_counts-927_151442" data-func="y_val.value_counts" title="💡 클릭하여 우측 'y_val.value_counts' 해설 보기">y_val.value_counts<span class="kw-sparkle">💡</span></span>(normalize=True).sort_index())</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (4)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>y_val 빈도 분석:
+</pre></div><div class="output-item html-table-output"><div class="output-type-tag">DataFrame Display</div><div class="table-responsive-wrapper"><table border="1" class="dataframe modern-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>count</th>
+    </tr>
+    <tr>
+      <th>outcome</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>100</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>54</td>
+    </tr>
+  </tbody>
+</table></div></div><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>
+y_val 비율 분석:
+</pre></div><div class="output-item html-table-output"><div class="output-type-tag">DataFrame Display</div><div class="table-responsive-wrapper"><table border="1" class="dataframe modern-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>proportion</th>
+    </tr>
+    <tr>
+      <th>outcome</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.649351</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.350649</td>
+    </tr>
+  </tbody>
+</table></div></div></div></div></div><div class="cell-markdown-box"><h3 class="note-h3"><code class="inline-code">y_test</code> 빈도 및 비율 분석</h3></div><div class="code-cell-wrapper" id="cell-13"><div class="cell-header"><span class="cell-badge">In [13]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">print(&#x27;y_test 빈도 분석:&#x27;)
+display(<span class="code-kw-interactive" data-step="step4" data-tab="step4-y_test_value_counts-927_151611" data-func="y_test.value_counts" title="💡 클릭하여 우측 'y_test.value_counts' 해설 보기">y_test.value_counts<span class="kw-sparkle">💡</span></span>().sort_index())
+
+print(&#x27;\ny_test 비율 분석:&#x27;)
+display(<span class="code-kw-interactive" data-step="step4" data-tab="step4-y_test_value_counts-927_151611" data-func="y_test.value_counts" title="💡 클릭하여 우측 'y_test.value_counts' 해설 보기">y_test.value_counts<span class="kw-sparkle">💡</span></span>(normalize=True).sort_index())</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (4)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>y_test 빈도 분석:
+</pre></div><div class="output-item html-table-output"><div class="output-type-tag">DataFrame Display</div><div class="table-responsive-wrapper"><table border="1" class="dataframe modern-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>count</th>
+    </tr>
+    <tr>
+      <th>outcome</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>100</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>54</td>
+    </tr>
+  </tbody>
+</table></div></div><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>
+y_test 비율 분석:
+</pre></div><div class="output-item html-table-output"><div class="output-type-tag">DataFrame Display</div><div class="table-responsive-wrapper"><table border="1" class="dataframe modern-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>proportion</th>
+    </tr>
+    <tr>
+      <th>outcome</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.649351</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.350649</td>
+    </tr>
+  </tbody>
+</table></div></div></div></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (Markdown)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (6)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step4" data-tab="step4-y_test_value_counts-927_151611" onclick="switchTab('step4', 'step4-y_test_value_counts-927_151611')"><span class="tab-func-name">y_test (빈도)</span></button><button class="func-tab-btn " data-step="step4" data-tab="step4-y_test_value_counts-927_151623" onclick="switchTab('step4', 'step4-y_test_value_counts-927_151623')"><span class="tab-func-name">y_test (비율)</span></button><button class="func-tab-btn " data-step="step4" data-tab="step4-y_train_final_value_counts-927_151129" onclick="switchTab('step4', 'step4-y_train_final_value_counts-927_151129')"><span class="tab-func-name">y_train_final (빈도)</span></button><button class="func-tab-btn " data-step="step4" data-tab="step4-y_train_final_value_counts-927_151228" onclick="switchTab('step4', 'step4-y_train_final_value_counts-927_151228')"><span class="tab-func-name">y_train_final (비율)</span></button><button class="func-tab-btn " data-step="step4" data-tab="step4-y_val_value_counts-927_151442" onclick="switchTab('step4', 'step4-y_val_value_counts-927_151442')"><span class="tab-func-name">y_val (빈도)</span></button><button class="func-tab-btn " data-step="step4" data-tab="step4-y_val_value_counts-927_151545" onclick="switchTab('step4', 'step4-y_val_value_counts-927_151545')"><span class="tab-func-name">y_val (비율)</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step4-y_test_value_counts-927_151611"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>y_test.value_counts</code></div><div class="note-time-badge">⏱ 2026-09-27 15:16:11</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: y_test.value_counts</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:16:11</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">y_test.value_counts</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">파이썬 머신러닝 코드에서 자주 사용되는 <code class="inline-code">y_test.value_counts().sort_index()</code> 구문 중, 핵심이 되는 <strong><code class="inline-code">y_test.value_counts</code></strong> 함수와 주변 메서드들에 대해 초보자의 눈높이에 맞춰 알기 쉽게 설명해 드리겠습니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">y_test.value_counts()</code>는 <strong>정답 데이터(y_test)에 포함된 각 정답(클래스)별 개수가 총 몇 개인지 세어주는 함수</strong>입니다. 여기에 <code class="inline-code">.sort_index()</code>를 붙이면 그 결과(데이터의 종류)를 오름차순으로 예쁘게 정렬해서 보여줍니다. 머신러닝 모델이 특정 정답에 편향되어 학습되지 않았는지(데이터가 골고루 잘 나뉘었는지) 확인할 때 주로 사용합니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">제시해주신 코드 문맥(<code class="inline-code">display(y_test.value_counts().sort_index())</code>)에서 <strong><code class="inline-code">value_counts()</code></strong> 함수와 <strong><code class="inline-code">sort_index()</code></strong> 함수에 사용된 인자들을 분석해 보겠습니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">y_test.value_counts()</code> 안의 괄호 <code class="inline-code">()</code> (전달된 인자 없음)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 이 괄호 안에는 아무런 값도 넣지 않았습니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 기본값(Default)을 그대로 사용하여, <code class="inline-code">y_test</code>에 있는 모든 데이터의 종류별 개수를 빠짐없이 세라는 뜻입니다. (참고로 이 안에 <code class="inline-code">normalize=True</code> 같은 인자를 넣으면 개수 대신 비율로 보여줄 수도 있지만, 기본은 개수입니다.)</li>
+<li class="note-list-item"><strong><code class="inline-code">.sort_index()</code> 안의 괄호 <code class="inline-code">()</code> (전달된 인자 없음)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 역시 비어 있는 괄호입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 데이터의 이름(Index, 예를 들어 0, 1, 2 또는 &#x27;Cat&#x27;, &#x27;Dog&#x27; 같은 정답 라벨)을 기준으로 <strong>가나다순 또는 오름차순(작은 것부터 큰 것 순서)</strong>으로 결과를 정렬하라는 뜻입니다. 결과가 뒤죽박죽 섞여 있으면 보기 불편하기 때문에 정렬을 위해 세트로 자주 붙여 씁니다.</li>
+</ul>
+<p class="note-p"><em>(※ 질문에서 예시로 언급하신 <code class="inline-code">test_size</code>, <code class="inline-code">random_state</code>, <code class="inline-code">stratify</code> 등은 이 함수가 아니라, 데이터를 훈련용과 테스트용으로 쪼갤 때 쓰는 <code class="inline-code">train_test_split</code> 함수의 인자이므로 여기서는 사용되지 않았습니다!)</em></p>
+<hr class="note-divider" />
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p">이 코드는 변수에 값을 새롭게 할당하는 코드가 아니라, 결과를 화면에 예쁘게 보여주는(<code class="inline-code">display</code>) 코드입니다. 이 코드가 실행되었을 때 <strong>출력되는 결과(반환값)</strong>가 무엇을 의미하는지 설명해 드릴게요.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong>반환되는 데이터 형태 (Pandas Series):</strong></li>
+<li class="note-list-item">왼쪽에는 <strong>정답의 이름(라벨)</strong>이 나오고, 오른쪽에는 <strong>그 정답이 테스트 데이터(y_test)에 몇 개 들어있는지(개수)</strong>가 짝을 지어 출력됩니다.</li>
+<li class="note-list-item"><strong>출력 예시 및 해석:</strong></li>
+</ul>
+<pre class="note-code-block"><code class="language-text">    0    30
+    1    25
+    Name: count, dtype: int64</code></pre>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">0</code>과 <code class="inline-code">1</code> (Index):</strong> 모델이 맞춰야 할 정답의 종류(예: 0번 고양이, 1번 강아지)입니다. <code class="inline-code">.sort_index()</code> 덕분에 0이 먼저, 1이 나중에 오도록 깔끔하게 정렬되었습니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">30</code>과 <code class="inline-code">25</code> (Value):</strong> 테스트 데이터(<code class="inline-code">y_test</code>) 안에 0번 정답이 30개, 1번 정답이 25개 들어있다는 뜻입니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">Name: count, dtype: int64</code>:</strong> 데이터의 개수를 세었으며, 숫자의 데이터 타입이 정수(int)라는 안내입니다.</li>
+</ul></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step4', 'y_test.value_counts')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step4-y_test_value_counts-927_151623"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>y_test.value_counts</code></div><div class="note-time-badge">⏱ 2026-09-27 15:16:23</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: y_test.value_counts</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:16:23</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">y_test.value_counts</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">파이썬 머신러닝 코드에서 자주 사용되는 <code class="inline-code">y_test.value_counts(normalize=True).sort_index()</code> 문맥 중, <strong><code class="inline-code">y_test.value_counts</code> 함수와 그 인자들</strong>에 대한 상세 해설입니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">y_test.value_counts()</code>는 판다스(Pandas) 데이터 구조(Series)에서 <strong>각 데이터(값)가 몇 번 나타나는지(개수)를 세어주는 함수</strong>입니다. 정답 데이터(<code class="inline-code">y_test</code>)에 어떤 종류의 값이 얼마나 들어있는지 파악하여, 데이터의 균형 상태를 확인할 때 주로 사용합니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">제시해주신 코드에는 함수 내부의 인자와 함께 결과값을 조작하는 메서드들이 연결(Chaining)되어 있습니다. 각각의 역할을 살펴볼게요.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">normalize=True</code> (<code class="inline-code">value_counts</code>의 인자)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 개수를 그대로 보여주는 대신, <strong>전체 대비 비율(백분율의 소수점 형태)</strong>로 변환해 줍니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 예를 들어 총 100개의 데이터 중 0이 80개, 1이 20개라면, 개수 대신 각각 <code class="inline-code">0.8</code>, <code class="inline-code">0.2</code>로 비율을 계산해서 보여줍니다. (불균형 데이터셋인지 확인할 때 매우 유용합니다.)</li>
+</ul>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">.sort_index()</code> (추가 메서드)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 계산된 결과의 <strong>기준값(Index)을 오름차순으로 정렬</strong>해 줍니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 예를 들어 정답 라벨이 <code class="inline-code">[0, 1, 2]</code>라면, 뒤죽박죽 섞여서 출력될 수 있는 결과를 <code class="inline-code">0</code>, <code class="inline-code">1</code>, <code class="inline-code">2</code> 순서대로 깔끔하게 줄 세워 줍니다.</li>
+</ul>
+<hr class="note-divider" />
+<h3 class="note-h3">3. 📤 반환값/할당 변수 설명</h3>
+<p class="note-p">이 코드는 변수에 값을 다시 할당하지 않고, 주피터 노트북 등의 환경에서 결과를 예쁘게 출력하기 위해 <code class="inline-code">display()</code> 함수로 감싸져 있습니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong>출력되는 결과:</strong></li>
+<li class="note-list-item"><code class="inline-code">y_test</code>(테스트용 정답 데이터)에 들어있는 <strong>각 클래스(라벨)별 비율</strong>이 <strong>정렬된 순서</strong>로 화면에 표 형태로 출력됩니다.</li>
+<li class="note-list-item"><em>(예시)</em></li>
+</ul>
+<pre class="note-code-block"><code class="language-text">        0    0.75
+        1    0.25
+        dtype: float64</code></pre>
+<p class="note-p"><em>(해석: 테스트 데이터 중 0번 정답이 75%, 1번 정답이 25% 비율로 들어있음을 한눈에 알 수 있습니다.)</em></p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step4', 'y_test.value_counts')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step4-y_train_final_value_counts-927_151129"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>y_train_final.value_counts</code></div><div class="note-time-badge">⏱ 2026-09-27 15:11:29</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: y_train_final.value_counts</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:11:29</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">y_train_final.value_counts</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">안녕하세요! 파이썬 데이터 분석(주로 판다스 Pandas)에서 자주 쓰이는 핵심 코드에 대한 상세 해설입니다.</p>
+<p class="note-p">초보자분들도 쉽게 이해하실 수 있도록 요청하신 항목별로 친절하게 풀어드리겠습니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">y_train_final.value_counts()</code>는 <strong>데이터프레임이나 시리즈(Series) 안에 들어있는 데이터의 종류별 개수(빈도수)를 세어주는 함수</strong>입니다.</p>
+<p class="note-p">여기서는 머신러닝 학습용 정답 데이터(<code class="inline-code">y_train_final</code>)에 각 정답(클래스)이 몇 개씩 들어있는지 확인할 때 사용합니다. 데이터가 한쪽으로 치우치지는 않았는지(불균형 데이터인지) 확인할 때 필수적인 함수입니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">제시해주신 전체 코드 <code class="inline-code">display(y_train_final.value_counts().sort_index())</code>에서 사용된 함수들과 인자들을 쪼개어 설명해 드릴게요.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">y_train_final</code> (대상 데이터)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 개수를 셀 원본 데이터(판다스 Series 객체)입니다. 머신러닝의 정답(Label) 데이터들이 들어있습니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">value_counts()</code>의 인자 (괄호 안)</strong></li>
+<li class="note-list-item"><strong>현재 상태:</strong> 괄호 안에 <strong>아무런 인자도 전달되지 않았습니다.</strong></li>
+<li class="note-list-item"><strong>의미:</strong> 기본값(Default)인 <code class="inline-code">dropna=True</code>가 적용되어, <strong>결측치(NaN, 빈 값)를 제외한 나머지 값들의 개수</strong>를 세게 됩니다. (참고로 값의 비율을 보고 싶다면 <code class="inline-code">normalize=True</code>를 넣을 수도 있지만, 여기서는 개수를 세고 있습니다.)</li>
+<li class="note-list-item"><strong>추가로 연결된 함수들의 역할:</strong></li>
+<li class="note-list-item"><strong><code class="inline-code">.sort_index()</code></strong>: <code class="inline-code">value_counts()</code> 결과는 기본적으로 데이터 개수가 많은 순서(내림차순)로 정렬됩니다. 여기에 <code class="inline-code">sort_index()</code>를 붙이면 <strong>데이터의 이름(인덱스, 예: 0, 1, 2 등)을 기준으로 오름차순 정렬</strong>해 줍니다. 보기 편하게 순서대로 정렬할 때 사용합니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">display(...)</code></strong>: 판다스 결과를 주피터 노트북(Jupyter Notebook) 화면에 예쁘고 가독성 좋게 출력해 주는 함수입니다.</li>
+</ul>
+<hr class="note-divider" />
+<h3 class="note-h3">3. 📤 반환값 및 최종 출력 결과</h3>
+<p class="note-p">이 코드는 새로운 변수에 값을 할당하는 코드가 아니라, 화면에 결과를 보여주는(<code class="inline-code">display</code>) 코드입니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong>반환값의 형태:</strong> 판다스 <strong>Series(시리즈)</strong> 객체로 반환되며, 화면에는 <strong>[데이터의 종류(Index) | 개수(Count)]</strong> 형태의 표로 출력됩니다.</li>
+<li class="note-list-item"><strong>예시 상황:</strong></li>
+</ul>
+<p class="note-p">만약 <code class="inline-code">y_train_final</code>에 0과 1이라는 두 가지 정답이 있다면, 결과는 아래와 같이 나옵니다.</p>
+<pre class="note-code-block"><code class="language-text">    0    450
+    1    550
+    Name: count, dtype: int64</code></pre>
+<ul class="note-list">
+<li class="note-list-item"><strong>좌측 (0, 1):</strong> 정답 데이터의 종류 (인덱스)</li>
+<li class="note-list-item"><strong>우측 (450, 550):</strong> 해당 정답이 데이터셋에 각각 몇 개씩 들어있는지(개수)</li>
+<li class="note-list-item"><strong><code class="inline-code">.sort_index()</code> 덕분에:</strong> 0번이 먼저 나오고 그 다음에 1번이 차례대로 정렬되어 출력됩니다.</li>
+</ul></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step4', 'y_train_final.value_counts')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step4-y_train_final_value_counts-927_151228"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>y_train_final.value_counts</code></div><div class="note-time-badge">⏱ 2026-09-27 15:12:28</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: y_train_final.value_counts</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:12:28</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">y_train_final.value_counts</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">안녕하세요! 파이썬 데이터 분석에서 자주 사용되는 <code class="inline-code">value_counts()</code> 함수와 관련된 코드를 초보자의 눈높이에 맞춰 아주 쉽고 명쾌하게 설명해 드리겠습니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">y_train_final.value_counts()</code>는 <strong>데이터프레임의 열이나 시리즈(Series) 안에 들어있는 데이터 값들의 종류별 개수(빈도수)를 세어주는 함수</strong>입니다.</p>
+<p class="note-p">주어진 코드 전체(<code class="inline-code">display(y_train_final.value_counts(normalize=True).sort_index())</code>)는 머신러닝 학습 전, 정답 데이터(<code class="inline-code">y_train_final</code>)에 어떤 값들이 각각 몇 %의 비율로 들어있는지 보기 쉽게 정렬해서 화면에 출력해 주는 역할을 합니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">제시해주신 코드 문맥에서 사용된 인자와 메서드들을 하나씩 뜯어보면 다음과 같습니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">normalize=True</code></strong></li>
+<li class="note-list-item"><strong>역할:</strong> 개수(Count) 대신 <strong>비율(Percentage)</strong>로 값을 보여줄지 결정합니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 기본값은 <code class="inline-code">False</code>(개수 출력)이지만, <code class="inline-code">True</code>로 설정했기 때문에 전체 데이터 중에서 각 값이 차지하는 비율(0.0 ~ 1.0 사이의 값, 합치면 1)을 계산해서 보여줍니다. (예: 0번 값이 70%, 1번 값이 30%라면 각각 <code class="inline-code">0.7</code>, <code class="inline-code">0.3</code>으로 출력됨)</li>
+<li class="note-list-item"><strong><code class="inline-code">.sort_index()</code> (함수 뒤에 붙은 추가 메서드)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 결과로 나온 값들을 <strong>인덱스(데이터의 이름/종류) 순서대로 정렬</strong>합니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 기본 <code class="inline-code">value_counts()</code>는 데이터가 많은 순서(내림차순)로 결과를 보여주지만, <code class="inline-code">sort_index()</code>를 붙이면 데이터의 이름(예: 0, 1 또는 A, B, C) 오름차순으로 예쁘게 정렬되어 데이터 분포를 직관적으로 비교하기 좋습니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">display(...)</code> (함수 전체를 감싼 함수)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 주피터 노트북(Jupyter Notebook) 같은 환경에서 결과 데이터를 <strong>가장 예쁘고 보기 좋은 표 형태로 출력</strong>해 줍니다. (<code class="inline-code">print()</code>보다 시각적으로 훨씬 깔끔하게 나옵니다.)</li>
+</ul>
+<hr class="note-divider" />
+<h3 class="note-h3">3. 📤 반환값/할당 변수 설명</h3>
+<p class="note-p"><em>(※ 질문하신 문맥에는 별도의 변수에 값을 대입하는 할당(=) 코드가 없고, 바로 화면에 출력하는 형태이므로 <strong>이 코드가 실행되었을 때 최종적으로 화면에 무엇이 나타나는지</strong>로 설명해 드릴게요!)</em></p>
+<ul class="note-list">
+<li class="note-list-item"><strong>최종 반환 및 출력되는 데이터:</strong></li>
+<li class="note-list-item"><code class="inline-code">y_train_final</code>에 들어있는 <strong>각 클래스(라벨)별 비율이 인덱스 순서대로 정렬된 판다스 시리즈(Series) 형태의 데이터</strong>가 화면에 출력됩니다.</li>
+<li class="note-list-item"><strong>예시 화면:</strong></li>
+</ul>
+<pre class="note-code-block"><code class="language-text">        0    0.75  (0번 데이터가 전체의 75%)
+        1    0.25  (1번 데이터가 전체의 25%)
+        dtype: float64</code></pre>
+<ul class="note-list">
+<li class="note-list-item"><strong>왜 이 코드를 쓸까요?:</strong> 머신러닝 모델을 만들기 전에, 정답 데이터가 한쪽으로 너무 치우쳐져 있지는 않은지(<strong>클래스 불균형</strong> 문제)를 확인하는 용도로 데이터 분석가들이 가장 즐겨 쓰는 필수 체크 코드입니다!</li>
+</ul></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step4', 'y_train_final.value_counts')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step4-y_val_value_counts-927_151442"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>y_val.value_counts</code></div><div class="note-time-badge">⏱ 2026-09-27 15:14:42</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: y_val.value_counts</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:14:42</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">y_val.value_counts</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">파이썬 데이터 분석 및 머신러닝에서 자주 쓰이는 <code class="inline-code">y_val.value_counts(normalize=True).sort_index()</code> 코드에 대한 상세 해설입니다. 초보자의 눈높이에 맞춰 쉽고 명쾌하게 설명해 드릴게요!</p>
+<hr class="note-divider" />
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">y_val.value_counts()</code>는 판다스(Pandas) 데이터 구조에서 <strong>데이터의 종류별 개수(빈도수)를 세어주는 함수</strong>입니다. 여기에 추가 옵션들을 더해 <strong>데이터의 비율을 계산하고, 보기 좋게 정렬</strong>하여 화면에 출력(<code class="inline-code">display</code>)하는 역할을 합니다. 주로 머신러닝에서 정답 데이터(y)의 클래스(범주) 비율이 잘 골고루 분포되어 있는지 확인할 때 사용합니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">제시해주신 코드에는 괄호 안에 들어가 있는 인자와, 함수 호출 뒤에 붙는 메서드들이 있습니다. 각각을 쪼개어 자세히 살펴보겠습니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">normalize=True</code> (인자)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 개수의 단순 합계를 구하는 대신, <strong>전체 대비 비율(백분율의 소수점 형태)</strong>로 값을 변환해 줍니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 예를 들어 총 100개의 데이터 중 A 클래스가 80개, B 클래스가 20개라면, <code class="inline-code">False</code>(기본값)일 때는 <code class="inline-code">80, 20</code>으로 나오지만, <code class="inline-code">True</code>로 설정하면 전체 1로 나누어 <code class="inline-code">0.8, 0.2</code> (즉, 80%와 20%)로 비율을 보여줍니다.</li>
+</ul>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">.sort_index()</code> (추가 메서드)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 계산된 결과의 <strong>인덱스(기준 이름)를 기준으로 오름차순 정렬</strong>해 줍니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 머신러닝 분류 문제에서 클래스 이름(예: 0, 1 또는 &#x27;Cat&#x27;, &#x27;Dog&#x27;) 순서대로 깔끔하게 결과를 정렬해 주어 데이터의 비율을 한눈에 비교하기 쉽게 만들어 줍니다.</li>
+</ul>
+<hr class="note-divider" />
+<h3 class="note-h3">3. 📤 반환값 및 출력 결과</h3>
+<p class="note-p">이 코드에는 별도의 변수에 값을 대입(<code class="inline-code">=</code>)하는 부분이 없고, 대신 <code class="inline-code">display()</code> 함수로 감싸져 있습니다. 따라서 화면에 출력되는 결과물에 대해 설명해 드릴게요.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong>반환(출력)되는 데이터:</strong></li>
+<li class="note-list-item"><code class="inline-code">y_val</code>에 들어있는 <strong>각 정답 클래스의 비율이 오름차순으로 정렬된 판다스 시리즈(Series) 형태의 표</strong>가 화면에 예쁘게 출력됩니다.</li>
+<li class="note-list-item"><strong>예시 화면:</strong></li>
+</ul>
+<pre class="note-code-block"><code class="language-text">        0    0.75  (0번 클래스가 전체의 75%)
+        1    0.25  (1번 클래스가 전체의 25%)
+        Name: proportion, dtype: float64</code></pre>
+<ul class="note-list">
+<li class="note-list-item"><strong>어따가 쓰나요?:</strong></li>
+<li class="note-list-item">검증용 정답 데이터(<code class="inline-code">y_val</code>)에 특정 데이터가 너무 편중되지는 않았는지(데이터 불균형 문제)를 파악할 때 유용하게 쓰입니다.</li>
+</ul></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step4', 'y_val.value_counts')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step4-y_val_value_counts-927_151545"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>y_val.value_counts</code></div><div class="note-time-badge">⏱ 2026-09-27 15:15:45</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: y_val.value_counts</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:15:45</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">y_val.value_counts</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">파이썬 데이터 분석 및 머신러닝에서 자주 쓰이는 <code class="inline-code">y_val.value_counts(normalize=True).sort_index()</code> 코드에 대한 상세 해설입니다. 초보자의 눈높이에 맞춰 쉽고 명쾌하게 설명해 드릴게요!</p>
+<hr class="note-divider" />
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">y_val.value_counts()</code>는 판다스(Pandas) 데이터 구조에서 <strong>데이터의 종류별 개수(빈도수)를 세어주는 함수</strong>입니다. 여기에 추가 옵션들을 더해 <strong>데이터의 비율을 계산하고, 보기 좋게 정렬</strong>하여 화면에 출력(<code class="inline-code">display</code>)하는 역할을 합니다. 주로 머신러닝에서 정답 데이터(y)의 클래스(범주) 비율이 잘 골고루 분포되어 있는지 확인할 때 사용합니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">제시해주신 코드에는 괄호 안에 들어가 있는 인자와, 함수 호출 뒤에 붙는 메서드들이 있습니다. 각각을 쪼개어 자세히 살펴보겠습니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">normalize=True</code> (인자)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 개수의 단순 합계를 구하는 대신, <strong>전체 대비 비율(백분율의 소수점 형태)</strong>로 값을 변환해 줍니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 예를 들어 총 100개의 데이터 중 A 클래스가 80개, B 클래스가 20개라면, <code class="inline-code">False</code>(기본값)일 때는 <code class="inline-code">80, 20</code>으로 나오지만, <code class="inline-code">True</code>로 설정하면 전체 1로 나누어 <code class="inline-code">0.8, 0.2</code> (즉, 80%와 20%)로 비율을 보여줍니다.</li>
+</ul>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">.sort_index()</code> (추가 메서드)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 계산된 결과의 <strong>인덱스(기준 이름)를 기준으로 오름차순 정렬</strong>해 줍니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 머신러닝 분류 문제에서 클래스 이름(예: 0, 1 또는 &#x27;Cat&#x27;, &#x27;Dog&#x27;) 순서대로 깔끔하게 결과를 정렬해 주어 데이터의 비율을 한눈에 비교하기 쉽게 만들어 줍니다.</li>
+</ul>
+<hr class="note-divider" />
+<h3 class="note-h3">3. 📤 반환값 및 출력 결과</h3>
+<p class="note-p">이 코드에는 별도의 변수에 값을 대입(<code class="inline-code">=</code>)하는 부분이 없고, 대신 <code class="inline-code">display()</code> 함수로 감싸져 있습니다. 따라서 화면에 출력되는 결과물에 대해 설명해 드릴게요.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong>반환(출력)되는 데이터:</strong></li>
+<li class="note-list-item"><code class="inline-code">y_val</code>에 들어있는 <strong>각 정답 클래스의 비율이 오름차순으로 정렬된 판다스 시리즈(Series) 형태의 표</strong>가 화면에 예쁘게 출력됩니다.</li>
+<li class="note-list-item"><strong>예시 화면:</strong></li>
+</ul>
+<pre class="note-code-block"><code class="language-text">        0    0.75  (0번 클래스가 전체의 75%)
+        1    0.25  (1번 클래스가 전체의 25%)
+        Name: proportion, dtype: float64</code></pre>
+<ul class="note-list">
+<li class="note-list-item"><strong>어따가 쓰나요?:</strong></li>
+<li class="note-list-item">검증용 정답 데이터(<code class="inline-code">y_val</code>)에 특정 데이터가 너무 편중되지는 않았는지(데이터 불균형 문제)를 파악할 때 유용하게 쓰입니다.</li>
+</ul></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step4', 'y_val.value_counts')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section>
+  </main>
+
+  <div class="toast-msg" id="toast">✅ 알림 메시지</div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('study_theme_01', next);
+      
+      const btn = document.getElementById('theme-btn');
+      btn.textContent = next === 'dark' ? '☀️ 라이트 모드' : '🌙 다크 모드';
+      showToast(next === 'dark' ? '🌙 다크 테마 적용됨' : '☀️ 라이트 테마 적용됨');
+    }
+
+    (function initTheme() {
+      const saved = localStorage.getItem('study_theme_01') || localStorage.getItem('study_theme');
+      if (saved) {
+        document.documentElement.setAttribute('data-theme', saved);
+        const btn = document.getElementById('theme-btn');
+        if (btn) btn.textContent = saved === 'dark' ? '☀️ 라이트 모드' : '🌙 다크 모드';
+      }
+    })();
+
+    function switchTab(stepId, tabId) {
+      const stepElem = document.getElementById(stepId);
+      if (!stepElem) return;
+
+      const tabBtns = stepElem.querySelectorAll('.func-tab-btn');
+      tabBtns.forEach(btn => {
+        if (btn.getAttribute('data-tab') === tabId) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+
+      const panes = stepElem.querySelectorAll('.func-note-pane');
+      panes.forEach(pane => {
+        if (pane.id === tabId) {
+          pane.classList.add('active');
+          pane.classList.remove('highlight-pulse');
+          void pane.offsetWidth;
+          pane.classList.add('highlight-pulse');
+        } else {
+          pane.classList.remove('active');
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const kwSpans = document.querySelectorAll('.code-kw-interactive');
+      kwSpans.forEach(span => {
+        span.addEventListener('click', (e) => {
+          const stepId = span.getAttribute('data-step');
+          const tabId = span.getAttribute('data-tab');
+          const funcName = span.getAttribute('data-func');
+
+          kwSpans.forEach(s => s.classList.remove('active-target'));
+          span.classList.add('active-target');
+
+          switchTab(stepId, tabId);
+
+          if (window.innerWidth <= 1180) {
+            const notePane = document.getElementById(tabId);
+            if (notePane) {
+              notePane.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          }
+
+          showToast("💡 '" + funcName + "' AI 학습 노트로 이동");
+        });
+      });
+    });
+
+    function highlightMatchingKeyword(stepId, funcName) {
+      const stepElem = document.getElementById(stepId);
+      if (!stepElem) return;
+
+      const kwSpans = stepElem.querySelectorAll('.code-kw-interactive');
+      let found = false;
+      kwSpans.forEach(span => {
+        if (span.getAttribute('data-func') === funcName) {
+          span.classList.add('active-target');
+          span.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          found = true;
+        } else {
+          span.classList.remove('active-target');
+        }
+      });
+
+      if (found) {
+        showToast("🔍 좌측 코드에서 '" + funcName + "' 위치 강조");
+      }
+    }
+
+    function copyCode(btn) {
+      const cellWrapper = btn.closest('.code-cell-wrapper');
+      const codeBlock = cellWrapper.querySelector('pre code');
+      if (codeBlock) {
+        const text = codeBlock.innerText;
+        navigator.clipboard.writeText(text).then(() => {
+          const original = btn.textContent;
+          btn.textContent = '✅ 복사됨!';
+          btn.style.borderColor = 'var(--accent-success)';
+          btn.style.color = 'var(--accent-success)';
+          setTimeout(() => {
+            btn.textContent = original;
+            btn.style.borderColor = '';
+            btn.style.color = '';
+          }, 2000);
+          showToast('📋 코드가 클립보드에 복사되었습니다.');
+        });
+      }
+    }
+
+    function toggleOutput(btn) {
+      const container = btn.closest('.cell-outputs-container');
+      const body = container.querySelector('.outputs-body');
+      if (body.style.display === 'none') {
+        body.style.display = 'flex';
+        btn.textContent = '접기 ▲';
+      } else {
+        body.style.display = 'none';
+        btn.textContent = '펼치기 ▼';
+      }
+    }
+
+    let allExpanded = true;
+    function toggleAllOutputs() {
+      const allBodies = document.querySelectorAll('.outputs-body');
+      const allBtns = document.querySelectorAll('.toggle-output-btn');
+      allExpanded = !allExpanded;
+
+      allBodies.forEach(b => b.style.display = allExpanded ? 'flex' : 'none');
+      allBtns.forEach(btn => btn.textContent = allExpanded ? '접기 ▲' : '펼치기 ▼');
+      
+      const toggleAllBtn = document.querySelector('.expand-all-btn');
+      toggleAllBtn.textContent = allExpanded ? '결과 전체 접기' : '결과 전체 펼치기';
+      showToast(allExpanded ? '⚡ 모든 실행 결과가 펼쳐졌습니다.' : '⚡ 모든 실행 결과가 접혔습니다.');
+    }
+
+    function filterFunctions(query) {
+      const q = query.trim().toLowerCase();
+      const tabBtns = document.querySelectorAll('.func-tab-btn');
+      const sections = document.querySelectorAll('.step-section');
+
+      if (!q) {
+        tabBtns.forEach(b => b.style.display = '');
+        sections.forEach(s => s.style.opacity = '1');
+        return;
+      }
+
+      tabBtns.forEach(b => {
+        const text = b.textContent.toLowerCase();
+        if (text.includes(q)) {
+          b.style.display = '';
+          b.style.border = '2px solid var(--accent-primary)';
+        } else {
+          b.style.display = 'none';
+          b.style.border = '';
+        }
+      });
+    }
+
+    window.addEventListener('scroll', () => {
+      const sections = document.querySelectorAll('.step-section');
+      const navLinks = document.querySelectorAll('.step-nav-item');
+      let currentId = '';
+
+      sections.forEach(s => {
+        const rect = s.getBoundingClientRect();
+        if (rect.top <= 200 && rect.bottom >= 200) {
+          currentId = s.id;
+        }
+      });
+
+      if (currentId) {
+        navLinks.forEach(link => {
+          if (link.getAttribute('data-step') === currentId) {
+            link.classList.add('active');
+          } else {
+            link.classList.remove('active');
+          }
+        });
+      }
+    });
+
+    let toastTimeout = null;
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        t.classList.remove('show');
+      }, 2500);
+    }
+  </script>
+</body>
+</html>

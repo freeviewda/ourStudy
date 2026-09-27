@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>이미지 K-Means 색상 압축 & 팔레트 스튜디오</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    .font-mono-code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .glass-panel {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(51, 65, 85, 0.7);
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
+
+  <header class="border-b border-slate-800 bg-slate-950/90 backdrop-blur sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-pink-500 via-rose-500 to-amber-500 flex items-center justify-center shadow-lg shadow-rose-500/20">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
+            K-Means 색상 압축 & 팔레트 스튜디오
+            <span class="text-xs bg-rose-500/20 text-rose-300 font-medium px-2 py-0.5 rounded-full border border-rose-500/30">Color Quantization</span>
+          </h1>
+          <p class="text-xs text-slate-400">사진의 수십만 개 RGB 픽셀을 K-평균 군집화로 대표 색상으로 압축하고 팔레트 추출하기</p>
+        </div>
+      </div>
+
+      <!-- Quick Action: Export Modal Trigger & Status -->
+      <div class="flex items-center gap-3">
+        <div id="statusBadge" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900 border border-slate-700 text-xs font-medium text-slate-300">
+          <span id="statusDot" class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+          <span id="statusLabel">수렴 완료</span>
+        </div>
+        <button onclick="openExportModal()" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white text-xs font-semibold shadow-lg shadow-indigo-500/20 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+          팔레트 / 이미지 내보내기
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto p-3 sm:p-4 lg:p-6 w-full flex-1 grid grid-cols-1 lg:grid-cols-12 gap-5">
+
+    <!-- LEFT COLUMN: Canvas Views (Image Compare + 3D RGB Color Cube) -->
+    <section class="lg:col-span-8 flex flex-col gap-4">
+      
+      <!-- Split Image View Card -->
+      <div class="glass-panel rounded-2xl p-4 shadow-2xl flex flex-col">
+        <div class="flex flex-wrap items-center justify-between pb-3 border-b border-slate-800 gap-2">
+          <div class="flex items-center gap-2 text-xs font-semibold text-slate-300">
+            <span class="w-2 h-2 rounded-full bg-rose-400"></span>
+            <span>이미지 뷰어: 원본 vs K-평균 압축 결과</span>
+          </div>
+          <div class="flex items-center gap-2 text-xs">
+            <button id="viewSplitBtn" onclick="setViewMode('split')" class="px-2.5 py-1 rounded-lg bg-indigo-600 text-white font-medium transition">
+              나란히 보기
+            </button>
+            <button id="viewQuantizedBtn" onclick="setViewMode('quantized')" class="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 hover:text-white transition">
+              압축 결과만
+            </button>
+            <button id="viewOriginalBtn" onclick="setViewMode('original')" class="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 hover:text-white transition">
+              원본만
+            </button>
+          </div>
+        </div>
+
+        <!-- Dynamic Responsive Image Canvas Area -->
+        <div id="imageViewerContainer" class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3 min-h-[260px] sm:min-h-[320px]">
+          <!-- Original Canvas Wrapper -->
+          <div id="origWrapper" class="bg-slate-900/90 rounded-xl border border-slate-800 p-2 flex flex-col items-center justify-center relative overflow-hidden group">
+            <span class="absolute top-3 left-3 bg-slate-950/80 backdrop-blur px-2.5 py-1 rounded-md text-[11px] font-semibold text-slate-300 border border-slate-800 z-10">
+              원본 사진
+            </span>
+            <canvas id="origCanvas" class="max-w-full max-h-[300px] object-contain rounded shadow-lg"></canvas>
+          </div>
+
+          <!-- Quantized Canvas Wrapper -->
+          <div id="quantWrapper" class="bg-slate-900/90 rounded-xl border border-slate-800 p-2 flex flex-col items-center justify-center relative overflow-hidden group">
+            <span class="absolute top-3 left-3 bg-rose-950/80 backdrop-blur px-2.5 py-1 rounded-md text-[11px] font-semibold text-rose-300 border border-rose-800/60 z-10 flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-rose-400 animate-ping"></span>
+              K-Means 압축 결과 (<span id="tagKVal">5</span>색)
+            </span>
+            <canvas id="quantCanvas" class="max-w-full max-h-[300px] object-contain rounded shadow-lg"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Palette Extraction Swatches -->
+      <div class="glass-panel rounded-2xl p-4 shadow-xl">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-300">
+              추출된 대표 색상 팔레트 (Cluster Centroids)
+            </h3>
+          </div>
+          <span class="text-[11px] text-slate-400">칩을 클릭하면 HEX 코드가 즉시 복사됩니다.</span>
+        </div>
+
+        <div id="paletteSwatches" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-8 gap-2.5">
+          <!-- Filled dynamically via JS -->
+        </div>
+      </div>
+
+      <!-- 3D RGB Color Space Scatter Visualizer -->
+      <div class="glass-panel rounded-2xl p-4 shadow-xl flex flex-col">
+        <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"/></svg>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-300">
+              3D RGB 색공간 뷰어 (R-G-B 축 군집화 시각화)
+            </h3>
+          </div>
+          <span class="text-[11px] text-slate-400">마우스 드래그로 3D 회전 가능</span>
+        </div>
+        <div class="relative w-full aspect-[16/9] sm:aspect-[21/9] bg-slate-950 rounded-xl overflow-hidden mt-3 border border-slate-800/80 flex items-center justify-center">
+          <canvas id="colorCubeCanvas" class="w-full h-full cursor-grab active:cursor-grabbing"></canvas>
+          <div class="absolute bottom-2 left-2 bg-slate-900/80 backdrop-blur px-2.5 py-1 rounded text-[10px] text-slate-400 border border-slate-800 pointer-events-none">
+            점: 샘플 픽셀들 | 큰 구체: K개의 이동 중심점(Centroid)
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- RIGHT COLUMN: Control Panel & Explanation -->
+    <section class="lg:col-span-4 flex flex-col gap-4">
+      
+      <!-- Algorithm & Image Controls -->
+      <div class="glass-panel rounded-2xl p-4 sm:p-5 shadow-2xl">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-sm font-bold text-white flex items-center gap-2">
+            <svg class="w-4 h-4 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            이미지 & 군집 조작판
+          </h2>
+          <span id="iterationBadge" class="text-xs px-2.5 py-0.5 rounded-full bg-slate-900 text-rose-300 border border-slate-700 font-mono-code">
+            반복: 0회
+          </span>
+        </div>
+
+        <!-- Presets Selection -->
+        <div class="mb-4">
+          <label class="text-xs font-semibold text-slate-300 block mb-2">샘플 프리셋 이미지</label>
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <button onclick="loadPreset('sunset')" class="preset-btn p-2 rounded-xl bg-slate-900 border border-slate-700/80 hover:border-rose-500 text-slate-200 text-left transition flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-amber-500 shrink-0"></span>
+              <span>노을 바다 (Sunset)</span>
+            </button>
+            <button onclick="loadPreset('cyberpunk')" class="preset-btn p-2 rounded-xl bg-slate-900 border border-slate-700/80 hover:border-rose-500 text-slate-200 text-left transition flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-fuchsia-500 shrink-0"></span>
+              <span>네온 시티 (Cyberpunk)</span>
+            </button>
+            <button onclick="loadPreset('cherry')" class="preset-btn p-2 rounded-xl bg-slate-900 border border-slate-700/80 hover:border-rose-500 text-slate-200 text-left transition flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-pink-400 shrink-0"></span>
+              <span>봄 벚꽃 (Blossom)</span>
+            </button>
+            <button onclick="loadPreset('forest')" class="preset-btn p-2 rounded-xl bg-slate-900 border border-slate-700/80 hover:border-rose-500 text-slate-200 text-left transition flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-emerald-500 shrink-0"></span>
+              <span>열대 숲 (Forest)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Upload File Button -->
+        <div class="mb-5">
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5">내 이미지 직접 올리기</label>
+          <label class="flex items-center justify-center gap-2 w-full p-2.5 rounded-xl border border-dashed border-slate-700 bg-slate-900/60 hover:bg-slate-900 hover:border-indigo-500 cursor-pointer transition text-xs text-slate-300">
+            <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            <span>사진 파일 업로드 (.jpg, .png)</span>
+            <input type="file" id="imageUpload" accept="image/*" class="hidden" onchange="handleImageUpload(event)">
+          </label>
+        </div>
+
+        <!-- Slider: K value -->
+        <div class="space-y-4 pt-4 border-t border-slate-800">
+          <div>
+            <div class="flex justify-between items-center text-xs mb-1.5">
+              <span class="text-slate-300 font-medium">추출할 색상 수 (K):</span>
+              <span id="kDisplay" class="font-bold text-rose-400 font-mono-code text-sm">5 개</span>
+            </div>
+            <input type="range" id="kSlider" min="2" max="16" value="5" step="1" oninput="changeK(this.value)" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-rose-500">
+            <div class="flex justify-between text-[10px] text-slate-500 px-1 mt-1">
+              <span>2 (단순 포스터)</span>
+              <span>8 (대표톤)</span>
+              <span>16 (고화질 압축)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Algorithm Step Execution Buttons -->
+        <div class="grid grid-cols-2 gap-2 mt-5">
+          <button id="stepBtn" onclick="runSingleStep()" class="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 transition">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"/></svg>
+            <span>1스텝 계산</span>
+          </button>
+          <button id="autoBtn" onclick="toggleAutoClustering()" class="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-semibold text-xs shadow-lg shadow-rose-600/30 transition">
+            <span id="autoIcon">▶</span>
+            <span id="autoText">자동 수렴 실행</span>
+          </button>
+        </div>
+
+        <button onclick="resetCentroids()" class="w-full mt-2 py-2 px-3 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-slate-400 hover:text-slate-200 text-xs border border-slate-800 transition">
+          🎲 초기 중심점 다시 뽑기
+        </button>
+      </div>
+
+      <!-- Educational Concept Explanation -->
+      <div class="glass-panel rounded-2xl p-4 sm:p-5 shadow-xl flex-1 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-2 h-2 rounded-full bg-indigo-400"></span>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-indigo-400">원리 탐구</h3>
+          </div>
+          <h4 class="text-sm font-bold text-white mb-1.5">지도 위의 집이 아니라 ‘RGB 색상’</h4>
+          <p class="text-xs leading-relaxed text-slate-300 mb-3">
+            생활코딩의 위도/경도(X, Y) 2차원 좌표 군집화 원리가 여기서는 **Red(빨강), Green(초록), Blue(파랑)** 3차원 색공간 좌표로 그대로 확장됩니다.
+          </p>
+          <ul class="space-y-2 text-xs bg-slate-900/80 p-3 rounded-xl border border-slate-800 text-slate-300">
+            <li class="flex items-start gap-2">
+              <span class="text-rose-400 font-bold">•</span>
+              <span><strong>수십만 고객 = 픽셀들:</strong> 이미지의 각 픽셀 색상이 3차원 공간의 점이 됩니다.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-purple-400 font-bold">•</span>
+              <span><strong>K개의 배달 본부 = 대표 색상:</strong> 가장 가깝고 많은 픽셀들을 대표하는 RGB 평균 색상을 찾아냅니다.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-400 font-bold">•</span>
+              <span><strong>양자화(Quantization):</strong> 모든 픽셀을 가장 가까운 대표 색상으로 교체해 용량을 획기적으로 줄입니다.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-500">
+          <span>차원: (R, G, B) $\in [0, 255]^3$</span>
+          <span class="text-rose-400 font-mono-code">Euclidean Distance</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- EXPORT & DOWNLOAD MODAL -->
+  <div id="exportModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="glass-panel w-full max-w-2xl rounded-2xl border border-slate-700 shadow-2xl p-5 sm:p-6 flex flex-col max-h-[90vh] overflow-y-auto custom-scrollbar">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-white">팔레트 & 이미지 내보내기</h3>
+            <p class="text-xs text-slate-400">웹 개발 CSS 코드, JSON, 또는 고해상도 디자인 카드로 다운로드하세요.</p>
+          </div>
+        </div>
+        <button onclick="closeExportModal()" class="w-8 h-8 rounded-lg bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition">
+          ✕
+        </button>
+      </div>
+
+      <!-- Palette Card Preview & Download -->
+      <div class="mt-4 p-4 rounded-xl bg-slate-900 border border-slate-800">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-semibold text-slate-300">1. 팔레트 디자인 카드 (PNG 이미지)</span>
+          <button onclick="downloadPaletteCardPNG()" class="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold shadow transition flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            팔레트 카드 다운로드 (.png)
+          </button>
+        </div>
+        <!-- Hidden/rendered card canvas -->
+        <div class="w-full overflow-x-auto flex justify-center bg-slate-950 p-3 rounded-lg border border-slate-800/80">
+          <canvas id="paletteCardCanvas" width="600" height="220" class="rounded max-w-full shadow-md"></canvas>
+        </div>
+      </div>
+
+      <!-- Compressed Image Download -->
+      <div class="mt-4 p-4 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between">
+        <div>
+          <span class="text-xs font-semibold text-slate-200 block">2. K-Means 압축 이미지 (.png)</span>
+          <span class="text-[11px] text-slate-400">K개 색상으로만 픽셀이 양자화된 원본 해상도 이미지</span>
+        </div>
+        <button onclick="downloadQuantizedImagePNG()" class="px-3.5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow transition flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          압축 이미지 다운로드
+        </button>
+      </div>
+
+      <!-- CSS Variables Code Copy -->
+      <div class="mt-4">
+        <div class="flex items-center justify-between mb-1.5">
+          <label class="text-xs font-semibold text-slate-300">3. 웹 개발용 CSS 변수 코드</label>
+          <button onclick="copyCSSVariables()" class="text-xs text-indigo-400 hover:text-indigo-300 font-medium">
+            📋 코드 복사
+          </button>
+        </div>
+        <pre id="cssCodeBlock" class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-xs font-mono-code text-indigo-300 overflow-x-auto custom-scrollbar select-all"></pre>
+      </div>
+
+      <!-- JSON Data Copy -->
+      <div class="mt-4">
+        <div class="flex items-center justify-between mb-1.5">
+          <label class="text-xs font-semibold text-slate-300">4. JSON 데이터</label>
+          <button onclick="copyJSONData()" class="text-xs text-indigo-400 hover:text-indigo-300 font-medium">
+            📋 JSON 복사
+          </button>
+        </div>
+        <pre id="jsonCodeBlock" class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-xs font-mono-code text-emerald-300 overflow-x-auto custom-scrollbar max-h-32 select-all"></pre>
+      </div>
+
+      <div class="mt-6 flex justify-end">
+        <button onclick="closeExportModal()" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white text-xs font-medium transition">
+          닫기
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-5 right-5 bg-slate-900 border border-slate-700 text-white text-xs px-4 py-3 rounded-xl shadow-2xl z-50 flex items-center gap-2 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+    <span id="toastMessage">클립보드에 복사되었습니다.</span>
+  </div>
+
+  <script>
+    // Global State
+    let K = 5;
+    let originalImageObj = new Image();
+    let samplePixels = []; // [{r, g, b}, ...]
+    let centroids = [];    // [{r, g, b, prevR, prevG, prevB, count, pct}, ...]
+    let iteration = 0;
+    let isAutoRunning = false;
+    let autoTimer = null;
+    let isConverged = false;
+    let viewMode = 'split'; // 'split' | 'quantized' | 'original'
+
+    // 3D Visualizer Camera Angles
+    let rotX = 0.45;
+    let rotY = -0.65;
+    let isDragging3D = false;
+    let lastMouseX = 0;
+    let lastMouseY = 0;
+
+    // Canvases
+    const origCanvas = document.getElementById('origCanvas');
+    const quantCanvas = document.getElementById('quantCanvas');
+    const colorCubeCanvas = document.getElementById('colorCubeCanvas');
+    const origCtx = origCanvas.getContext('2d');
+    const quantCtx = quantCanvas.getContext('2d');
+    const cubeCtx = colorCubeCanvas.getContext('2d');
+
+    // On Load Initializer
+    window.addEventListener('load', () => {
+      init3DEvents();
+      loadPreset('sunset');
+      setupResizeObserver();
+    });
+
+    function setupResizeObserver() {
+      const resizeObserver = new ResizeObserver(() => {
+        resize3DCanvas();
+        draw3DColorSpace();
+      });
+      resizeObserver.observe(colorCubeCanvas.parentElement);
+    }
+
+    function resize3DCanvas() {
+      const rect = colorCubeCanvas.parentElement.getBoundingClientRect();
+      colorCubeCanvas.width = rect.width;
+      colorCubeCanvas.height = rect.height;
+    }
+
+    // Preset Generator (Generates aesthetic procedural artworks locally)
+    function loadPreset(name) {
+      if (isAutoRunning) toggleAutoClustering();
+      
+      const width = 360;
+      const height = 240;
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = width;
+      tempCanvas.height = height;
+      const ctx = tempCanvas.getContext('2d');
+
+      if (name === 'sunset') {
+        const grad = ctx.createLinearGradient(0, 0, 0, height);
+        grad.addColorStop(0, '#f97316'); // orange
+        grad.addColorStop(0.35, '#ec4899'); // pink
+        grad.addColorStop(0.65, '#6366f1'); // purple indigo
+        grad.addColorStop(1, '#0f172a'); // deep navy sea
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, width, height);
+
+        // Sun
+        const sunGrad = ctx.createRadialGradient(width/2, height*0.48, 10, width/2, height*0.48, 55);
+        sunGrad.addColorStop(0, '#fef08a');
+        sunGrad.addColorStop(1, 'rgba(239, 68, 68, 0)');
+        ctx.fillStyle = sunGrad;
+        ctx.beginPath();
+        ctx.arc(width/2, height*0.48, 55, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Water reflection bands
+        ctx.fillStyle = 'rgba(253, 224, 71, 0.4)';
+        for(let y = height * 0.65; y < height; y += 8) {
+          ctx.fillRect(width * 0.35, y, width * 0.3, 3);
+        }
+      } else if (name === 'cyberpunk') {
+        // Dark futuristic city skyline
+        ctx.fillStyle = '#05050f';
+        ctx.fillRect(0, 0, width, height);
+
+        // Neon Glow Grid
+        for(let i=0; i<12; i++) {
+          const bx = i * 32;
+          const bh = 70 + Math.sin(i * 1.5) * 55;
+          ctx.fillStyle = i % 2 === 0 ? '#0f172a' : '#1e1b4b';
+          ctx.fillRect(bx, height - bh, 28, bh);
+
+          // Neon windows
+          ctx.fillStyle = i % 3 === 0 ? '#06b6d4' : '#f43f5e';
+          for(let wy = height - bh + 10; wy < height - 10; wy += 14) {
+            ctx.fillRect(bx + 6, wy, 16, 5);
+          }
+        }
+        // Neon Fog
+        const fog = ctx.createLinearGradient(0, height*0.4, 0, height);
+        fog.addColorStop(0, 'rgba(168, 85, 247, 0.0)');
+        fog.addColorStop(0.8, 'rgba(217, 70, 239, 0.35)');
+        fog.addColorStop(1, 'rgba(6, 182, 212, 0.5)');
+        ctx.fillStyle = fog;
+        ctx.fillRect(0, height*0.4, width, height*0.6);
+      } else if (name === 'cherry') {
+        // Soft spring cherry blossoms
+        const sky = ctx.createLinearGradient(0, 0, width, height);
+        sky.addColorStop(0, '#e0f2fe'); // soft blue sky
+        sky.addColorStop(1, '#fce7f3'); // pastel pink
+        ctx.fillStyle = sky;
+        ctx.fillRect(0, 0, width, height);
+
+        // Tree branch
+        ctx.strokeStyle = '#451a03';
+        ctx.lineWidth = 14;
+        ctx.beginPath();
+        ctx.moveTo(0, height * 0.2);
+        ctx.bezierCurveTo(width * 0.4, height * 0.3, width * 0.6, height * 0.1, width, height * 0.35);
+        ctx.stroke();
+
+        // Blossom petals
+        for(let i=0; i<180; i++) {
+          const px = Math.random() * width;
+          const py = Math.random() * height * 0.8;
+          ctx.fillStyle = i % 3 === 0 ? '#fbcfe8' : (i % 3 === 1 ? '#f472b6' : '#fda4af');
+          ctx.beginPath();
+          ctx.ellipse(px, py, 6 + Math.random()*5, 4 + Math.random()*4, Math.random()*Math.PI, 0, Math.PI*2);
+          ctx.fill();
+        }
+      } else if (name === 'forest') {
+        // Deep Emerald Rainforest
+        const fgrad = ctx.createLinearGradient(0, 0, 0, height);
+        fgrad.addColorStop(0, '#064e3b');
+        fgrad.addColorStop(0.5, '#047857');
+        fgrad.addColorStop(1, '#022c22');
+        ctx.fillStyle = fgrad;
+        ctx.fillRect(0, 0, width, height);
+
+        // Sun shafts
+        ctx.fillStyle = 'rgba(253, 230, 138, 0.15)';
+        ctx.beginPath();
+        ctx.moveTo(width * 0.2, 0);
+        ctx.lineTo(width * 0.6, height);
+        ctx.lineTo(width * 0.4, height);
+        ctx.lineTo(width * 0.1, 0);
+        ctx.fill();
+
+        // Exotic flowers
+        for(let i=0; i<40; i++) {
+          ctx.fillStyle = i % 2 === 0 ? '#fbbf24' : '#ef4444';
+          ctx.beginPath();
+          ctx.arc(Math.random() * width, height * 0.4 + Math.random() * height * 0.55, 5 + Math.random()*6, 0, Math.PI*2);
+          ctx.fill();
+        }
+      }
+
+      originalImageObj = new Image();
+      originalImageObj.onload = () => {
+        applyNewImage();
+      };
+      originalImageObj.src = tempCanvas.toDataURL();
+    }
+
+    function handleImageUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (isAutoRunning) toggleAutoClustering();
+
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        originalImageObj = new Image();
+        originalImageObj.onload = () => {
+          applyNewImage();
+        };
+        originalImageObj.src = evt.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function applyNewImage() {
+      // Resize original canvas proportionally
+      const maxDim = 400;
+      let w = originalImageObj.width;
+      let h = originalImageObj.height;
+      if (w > maxDim || h > maxDim) {
+        if (w > h) {
+          h = Math.round((h * maxDim) / w);
+          w = maxDim;
+        } else {
+          w = Math.round((w * maxDim) / h);
+          h = maxDim;
+        }
+      }
+      origCanvas.width = w;
+      origCanvas.height = h;
+      quantCanvas.width = w;
+      quantCanvas.height = h;
+
+      origCtx.drawImage(originalImageObj, 0, 0, w, h);
+
+      // Extract representative pixel points for clustering & 3D display (max 1800 points for real-time responsiveness)
+      samplePixels = [];
+      const imgData = origCtx.getImageData(0, 0, w, h).data;
+      const step = Math.max(1, Math.floor((w * h) / 1800));
+      for (let i = 0; i < imgData.length; i += 4 * step) {
+        samplePixels.push({
+          r: imgData[i],
+          g: imgData[i+1],
+          b: imgData[i+2],
+          cluster: 0
+        });
+      }
+
+      resetCentroids();
+      updateViewDisplay();
+    }
+
+    function changeK(val) {
+      K = parseInt(val);
+      document.getElementById('kDisplay').innerText = `${K} 개`;
+      document.getElementById('tagKVal').innerText = K;
+      if (isAutoRunning) toggleAutoClustering();
+      resetCentroids();
+    }
+
+    function resetCentroids() {
+      iteration = 0;
+      isConverged = false;
+      document.getElementById('iterationBadge').innerText = `반복: 0회`;
+      updateStatus('준비 완료 (초기화됨)', 'bg-amber-400');
+
+      centroids = [];
+      if (samplePixels.length === 0) return;
+
+      // K-Means++ style or distributed random sample initialization
+      for (let i = 0; i < K; i++) {
+        const randPixel = samplePixels[Math.floor(Math.random() * samplePixels.length)];
+        centroids.push({
+          r: randPixel.r,
+          g: randPixel.g,
+          b: randPixel.b,
+          prevR: randPixel.r,
+          prevG: randPixel.g,
+          prevB: randPixel.b,
+          count: 0,
+          pct: (100 / K).toFixed(1)
+        });
+      }
+
+      // Initial assignment & render
+      runSingleStep(false);
+    }
+
+    // 1 Step execution of K-Means
+    function runSingleStep(incrementIter = true) {
+      if (samplePixels.length === 0 || centroids.length === 0) return;
+
+      // 1. Assign each pixel to nearest Centroid
+      const sums = Array.from({ length: K }, () => ({ r: 0, g: 0, b: 0, count: 0 }));
+
+      for (let p of samplePixels) {
+        let minDist = Infinity;
+        let bestK = 0;
+        for (let k = 0; k < K; k++) {
+          const dr = p.r - centroids[k].r;
+          const dg = p.g - centroids[k].g;
+          const db = p.b - centroids[k].b;
+          const d = dr*dr + dg*dg + db*db;
+          if (d < minDist) {
+            minDist = d;
+            bestK = k;
+          }
+        }
+        p.cluster = bestK;
+        sums[bestK].r += p.r;
+        sums[bestK].g += p.g;
+        sums[bestK].b += p.b;
+        sums[bestK].count++;
+      }
+
+      // 2. Re-compute Centroid means
+      let maxMovement = 0;
+      for (let k = 0; k < K; k++) {
+        centroids[k].prevR = centroids[k].r;
+        centroids[k].prevG = centroids[k].g;
+        centroids[k].prevB = centroids[k].b;
+
+        if (sums[k].count > 0) {
+          centroids[k].r = Math.round(sums[k].r / sums[k].count);
+          centroids[k].g = Math.round(sums[k].g / sums[k].count);
+          centroids[k].b = Math.round(sums[k].b / sums[k].count);
+          centroids[k].count = sums[k].count;
+          centroids[k].pct = ((sums[k].count / samplePixels.length) * 100).toFixed(1);
+        }
+
+        const dr = centroids[k].r - centroids[k].prevR;
+        const dg = centroids[k].g - centroids[k].prevG;
+        const db = centroids[k].b - centroids[k].prevB;
+        maxMovement = Math.max(maxMovement, Math.hypot(dr, dg, db));
+      }
+
+      if (incrementIter) {
+        iteration++;
+        document.getElementById('iterationBadge').innerText = `반복: ${iteration}회`;
+      }
+
+      // Check convergence threshold
+      if (maxMovement < 1.0 && incrementIter) {
+        isConverged = true;
+        updateStatus('수렴 완료 (최적 팔레트 확정)', 'bg-emerald-400');
+        if (isAutoRunning) toggleAutoClustering();
+      } else {
+        updateStatus(`군집 이동 중 (오차: ${maxMovement.toFixed(1)})`, 'bg-indigo-400');
+      }
+
+      renderQuantizedImage();
+      renderPaletteSwatches();
+      draw3DColorSpace();
+    }
+
+    function toggleAutoClustering() {
+      isAutoRunning = !isAutoRunning;
+      const btn = document.getElementById('autoBtn');
+      const text = document.getElementById('autoText');
+      const icon = document.getElementById('autoIcon');
+
+      if (isAutoRunning) {
+        if (isConverged) {
+          resetCentroids();
+        }
+        text.innerText = '일시 정지';
+        icon.innerText = '⏸';
+        btn.classList.add('bg-amber-600', 'hover:bg-amber-500');
+        btn.classList.remove('bg-rose-600', 'hover:bg-rose-500');
+
+        autoTimer = setInterval(() => {
+          runSingleStep(true);
+        }, 180);
+      } else {
+        clearInterval(autoTimer);
+        autoTimer = null;
+        text.innerText = '자동 수렴 실행';
+        icon.innerText = '▶';
+        btn.classList.remove('bg-amber-600', 'hover:bg-amber-500');
+        btn.classList.add('bg-rose-600', 'hover:bg-rose-500');
+      }
+    }
+
+    function updateStatus(label, dotColorClass) {
+      document.getElementById('statusLabel').innerText = label;
+      document.getElementById('statusDot').className = `w-2.5 h-2.5 rounded-full ${dotColorClass}`;
+    }
+
+    function renderQuantizedImage() {
+      const w = origCanvas.width;
+      const h = origCanvas.height;
+      if (w === 0 || h === 0) return;
+
+      const srcData = origCtx.getImageData(0, 0, w, h);
+      const dstData = quantCtx.createImageData(w, h);
+      const s = srcData.data;
+      const d = dstData.data;
+
+      for (let i = 0; i < s.length; i += 4) {
+        const pr = s[i];
+        const pg = s[i+1];
+        const pb = s[i+2];
+
+        // Find closest centroid
+        let minDist = Infinity;
+        let bestK = 0;
+        for (let k = 0; k < K; k++) {
+          const dr = pr - centroids[k].r;
+          const dg = pg - centroids[k].g;
+          const db = pb - centroids[k].b;
+          const distSq = dr*dr + dg*dg + db*db;
+          if (distSq < minDist) {
+            minDist = distSq;
+            bestK = k;
+          }
+        }
+
+        d[i] = centroids[bestK].r;
+        d[i+1] = centroids[bestK].g;
+        d[i+2] = centroids[bestK].b;
+        d[i+3] = 255;
+      }
+
+      quantCtx.putImageData(dstData, 0, 0);
+    }
+
+    function renderPaletteSwatches() {
+      const container = document.getElementById('paletteSwatches');
+      container.innerHTML = '';
+
+      // Sort by percentage descending for presentation
+      const sorted = [...centroids].sort((a, b) => b.pct - a.pct);
+
+      sorted.forEach((c, idx) => {
+        const hex = rgbToHex(c.r, c.g, c.b);
+        const isBright = (c.r * 0.299 + c.g * 0.587 + c.b * 0.114) > 160;
+
+        const card = document.createElement('div');
+        card.className = 'group relative flex flex-col rounded-xl overflow-hidden border border-slate-800 bg-slate-900 shadow-md hover:scale-105 transition transform cursor-pointer';
+        card.onclick = () => copyText(hex, `색상 코드 ${hex} 가 복사되었습니다!`);
+
+        card.innerHTML = `
+          <div class="h-14 w-full flex items-end justify-end p-1.5 transition-colors" style="background-color: ${hex}">
+            <span class="text-[10px] font-bold px-1.5 py-0.5 rounded shadow ${isBright ? 'bg-black/40 text-white' : 'bg-white/40 text-black'} backdrop-blur-xs">
+              ${c.pct}%
+            </span>
+          </div>
+          <div class="p-2 flex flex-col gap-0.5 text-center bg-slate-900">
+            <span class="text-xs font-mono-code font-bold text-slate-200">${hex}</span>
+            <span class="text-[10px] text-slate-500 font-mono-code">${c.r}, ${c.g}, ${c.b}</span>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      updateExportBlocks();
+    }
+
+    function init3DEvents() {
+      colorCubeCanvas.addEventListener('mousedown', (e) => {
+        isDragging3D = true;
+        lastMouseX = e.clientX;
+        lastMouseY = e.clientY;
+      });
+      window.addEventListener('mousemove', (e) => {
+        if (!isDragging3D) return;
+        const dx = e.clientX - lastMouseX;
+        const dy = e.clientY - lastMouseY;
+        rotY += dx * 0.01;
+        rotX += dy * 0.01;
+        lastMouseX = e.clientX;
+        lastMouseY = e.clientY;
+        draw3DColorSpace();
+      });
+      window.addEventListener('mouseup', () => {
+        isDragging3D = false;
+      });
+      
+      // Touch support
+      colorCubeCanvas.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+          isDragging3D = true;
+          lastMouseX = e.touches[0].clientX;
+          lastMouseY = e.touches[0].clientY;
+        }
+      }, { passive: true });
+      window.addEventListener('touchmove', (e) => {
+        if (!isDragging3D || e.touches.length !== 1) return;
+        const dx = e.touches[0].clientX - lastMouseX;
+        const dy = e.touches[0].clientY - lastMouseY;
+        rotY += dx * 0.01;
+        rotX += dy * 0.01;
+        lastMouseX = e.touches[0].clientX;
+        lastMouseY = e.touches[0].clientY;
+        draw3DColorSpace();
+      }, { passive: true });
+      window.addEventListener('touchend', () => { isDragging3D = false; });
+    }
+
+    function project3D(x, y, z, cx, cy, scale) {
+      // Rotate Y
+      const cosY = Math.cos(rotY);
+      const sinY = Math.sin(rotY);
+      const x1 = x * cosY - z * sinY;
+      const z1 = z * cosY + x * sinY;
+
+      // Rotate X
+      const cosX = Math.cos(rotX);
+      const sinX = Math.sin(rotX);
+      const y2 = y * cosX - z1 * sinX;
+      const z2 = z1 * cosX + y * sinX;
+
+      // Perspective projection
+      const fov = 420;
+      const distance = 480;
+      const factor = fov / (distance + z2);
+
+      return {
+        x: cx + x1 * factor * scale,
+        y: cy + y2 * factor * scale,
+        z: z2
+      };
+    }
+
+    function draw3DColorSpace() {
+      const w = colorCubeCanvas.width;
+      const h = colorCubeCanvas.height;
+      if (w === 0 || h === 0) return;
+
+      cubeCtx.clearRect(0, 0, w, h);
+      const cx = w / 2;
+      const cy = h / 2;
+      const scale = Math.min(w, h) * 0.0035;
+
+      // Draw bounding RGB Cube edges [-128, 128]
+      const cubeCorners = [
+        [-128, -128, -128], [128, -128, -128], [128, 128, -128], [-128, 128, -128],
+        [-128, -128, 128],  [128, -128, 128],  [128, 128, 128],  [-128, 128, 128]
+      ];
+      const pCorners = cubeCorners.map(pt => project3D(pt[0], pt[1], pt[2], cx, cy, scale));
+
+      const edges = [
+        [0,1],[1,2],[2,3],[3,0],
+        [4,5],[5,6],[6,7],[7,4],
+        [0,4],[1,5],[2,6],[3,7]
+      ];
+
+      cubeCtx.strokeStyle = 'rgba(71, 85, 105, 0.45)';
+      cubeCtx.lineWidth = 1;
+      for (let [i, j] of edges) {
+        cubeCtx.beginPath();
+        cubeCtx.moveTo(pCorners[i].x, pCorners[i].y);
+        cubeCtx.lineTo(pCorners[j].x, pCorners[j].y);
+        cubeCtx.stroke();
+      }
+
+      // Axis labels (Red, Green, Blue)
+      const pRed = project3D(150, -128, -128, cx, cy, scale);
+      const pGreen = project3D(-128, 150, -128, cx, cy, scale);
+      const pBlue = project3D(-128, -128, 150, cx, cy, scale);
+
+      cubeCtx.font = '10px JetBrains Mono';
+      cubeCtx.fillStyle = '#f43f5e';
+      cubeCtx.fillText('+R (Red)', pRed.x, pRed.y);
+      cubeCtx.fillStyle = '#10b981';
+      cubeCtx.fillText('+G (Green)', pGreen.x, pGreen.y);
+      cubeCtx.fillStyle = '#3b82f6';
+      cubeCtx.fillText('+B (Blue)', pBlue.x, pBlue.y);
+
+      // Draw Sampled Pixel points mapped from [0, 255] to [-128, 128]
+      for (let p of samplePixels) {
+        const pt3D = project3D(p.r - 128, p.g - 128, p.b - 128, cx, cy, scale);
+        cubeCtx.fillStyle = `rgba(${p.r}, ${p.g}, ${p.b}, 0.55)`;
+        cubeCtx.beginPath();
+        cubeCtx.arc(pt3D.x, pt3D.y, 2, 0, Math.PI * 2);
+        cubeCtx.fill();
+      }
+
+      // Draw K Centroid Spheres (Layered on top)
+      centroids.forEach((c, idx) => {
+        const pt = project3D(c.r - 128, c.g - 128, c.b - 128, cx, cy, scale);
+
+        // Glow ring
+        cubeCtx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+        cubeCtx.lineWidth = 2.5;
+        cubeCtx.beginPath();
+        cubeCtx.arc(pt.x, pt.y, 8, 0, Math.PI * 2);
+        cubeCtx.stroke();
+
+        // Solid centroid color
+        cubeCtx.fillStyle = `rgb(${c.r}, ${c.g}, ${c.b})`;
+        cubeCtx.beginPath();
+        cubeCtx.arc(pt.x, pt.y, 6, 0, Math.PI * 2);
+        cubeCtx.fill();
+      });
+    }
+
+    function setViewMode(mode) {
+      viewMode = mode;
+      const wOrig = document.getElementById('origWrapper');
+      const wQuant = document.getElementById('quantWrapper');
+      const bSplit = document.getElementById('viewSplitBtn');
+      const bQuant = document.getElementById('viewQuantizedBtn');
+      const bOrig = document.getElementById('viewOriginalBtn');
+
+      [bSplit, bQuant, bOrig].forEach(b => {
+        b.className = 'px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 hover:text-white transition';
+      });
+
+      if (mode === 'split') {
+        wOrig.classList.remove('hidden');
+        wQuant.classList.remove('hidden');
+        bSplit.className = 'px-2.5 py-1 rounded-lg bg-indigo-600 text-white font-medium transition';
+      } else if (mode === 'quantized') {
+        wOrig.classList.add('hidden');
+        wQuant.classList.remove('hidden');
+        bQuant.className = 'px-2.5 py-1 rounded-lg bg-indigo-600 text-white font-medium transition';
+      } else if (mode === 'original') {
+        wOrig.classList.remove('hidden');
+        wQuant.classList.add('hidden');
+        bOrig.className = 'px-2.5 py-1 rounded-lg bg-indigo-600 text-white font-medium transition';
+      }
+    }
+
+    function updateViewDisplay() {
+      setViewMode(viewMode);
+    }
+
+    function openExportModal() {
+      updateExportBlocks();
+      renderPaletteCanvasCard();
+      document.getElementById('exportModal').classList.remove('hidden');
+    }
+
+    function closeExportModal() {
+      document.getElementById('exportModal').classList.add('hidden');
+    }
+
+    function updateExportBlocks() {
+      // 1. CSS Variables
+      let cssText = ':root {\n';
+      centroids.forEach((c, idx) => {
+        cssText += `  --color-${idx + 1}: ${rgbToHex(c.r, c.g, c.b)}; /* ${c.pct}% */\n`;
+      });
+      cssText += '}';
+      document.getElementById('cssCodeBlock').textContent = cssText;
+
+      // 2. JSON
+      const exportJson = centroids.map((c, i) => ({
+        id: i + 1,
+        hex: rgbToHex(c.r, c.g, c.b),
+        rgb: { r: c.r, g: c.g, b: c.b },
+        percentage: parseFloat(c.pct)
+      }));
+      document.getElementById('jsonCodeBlock').textContent = JSON.stringify(exportJson, null, 2);
+    }
+
+    function renderPaletteCanvasCard() {
+      const card = document.getElementById('paletteCardCanvas');
+      const ctx = card.getContext('2d');
+      const cw = card.width;
+      const ch = card.height;
+
+      // Card Background
+      ctx.fillStyle = '#090d16';
+      ctx.fillRect(0, 0, cw, ch);
+
+      // Card Header
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 15px Plus Jakarta Sans, sans-serif';
+      ctx.fillText('Color Palette Card', 20, 32);
+
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '11px Plus Jakarta Sans, sans-serif';
+      ctx.fillText(`K-Means Quantized • K = ${K} Clusters`, 20, 50);
+
+      // Swatches Row
+      const margin = 20;
+      const availWidth = cw - margin * 2;
+      const swatchH = 80;
+      const swatchY = 70;
+      const swatchW = availWidth / centroids.length;
+
+      centroids.forEach((c, i) => {
+        const x = margin + i * swatchW;
+        const hex = rgbToHex(c.r, c.g, c.b);
+
+        // Fill swatch block
+        ctx.fillStyle = hex;
+        ctx.fillRect(x, swatchY, swatchW, swatchH);
+
+        // HEX text
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 10px JetBrains Mono';
+        ctx.textAlign = 'center';
+        ctx.fillText(hex, x + swatchW / 2, swatchY + swatchH + 20);
+
+        // Percent text
+        ctx.fillStyle = '#64748b';
+        ctx.font = '10px JetBrains Mono';
+        ctx.fillText(`${c.pct}%`, x + swatchW / 2, swatchY + swatchH + 35);
+      });
+      ctx.textAlign = 'left';
+    }
+
+    function downloadPaletteCardPNG() {
+      renderPaletteCanvasCard();
+      const card = document.getElementById('paletteCardCanvas');
+      const a = document.createElement('a');
+      a.download = `palette-card-k${K}.png`;
+      a.href = card.toDataURL('image/png');
+      a.click();
+      showToast('팔레트 디자인 카드 이미지가 다운로드되었습니다.');
+    }
+
+    function downloadQuantizedImagePNG() {
+      const a = document.createElement('a');
+      a.download = `quantized-image-k${K}.png`;
+      a.href = quantCanvas.toDataURL('image/png');
+      a.click();
+      showToast('압축 결과 이미지가 다운로드되었습니다.');
+    }
+
+    function copyCSSVariables() {
+      const text = document.getElementById('cssCodeBlock').textContent;
+      copyText(text, 'CSS 변수 코드가 복사되었습니다.');
+    }
+
+    function copyJSONData() {
+      const text = document.getElementById('jsonCodeBlock').textContent;
+      copyText(text, '팔레트 JSON 데이터가 복사되었습니다.');
+    }
+
+    // Helper functions
+    function rgbToHex(r, g, b) {
+      return '#' + [r, g, b].map(x => {
+        const h = Math.round(x).toString(16);
+        return h.length === 1 ? '0' + h : h;
+      }).join('');
+    }
+
+    function copyText(val, msg) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(val).then(() => showToast(msg)).catch(() => fallbackCopy(val, msg));
+      } else {
+        fallbackCopy(val, msg);
+      }
+    }
+
+    function fallbackCopy(text, msg) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      showToast(msg);
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const label = document.getElementById('toastMessage');
+      label.innerText = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+      }, 2400);
+    }
+  </script>
+</body>
+</html>

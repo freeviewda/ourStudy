@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>K-Means 군집화 시각화 놀이터</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- p5.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"></script>
+  <!-- Google Fonts: Inter & Pretendard-compatible sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background-color: #cbd5e1;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+    .badge-glow {
+      box-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
+
+  <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-30">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center space-x-3">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-indigo-500/25">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
+            K-평균 군집화 <span class="text-xs bg-indigo-500/20 text-indigo-300 font-medium px-2 py-0.5 rounded-full border border-indigo-500/30">생활코딩 머신러닝 실습실</span>
+          </h1>
+          <p class="text-xs text-slate-400">데이터(고객)와 중심점(배달 본부)의 자가 학습 원리 체험하기</p>
+        </div>
+      </div>
+
+      <!-- Quick status indicator in header -->
+      <div class="flex items-center gap-3">
+        <div id="statusBadge" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800 border border-slate-700 text-xs font-medium text-slate-300">
+          <span id="statusDot" class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span>
+          <span id="statusLabel">준비 완료 (대기 중)</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto p-3 sm:p-4 lg:p-6 w-full flex-1 grid grid-cols-1 lg:grid-cols-12 gap-5">
+    
+    <!-- LEFT: Canvas Display (7 Cols on large screen) -->
+    <section class="lg:col-span-8 flex flex-col gap-3">
+      <!-- Canvas Wrapper Card -->
+      <div class="bg-slate-950 border border-slate-800 rounded-2xl p-3 sm:p-4 shadow-xl flex flex-col">
+        <div class="flex flex-wrap items-center justify-between pb-3 border-b border-slate-800/80 gap-2">
+          <!-- Interaction Tool Selector -->
+          <div class="flex items-center gap-1.5 bg-slate-900 p-1 rounded-xl border border-slate-800 text-xs">
+            <span class="px-2 text-slate-400 font-medium hidden sm:inline">마우스 동작:</span>
+            <button id="modeAddPoint" onclick="setInteractionMode('ADD_POINT')" class="px-3 py-1.5 rounded-lg bg-indigo-600 text-white font-medium transition shadow-sm">
+              📍 고객 점 추가
+            </button>
+            <button id="modeDragCentroid" onclick="setInteractionMode('DRAG')" class="px-3 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition font-medium">
+              ✋ 본부 드래그
+            </button>
+            <button id="modeAddCentroid" onclick="setInteractionMode('ADD_CENTROID')" class="px-3 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition font-medium">
+              🏢 새 본부 찍기
+            </button>
+          </div>
+
+          <!-- Canvas Layer Toggles -->
+          <div class="flex items-center gap-2 text-xs">
+            <label class="inline-flex items-center cursor-pointer gap-1.5 text-slate-300 select-none">
+              <input type="checkbox" id="toggleLines" class="sr-only peer" checked onchange="toggleLines(this.checked)">
+              <div class="w-8 h-4 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-indigo-600 relative"></div>
+              <span>연결선</span>
+            </label>
+            <label class="inline-flex items-center cursor-pointer gap-1.5 text-slate-300 select-none ml-2">
+              <input type="checkbox" id="toggleVoronoi" class="sr-only peer" onchange="toggleVoronoi(this.checked)">
+              <div class="w-8 h-4 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-purple-600 relative"></div>
+              <span>관할 구역(배경)</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- The Responsive p5.js Canvas Container -->
+        <div id="canvasContainer" class="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 rounded-xl overflow-hidden mt-3 border border-slate-800 shadow-inner flex items-center justify-center">
+          <!-- Canvas injected here by p5 -->
+          <div id="canvasOverlayNotice" class="absolute bottom-3 left-3 bg-slate-950/80 backdrop-blur px-3 py-1.5 rounded-lg text-xs text-slate-300 border border-slate-800 pointer-events-none transition-opacity">
+            캔버스를 클릭하여 데이터를 추가하거나 본부를 마우스로 끌어보세요.
+          </div>
+        </div>
+
+        <!-- Canvas Footer / Quick Stats Bar -->
+        <div class="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
+          <div class="bg-slate-900/80 border border-slate-800 p-2 rounded-xl">
+            <span class="text-slate-400 block text-[11px]">총 데이터(고객)</span>
+            <span id="metricPointsCount" class="text-base font-bold text-slate-100">0</span>
+          </div>
+          <div class="bg-slate-900/80 border border-slate-800 p-2 rounded-xl">
+            <span class="text-slate-400 block text-[11px]">중심점(K 본부)</span>
+            <span id="metricCentroidsCount" class="text-base font-bold text-indigo-400">3</span>
+          </div>
+          <div class="bg-slate-900/80 border border-slate-800 p-2 rounded-xl">
+            <span class="text-slate-400 block text-[11px]">반복 이터레이션</span>
+            <span id="metricIterations" class="text-base font-bold text-amber-400">0 회</span>
+          </div>
+          <div class="bg-slate-900/80 border border-slate-800 p-2 rounded-xl">
+            <span class="text-slate-400 block text-[11px]">중심점 이동 오차</span>
+            <span id="metricMovement" class="text-base font-bold text-emerald-400">0.0 px</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 shadow-xl">
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3 flex items-center justify-between">
+          <span>각 군집(본부)별 담당 배달 고객 현황</span>
+          <span class="text-[11px] font-normal text-slate-500">실시간 데이터 집계</span>
+        </h3>
+        <div id="clustersBreakdown" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT: Control Panel & Educational Guide (5 Cols on large screen) -->
+    <section class="lg:col-span-4 flex flex-col gap-4">
+      
+      <!-- Primary Operation Control Card -->
+      <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-xl">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-sm font-bold text-white flex items-center gap-2">
+            <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+            알고리즘 조작판
+          </h2>
+          <span id="phaseBadge" class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700 font-mono">
+            대기
+          </span>
+        </div>
+
+        <!-- Playback Actions -->
+        <div class="grid grid-cols-2 gap-2 mb-4">
+          <button id="btnStep" onclick="stepAlgorithm()" class="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs shadow-lg shadow-indigo-600/30 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"/></svg>
+            1스텝 진행
+          </button>
+          <button id="btnAutoPlay" onclick="toggleAutoPlay()" class="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 font-medium text-xs border border-slate-700 transition">
+            <span id="autoPlayIcon">▶</span>
+            <span id="autoPlayText">자동 실행</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 mb-5">
+          <button onclick="reassignRandomCentroids()" class="py-2 px-3 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs border border-slate-800 transition">
+            🎲 본부 위치 재배치
+          </button>
+          <button onclick="clearAllData()" class="py-2 px-3 rounded-lg bg-rose-950/40 hover:bg-rose-900/50 text-rose-300 text-xs border border-rose-900/40 transition">
+            🗑 데이터 전체 삭제
+          </button>
+        </div>
+
+        <!-- Parameter: K (Cluster Count) -->
+        <div class="space-y-3 pt-4 border-t border-slate-800">
+          <div>
+            <div class="flex justify-between items-center text-xs mb-1.5">
+              <span class="text-slate-300 font-medium">군집 수 (K):</span>
+              <span id="kValDisplay" class="font-bold text-indigo-400 font-mono">3 개</span>
+            </div>
+            <input type="range" id="kSlider" min="2" max="6" value="3" step="1" oninput="changeClusterCount(this.value)" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-indigo-500">
+            <div class="flex justify-between text-[10px] text-slate-500 px-0.5 mt-1">
+              <span>2</span>
+              <span>3</span>
+              <span>4</span>
+              <span>5</span>
+              <span>6</span>
+            </div>
+          </div>
+
+          <!-- Parameter: Speed -->
+          <div>
+            <div class="flex justify-between items-center text-xs mb-1.5">
+              <span class="text-slate-300 font-medium">애니메이션 속도:</span>
+              <span id="speedValDisplay" class="font-bold text-slate-300 font-mono">보통</span>
+            </div>
+            <input type="range" id="speedSlider" min="1" max="5" value="3" step="1" oninput="changeSpeed(this.value)" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-indigo-500">
+          </div>
+        </div>
+
+        <!-- Preset Patterns -->
+        <div class="pt-4 border-t border-slate-800 mt-4">
+          <label class="text-xs font-semibold text-slate-400 block mb-2">프리셋 데이터셋 생성</label>
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <button onclick="generatePreset('CLUSTERED')" class="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 text-left transition">
+              📍 3개 밀집 상권
+            </button>
+            <button onclick="generatePreset('UNIFORM')" class="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 text-left transition">
+              🌐 고른 랜덤 분포
+            </button>
+            <button onclick="generatePreset('RING')" class="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 text-left transition">
+              ⭕ 원형 / 도넛 군집
+            </button>
+            <button onclick="generatePreset('DELIVERY')" class="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 text-left transition">
+              🛵 실제 배달 밀집 지역
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Educational Card (생활코딩 연계) -->
+      <div class="bg-gradient-to-b from-slate-950 to-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-xl flex-1 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center gap-2 mb-2.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-emerald-400">생활코딩 머신러닝 개념 노트</h3>
+          </div>
+          <h4 class="text-sm font-bold text-white mb-2">“배달 본부 100개를 어디에 둘 것인가?”</h4>
+          <p class="text-xs leading-relaxed text-slate-300 mb-3">
+            생활코딩의 <strong>군집화(Clustering)</strong> 수업에서는 정답(라벨)이 없는 상태에서 데이터끼리의 거리적 유사성을 토대로 비슷한 무리를 스스로 묶는 <strong>비지도 학습(Unsupervised Learning)</strong>을 다룹니다.
+          </p>
+
+          <div class="space-y-2 text-xs bg-slate-900/90 p-3 rounded-xl border border-slate-800">
+            <div class="flex items-start gap-2">
+              <span class="w-5 h-5 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">1</span>
+              <div>
+                <strong class="text-slate-200">배정 단계:</strong> 각 고객은 자신과 <em>가장 가까운 거리의 배달 본부</em>에 임시 배정됩니다.
+              </div>
+            </div>
+            <div class="flex items-start gap-2">
+              <span class="w-5 h-5 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">2</span>
+              <div>
+                <strong class="text-slate-200">중심 이동 단계:</strong> 각 배달 본부는 자신에게 배정된 고객들의 <em>평균 위치(무게중심)</em>로 사무실을 이동합니다.
+              </div>
+            </div>
+            <div class="flex items-start gap-2">
+              <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">3</span>
+              <div>
+                <strong class="text-slate-200">수렴(완료):</strong> 본부의 위치가 더 이상 움직이지 않으면 가장 효율적인 최적의 군집이 완성됩니다!
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-slate-400 flex justify-between items-center">
+          <span>비지도학습 (Unsupervised)</span>
+          <span class="text-indigo-400 font-medium">거리 기반 K-Means</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Palette definition (6 vibrant, distinct colors)
+    const CLUSTER_PALETTE = [
+      { name: 'Red', hex: '#f43f5e', r: 244, g: 63, b: 94 },
+      { name: 'Emerald', hex: '#10b981', r: 16, g: 185, b: 129 },
+      { name: 'Blue', hex: '#3b82f6', r: 59, g: 130, b: 246 },
+      { name: 'Amber', hex: '#f59e0b', r: 245, g: 158, b: 11 },
+      { name: 'Purple', hex: '#a855f7', r: 168, g: 85, b: 247 },
+      { name: 'Cyan', hex: '#06b6d4', r: 6, g: 182, b: 212 }
+    ];
+
+    // Core algorithmic state
+    let points = [];
+    let centroids = [];
+    let k = 3;
+    let iterationCount = 0;
+    let lastMovementError = 0;
+
+    // Phases: 'ASSIGN' (ready to assign points) -> 'MOVE' (ready to calculate centroids) -> 'CONVERGED'
+    let phase = 'ASSIGN';
+    let isAutoPlaying = false;
+    let autoPlayInterval = null;
+    let animSpeedMs = 500;
+
+    // UI & Interactive states
+    let interactionMode = 'ADD_POINT'; // 'ADD_POINT' | 'DRAG' | 'ADD_CENTROID'
+    let draggedCentroidIndex = -1;
+    let showLines = true;
+    let showVoronoi = false;
+
+    let myCanvas;
+
+    function setup() {
+      const container = document.getElementById('canvasContainer');
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+
+      myCanvas = createCanvas(w, h);
+      myCanvas.parent('canvasContainer');
+      myCanvas.mouseWheel(preventScroll);
+
+      // Initialize with Clustered preset
+      generatePreset('CLUSTERED');
+      updateUI();
+    }
+
+    function windowResized() {
+      const container = document.getElementById('canvasContainer');
+      if (container) {
+        resizeCanvas(container.clientWidth, container.clientHeight);
+      }
+    }
+
+    function preventScroll(e) {
+      return false;
+    }
+
+    function draw() {
+      background(15, 23, 42); // slate-900
+
+      // 1. Draw subtle grid
+      drawGrid();
+
+      // 2. Draw Voronoi Background if enabled
+      if (showVoronoi && centroids.length > 0) {
+        drawVoronoiBackground();
+      }
+
+      // 3. Smooth centroid position interpolation (for smooth visuals)
+      updateCentroidInterpolation();
+
+      // 4. Draw Connecting Lines between points & assigned centroids
+      if (showLines) {
+        drawConnectingLines();
+      }
+
+      // 5. Draw Data Points
+      drawDataPoints();
+
+      // 6. Draw Centroids
+      drawCentroids();
+    }
+
+    function drawGrid() {
+      stroke(30, 41, 59, 120);
+      strokeWeight(1);
+      const step = 40;
+      for (let x = 0; x < width; x += step) {
+        line(x, 0, x, height);
+      }
+      for (let y = 0; y < height; y += step) {
+        line(0, y, width, y);
+      }
+    }
+
+    function drawVoronoiBackground() {
+      loadPixels();
+      const density = pixelDensity();
+      const totalPixels = 4 * (width * density) * (height * density);
+
+      // Low resolution sampling for high framerate
+      const sampleStep = 8;
+      for (let y = 0; y < height; y += sampleStep) {
+        for (let x = 0; x < width; x += sampleStep) {
+          let minDist = Infinity;
+          let nearestIdx = 0;
+          for (let c = 0; c < centroids.length; c++) {
+            let d = dist(x, y, centroids[c].x, centroids[c].y);
+            if (d < minDist) {
+              minDist = d;
+              nearestIdx = c;
+            }
+          }
+          let col = CLUSTER_PALETTE[nearestIdx % CLUSTER_PALETTE.length];
+          noStroke();
+          fill(col.r, col.g, col.b, 25);
+          rect(x, y, sampleStep, sampleStep);
+        }
+      }
+    }
+
+    function updateCentroidInterpolation() {
+      let totalErr = 0;
+      for (let c of centroids) {
+        let dx = c.targetX - c.x;
+        let dy = c.targetY - c.y;
+        c.x += dx * 0.18;
+        c.y += dy * 0.18;
+        totalErr += Math.hypot(dx, dy);
+      }
+      // If we are currently transitioning, reflect movement
+      if (totalErr > 0.1 && phase === 'MOVE') {
+        document.getElementById('metricMovement').innerText = totalErr.toFixed(1) + ' px';
+      }
+    }
+
+    function drawConnectingLines() {
+      strokeWeight(1);
+      for (let pt of points) {
+        if (pt.cluster !== -1 && centroids[pt.cluster]) {
+          let c = centroids[pt.cluster];
+          let col = CLUSTER_PALETTE[pt.cluster % CLUSTER_PALETTE.length];
+          stroke(col.r, col.g, col.b, 45);
+          line(pt.x, pt.y, c.x, c.y);
+        }
+      }
+    }
+
+    function drawDataPoints() {
+      noStroke();
+      for (let pt of points) {
+        if (pt.cluster !== -1 && centroids[pt.cluster]) {
+          let col = CLUSTER_PALETTE[pt.cluster % CLUSTER_PALETTE.length];
+          fill(col.r, col.g, col.b, 230);
+        } else {
+          fill(148, 163, 184, 180); // Slate-400 unassigned
+        }
+        circle(pt.x, pt.y, 9);
+      }
+    }
+
+    function drawCentroids() {
+      for (let i = 0; i < centroids.length; i++) {
+        let c = centroids[i];
+        let col = CLUSTER_PALETTE[i % CLUSTER_PALETTE.length];
+
+        // Outer glow
+        noFill();
+        stroke(col.r, col.g, col.b, 70);
+        strokeWeight(6);
+        circle(c.x, c.y, 34);
+
+        // Core marker
+        fill(col.r, col.g, col.b);
+        stroke(255);
+        strokeWeight(2.5);
+        circle(c.x, c.y, 22);
+
+        // Centroid number index
+        fill(255);
+        noStroke();
+        textAlign(CENTER, CENTER);
+        textSize(11);
+        textStyle(BOLD);
+        text(i + 1, c.x, c.y);
+      }
+      textStyle(NORMAL);
+    }
+
+    function mousePressed() {
+      if (mouseX < 0 || mouseX > width || mouseY < 0 || mouseY > height) return;
+
+      if (interactionMode === 'ADD_POINT') {
+        // Add single customer point
+        points.push({ x: mouseX, y: mouseY, cluster: -1 });
+        resetToAssignPhase();
+        updateUI();
+      } else if (interactionMode === 'DRAG') {
+        // Check if clicked near centroid
+        draggedCentroidIndex = -1;
+        for (let i = 0; i < centroids.length; i++) {
+          if (dist(mouseX, mouseY, centroids[i].x, centroids[i].y) < 25) {
+            draggedCentroidIndex = i;
+            break;
+          }
+        }
+      } else if (interactionMode === 'ADD_CENTROID') {
+        if (centroids.length < CLUSTER_PALETTE.length) {
+          centroids.push({
+            x: mouseX,
+            y: mouseY,
+            targetX: mouseX,
+            targetY: mouseY
+          });
+          k = centroids.length;
+          document.getElementById('kSlider').value = k;
+          resetToAssignPhase();
+          updateUI();
+        }
+      }
+    }
+
+    function mouseDragged() {
+      if (interactionMode === 'DRAG' && draggedCentroidIndex !== -1) {
+        centroids[draggedCentroidIndex].x = constrain(mouseX, 15, width - 15);
+        centroids[draggedCentroidIndex].y = constrain(mouseY, 15, height - 15);
+        centroids[draggedCentroidIndex].targetX = centroids[draggedCentroidIndex].x;
+        centroids[draggedCentroidIndex].targetY = centroids[draggedCentroidIndex].y;
+        resetToAssignPhase();
+        updateUI();
+      }
+    }
+
+    function mouseReleased() {
+      draggedCentroidIndex = -1;
+    }
+
+    function stepAlgorithm() {
+      if (centroids.length === 0 || points.length === 0) return;
+
+      if (phase === 'ASSIGN') {
+        // Step 1: Assign each point to closest centroid
+        let anyChanged = false;
+        for (let pt of points) {
+          let minDist = Infinity;
+          let bestIdx = -1;
+          for (let i = 0; i < centroids.length; i++) {
+            let d = dist(pt.x, pt.y, centroids[i].targetX, centroids[i].targetY);
+            if (d < minDist) {
+              minDist = d;
+              bestIdx = i;
+            }
+          }
+          if (pt.cluster !== bestIdx) {
+            anyChanged = true;
+            pt.cluster = bestIdx;
+          }
+        }
+
+        phase = 'MOVE';
+        updateUI();
+      } else if (phase === 'MOVE') {
+        // Step 2: Compute mean of points for each cluster
+        let totalShift = 0;
+        iterationCount++;
+
+        for (let i = 0; i < centroids.length; i++) {
+          let sumX = 0;
+          let sumY = 0;
+          let count = 0;
+
+          for (let pt of points) {
+            if (pt.cluster === i) {
+              sumX += pt.x;
+              sumY += pt.y;
+              count++;
+            }
+          }
+
+          if (count > 0) {
+            let newX = sumX / count;
+            let newY = sumY / count;
+            let shift = dist(centroids[i].targetX, centroids[i].targetY, newX, newY);
+            totalShift += shift;
+
+            centroids[i].targetX = newX;
+            centroids[i].targetY = newY;
+          }
+        }
+
+        lastMovementError = totalShift;
+
+        // Check Convergence
+        if (totalShift < 0.5) {
+          phase = 'CONVERGED';
+          if (isAutoPlaying) toggleAutoPlay();
+        } else {
+          phase = 'ASSIGN';
+        }
+        updateUI();
+      } else if (phase === 'CONVERGED') {
+        // Already optimal
+        if (isAutoPlaying) toggleAutoPlay();
+        updateUI();
+      }
+    }
+
+    function resetToAssignPhase() {
+      phase = 'ASSIGN';
+      iterationCount = 0;
+      lastMovementError = 0;
+    }
+
+    function toggleAutoPlay() {
+      isAutoPlaying = !isAutoPlaying;
+      const btn = document.getElementById('btnAutoPlay');
+      const text = document.getElementById('autoPlayText');
+      const icon = document.getElementById('autoPlayIcon');
+
+      if (isAutoPlaying) {
+        if (phase === 'CONVERGED') resetToAssignPhase();
+        text.innerText = '일시정지';
+        icon.innerText = '⏸';
+        btn.classList.add('bg-amber-600', 'text-white');
+        btn.classList.remove('bg-slate-800', 'text-slate-100');
+
+        autoPlayInterval = setInterval(() => {
+          stepAlgorithm();
+        }, animSpeedMs);
+      } else {
+        clearInterval(autoPlayInterval);
+        autoPlayInterval = null;
+        text.innerText = '자동 실행';
+        icon.innerText = '▶';
+        btn.classList.remove('bg-amber-600', 'text-white');
+        btn.classList.add('bg-slate-800', 'text-slate-100');
+      }
+    }
+
+    function changeSpeed(val) {
+      const speeds = [1000, 750, 450, 250, 100];
+      const labels = ['매우 느림', '느림', '보통', '빠름', '초고속'];
+      animSpeedMs = speeds[val - 1];
+      document.getElementById('speedValDisplay').innerText = labels[val - 1];
+
+      if (isAutoPlaying) {
+        clearInterval(autoPlayInterval);
+        autoPlayInterval = setInterval(() => {
+          stepAlgorithm();
+        }, animSpeedMs);
+      }
+    }
+
+    function changeClusterCount(newK) {
+      k = parseInt(newK);
+      document.getElementById('kValDisplay').innerText = `${k} 개`;
+      reassignRandomCentroids();
+    }
+
+    function setInteractionMode(mode) {
+      interactionMode = mode;
+      const btnPoint = document.getElementById('modeAddPoint');
+      const btnDrag = document.getElementById('modeDragCentroid');
+      const btnCentroid = document.getElementById('modeAddCentroid');
+
+      [btnPoint, btnDrag, btnCentroid].forEach(b => {
+        b.className = 'px-3 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition font-medium';
+      });
+
+      if (mode === 'ADD_POINT') {
+        btnPoint.className = 'px-3 py-1.5 rounded-lg bg-indigo-600 text-white font-medium transition shadow-sm';
+      } else if (mode === 'DRAG') {
+        btnDrag.className = 'px-3 py-1.5 rounded-lg bg-indigo-600 text-white font-medium transition shadow-sm';
+      } else if (mode === 'ADD_CENTROID') {
+        btnCentroid.className = 'px-3 py-1.5 rounded-lg bg-indigo-600 text-white font-medium transition shadow-sm';
+      }
+    }
+
+    function toggleLines(val) {
+      showLines = val;
+    }
+
+    function toggleVoronoi(val) {
+      showVoronoi = val;
+    }
+
+    function generatePreset(type) {
+      const w = width || 600;
+      const h = height || 400;
+      points = [];
+      resetToAssignPhase();
+
+      if (type === 'CLUSTERED') {
+        const clusterCenters = [
+          { x: w * 0.25, y: h * 0.35, count: 40 },
+          { x: w * 0.75, y: h * 0.35, count: 40 },
+          { x: w * 0.50, y: h * 0.75, count: 45 }
+        ];
+        clusterCenters.forEach(c => {
+          for (let i = 0; i < c.count; i++) {
+            points.push({
+              x: constrain(randomGaussian(c.x, 38), 20, w - 20),
+              y: constrain(randomGaussian(c.y, 38), 20, h - 20),
+              cluster: -1
+            });
+          }
+        });
+      } else if (type === 'UNIFORM') {
+        for (let i = 0; i < 120; i++) {
+          points.push({
+            x: random(20, w - 20),
+            y: random(20, h - 20),
+            cluster: -1
+          });
+        }
+      } else if (type === 'RING') {
+        const cx = w * 0.5;
+        const cy = h * 0.5;
+        // Central cluster
+        for (let i = 0; i < 40; i++) {
+          points.push({
+            x: constrain(randomGaussian(cx, 25), 20, w - 20),
+            y: constrain(randomGaussian(cy, 25), 20, h - 20),
+            cluster: -1
+          });
+        }
+        // Outer ring
+        for (let i = 0; i < 80; i++) {
+          let angle = random(TWO_PI);
+          let r = random(120, 160);
+          points.push({
+            x: constrain(cx + Math.cos(angle) * r, 20, w - 20),
+            y: constrain(cy + Math.sin(angle) * r, 20, h - 20),
+            cluster: -1
+          });
+        }
+      } else if (type === 'DELIVERY') {
+        // High density commercial center + 2 residential suburbs
+        for (let i = 0; i < 70; i++) {
+          points.push({
+            x: constrain(randomGaussian(w * 0.35, 45), 20, w - 20),
+            y: constrain(randomGaussian(h * 0.5, 40), 20, h - 20),
+            cluster: -1
+          });
+        }
+        for (let i = 0; i < 35; i++) {
+          points.push({
+            x: constrain(randomGaussian(w * 0.78, 30), 20, w - 20),
+            y: constrain(randomGaussian(h * 0.28, 30), 20, h - 20),
+            cluster: -1
+          });
+        }
+        for (let i = 0; i < 35; i++) {
+          points.push({
+            x: constrain(randomGaussian(w * 0.72, 35), 20, w - 20),
+            y: constrain(randomGaussian(h * 0.78, 35), 20, h - 20),
+            cluster: -1
+          });
+        }
+      }
+
+      reassignRandomCentroids();
+    }
+
+    function reassignRandomCentroids() {
+      const w = width || 600;
+      const h = height || 400;
+      centroids = [];
+      for (let i = 0; i < k; i++) {
+        let rx = random(w * 0.15, w * 0.85);
+        let ry = random(h * 0.15, h * 0.85);
+        centroids.push({
+          x: rx,
+          y: ry,
+          targetX: rx,
+          targetY: ry
+        });
+      }
+      resetToAssignPhase();
+      updateUI();
+    }
+
+    function clearAllData() {
+      points = [];
+      resetToAssignPhase();
+      updateUI();
+    }
+
+    function updateUI() {
+      // 1. Counters
+      document.getElementById('metricPointsCount').innerText = points.length;
+      document.getElementById('metricCentroidsCount').innerText = centroids.length;
+      document.getElementById('metricIterations').innerText = `${iterationCount} 회`;
+      document.getElementById('metricMovement').innerText = `${lastMovementError.toFixed(1)} px`;
+
+      // 2. Status Badge & Description
+      const statusLabel = document.getElementById('statusLabel');
+      const statusDot = document.getElementById('statusDot');
+      const phaseBadge = document.getElementById('phaseBadge');
+
+      if (phase === 'ASSIGN') {
+        statusLabel.innerText = '1단계: 가장 가까운 본부로 고객 배정 준비';
+        statusDot.className = 'w-2.5 h-2.5 rounded-full bg-indigo-400 animate-pulse';
+        phaseBadge.innerText = '1단계 (배정)';
+        phaseBadge.className = 'text-xs px-2.5 py-0.5 rounded-full bg-indigo-950 text-indigo-300 border border-indigo-700 font-mono';
+      } else if (phase === 'MOVE') {
+        statusLabel.innerText = '2단계: 소속 고객들의 평균 위치로 본부 이동';
+        statusDot.className = 'w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse';
+        phaseBadge.innerText = '2단계 (중심 갱신)';
+        phaseBadge.className = 'text-xs px-2.5 py-0.5 rounded-full bg-amber-950 text-amber-300 border border-amber-700 font-mono';
+      } else if (phase === 'CONVERGED') {
+        statusLabel.innerText = '수렴 완료: 최적의 본부 위치를 찾았습니다!';
+        statusDot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400';
+        phaseBadge.innerText = '수렴 완료';
+        phaseBadge.className = 'text-xs px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-700 font-mono';
+      }
+
+      // 3. Cluster breakdowns
+      const breakdownEl = document.getElementById('clustersBreakdown');
+      breakdownEl.innerHTML = '';
+
+      for (let i = 0; i < centroids.length; i++) {
+        let count = points.filter(p => p.cluster === i).length;
+        let pct = points.length > 0 ? ((count / points.length) * 100).toFixed(0) : 0;
+        let col = CLUSTER_PALETTE[i % CLUSTER_PALETTE.length];
+
+        let card = document.createElement('div');
+        card.className = 'bg-slate-900 border border-slate-800 p-2.5 rounded-xl flex items-center justify-between';
+        card.innerHTML = `
+          <div class="flex items-center gap-2">
+            <span class="w-3.5 h-3.5 rounded-full" style="background-color: ${col.hex}"></span>
+            <span class="text-xs font-semibold text-slate-300">본부 ${i + 1}</span>
+          </div>
+          <div class="text-right">
+            <span class="text-xs font-bold text-slate-100">${count}명</span>
+            <span class="text-[10px] text-slate-500 block">${pct}%</span>
+          </div>
+        `;
+        breakdownEl.appendChild(card);
+      }
+    }
+  </script>
+</body>
+</html>

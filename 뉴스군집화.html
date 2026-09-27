@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>News Topic Clustering Playground</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700;800&display=swap');
+    body { font-family: 'Pretendard', sans-serif; }
+    .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 flex flex-col h-screen overflow-hidden select-none">
+
+  <!-- Header -->
+  <header class="bg-slate-800/90 border-b border-slate-700/80 px-6 py-3 flex items-center justify-between shadow-md">
+    <div class="flex items-center space-x-3">
+      <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white shadow-sm">📰</div>
+      <div>
+        <h1 class="font-bold text-base text-slate-50 flex items-center gap-2">
+          뉴스 토픽 자동 군집화 스튜디오
+          <span class="text-xs px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">TF-IDF + K-Means</span>
+        </h1>
+        <p class="text-xs text-slate-400">포털 사이트 '주요 뉴스 묶어보기' 비지도 학습 원리</p>
+      </div>
+    </div>
+
+    <!-- Algorithm Controls -->
+    <div class="flex items-center space-x-4">
+      <div class="flex items-center space-x-2 bg-slate-900/60 px-3 py-1.5 rounded-lg border border-slate-700/60">
+        <label for="kSlider" class="text-xs font-semibold text-slate-300">토픽 수 (K): <span id="kVal" class="text-indigo-400 font-bold">4</span></label>
+        <input type="range" id="kSlider" min="2" max="6" value="4" class="w-24 accent-indigo-500 cursor-pointer">
+      </div>
+      <button id="stepBtn" class="px-3.5 py-1.5 bg-slate-700 hover:bg-slate-600 active:scale-95 text-xs font-semibold rounded-lg border border-slate-600 transition flex items-center gap-1.5 shadow-sm">
+        <span>⚡ 1단계 실행</span>
+      </button>
+      <button id="autoRunBtn" class="px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-xs font-semibold rounded-lg transition flex items-center gap-1.5 shadow-sm shadow-indigo-600/30">
+        <span id="playIcon">▶</span> <span id="playText">자동 수렴</span>
+      </button>
+      <button id="resetBtn" class="px-3.5 py-1.5 bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 active:scale-95 text-xs font-semibold rounded-lg border border-rose-500/30 transition">
+        새 기사 생성
+      </button>
+    </div>
+  </header>
+
+  <!-- Main View -->
+  <main class="flex-1 flex overflow-hidden">
+    <!-- Left: 2D TF-IDF Vector Semantic Space Canvas -->
+    <section class="flex-1 flex flex-col relative border-r border-slate-800">
+      <div class="absolute top-4 left-4 z-10 bg-slate-900/80 backdrop-blur-md px-3 py-2 rounded-lg border border-slate-700/70 text-xs shadow-lg pointer-events-none">
+        <div class="flex items-center gap-2">
+          <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+          <span id="statusText" class="font-medium text-slate-200">초기 상태: 토픽 중심점 탐색 대기</span>
+        </div>
+        <div class="text-[11px] text-slate-400 mt-1">기사 점에 마우스를 올리면 기사 본문과 TF-IDF 특징 벡터를 확인합니다.</div>
+      </div>
+
+      <div class="flex-1 relative w-full h-full bg-[#0b1120]">
+        <canvas id="canvas" class="w-full h-full cursor-crosshair"></canvas>
+      </div>
+
+      <!-- Vector Space Legend -->
+      <div class="bg-slate-800/60 border-t border-slate-800 px-4 py-2 flex items-center justify-between text-[11px] text-slate-400">
+        <span>X축: TF-IDF 주성분 1 (정치·사회 ↔ 경제·산업)</span>
+        <span>2차원 벡터 시맨틱 공간 (Cosine Similarity 투영)</span>
+        <span>Y축: TF-IDF 주성분 2 (국제·문화 ↔ IT·과학)</span>
+      </div>
+    </section>
+
+    <!-- Right Sidebar: Clusters & News Feed -->
+    <aside class="w-96 bg-slate-900 flex flex-col border-l border-slate-800">
+      <!-- Section: Extracted Clusters Summary -->
+      <div class="p-4 border-b border-slate-800 bg-slate-800/30">
+        <h2 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2 flex items-center justify-between">
+          <span>도출된 토픽 그룹 (Clusters)</span>
+          <span id="iterCount" class="text-indigo-400 font-mono text-[11px]">반복: 0회</span>
+        </h2>
+        <div id="clusterCards" class="grid grid-cols-2 gap-2">
+          <!-- Dynamic Cluster Cards injected here -->
+        </div>
+      </div>
+
+      <!-- Section: News Article Feed grouped by Topic -->
+      <div class="p-3 border-b border-slate-800 flex justify-between items-center text-xs font-semibold text-slate-400 bg-slate-900/90">
+        <span>실시간 뉴스 피드 (<span id="newsCount">0</span>건)</span>
+        <span class="text-[11px] text-slate-500">클러스터별 자동 그루핑</span>
+      </div>
+      <div id="newsList" class="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-2.5">
+        <!-- News list injected here -->
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    // --- Preset News Dataset with Keywords & Simulating TF-IDF Vectors ---
+    const RAW_ARTICLES = [
+      // Cluster A: 금리 / 거시경제
+      { title: "한국은행 기준금리 0.25%p 인하 시사… 물가 둔화세 반영", cat: "경제", keywords: ["금리", "한국은행", "물가", "인플레이션", "금융"] },
+      { title: "美 연준 '물가 목표치 도달 확실시'… 추가 금리 인하 열어둬", cat: "경제", keywords: ["금리", "연준", "물가", "달러", "금융"] },
+      { title: "원·달러 환율 1,330원대 안정세… 국채 금리 일제히 하락", cat: "경제", keywords: ["환율", "금리", "국채", "달러", "외환"] },
+      { title: "가계대출 증가세 둔화… 주담대 고정금리 하향 조정", cat: "경제", keywords: ["금리", "대출", "은행", "부동산", "금융"] },
+      { title: "소비자물가 상승률 2년 만에 최저… 내수 진작책 발표", cat: "경제", keywords: ["물가", "소비", "경제", "금리", "소비자"] },
+
+      // Cluster B: AI / 생성형 인공지능 / 반도체
+      { title: "차세대 AI 가속기 공개… HBM 공급망 선점 경쟁 심화", cat: "IT/과학", keywords: ["AI", "반도체", "HBM", "엔비디아", "생성형"] },
+      { title: "오픈AI, 음성 대화 특화 새 모델 출시… 인간 반응 속도 구현", cat: "IT/과학", keywords: ["오픈AI", "AI", "생성형", "LLM", "인공지능"] },
+      { title: "글로벌 빅테크 AI 데이터센터 투자 확대… 전력망 수요 폭증", cat: "IT/과학", keywords: ["AI", "데이터센터", "클라우드", "빅테크", "서버"] },
+      { title: "온디바이스 AI 스마트폰 판매량 호조… 하반기 시장 주도", cat: "IT/과학", keywords: ["스마트폰", "AI", "온디바이스", "반도체", "디바이스"] },
+      { title: "국내 연구진, 초저전력 차세대 뉴로모픽 반도체 칩 개발", cat: "IT/과학", keywords: ["반도체", "칩", "연구", "AI", "차세대"] },
+
+      // Cluster C: 전기차 / 배터리 / 친환경 모빌리티
+      { title: "전고체 배터리 파일럿 라인 가동… 1회 충전 900km 주행 목표", cat: "산업/모빌리티", keywords: ["배터리", "전기차", "전고체", "충전", "모빌리티"] },
+      { title: "글로벌 전기차 보급 속도 조절… 하이브리드 판매 비중 급증", cat: "산업/모빌리티", keywords: ["전기차", "하이브리드", "자동차", "완성차", "판매"] },
+      { title: "전기차 급속 충전 인프라 고속도로 휴게소 대폭 확충", cat: "산업/모빌리티", keywords: ["전기차", "충전", "인프라", "충전소", "고속도로"] },
+      { title: "폐배터리 리사이클링 시장 개화… 핵심 광물 회수 기술 경쟁", cat: "산업/모빌리티", keywords: ["배터리", "리사이클링", "광물", "친환경", "소재"] },
+      { title: "주요 완성차 업계, 차세대 전기 SUV 신차 잇따라 공개", cat: "산업/모빌리티", keywords: ["전기차", "SUV", "모빌리티", "자동차", "신차"] },
+
+      // Cluster D: 우주항공 / 누리호 / 천문
+      { title: "누리호 4차 발사 준비 착수… 실용 위성 탑재 종합 점검", cat: "우주/항공", keywords: ["누리호", "발사", "우주", "위성", "로켓"] },
+      { title: "우주항공청, 달 탐사 로버 핵심 탑재체 개발 협약 체결", cat: "우주/항공", keywords: ["우주항공청", "달", "탐사", "로버", "우주"] },
+      { title: "민간 저궤도 위성 통신망 시범 서비스 연내 개시", cat: "우주/항공", keywords: ["위성", "통신", "우주", "민간", "발사"] },
+      { title: "제임스웹 망원경, 초기 우주서 초대질량 블랙홀 후보 관측", cat: "우주/항공", keywords: ["우주", "망원경", "블랙홀", "은하", "관측"] },
+      { title: "차세대 중형위성 발사 성공… 지상관측 고해상도 영상 수신", cat: "우주/항공", keywords: ["위성", "발사", "지상", "우주", "관측"] }
+    ];
+
+    const PALETTE = [
+      { border: '#38bdf8', bg: 'rgba(56, 189, 248, 0.15)', name: '하늘색' },
+      { border: '#f43f5e', bg: 'rgba(244, 63, 94, 0.15)', name: '로즈핑크' },
+      { border: '#10b981', bg: 'rgba(16, 185, 129, 0.15)', name: '에메랄드' },
+      { border: '#f59e0b', bg: 'rgba(245, 158, 11, 0.15)', name: '앰버골드' },
+      { border: '#a855f7', bg: 'rgba(168, 85, 247, 0.15)', name: '퍼플' },
+      { border: '#ec4899', bg: 'rgba(236, 72, 153, 0.15)', name: '핫핑크' }
+    ];
+
+    // --- State Management ---
+    let K = 4;
+    let articles = [];
+    let vocabulary = [];
+    let centroids = [];
+    let stepPhase = 'ASSIGN'; // 'ASSIGN' -> 'UPDATE'
+    let iteration = 0;
+    let isRunning = false;
+    let timer = null;
+    let hoveredArticle = null;
+
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    // --- Initialization & TF-IDF Extraction ---
+    function initData() {
+      // 1. 단어장(Vocabulary) 구축
+      const wordSet = new Set();
+      RAW_ARTICLES.forEach(a => a.keywords.forEach(w => wordSet.add(w)));
+      vocabulary = Array.from(wordSet);
+
+      // 2. TF-IDF 벡터 계산 (간이 구현)
+      const N = RAW_ARTICLES.length;
+      articles = RAW_ARTICLES.map((item, idx) => {
+        const tf = {};
+        item.keywords.forEach(w => tf[w] = (tf[w] || 0) + 1);
+
+        const vector = vocabulary.map(w => {
+          if (!tf[w]) return 0;
+          const df = RAW_ARTICLES.filter(a => a.keywords.includes(w)).length;
+          const idf = Math.log(N / (df + 0.1));
+          return tf[w] * idf;
+        });
+
+        // 2차원 투영 (시맨틱 유사도 분포에 맞게 2차원 공간 배치 + 미세 노이즈)
+        let tx = 0, ty = 0;
+        if (item.cat === "경제") { tx = 0.25; ty = 0.3; }
+        else if (item.cat === "IT/과학") { tx = 0.75; ty = 0.28; }
+        else if (item.cat === "산업/모빌리티") { tx = 0.3; ty = 0.72; }
+        else { tx = 0.78; ty = 0.75; }
+
+        return {
+          id: idx,
+          title: item.title,
+          keywords: item.keywords,
+          vector: vector,
+          // 정규화된 2D 시각화 좌표 (0.0 ~ 1.0)
+          x: tx + (Math.random() - 0.5) * 0.18,
+          y: ty + (Math.random() - 0.5) * 0.18,
+          cluster: -1
+        };
+      });
+
+      initCentroids();
+      updateNewsCount();
+      renderNewsList();
+      renderClusters();
+    }
+
+    function initCentroids() {
+      centroids = [];
+      iteration = 0;
+      stepPhase = 'ASSIGN';
+      document.getElementById('iterCount').innerText = `반복: 0회`;
+      document.getElementById('statusText').innerText = `K-Means 초기화 완료: K=${K}개 중심점 무작위 배치`;
+
+      for (let i = 0; i < K; i++) {
+        centroids.push({
+          x: 0.15 + Math.random() * 0.7,
+          y: 0.15 + Math.random() * 0.7,
+          color: PALETTE[i % PALETTE.length],
+          topKeywords: []
+        });
+      }
+      articles.forEach(a => a.cluster = -1);
+      draw();
+    }
+
+    // --- K-Means Steps ---
+    function step() {
+      if (stepPhase === 'ASSIGN') {
+        // [Step 1: 할당] 모든 기사를 가장 가까운 토픽 중심점에 배정
+        let changed = false;
+        articles.forEach(art => {
+          let minDist = Infinity;
+          let bestIdx = -1;
+          centroids.forEach((c, idx) => {
+            const d = Math.hypot(art.x - c.x, art.y - c.y);
+            if (d < minDist) {
+              minDist = d;
+              bestIdx = idx;
+            }
+          });
+          if (art.cluster !== bestIdx) {
+            art.cluster = bestIdx;
+            changed = true;
+          }
+        });
+
+        stepPhase = 'UPDATE';
+        document.getElementById('statusText').innerText = `1단계: 기사를 가장 유사한 토픽 중심점에 할당함`;
+        extractTopKeywords();
+        renderClusters();
+        renderNewsList();
+        draw();
+        return changed;
+
+      } else {
+        // [Step 2: 갱신] 배정된 기사들의 무게중심으로 중심점 이동
+        let totalShift = 0;
+        centroids.forEach((c, idx) => {
+          const members = articles.filter(a => a.cluster === idx);
+          if (members.length > 0) {
+            const meanX = members.reduce((sum, a) => sum + a.x, 0) / members.length;
+            const meanY = members.reduce((sum, a) => sum + a.y, 0) / members.length;
+            totalShift += Math.hypot(c.x - meanX, c.y - meanY);
+            c.x = meanX;
+            c.y = meanY;
+          }
+        });
+
+        iteration++;
+        stepPhase = 'ASSIGN';
+        document.getElementById('iterCount').innerText = `반복: ${iteration}회`;
+        document.getElementById('statusText').innerText = `2단계: 배정된 기사 평균 벡터로 토픽 중심점 이동`;
+
+        draw();
+        return totalShift > 0.005;
+      }
+    }
+
+    // 각 클러스터의 대표 키워드 추출 (해당 군집 내 기사들의 빈출 단어 랭킹)
+    function extractTopKeywords() {
+      centroids.forEach((c, idx) => {
+        const members = articles.filter(a => a.cluster === idx);
+        const freq = {};
+        members.forEach(m => {
+          m.keywords.forEach(kw => {
+            freq[kw] = (freq[kw] || 0) + 1;
+          });
+        });
+        const sorted = Object.entries(freq).sort((a, b) => b[1] - a[1]);
+        c.topKeywords = sorted.slice(0, 3).map(([k]) => k);
+      });
+    }
+
+    // --- Auto Run Loop ---
+    function toggleAutoRun() {
+      if (isRunning) {
+        clearInterval(timer);
+        isRunning = false;
+        document.getElementById('playIcon').innerText = '▶';
+        document.getElementById('playText').innerText = '자동 수렴';
+        document.getElementById('autoRunBtn').className = "px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-xs font-semibold rounded-lg transition flex items-center gap-1.5 shadow-sm shadow-indigo-600/30";
+      } else {
+        isRunning = true;
+        document.getElementById('playIcon').innerText = '⏸';
+        document.getElementById('playText').innerText = '일시 정지';
+        document.getElementById('autoRunBtn').className = "px-3.5 py-1.5 bg-amber-600 hover:bg-amber-500 active:scale-95 text-xs font-semibold rounded-lg transition flex items-center gap-1.5 shadow-sm";
+
+        timer = setInterval(() => {
+          const changed = step();
+          if (!changed && stepPhase === 'ASSIGN') {
+            clearInterval(timer);
+            isRunning = false;
+            document.getElementById('playIcon').innerText = '▶';
+            document.getElementById('playText').innerText = '자동 수렴';
+            document.getElementById('autoRunBtn').className = "px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-xs font-semibold rounded-lg transition flex items-center gap-1.5 shadow-sm shadow-indigo-600/30";
+            document.getElementById('statusText').innerText = `✅ 군집화 수렴 완료! 최적의 뉴스 토픽 ${K}개 분할 완료`;
+          }
+        }, 500);
+      }
+    }
+
+    // --- Render Canvas ---
+    function resizeCanvas() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+      draw();
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // 격자 배경
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
+      ctx.lineWidth = 1;
+      const stepSize = 40;
+      for (let x = 0; x < canvas.width; x += stepSize) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+      }
+      for (let y = 0; y < canvas.height; y += stepSize) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+      }
+
+      // 기사 점과 연결선
+      articles.forEach(art => {
+        const px = art.x * canvas.width;
+        const py = art.y * canvas.height;
+
+        // 군집 배정 연결선
+        if (art.cluster !== -1) {
+          const c = centroids[art.cluster];
+          const cx = c.x * canvas.width;
+          const cy = c.y * canvas.height;
+
+          ctx.strokeStyle = c.color.border + '33';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(px, py);
+          ctx.lineTo(cx, cy);
+          ctx.stroke();
+        }
+
+        // 점 렌더링
+        const color = art.cluster !== -1 ? centroids[art.cluster].color.border : '#64748b';
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(px, py, hoveredArticle === art ? 9 : 6, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = '#0f172a';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // 마우스 호버 시 툴팁
+        if (hoveredArticle === art) {
+          ctx.fillStyle = 'rgba(15, 23, 42, 0.92)';
+          ctx.strokeStyle = '#38bdf8';
+          ctx.lineWidth = 1;
+
+          const text = art.title;
+          const kwText = `키워드: [${art.keywords.join(', ')}]`;
+          ctx.font = '12px Pretendard, sans-serif';
+          const w = Math.max(ctx.measureText(text).width, ctx.measureText(kwText).width) + 24;
+
+          const bx = Math.min(px + 12, canvas.width - w - 10);
+          const by = Math.max(py - 50, 10);
+
+          ctx.beginPath();
+          ctx.roundRect(bx, by, w, 44, 6);
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.fillStyle = '#f8fafc';
+          ctx.fillText(text, bx + 12, by + 18);
+          ctx.fillStyle = '#94a3b8';
+          ctx.font = '10px Pretendard, sans-serif';
+          ctx.fillText(kwText, bx + 12, by + 34);
+        }
+      });
+
+      // 토픽 중심점 (Centroids)
+      centroids.forEach((c, idx) => {
+        const cx = c.x * canvas.width;
+        const cy = c.y * canvas.height;
+
+        // 중심점 외곽 펄스 링
+        ctx.strokeStyle = c.color.border;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(cx, cy, 14, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.fillStyle = c.color.border;
+        ctx.beginPath();
+        ctx.arc(cx, cy, 8, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 중심점 라벨 (대표 키워드)
+        const label = c.topKeywords.length > 0 ? `#${c.topKeywords.join(' #')}` : `토픽 ${idx + 1}`;
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 11px Pretendard, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.shadowColor = 'black';
+        ctx.shadowBlur = 4;
+        ctx.fillText(label, cx, cy - 20);
+        ctx.shadowBlur = 0;
+        ctx.textAlign = 'left';
+      });
+    }
+
+    // --- UI Update Functions ---
+    function renderClusters() {
+      const container = document.getElementById('clusterCards');
+      container.innerHTML = '';
+
+      centroids.forEach((c, idx) => {
+        const count = articles.filter(a => a.cluster === idx).length;
+        const kw = c.topKeywords.length > 0 ? c.topKeywords.join(' · ') : '분석 대기';
+        
+        const card = document.createElement('div');
+        card.className = "p-2.5 rounded-lg border text-xs flex flex-col justify-between transition";
+        card.style.borderColor = c.color.border + '60';
+        card.style.backgroundColor = c.color.bg;
+
+        card.innerHTML = `
+          <div class="flex items-center justify-between font-bold" style="color: ${c.color.border}">
+            <span>토픽 #${idx + 1}</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-900/60 font-mono">${count}건</span>
+          </div>
+          <div class="text-[11px] text-slate-200 font-medium truncate mt-1.5" title="${kw}">
+            ${kw}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function renderNewsList() {
+      const list = document.getElementById('newsList');
+      list.innerHTML = '';
+
+      articles.forEach(art => {
+        const cluster = art.cluster !== -1 ? centroids[art.cluster] : null;
+        const card = document.createElement('div');
+        card.className = "p-2.5 rounded-lg bg-slate-800/40 border border-slate-700/60 hover:border-slate-500 transition text-xs cursor-pointer";
+        
+        const badge = cluster 
+          ? `<span class="text-[10px] px-1.5 py-0.5 rounded font-medium" style="background:${cluster.color.bg}; color:${cluster.color.border}">
+               #${cluster.topKeywords[0] || '토픽 ' + (art.cluster + 1)}
+             </span>`
+          : `<span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-700 text-slate-400">미분류</span>`;
+
+        card.innerHTML = `
+          <div class="flex items-start justify-between gap-2">
+            <span class="font-medium text-slate-200 line-clamp-2 leading-relaxed">${art.title}</span>
+          </div>
+          <div class="flex items-center justify-between mt-2 pt-1 border-t border-slate-700/40">
+            <div class="flex gap-1 text-[10px] text-slate-400">
+              ${art.keywords.map(k => `<span>#${k}</span>`).join(' ')}
+            </div>
+            ${badge}
+          </div>
+        `;
+
+        card.addEventListener('mouseenter', () => {
+          hoveredArticle = art;
+          draw();
+        });
+        card.addEventListener('mouseleave', () => {
+          hoveredArticle = null;
+          draw();
+        });
+
+        list.appendChild(card);
+      });
+    }
+
+    function updateNewsCount() {
+      document.getElementById('newsCount').innerText = articles.length;
+    }
+
+    // --- Mouse Canvas Hover Check ---
+    canvas.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+
+      let found = null;
+      for (const art of articles) {
+        const px = art.x * canvas.width;
+        const py = art.y * canvas.height;
+        if (Math.hypot(mx - px, my - py) < 14) {
+          found = art;
+          break;
+        }
+      }
+      if (found !== hoveredArticle) {
+        hoveredArticle = found;
+        draw();
+      }
+    });
+
+    canvas.addEventListener('mouseleave', () => {
+      hoveredArticle = null;
+      draw();
+    });
+
+    // --- Controls Listeners ---
+    document.getElementById('kSlider').addEventListener('input', (e) => {
+      K = parseInt(e.target.value);
+      document.getElementById('kVal').innerText = K;
+      initCentroids();
+      renderClusters();
+      renderNewsList();
+    });
+
+    document.getElementById('stepBtn').addEventListener('click', () => {
+      if (isRunning) toggleAutoRun();
+      step();
+    });
+
+    document.getElementById('autoRunBtn').addEventListener('click', toggleAutoRun);
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      if (isRunning) toggleAutoRun();
+      initData();
+    });
+
+    window.addEventListener('resize', resizeCanvas);
+
+    // Boot
+    initData();
+    setTimeout(resizeCanvas, 50);
+  </script>
+</body>
+</html>

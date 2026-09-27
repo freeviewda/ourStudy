@@ -547,21 +547,21 @@
       <div class="stat-card">
         <span class="stat-icon">📚</span>
         <div class="stat-text">
-          <div class="stat-value">5 / 12+</div>
+          <div class="stat-value">6 / 12+</div>
           <div class="stat-label">학습 모듈 (순차 오픈 중)</div>
         </div>
       </div>
       <div class="stat-card">
         <span class="stat-icon">💡</span>
         <div class="stat-text">
-          <div class="stat-value">159개</div>
+          <div class="stat-value">180개</div>
           <div class="stat-label">AI 핵심 함수 상세 해설</div>
         </div>
       </div>
       <div class="stat-card">
         <span class="stat-icon">⚡</span>
         <div class="stat-text">
-          <div class="stat-value">36단계</div>
+          <div class="stat-value">40단계</div>
           <div class="stat-label">실습 전처리/모델링 파이프라인</div>
         </div>
       </div>
@@ -580,6 +580,36 @@
   <!-- Modules Grid -->
   <main class="portal-main">
     <div class="modules-grid" id="modules-container">
+
+      <!-- Module 01 (Active) -->
+      <div class="module-card" data-category="active prep">
+        <div>
+          <div class="card-top">
+            <span class="chapter-tag">CHAPTER 01</span>
+            <span class="status-badge active"><span class="status-dot"></span>학습 가능</span>
+          </div>
+          <h3 class="module-title">01. 머신러닝 기초: 데이터셋 (Dataset & Split)</h3>
+          <p class="module-desc">
+            Pandas로 당뇨병(Pima Indians) 데이터셋을 로드하고 특성 행렬(X)과 타깃 벡터(y)를 분리합니다. train_test_split과 stratify=y 층화추출 기법을 활용하여 훈련/검증/테스트(6:2:2) 3단 데이터셋 분할 체계를 구축하고 클래스 레이블 빈도 및 비율을 검증합니다.
+          </p>
+          <div class="topic-tags">
+            <span class="topic-tag">pd.read_csv</span>
+            <span class="topic-tag">train_test_split</span>
+            <span class="topic-tag">stratify (층화추출)</span>
+            <span class="topic-tag">Train/Val/Test (6:2:2)</span>
+            <span class="topic-tag">value_counts 비율 검증</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="card-metrics">
+            <span>⚡ 4개 파이프라인 단계</span>
+            <span>📝 21개 AI 해설 노트 매칭</span>
+          </div>
+          <a href="01 머신러닝 기초_데이터셋/index01.html" class="open-btn">
+            뷰어 열기 ➔
+          </a>
+        </div>
+      </div>
 
       <!-- Module 02 (Active) -->
       <div class="module-card" data-category="active prep">
@@ -850,6 +880,8 @@
       const next = current === 'dark' ? 'light' : 'dark';
       html.setAttribute('data-theme', next);
       localStorage.setItem('study_theme', next);
+      localStorage.setItem('study_theme_01', next);
+      localStorage.setItem('study_theme_02', next);
       localStorage.setItem('study_theme_06', next);
       
       const btn = document.getElementById('theme-btn');
@@ -857,7 +889,7 @@
     }
 
     (function initTheme() {
-      const saved = localStorage.getItem('study_theme') || localStorage.getItem('study_theme_06');
+      const saved = localStorage.getItem('study_theme') || localStorage.getItem('study_theme_01') || localStorage.getItem('study_theme_02') || localStorage.getItem('study_theme_06');
       if (saved) {
         document.documentElement.setAttribute('data-theme', saved);
         const btn = document.getElementById('theme-btn');
