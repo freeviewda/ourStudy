@@ -547,21 +547,21 @@
       <div class="stat-card">
         <span class="stat-icon">📚</span>
         <div class="stat-text">
-          <div class="stat-value">6 / 12+</div>
+          <div class="stat-value">10 / 12+</div>
           <div class="stat-label">학습 모듈 (순차 오픈 중)</div>
         </div>
       </div>
       <div class="stat-card">
         <span class="stat-icon">💡</span>
         <div class="stat-text">
-          <div class="stat-value">180개</div>
+          <div class="stat-value">253개</div>
           <div class="stat-label">AI 핵심 함수 상세 해설</div>
         </div>
       </div>
       <div class="stat-card">
         <span class="stat-icon">⚡</span>
         <div class="stat-text">
-          <div class="stat-value">40단계</div>
+          <div class="stat-value">56단계</div>
           <div class="stat-label">실습 전처리/모델링 파이프라인</div>
         </div>
       </div>
@@ -636,6 +636,36 @@
             <span>📝 24개 AI 해설 노트 매칭</span>
           </div>
           <a href="02 머신러닝 기초_데이터 전처리/index02.html" class="open-btn">
+            뷰어 열기 ➔
+          </a>
+        </div>
+      </div>
+
+      <!-- Module 05 (Active) -->
+      <div class="module-card" data-category="active supervised">
+        <div>
+          <div class="card-top">
+            <span class="chapter-tag">CHAPTER 05</span>
+            <span class="status-badge active"><span class="status-dot"></span>학습 가능</span>
+          </div>
+          <h3 class="module-title">05. 머신러닝 기초: 머신러닝 프레임워크 (Scikit-Learn API)</h3>
+          <p class="module-desc">
+            피마 인디언 당뇨병 데이터셋을 활용해 Scikit-Learn의 일관된 머신러닝 워크플로우(Estimator, fit, predict)를 학습합니다. 특성 행렬(X)과 타깃 벡터(y)를 분리하고 8:2 층화 분할 후 의사결정나무(DecisionTreeClassifier) 모델을 생성·학습하여 정확도(Accuracy) 및 classification_report 지표를 도출합니다.
+          </p>
+          <div class="topic-tags">
+            <span class="topic-tag">pd.read_csv</span>
+            <span class="topic-tag">train_test_split (8:2)</span>
+            <span class="topic-tag">DecisionTreeClassifier</span>
+            <span class="topic-tag">model.fit() & predict()</span>
+            <span class="topic-tag">accuracy_score & report</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="card-metrics">
+            <span>⚡ 4개 파이프라인 단계</span>
+            <span>📝 14개 AI 해설 노트 매칭</span>
+          </div>
+          <a href="05 머신러닝 기초_머신러닝_프레임워크/index05.html" class="open-btn">
             뷰어 열기 ➔
           </a>
         </div>
@@ -731,6 +761,96 @@
         </div>
       </div>
 
+      <!-- Module 09 (Active) -->
+      <div class="module-card" data-category="active supervised">
+        <div>
+          <div class="card-top">
+            <span class="chapter-tag">CHAPTER 09</span>
+            <span class="status-badge active"><span class="status-dot"></span>학습 가능</span>
+          </div>
+          <h3 class="module-title">09. 머신러닝 기초: 분류 (Classification & Logistic Regression)</h3>
+          <p class="module-desc">
+            유방암(Breast Cancer) 진단 벤치마크 데이터를 로드하고 StandardScaler로 특성을 표준화한 후, 이진 분류의 대표 알고리즘인 LogisticRegression 모델을 학습합니다. predict()로 이진 클래스를 예측하고, predict_proba()를 통해 악성/양성 소속 확률을 정밀하게 추출 및 분석합니다.
+          </p>
+          <div class="topic-tags">
+            <span class="topic-tag">load_breast_cancer</span>
+            <span class="topic-tag">StandardScaler 표준화</span>
+            <span class="topic-tag">LogisticRegression</span>
+            <span class="topic-tag">model.predict()</span>
+            <span class="topic-tag">predict_proba() (확률 추출)</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="card-metrics">
+            <span>⚡ 4개 파이프라인 단계</span>
+            <span>📝 11개 AI 해설 노트 매칭</span>
+          </div>
+          <a href="09 머신러닝 기초_분류/index09.html" class="open-btn">
+            뷰어 열기 ➔
+          </a>
+        </div>
+      </div>
+
+      <!-- Module 10 (Active) -->
+      <div class="module-card" data-category="active supervised">
+        <div>
+          <div class="card-top">
+            <span class="chapter-tag">CHAPTER 10</span>
+            <span class="status-badge active"><span class="status-dot"></span>학습 가능</span>
+          </div>
+          <h3 class="module-title">10. 머신러닝 기초: 분류 모델 성능 평가 지표 (Classification Metrics)</h3>
+          <p class="module-desc">
+            유방암 진단 이진 분류 모델의 혼동 행렬(Confusion Matrix)과 오차 행렬 히트맵(sns.heatmap)을 시각화합니다. 정확도(Accuracy), 정밀도(Precision), 재현율(Recall), F1-Score를 정량 분석하고, predict_proba 기반의 ROC 곡선(RocCurveDisplay) 및 AUC 면적 스코어를 완벽 검증합니다.
+          </p>
+          <div class="topic-tags">
+            <span class="topic-tag">confusion_matrix & Heatmap</span>
+            <span class="topic-tag">precision_score & recall_score</span>
+            <span class="topic-tag">f1_score</span>
+            <span class="topic-tag">roc_curve & RocCurveDisplay</span>
+            <span class="topic-tag">roc_auc_score</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="card-metrics">
+            <span>⚡ 4개 파이프라인 단계</span>
+            <span>📝 22개 AI 해설 노트 매칭</span>
+          </div>
+          <a href="10 머신러닝 기초_분류_성능_지표/index10.html" class="open-btn">
+            뷰어 열기 ➔
+          </a>
+        </div>
+      </div>
+
+      <!-- Module 11 (Active) -->
+      <div class="module-card" data-category="active prep supervised">
+        <div>
+          <div class="card-top">
+            <span class="chapter-tag">CHAPTER 11</span>
+            <span class="status-badge active"><span class="status-dot"></span>학습 가능</span>
+          </div>
+          <h3 class="module-title">11. 머신러닝 기초: 분류 데이터 증강 (Imbalanced Data & SMOTE)</h3>
+          <p class="module-desc">
+            피마 인디언 당뇨병 데이터의 정상(0) vs 당뇨병(1) 불균형 레이블을 확인하고 Seaborn countplot으로 시각화합니다. stratify=y 층화추출 8:2 분할 후, imblearn SMOTE(합성 소수 오버샘플링)를 적용하여 소수 클래스를 증강(500:500)하고, 원본 vs 증강 데이터의 LogisticRegression 학습 및 재현율(Recall) 개선 효과를 비교 검증합니다.
+          </p>
+          <div class="topic-tags">
+            <span class="topic-tag">sns.countplot (불균형 시각화)</span>
+            <span class="topic-tag">train_test_split (층화추출)</span>
+            <span class="topic-tag">imblearn SMOTE</span>
+            <span class="topic-tag">fit_resample (합성 증강)</span>
+            <span class="topic-tag">classification_report 비교</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="card-metrics">
+            <span>⚡ 4개 파이프라인 단계</span>
+            <span>📝 26개 AI 해설 노트 매칭</span>
+          </div>
+          <a href="11 머신러닝 기초_분류_데이터_증강/index11.html" class="open-btn">
+            뷰어 열기 ➔
+          </a>
+        </div>
+      </div>
+
       <!-- Module 12 (Active) -->
       <div class="module-card" data-category="active supervised">
         <div>
@@ -761,108 +881,57 @@
         </div>
       </div>
 
-      <!-- Module 05 (Upcoming - File exists) -->
+      <!-- Module Upcoming: Feature Engineering & PCA -->
       <div class="module-card upcoming" data-category="upcoming prep">
         <div>
           <div class="card-top">
-            <span class="chapter-tag">CHAPTER 05</span>
+            <span class="chapter-tag">CHAPTER 03 & 04</span>
             <span class="status-badge upcoming"><span class="status-dot"></span>순차 오픈 예정</span>
           </div>
-          <h3 class="module-title">05. 머신러닝 기초: 머신러닝 프레임워크</h3>
+          <h3 class="module-title">03 & 04. 특성 공학 및 차원 축소 (PCA & Feature Engineering)</h3>
           <p class="module-desc">
-            Scikit-Learn의 핵심 API 구조(Estimator, Transformer, Predictor)와 데이터 파이프라인 구축 기법, 모델 검증 프로세스의 표준 워크플로우를 체계적으로 다룹니다.
+            주성분 분석(PCA)을 활용한 다차원 특성의 차원 축소와 정보 손실 최소화, 그리고 상관관계 기반 피처 선택(Feature Selection) 기법을 심층적으로 다룹니다.
           </p>
           <div class="topic-tags">
-            <span class="topic-tag">Scikit-Learn API</span>
-            <span class="topic-tag">Pipeline</span>
-            <span class="topic-tag">모델 검증 프로세스</span>
+            <span class="topic-tag">PCA (주성분 분석)</span>
+            <span class="topic-tag">설명 분산 비율</span>
+            <span class="topic-tag">Feature Selection</span>
           </div>
         </div>
         <div class="card-footer">
           <div class="card-metrics">
             <span>준비 중인 모듈</span>
-            <span>작업 진행 예정</span>
+            <span>순차 개설 예정</span>
           </div>
           <button class="open-btn disabled">오픈 예정</button>
         </div>
       </div>
 
-      <!-- Module 09 (Upcoming) -->
+      <!-- Module Upcoming: Ensemble & Clustering -->
       <div class="module-card upcoming" data-category="upcoming supervised">
         <div>
           <div class="card-top">
-            <span class="chapter-tag">CHAPTER 09</span>
+            <span class="chapter-tag">CHAPTER 13+</span>
             <span class="status-badge upcoming"><span class="status-dot"></span>순차 오픈 예정</span>
           </div>
-          <h3 class="module-title">09. 트리 기반 모델 및 앙상블 (Tree & Ensemble)</h3>
+          <h3 class="module-title">13+. 고급 앙상블 및 비지도 학습 (RandomForest, XGBoost & K-Means)</h3>
           <p class="module-desc">
-            결정 트리(Decision Tree)의 불순도 지표(Gini, Entropy)와 배깅(Bagging)의 대표 알고리즘인 랜덤 포레스트(Random Forest)의 특성 중요도 분석을 실습합니다.
+            배깅(Bagging)과 부스팅(XGBoost, LightGBM)의 강력한 앙상블 모델링 및 비지도 학습 군집화(K-Means, 실루엣 스코어) 파이프라인을 실습합니다.
           </p>
           <div class="topic-tags">
-            <span class="topic-tag">DecisionTreeClassifier</span>
             <span class="topic-tag">RandomForest</span>
-            <span class="topic-tag">Feature Importance</span>
+            <span class="topic-tag">XGBoost / LightGBM</span>
+            <span class="topic-tag">K-Means Clustering</span>
           </div>
         </div>
         <div class="card-footer">
           <div class="card-metrics">
-            <span>순차 오픈 예정</span>
+            <span>준비 중인 모듈</span>
+            <span>순차 개설 예정</span>
           </div>
           <button class="open-btn disabled">오픈 예정</button>
         </div>
       </div>
-
-      <!-- Module 10 (Upcoming) -->
-      <div class="module-card upcoming" data-category="upcoming supervised">
-        <div>
-          <div class="card-top">
-            <span class="chapter-tag">CHAPTER 10</span>
-            <span class="status-badge upcoming"><span class="status-dot"></span>순차 오픈 예정</span>
-          </div>
-          <h3 class="module-title">10. 부스팅 알고리즘 (XGBoost, LightGBM)</h3>
-          <p class="module-desc">
-            실무 및 캐글 경진대회에서 가장 많이 활용되는 그라디언트 부스팅(GBM) 기반의 XGBoost, LightGBM을 활용한 고성능 예측 모델 파이프라인을 구축합니다.
-          </p>
-          <div class="topic-tags">
-            <span class="topic-tag">XGBoost</span>
-            <span class="topic-tag">LightGBM</span>
-            <span class="topic-tag">Gradient Boosting</span>
-          </div>
-        </div>
-        <div class="card-footer">
-          <div class="card-metrics">
-            <span>순차 오픈 예정</span>
-          </div>
-          <button class="open-btn disabled">오픈 예정</button>
-        </div>
-      </div>
-
-      <!-- Module 11 (Upcoming) -->
-      <div class="module-card upcoming" data-category="upcoming">
-        <div>
-          <div class="card-top">
-            <span class="chapter-tag">CHAPTER 11</span>
-            <span class="status-badge upcoming"><span class="status-dot"></span>순차 오픈 예정</span>
-          </div>
-          <h3 class="module-title">11. 비지도 학습: 군집화 (K-Means Clustering)</h3>
-          <p class="module-desc">
-            레이블이 없는 데이터에서 숨겨진 패턴과 유사 그룹을 찾는 K-Means 군집화와 엘보우 방법(Elbow Method), 실루엣 분석(Silhouette Analysis)을 실습합니다.
-          </p>
-          <div class="topic-tags">
-            <span class="topic-tag">K-Means</span>
-            <span class="topic-tag">Silhouette Score</span>
-            <span class="topic-tag">Elbow Method</span>
-          </div>
-        </div>
-        <div class="card-footer">
-          <div class="card-metrics">
-            <span>순차 오픈 예정</span>
-          </div>
-          <button class="open-btn disabled">오픈 예정</button>
-        </div>
-      </div>
-
-
 
     </div>
   </main>
@@ -874,22 +943,30 @@
 
   <script>
     // Theme Switcher (Synchronized with module viewers)
+    const ALL_MODULES = ['01', '02', '05', '06', '07', '08', '09', '10', '11', '12'];
+
     function toggleTheme() {
       const html = document.documentElement;
       const current = html.getAttribute('data-theme') || 'dark';
       const next = current === 'dark' ? 'light' : 'dark';
       html.setAttribute('data-theme', next);
       localStorage.setItem('study_theme', next);
-      localStorage.setItem('study_theme_01', next);
-      localStorage.setItem('study_theme_02', next);
-      localStorage.setItem('study_theme_06', next);
+      ALL_MODULES.forEach(num => {
+        localStorage.setItem('study_theme_' + num, next);
+      });
       
       const btn = document.getElementById('theme-btn');
       btn.textContent = next === 'dark' ? '☀️ 라이트 모드' : '🌙 다크 모드';
     }
 
     (function initTheme() {
-      const saved = localStorage.getItem('study_theme') || localStorage.getItem('study_theme_01') || localStorage.getItem('study_theme_02') || localStorage.getItem('study_theme_06');
+      let saved = localStorage.getItem('study_theme');
+      if (!saved) {
+        for (const num of ALL_MODULES) {
+          const s = localStorage.getItem('study_theme_' + num);
+          if (s) { saved = s; break; }
+        }
+      }
       if (saved) {
         document.documentElement.setAttribute('data-theme', saved);
         const btn = document.getElementById('theme-btn');

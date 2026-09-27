@@ -1,0 +1,1803 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>05. 머신러닝 기초: 머신러닝 프레임워크 (Scikit-Learn Workflow)</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Pretendard:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  
+  <style>
+    :root[data-theme="dark"] {
+      --bg-base: #090d16;
+      --bg-surface: #101726;
+      --bg-card: #172136;
+      --bg-card-hover: #1e2c47;
+      --bg-code: #0b1120;
+      
+      --border-subtle: #24324d;
+      --border-focus: #38bdf8;
+      
+      --text-main: #f3f4f6;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      
+      --accent-primary: #38bdf8;
+      --accent-primary-hover: #0ea5e9;
+      --accent-secondary: #818cf8;
+      --accent-success: #34d399;
+      --accent-warning: #fbbf24;
+      --accent-glow: rgba(56, 189, 248, 0.25);
+      
+      --pill-bg: rgba(56, 189, 248, 0.12);
+      --pill-border: rgba(56, 189, 248, 0.3);
+      --pill-text: #7dd3fc;
+      --pill-hover-bg: rgba(56, 189, 248, 0.22);
+      
+      --table-th-bg: #1e293b;
+      --table-td-stripe: #0f172a;
+      --table-border: #334155;
+      
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6);
+      --shadow-glow: 0 0 20px rgba(56, 189, 248, 0.25);
+    }
+
+    :root[data-theme="light"] {
+      --bg-base: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-card: #f1f5f9;
+      --bg-card-hover: #e2e8f0;
+      --bg-code: #1e293b;
+      
+      --border-subtle: #e2e8f0;
+      --border-focus: #0284c7;
+      
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-dim: #94a3b8;
+      
+      --accent-primary: #0284c7;
+      --accent-primary-hover: #0369a1;
+      --accent-secondary: #6366f1;
+      --accent-success: #059669;
+      --accent-warning: #d97706;
+      --accent-glow: rgba(2, 132, 199, 0.2);
+      
+      --pill-bg: #e0f2fe;
+      --pill-border: #7dd3fc;
+      --pill-text: #0369a1;
+      --pill-hover-bg: #bae6fd;
+      
+      --table-th-bg: #f1f5f9;
+      --table-td-stripe: #f8fafc;
+      --table-border: #e2e8f0;
+      
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --shadow-glow: 0 0 20px rgba(2, 132, 199, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 15px;
+    }
+
+    body {
+      font-family: 'Pretendard', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      line-height: 1.6;
+      transition: background-color 0.25s ease, color 0.25s ease;
+      min-height: 100vh;
+    }
+
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(17, 24, 39, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+      transition: background-color 0.25s ease;
+    }
+    :root[data-theme="light"] .app-header {
+      background: rgba(255, 255, 255, 0.88);
+    }
+
+    .header-main-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1720px;
+      margin: 0 auto;
+      padding: 0.85rem 1.5rem;
+      gap: 1.5rem;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-icon {
+      font-size: 1.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+    }
+
+    .brand-titles h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+    }
+
+    .brand-titles p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .stats-pill {
+      display: inline-block;
+      padding: 0.15rem 0.55rem;
+      border-radius: 9999px;
+      background: var(--pill-bg);
+      border: 1px solid var(--pill-border);
+      color: var(--pill-text);
+      font-weight: 600;
+      font-size: 0.75rem;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .search-box-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-input {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 0.45rem 0.85rem 0.45rem 2rem;
+      color: var(--text-main);
+      font-size: 0.85rem;
+      outline: none;
+      width: 220px;
+      transition: all 0.2s ease;
+    }
+    .search-input:focus {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+      width: 280px;
+    }
+    .search-icon {
+      position: absolute;
+      left: 0.65rem;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      pointer-events: none;
+    }
+
+    .theme-toggle-btn, .expand-all-btn, .home-hub-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 0.45rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .theme-toggle-btn:hover, .expand-all-btn:hover, .home-hub-btn:hover {
+      background: var(--bg-card);
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+    }
+
+    .steps-nav-bar {
+      display: flex;
+      align-items: center;
+      overflow-x: auto;
+      max-width: 1720px;
+      margin: 0 auto;
+      padding: 0.35rem 1.5rem 0.65rem 1.5rem;
+      gap: 0.6rem;
+      scrollbar-width: thin;
+    }
+    .steps-nav-bar::-webkit-scrollbar {
+      height: 4px;
+    }
+    .steps-nav-bar::-webkit-scrollbar-thumb {
+      background: var(--border-subtle);
+      border-radius: 4px;
+    }
+
+    .step-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 20px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+    .step-nav-item:hover {
+      color: var(--accent-primary);
+      border-color: var(--accent-primary);
+      background: var(--bg-card);
+      transform: translateY(-1px);
+    }
+    .step-nav-item.active {
+      background: var(--accent-primary);
+      color: #ffffff;
+      border-color: var(--accent-primary);
+      box-shadow: 0 2px 8px var(--accent-glow);
+    }
+    .step-nav-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.2);
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+    .nav-note-badge {
+      font-size: 0.7rem;
+      padding: 0.1rem 0.4rem;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .app-main {
+      max-width: 1720px;
+      margin: 1.5rem auto 4rem auto;
+      padding: 0 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    .step-section {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    .step-section:hover {
+      border-color: rgba(56, 189, 248, 0.35);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .step-section-header {
+      padding: 1.25rem 1.75rem;
+      background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-surface) 100%);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .step-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .step-number-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+      color: #ffffff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      border-radius: 6px;
+      letter-spacing: 0.03em;
+    }
+
+    .step-title-text {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.01em;
+    }
+
+    .step-summary-desc {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
+    .step-dual-grid {
+      display: grid;
+      grid-template-columns: 50% 50%;
+      min-height: 480px;
+    }
+    @media (max-width: 1180px) {
+      .step-dual-grid {
+        grid-template-columns: 100%;
+      }
+    }
+
+    .grid-col-code {
+      border-right: 1px solid var(--border-subtle);
+      padding: 1.5rem;
+      background: var(--bg-base);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      overflow-x: hidden;
+    }
+    @media (max-width: 1180px) {
+      .grid-col-code {
+        border-right: none;
+        border-bottom: 2px dashed var(--border-subtle);
+      }
+    }
+
+    .grid-col-notes {
+      padding: 1.5rem;
+      background: var(--bg-surface);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .col-sticky-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-dim);
+      padding-bottom: 0.65rem;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .code-cell-wrapper {
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      background: var(--bg-code);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+
+    .cell-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.45rem 0.85rem;
+      background: rgba(0, 0, 0, 0.25);
+      border-bottom: 1px solid var(--border-subtle);
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+    }
+    .cell-badge {
+      color: var(--accent-primary);
+      font-weight: 600;
+    }
+
+    .cell-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .copy-code-btn {
+      background: transparent;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      border-radius: 4px;
+      padding: 0.15rem 0.5rem;
+      font-size: 0.72rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .copy-code-btn:hover {
+      background: var(--bg-card);
+      color: var(--text-main);
+      border-color: var(--accent-primary);
+    }
+
+    .code-editor-look {
+      padding: 0.85rem 1rem;
+      overflow-x: auto;
+    }
+    .code-editor-look pre {
+      margin: 0;
+      background: transparent !important;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+    .code-editor-look code {
+      font-family: 'Fira Code', monospace;
+      background: transparent !important;
+    }
+
+    .code-kw-interactive {
+      display: inline-block;
+      cursor: pointer;
+      font-weight: 700;
+      color: #38bdf8 !important;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px dashed rgba(56, 189, 248, 0.45);
+      padding: 0.05rem 0.35rem;
+      border-radius: 4px;
+      margin: 0 0.1rem;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .code-kw-interactive:hover {
+      background: rgba(56, 189, 248, 0.3);
+      border-color: #38bdf8;
+      box-shadow: 0 0 10px var(--accent-glow);
+      transform: translateY(-1px);
+    }
+    .code-kw-interactive.active-target {
+      background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+      color: #ffffff !important;
+      border-color: transparent;
+      box-shadow: 0 0 14px var(--accent-glow);
+      animation: pulse-glow 1.5s infinite;
+    }
+    .kw-sparkle {
+      font-size: 0.75em;
+      margin-left: 0.2rem;
+      opacity: 0.8;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 10px var(--accent-glow); }
+      50% { transform: scale(1.04); box-shadow: 0 0 18px var(--accent-glow); }
+    }
+
+    .cell-outputs-container {
+      border-top: 1px solid var(--border-subtle);
+      background: rgba(0, 0, 0, 0.18);
+    }
+
+    .outputs-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.4rem 0.85rem;
+      background: rgba(0, 0, 0, 0.1);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .outputs-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .toggle-output-btn {
+      background: transparent;
+      border: none;
+      color: var(--accent-primary);
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .outputs-body {
+      padding: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .output-type-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-dim);
+      margin-bottom: 0.4rem;
+    }
+
+    .stream-output pre, .text-output pre {
+      background: #090d16;
+      border: 1px solid #1e293b;
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.82rem;
+      color: #38bdf8;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .table-responsive-wrapper {
+      max-width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--table-border);
+      border-radius: 8px;
+      background: var(--bg-surface);
+      box-shadow: var(--shadow-sm);
+    }
+
+    table.modern-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      text-align: right;
+    }
+    table.modern-table th, table.modern-table td {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--table-border);
+      white-space: nowrap;
+    }
+    table.modern-table thead th {
+      background: var(--table-th-bg);
+      color: var(--text-main);
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+    }
+    table.modern-table tbody tr:nth-child(even) {
+      background: var(--table-td-stripe);
+    }
+    table.modern-table tbody tr:hover {
+      background: rgba(56, 189, 248, 0.12);
+    }
+    table.modern-table th:first-child, table.modern-table td:first-child {
+      text-align: center;
+      font-weight: 600;
+      background: var(--table-th-bg);
+    }
+
+    .cell-markdown-box {
+      padding: 0.75rem 1rem;
+      background: var(--bg-card);
+      border-left: 4px solid var(--accent-primary);
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .notes-panel-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .notes-tabs-header {
+      margin-bottom: 1.25rem;
+    }
+
+    .tabs-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent-primary);
+      margin-bottom: 0.65rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .chrono-tag {
+      font-size: 0.72rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-dim);
+      font-weight: normal;
+    }
+
+    .tabs-scroll-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .func-tab-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 0.45rem 0.85rem;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+    }
+    .func-tab-btn:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent-primary);
+      color: var(--text-main);
+    }
+    .func-tab-btn.active {
+      background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+      color: #ffffff;
+      border-color: transparent;
+      box-shadow: 0 4px 12px var(--accent-glow);
+    }
+
+    .notes-panes-wrapper {
+      flex: 1;
+      position: relative;
+    }
+
+    .func-note-pane {
+      display: none;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      animation: fadeIn 0.25s ease-out;
+    }
+    .func-note-pane.active {
+      display: block;
+    }
+    .func-note-pane.highlight-pulse {
+      animation: pulse-border 1.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse-border {
+      0% { box-shadow: 0 0 0 4px var(--accent-primary); border-color: var(--accent-primary); }
+      100% { box-shadow: var(--shadow-sm); border-color: var(--border-subtle); }
+    }
+
+    .note-meta-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding-bottom: 0.85rem;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 1.25rem;
+    }
+
+    .note-target-badge {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .note-target-badge code {
+      font-family: 'Fira Code', monospace;
+      color: var(--accent-primary);
+      background: var(--bg-base);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .note-time-badge {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      background: var(--bg-base);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+    }
+
+    .note-body-content {
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: var(--text-main);
+    }
+
+    .note-h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin: 1rem 0 0.75rem 0;
+    }
+    .note-h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin: 1.2rem 0 0.65rem 0;
+    }
+    .note-h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--accent-primary);
+      margin: 1.4rem 0 0.6rem 0;
+      padding-bottom: 0.3rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .note-h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin: 0.8rem 0 0.4rem 0;
+    }
+
+    .note-p {
+      margin-bottom: 0.85rem;
+    }
+
+    .note-list {
+      margin: 0.5rem 0 1rem 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .note-list-item {
+      list-style-type: disc;
+    }
+
+    .inline-code {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85em;
+      background: var(--bg-base);
+      color: var(--accent-primary);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .note-code-block {
+      background: var(--bg-code);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+      margin: 0.85rem 0;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.84rem;
+      overflow-x: auto;
+    }
+
+    .note-divider {
+      border: none;
+      height: 1px;
+      background: var(--border-subtle);
+      margin: 1.25rem 0;
+    }
+
+    .note-footer-actions {
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px dashed var(--border-subtle);
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .jump-to-code-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      color: var(--accent-primary);
+      padding: 0.35rem 0.75rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .jump-to-code-btn:hover {
+      background: var(--accent-primary);
+      color: #ffffff;
+      border-color: var(--accent-primary);
+    }
+
+    .toast-msg {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--text-main);
+      color: var(--bg-base);
+      padding: 0.65rem 1.25rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      box-shadow: var(--shadow-lg);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.25s ease;
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .toast-msg.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="app-header">
+    <div class="header-main-bar">
+      <div class="brand-wrap">
+        <div class="brand-icon">⚙️</div>
+        <div class="brand-titles">
+          <h1>05. 머신러닝 기초: 머신러닝 프레임워크 (Scikit-Learn Workflow)</h1>
+          <p>
+            <span>인터랙티브 듀얼 학습 뷰어</span>
+            <span class="stats-pill">4개 파이프라인 단계</span>
+            <span class="stats-pill">14개 AI 해설 노트 (시간순)</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <a href="../index.html" class="home-hub-btn" title="메인 학습 포털로 이동">🏠 메인 포털</a>
+        <div class="search-box-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="global-search" class="search-input" placeholder="함수 검색 (ex: fit, joblib...)" oninput="filterFunctions(this.value)" />
+        </div>
+        <button class="expand-all-btn" onclick="toggleAllOutputs()">결과 전체 펼치기</button>
+        <button class="theme-toggle-btn" id="theme-btn" onclick="toggleTheme()">☀️ 테마 전환</button>
+      </div>
+    </div>
+
+    <nav class="steps-nav-bar" id="steps-nav">
+      <a href="#step1" class="step-nav-item" data-step="step1"><span class="step-nav-num">1</span><span class="step-nav-label">데이터셋 로드, DataFrame 구성 및 Train-Test 분할</span><span class="nav-note-badge">6개 해설</span></a><a href="#step2" class="step-nav-item" data-step="step2"><span class="step-nav-num">2</span><span class="step-nav-label">선형 회귀 Estimator 기반 모델 학습</span><span class="nav-note-badge">2개 해설</span></a><a href="#step3" class="step-nav-item" data-step="step3"><span class="step-nav-num">3</span><span class="step-nav-label">테스트셋 예측</span><span class="nav-note-badge">2개 해설</span></a><a href="#step4" class="step-nav-item" data-step="step4"><span class="step-nav-num">4</span><span class="step-nav-label">Joblib 모델 파일 직렬화</span><span class="nav-note-badge">4개 해설</span></a>
+    </nav>
+  </header>
+
+  <main class="app-main">
+    <section class="step-section" id="step1"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">1단계</span><h2 class="step-title-text">데이터셋 로드, DataFrame 구성 및 Train-Test 분할</h2></div><p class="step-summary-desc">Scikit-Learn load_diabetes로 당뇨병 데이터를 로드하고 DataFrame 구성, target 컬럼 추가 후 8:2 비율로 학습/테스트 분할</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 주피터 노트북 실행 코드 및 결과</div><div class="code-cell-wrapper" id="cell-1"><div class="cell-header"><span class="cell-badge">In [1]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">import numpy as np # NumPy 라이브러리 임포트 (수치 계산용)
+import pandas as pd # Pandas 라이브러리 임포트 (데이터 처리 및 분석용)
+import matplotlib.pyplot as plt # Matplotlib.pyplot 라이브러리 임포트 (데이터 시각화용)
+import seaborn as sns # Seaborn 라이브러리 임포트 (데이터 시각화용, Matplotlib 기반)
+from sklearn.datasets import <span class="code-kw-interactive" data-step="step1" data-tab="step1-load_diabetes-927_161309" data-func="load_diabetes" title="💡 클릭하여 우측 'load_diabetes' 해설 보기">load_diabetes<span class="kw-sparkle">💡</span></span> # Scikit-learn에서 당뇨병 데이터셋 로드
+from sklearn.model_selection import <span class="code-kw-interactive" data-step="step1" data-tab="step1-train_test_split-927_161634" data-func="train_test_split" title="💡 클릭하여 우측 'train_test_split' 해설 보기">train_test_split<span class="kw-sparkle">💡</span></span> # 데이터셋 분할을 위한 함수 임포트
+from sklearn.linear_model import LinearRegression # 선형 회귀 모델 임포트
+from sklearn.metrics import mean_squared_error # 모델 평가를 위한 평균 제곱 오차 함수 임포트
+import joblib  # 모델 저장 및 로드를 위한 라이브러리 임포트
+import warnings # 경고 메시지 처리를 위한 라이브러리 임포트
+warnings.filterwarnings(&#x27;ignore&#x27;) # 모든 경고 메시지를 무시하도록 설정</code></pre></div></div><div class="code-cell-wrapper" id="cell-3"><div class="cell-header"><span class="cell-badge">In [3]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">diabetes = <span class="code-kw-interactive" data-step="step1" data-tab="step1-load_diabetes-927_161309" data-func="load_diabetes" title="💡 클릭하여 우측 'load_diabetes' 해설 보기">load_diabetes<span class="kw-sparkle">💡</span></span>() # 당뇨병 데이터셋 로드
+df = <span class="code-kw-interactive" data-step="step1" data-tab="step1-pd_DataFrame-927_161328" data-func="pd.DataFrame" title="💡 클릭하여 우측 'pd.DataFrame' 해설 보기">pd.DataFrame<span class="kw-sparkle">💡</span></span>(diabetes.data, columns=diabetes.feature_names) # 데이터프레임 생성 및 특성 이름 지정
+
+display(<span class="code-kw-interactive" data-step="step1" data-tab="step1-df_head-927_161500" data-func="df.head" title="💡 클릭하여 우측 'df.head' 해설 보기">df.head<span class="kw-sparkle">💡</span></span>())
+df[&#x27;target&#x27;] = <span class="code-kw-interactive" data-step="step1" data-tab="step1-diabetes_target-927_161519" data-func="diabetes.target" title="💡 클릭하여 우측 'diabetes.target' 해설 보기">diabetes.target<span class="kw-sparkle">💡</span></span> # 데이터프레임에 타겟 변수(질병 진행 정도) 추가
+display(<span class="code-kw-interactive" data-step="step1" data-tab="step1-df_head-927_161500" data-func="df.head" title="💡 클릭하여 우측 'df.head' 해설 보기">df.head<span class="kw-sparkle">💡</span></span>())</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (2)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item html-table-output"><div class="output-type-tag">DataFrame Display</div><div class="table-responsive-wrapper"><table border="1" class="dataframe modern-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>age</th>
+      <th>sex</th>
+      <th>bmi</th>
+      <th>bp</th>
+      <th>s1</th>
+      <th>s2</th>
+      <th>s3</th>
+      <th>s4</th>
+      <th>s5</th>
+      <th>s6</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.038076</td>
+      <td>0.050680</td>
+      <td>0.061696</td>
+      <td>0.021872</td>
+      <td>-0.044223</td>
+      <td>-0.034821</td>
+      <td>-0.043401</td>
+      <td>-0.002592</td>
+      <td>0.019907</td>
+      <td>-0.017646</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-0.001882</td>
+      <td>-0.044642</td>
+      <td>-0.051474</td>
+      <td>-0.026328</td>
+      <td>-0.008449</td>
+      <td>-0.019163</td>
+      <td>0.074412</td>
+      <td>-0.039493</td>
+      <td>-0.068332</td>
+      <td>-0.092204</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.085299</td>
+      <td>0.050680</td>
+      <td>0.044451</td>
+      <td>-0.005670</td>
+      <td>-0.045599</td>
+      <td>-0.034194</td>
+      <td>-0.032356</td>
+      <td>-0.002592</td>
+      <td>0.002861</td>
+      <td>-0.025930</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-0.089063</td>
+      <td>-0.044642</td>
+      <td>-0.011595</td>
+      <td>-0.036656</td>
+      <td>0.012191</td>
+      <td>0.024991</td>
+      <td>-0.036038</td>
+      <td>0.034309</td>
+      <td>0.022688</td>
+      <td>-0.009362</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.005383</td>
+      <td>-0.044642</td>
+      <td>-0.036385</td>
+      <td>0.021872</td>
+      <td>0.003935</td>
+      <td>0.015596</td>
+      <td>0.008142</td>
+      <td>-0.002592</td>
+      <td>-0.031988</td>
+      <td>-0.046641</td>
+    </tr>
+  </tbody>
+</table></div></div><div class="output-item html-table-output"><div class="output-type-tag">DataFrame Display</div><div class="table-responsive-wrapper"><table border="1" class="dataframe modern-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>age</th>
+      <th>sex</th>
+      <th>bmi</th>
+      <th>bp</th>
+      <th>s1</th>
+      <th>s2</th>
+      <th>s3</th>
+      <th>s4</th>
+      <th>s5</th>
+      <th>s6</th>
+      <th>target</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.038076</td>
+      <td>0.050680</td>
+      <td>0.061696</td>
+      <td>0.021872</td>
+      <td>-0.044223</td>
+      <td>-0.034821</td>
+      <td>-0.043401</td>
+      <td>-0.002592</td>
+      <td>0.019907</td>
+      <td>-0.017646</td>
+      <td>151.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-0.001882</td>
+      <td>-0.044642</td>
+      <td>-0.051474</td>
+      <td>-0.026328</td>
+      <td>-0.008449</td>
+      <td>-0.019163</td>
+      <td>0.074412</td>
+      <td>-0.039493</td>
+      <td>-0.068332</td>
+      <td>-0.092204</td>
+      <td>75.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.085299</td>
+      <td>0.050680</td>
+      <td>0.044451</td>
+      <td>-0.005670</td>
+      <td>-0.045599</td>
+      <td>-0.034194</td>
+      <td>-0.032356</td>
+      <td>-0.002592</td>
+      <td>0.002861</td>
+      <td>-0.025930</td>
+      <td>141.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-0.089063</td>
+      <td>-0.044642</td>
+      <td>-0.011595</td>
+      <td>-0.036656</td>
+      <td>0.012191</td>
+      <td>0.024991</td>
+      <td>-0.036038</td>
+      <td>0.034309</td>
+      <td>0.022688</td>
+      <td>-0.009362</td>
+      <td>206.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.005383</td>
+      <td>-0.044642</td>
+      <td>-0.036385</td>
+      <td>0.021872</td>
+      <td>0.003935</td>
+      <td>0.015596</td>
+      <td>0.008142</td>
+      <td>-0.002592</td>
+      <td>-0.031988</td>
+      <td>-0.046641</td>
+      <td>135.0</td>
+    </tr>
+  </tbody>
+</table></div></div></div></div></div><div class="code-cell-wrapper" id="cell-4"><div class="cell-header"><span class="cell-badge">In [4]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 데이터셋 분리
+X = <span class="code-kw-interactive" data-step="step1" data-tab="step1-df_drop-927_161557" data-func="df.drop" title="💡 클릭하여 우측 'df.drop' 해설 보기">df.drop<span class="kw-sparkle">💡</span></span>(&#x27;target&#x27;, axis=1) # &#x27;target&#x27; 열을 제외한 나머지 열을 특성(X)으로 설정
+y = df[&#x27;target&#x27;] # &#x27;target&#x27; 열을 타겟(y)으로 설정
+X_train, X_test, y_train, y_test = <span class="code-kw-interactive" data-step="step1" data-tab="step1-train_test_split-927_161634" data-func="train_test_split" title="💡 클릭하여 우측 'train_test_split' 해설 보기">train_test_split<span class="kw-sparkle">💡</span></span>(X, y, test_size=0.2, random_state=42) # 훈련 세트와 테스트 세트로 8:2 비율로 분리 (재현 가능하도록 random_state 설정)</code></pre></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (MARKDOWN)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (6) <span class="chrono-tag">⏱ 시간순 정렬</span></div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step1" data-tab="step1-load_diabetes-927_161309" onclick="switchTab('step1', 'step1-load_diabetes-927_161309')"><span class="tab-func-name">load_diabetes (데이터 로드)</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-pd_DataFrame-927_161328" onclick="switchTab('step1', 'step1-pd_DataFrame-927_161328')"><span class="tab-func-name">pd.DataFrame (DF 변환)</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-df_head-927_161500" onclick="switchTab('step1', 'step1-df_head-927_161500')"><span class="tab-func-name">df.head() (미리보기)</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-diabetes_target-927_161519" onclick="switchTab('step1', 'step1-diabetes_target-927_161519')"><span class="tab-func-name">diabetes.target (타깃)</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-df_drop-927_161557" onclick="switchTab('step1', 'step1-df_drop-927_161557')"><span class="tab-func-name">df.drop (특성 분리)</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-train_test_split-927_161634" onclick="switchTab('step1', 'step1-train_test_split-927_161634')"><span class="tab-func-name">train_test_split (8:2)</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step1-load_diabetes-927_161309"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>load_diabetes</code></div><div class="note-time-badge">⏱ 2026-09-27 16:13:09</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: load_diabetes</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 16:13:09</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">load_diabetes</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">안녕하세요! 파이썬을 배우시면서 데이터 분석의 첫걸음을 내딛고 계시군요. 정말 잘하고 계셔요.</p>
+<div class="note-empty-line"></div>
+<p class="note-p">load_diabetes는 마치 선생님이 요리 실습을 위해 미리 손질해 둔 신선한 재료 바구니를 통째로 내어주시는 것과 같아요. 우리가 직접 당뇨병 환자들의 데이터를 일일이 모으는 번거로움 없이, 연습용 데이터를 바로 꺼내 쓸 수 있도록 준비해 주는 고마운 도구랍니다. 주로 머신러닝 모델을 처음 공부하거나, 내가 만든 알고리즘이 데이터를 얼마나 잘 분석하는지 테스트해보고 싶을 때 사용해요.</p>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'load_diabetes')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step1-pd_DataFrame-927_161328"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>pd.DataFrame</code></div><div class="note-time-badge">⏱ 2026-09-27 16:13:28</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: pd.DataFrame</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 16:13:28</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">pd.DataFrame</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">안녕하세요! 파이썬을 배우시는 초보자분들의 눈높이에 맞춰, 코드에서 사용된 <code class="inline-code">pd.DataFrame</code> 함수와 그 인자들에 대해 쉽고 명쾌하게 설명해 드리겠습니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">pd.DataFrame</code>은 파이썬의 데이터 분석 라이브러리인 <strong>Pandas(판다스)</strong>에서 제공하는 가장 핵심적인 함수입니다. 엑셀의 스프레드시트나 데이터베이스의 테이블처럼, <strong>행(Row)과 열(Column)로 이루어진 2차원 표 형태의 데이터 구조(DataFrame)</strong>를 만들어주는 역할을 합니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">제시해주신 코드에서는 <code class="inline-code">pd.DataFrame()</code> 함수에 총 2개의 인자가 전달되었습니다. 각각의 역할을 자세히 알아볼까요?</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>첫 번째 인자: <code class="inline-code">diabetes.data</code> (데이터 내용)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 데이터프레임에 채워 넣을 <strong>실제 데이터(숫자 값들)</strong>입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 여기서는 사이킷런(Scikit-learn) 라이브러리에 내장된 당뇨병 환자의 수치 데이터(나이, 성별, 혈압, 혈당 등)가 들어가 있습니다. 이 데이터가 표의 알맹이(값)가 됩니다.</li>
+</ul>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>두 번째 인자: <code class="inline-code">columns=diabetes.feature_names</code> (열 이름 지정)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 데이터프레임의 <strong>각 열(Column)에 이름을 붙여주는 역할</strong>을 합니다.</li>
+<li class="note-list-item"><strong>의미:</strong> <code class="inline-code">diabetes.feature_names</code>에는 각 데이터가 무엇을 뜻하는지 나타내는 이름표들(예: &#x27;age&#x27;, &#x27;sex&#x27;, &#x27;bmi&#x27; 등)이 들어있습니다. 이 인자 덕분에 우리는 표의 각 열이 어떤 데이터를 의미하는지 한눈에 알아볼 수 있게 됩니다.</li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p">함수가 실행된 후 결과물이 어디에 담기는지 확인해 보겠습니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>할당 변수: <code class="inline-code">df</code></strong></li>
+<li class="note-list-item"><strong>역할:</strong> <code class="inline-code">pd.DataFrame(...)</code> 함수가 만들어낸 <strong>최종 결과물(2차원 표 데이터)을 저장하는 변수</strong>입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 앞으로 이 변수 <code class="inline-code">df</code>를 통해 당뇨병 데이터를 조회하고, 분석하고, 수정할 수 있습니다. 엑셀 파일을 하나 통째로 불러와서 <code class="inline-code">df</code>라는 이름의 상자에 담아두었다고 생각하시면 이해하기 쉽습니다.</li>
+</ul>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'pd.DataFrame')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step1-df_head-927_161500"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>df.head</code></div><div class="note-time-badge">⏱ 2026-09-27 16:15:00</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: df.head</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 16:15:00</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">df.head</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">파이썬 데이터 분석에서 가장 많이 쓰는 판다스(Pandas) 라이브러리의 <code class="inline-code">df.head()</code> 함수에 대한 상세 해설입니다. 초보자분들도 쉽게 이해하실 수 있도록 항목별로 친절하게 설명해 드릴게요!</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">df.head()</code>는 거대한 데이터프레임(DataFrame)에서 <strong>데이터의 전체적인 생김새를 파악하기 위해 맨 처음 5개의 행(Row)을 미리보기로 출력</strong>해 주는 함수입니다.</p>
+<p class="note-p">엑셀 파일을 열었을 때 맨 위에 적힌 제목과 첫 몇 줄의 데이터만 살짝 확인해보는 것과 같습니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">제시해주신 코드 <code class="inline-code">df.head()</code> 안을 살펴보면, 괄호 안에 아무런 숫자나 글자가 적혀있지 않은 <strong>빈 상태(Default)</strong>입니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>전달된 인자:</strong> 없음 (비어 있음)</li>
+<li class="note-list-item"><strong>설정된 값의 의미:</strong></li>
+<li class="note-list-item"><code class="inline-code">head()</code> 함수는 기본값(Default)으로 <strong>숫자 5</strong>를 품고 있습니다.</li>
+<li class="note-list-item">따라서 인자를 비워두면 <strong>&quot;위에서부터 딱 5줄만 보여줘!&quot;</strong>라는 뜻으로 작동합니다.</li>
+<li class="note-list-item"><em>참고:</em> 만약 첫 10줄을 보고 싶다면 <code class="inline-code">df.head(10)</code>처럼 괄호 안에 원하는 숫자를 넣을 수도 있습니다.</li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p">코드 전체를 보면 <code class="inline-code">df.head()</code>가 <code class="inline-code">display()</code>라는 함수로 감싸져 있습니다. 여기서 반환되는 결과물은 다음과 같습니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>반환되는 데이터:</strong> 원본 데이터프레임(<code class="inline-code">df</code>)의 <strong>상위 5개 행과 모든 열(Column)로 이루어진 &#x27;작은 데이터프레임&#x27;</strong>이 반환됩니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">display()</code> 함수의 역할:</strong> 파이썬의 기본 출력 방식(<code class="inline-code">print</code>)보다 훨씬 예쁘고 보기 좋은 표(HTML 형식) 형태로 화면에 띄워줍니다. (주 주로 주피터 노트북 환경에서 시각적으로 데이터를 확인할 때 사용됩니다.)</li>
+</ul>
+<div class="note-empty-line"></div>
+<blockquote class="note-quote"><strong>💡 요약하자면:</strong></blockquote>
+<blockquote class="note-quote"><code class="inline-code">display(df.head())</code>는 <strong>&quot;내 데이터(<code class="inline-code">df</code>)가 어떻게 생겼는지 궁금하니까, 맨 위 5줄만 예쁜 표(<code class="inline-code">display</code>)로 보여줘!&quot;</strong>라는 의미의 아주 실용적이고 자주 쓰이는 코드입니다.</blockquote>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'df.head')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step1-diabetes_target-927_161519"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>diabetes.target</code></div><div class="note-time-badge">⏱ 2026-09-27 16:15:19</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: diabetes.target</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 16:15:19</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">diabetes.target</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">diabetes.target은 머신러닝 공부를 시작할 때 자주 쓰는 당뇨병 환자의 실제 병세(질병 진행 정도)를 숫자로 기록해 둔 정답 노트 같은 친구랍니다.</p>
+<div class="note-empty-line"></div>
+<p class="note-p">우리가 컴퓨터에게 &quot;이 환자들은 나중에 병이 얼마나 심해졌을까?&quot; 하고 맞추기 훈련을 시킬 때, 진짜 정답이 무엇인지 알려주는 기준점 역할을 한답니다.</p>
+<div class="note-empty-line"></div>
+<p class="note-p">주로 인공지능 모델이 예측을 잘했는지 채점하거나, 환자의 데이터와 정답을 짝지어 공부시킬 때 사용해요.</p>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'diabetes.target')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step1-df_drop-927_161557"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>df.drop</code></div><div class="note-time-badge">⏱ 2026-09-27 16:15:57</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: df.drop</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 16:15:57</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">df.drop</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">파이썬 코드에서 사용된 <code class="inline-code">df.drop</code> 함수와 인자에 대한 상세 해설입니다. 초보자분들도 쉽게 이해할 수 있도록 정리해 드립니다!</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">df.drop()</code>은 판다스(Pandas) 데이터프레임에서 <strong>특정 행(Row)이나 열(Column)을 삭제</strong>할 때 사용하는 함수입니다. 주로 머신러닝 모델에 학습시킬 데이터(특성, Features)를 준비할 때, 정답에 해당하는 열을 쏙 빼내기 위해 가장 많이 사용됩니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">코드 <code class="inline-code">df.drop(&#x27;target&#x27;, axis=1)</code>에 사용된 두 가지 인자의 역할은 다음과 같습니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>첫 번째 인자 (<code class="inline-code">&#x27;target&#x27;</code>):</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 삭제하고자 하는 행이나 열의 이름(라벨)을 지정합니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 데이터프레임에서 <code class="inline-code">&#x27;target&#x27;</code>이라는 이름을 가진 열(Column)을 지우겠다는 뜻입니다. (보통 머신러닝에서 <code class="inline-code">&#x27;target&#x27;</code>은 우리가 예측해야 할 정답 데이터를 의미합니다.)</li>
+<li class="note-list-item"><strong><code class="inline-code">axis=1</code>:</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 삭제할 방향(축)을 지정합니다. 판다스에서는 <code class="inline-code">axis=0</code>은 행(Row, 가로), <code class="inline-code">axis=1</code>은 열(Column, 세로)을 의미합니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 데이터의 가로줄(행)을 지우는 것이 아니라, <strong>세로줄(열)을 지우겠다</strong>는 뜻입니다. 즉, <code class="inline-code">&#x27;target&#x27;</code>이라는 세로 열 통째로 삭제합니다.</li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p">코드 전체인 <code class="inline-code">X = df.drop(&#x27;target&#x27;, axis=1)</code>의 실행 결과와 할당된 변수의 의미는 다음과 같습니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>할당된 변수 (<code class="inline-code">X</code>):</strong></li>
+<li class="note-list-item"><strong>의미:</strong> 원본 데이터프레임(<code class="inline-code">df</code>)에서 정답 열인 <code class="inline-code">&#x27;target&#x27;</code>을 <strong>제외한 나머지 모든 열(Column)들</strong>이 담긴 새로운 데이터프레임이 변수 <code class="inline-code">X</code>에 저장됩니다.</li>
+<li class="note-list-item"><strong>머신러닝에서의 역할:</strong> 이 <code class="inline-code">X</code>는 컴퓨터가 정답을 맞히기 위해 참고하는 <strong>&#x27;문제지(특성, Features)&#x27;</strong> 역할을 하게 됩니다.</li>
+</ul>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'df.drop')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step1-train_test_split-927_161634"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>train_test_split</code></div><div class="note-time-badge">⏱ 2026-09-27 16:16:34</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: train_test_split</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 16:16:34</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">train_test_split</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">안녕하세요! 머신러닝 공부를 시작할 때 가장 많이 만나는 함수 중 하나인 <code class="inline-code">train_test_split</code>에 대해 초보자의 눈높이에 맞춰 쉽고 명쾌하게 설명해 드리겠습니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">train_test_split</code>은 <strong>머신러닝 모델을 학습시키기 위한 데이터(훈련용)와 모델의 성능을 평가하기 위한 데이터(테스트용)로 나누어주는 함수</strong>입니다.</p>
+<p class="note-p">시험을 보기 전에 &#x27;문제집(훈련 데이터)&#x27;으로 공부를 하고, 실제 &#x27;모의고사(테스트 데이터)&#x27;로 실력을 평가하는 것과 같은 원리입니다. 이 함수는 주로 파이썬의 머신러닝 라이브러리인 <code class="inline-code">scikit-learn(sklearn)</code>에서 가져와 사용합니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<div class="note-empty-line"></div>
+<p class="note-p">코드에서 사용된 <code class="inline-code">train_test_split(X, y, test_size=0.2, random_state=42)</code>에 전달된 인자들의 의미는 다음과 같습니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">X</code></strong>: <strong>특징(Feature) 데이터</strong>, 즉 모델이 정답을 맞히기 위해 보는 <strong>&#x27;문제&#x27;</strong> 데이터입니다. (예: 집의 크기, 방 개수, 위치 등)</li>
+<li class="note-list-item"><strong><code class="inline-code">y</code></strong>: <strong>정답(Label/Target) 데이터</strong>, 즉 모델이 예측해야 하는 <strong>&#x27;답안지&#x27;</strong> 데이터입니다. (예: 해당 집의 실제 가격)</li>
+<li class="note-list-item"><em>주의: <code class="inline-code">X</code>와 <code class="inline-code">y</code>는 반드시 행(데이터 개수)의 개수가 일치해야 하며, 짝을 맞추어 섞이게 됩니다.</em></li>
+<li class="note-list-item"><strong><code class="inline-code">test_size=0.2</code></strong>: 전체 데이터를 몇 대 몇의 비율로 나눌지 정하는 값입니다. <code class="inline-code">0.2</code>는 <strong>테스트 세트를 20%(0.2)로 지정</strong>하겠다는 뜻입니다. (자동으로 남은 80%는 훈련 세트가 됩니다.)</li>
+<li class="note-list-item"><strong><code class="inline-code">random_state=42</code></strong>: 데이터를 무작위로 섞을 때 사용하는 <strong>&#x27;랜덤 시드(Seed)&#x27;</strong> 번호입니다.</li>
+<li class="note-list-item">데이터를 섞을 때 매번 다르게 섞이면 코드를 실행할 때마다 결과가 달라져 디버깅(오류 수정)이 어려워집니다.</li>
+<li class="note-list-item">숫자 <code class="inline-code">42</code>(어떤 숫자를 써도 상관없음)를 지정해 주면, <strong>코드를 몇 번을 다시 실행해도 항상 똑같은 방식으로 데이터를 섞어줍니다.</strong> 이를 &#x27;결과 재현성&#x27;이라고 합니다.</li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">3. 📤 반환값 및 할당 변수 분석</h3>
+<div class="note-empty-line"></div>
+<p class="note-p">함수가 실행되면 총 4개의 묶음 데이터가 반환되며, 이를 좌변의 변수들에 차례대로 나누어 담게 됩니다 (<strong>언패킹(Unpacking)</strong>).</p>
+<div class="note-empty-line"></div>
+<pre class="note-code-block"><code class="language-python">X_train, X_test, y_train, y_test = train_test_split(...)</code></pre>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">X_train</code> (훈련용 문제)</strong></li>
+<li class="note-list-item">전체 문제 데이터(<code class="inline-code">X</code>) 중 80%에 해당하는 데이터입니다.</li>
+<li class="note-list-item">모델이 &quot;이러한 특징을 가진 데이터는 이런 정답을 가지는구나&quot; 하고 <strong>공부(학습)하는 데 사용</strong>됩니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">X_test</code> (테스트용 문제)</strong></li>
+<li class="note-list-item">전체 문제 데이터(<code class="inline-code">X</code>) 중 20%에 해당하는 데이터입니다.</li>
+<li class="note-list-item">모델에게는 이 문제들의 정답을 숨기고, <strong>&quot;너 이 문제들 풀 수 있어?&quot; 하고 시험을 볼 때 사용</strong>됩니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">y_train</code> (훈련용 정답)</strong></li>
+<li class="note-list-item">전체 정답 데이터(<code class="inline-code">y</code>) 중 80%에 해당하는 데이터입니다.</li>
+<li class="note-list-item"><code class="inline-code">X_train</code>과 짝을 이루어, 모델이 공부할 때 <strong>&quot;이 문제의 진짜 정답은 이것이다&quot;라고 알려주는 용도</strong>로 쓰입니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">y_test</code> (테스트용 정답)</strong></li>
+<li class="note-list-item">전체 정답 데이터(<code class="inline-code">y</code>) 중 20%에 해당하는 데이터입니다.</li>
+<li class="note-list-item">모델이 <code class="inline-code">X_test</code>를 풀어서 써낸 답안과 <strong>진짜 정답을 비교하여 모델의 점수(정확도 등)를 채점할 때 사용</strong>됩니다.</li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p"><strong>💡 한 줄 요약!</strong></p>
+<p class="note-p">이 코드는 전체 데이터(<code class="inline-code">X</code>, <code class="inline-code">y</code>)를 섞어서, 80%는 공부용(<code class="inline-code">X_train</code>, <code class="inline-code">y_train</code>)으로, 20%는 시험용(<code class="inline-code">X_test</code>, <code class="inline-code">y_test</code>)으로 나누되, 실행할 때마다 똑같이 섞이도록 고정(<code class="inline-code">random_state=42</code>)해 주는 작업입니다.</p>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'train_test_split')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section><section class="step-section" id="step2"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">2단계</span><h2 class="step-title-text">선형 회귀 Estimator 기반 모델 학습 (fit)</h2></div><p class="step-summary-desc">LinearRegression 인스턴스를 생성하고 fit(X_train, y_train)을 호출하여 최소제곱법(OLS) 기반 회귀 모델 학습 수행</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 주피터 노트북 실행 코드 및 결과</div><div class="code-cell-wrapper" id="cell-6"><div class="cell-header"><span class="cell-badge">In [6]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">model = <span class="code-kw-interactive" data-step="step2" data-tab="step2-LinearRegression-927_161701" data-func="LinearRegression" title="💡 클릭하여 우측 'LinearRegression' 해설 보기">LinearRegression<span class="kw-sparkle">💡</span></span>() # 선형 회귀 모델 객체 생성
+<span class="code-kw-interactive" data-step="step2" data-tab="step2-model_fit-927_161744" data-func="model.fit" title="💡 클릭하여 우측 'model.fit' 해설 보기">model.fit<span class="kw-sparkle">💡</span></span>(X_train, y_train) # 훈련 데이터를 사용하여 모델 훈련
+print(&quot;선형 회귀 모델 훈련 완료.&quot;) # 모델 훈련 완료 메시지 출력</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>선형 회귀 모델 훈련 완료.
+</pre></div></div></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (MARKDOWN)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (2) <span class="chrono-tag">⏱ 시간순 정렬</span></div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step2" data-tab="step2-LinearRegression-927_161701" onclick="switchTab('step2', 'step2-LinearRegression-927_161701')"><span class="tab-func-name">LinearRegression (모델)</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-model_fit-927_161744" onclick="switchTab('step2', 'step2-model_fit-927_161744')"><span class="tab-func-name">model.fit() (학습)</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step2-LinearRegression-927_161701"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>LinearRegression</code></div><div class="note-time-badge">⏱ 2026-09-27 16:17:01</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: LinearRegression</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 16:17:01</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">LinearRegression</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">LinearRegression은 마치 키가 크면 몸무게도 많이 나갈 것처럼, 데이터들 사이에 숨겨진 일정한 비례 관계를 찾아내어 미래의 값을 예측해 주는 똑똑한 점쟁이 같은 친구랍니다.</p>
+<div class="note-empty-line"></div>
+<p class="note-p">예를 들어 공부한 시간에 따른 시험 점수를 예측하거나, 집의 크기에 따른 아파트 가격을 알아내고 싶을 때 아주 유용하게 쓰인답니다.</p>
+<div class="note-empty-line"></div>
+<p class="note-p">지금 작성하신 코드는 그 점쟁이를 우리 집 거실로 초대해서 &quot;자, 이제 예측을 시작해 볼까?&quot; 하고 준비시키는 첫 번째 단계라고 생각하시면 돼요.</p>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step2', 'LinearRegression')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step2-model_fit-927_161744"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>model.fit</code></div><div class="note-time-badge">⏱ 2026-09-27 16:17:44</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: model.fit</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 16:17:44</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">model.fit</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">파이썬 머신러닝에서 가장 많이 쓰이는 핵심 코드인 <code class="inline-code">model.fit(X_train, y_train)</code>에 대해 초보자의 눈높이에 맞춰 친절하고 명쾌하게 해설해 드리겠습니다!</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">model.fit()</code> 함수는 <strong>준비된 훈련 데이터(문제와 정답)를 가지고 머신러닝 모델을 가르치는(학습시키는) 핵심 함수</strong>입니다. AI가 데이터 속에 숨겨진 패턴과 규칙을 스스로 찾아내어 실력을 쌓는 과정이라고 생각하시면 됩니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">코드 안에서 괄호 <code class="inline-code">()</code> 안에 들어간 <code class="inline-code">X_train</code>과 <code class="inline-code">y_train</code>은 모델을 가르치기 위해 교사가 학생에게 주는 &#x27;문제집과 정답지&#x27;입니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">X_train</code> (훈련 데이터의 독립 변수 / 문제)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 모델이 학습할 &#x27;문제&#x27;에 해당하는 데이터입니다. (예: 집의 크기, 방 개수, 위치 등의 정보)</li>
+<li class="note-list-item"><strong>형태:</strong> 보통 행렬(2차원 데이터, DataFrame 또는 NumPy Array) 형태로 들어갑니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">y_train</code> (훈련 데이터의 종속 변수 / 정답)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> <code class="inline-code">X_train</code>이라는 문제에 정확히 대응하는 &#x27;정답(Label)&#x27;입니다. (예: 해당 집의 실제 가격)</li>
+<li class="note-list-item"><strong>형태:</strong> 보통 1차원 배열(Series 또는 1차원 Array) 형태로 들어갑니다.</li>
+</ul>
+<div class="note-empty-line"></div>
+<blockquote class="note-quote">💡 <strong>요약하자면:</strong> 모델에게 &quot;이러한 조건들(<code class="inline-code">X_train</code>)일 때는 이런 결과(<code class="inline-code">y_train</code>)가 나온다&quot;는 것을 반복해서 보여주며 공부시키는 것입니다.</blockquote>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p"><code class="inline-code">model.fit()</code> 함수는 특별한 새로운 데이터를 만들어 반환하지 않습니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>반환값:</strong> <strong>학습이 완료된 자기 자신(trained model)</strong>을 반환합니다.</li>
+<li class="note-list-item"><strong>특징:</strong> 파이썬에서는 <code class="inline-code">model.fit(X_train, y_train)</code>을 실행하는 순간, <code class="inline-code">model</code> 이라는 변수 자체에 <strong>공부가 끝난 똑똑한 상태의 모델</strong>이 덮어씌워(저장)집니다.</li>
+<li class="note-list-item">따라서 이 코드가 실행된 직후부터는 <code class="inline-code">model.predict()</code> 같은 함수를 사용해 새로운 문제에 대한 예측을 시킬 수 있게 됩니다.</li>
+</ul>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step2', 'model.fit')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section><section class="step-section" id="step3"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">3단계</span><h2 class="step-title-text">테스트셋 예측 (predict) 및 MSE 오차 성능 평가</h2></div><p class="step-summary-desc">학습된 모델로 테스트 데이터 예측(predict)을 수행하고 mean_squared_error(MSE) 지표로 모델의 예측 성능 정량화</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 주피터 노트북 실행 코드 및 결과</div><div class="code-cell-wrapper" id="cell-8"><div class="cell-header"><span class="cell-badge">In [8]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">y_pred = <span class="code-kw-interactive" data-step="step3" data-tab="step3-model_predict-927_161811" data-func="model.predict" title="💡 클릭하여 우측 'model.predict' 해설 보기">model.predict<span class="kw-sparkle">💡</span></span>(X_test) # 훈련된 모델로 테스트 세트 예측
+mse = <span class="code-kw-interactive" data-step="step3" data-tab="step3-mean_squared_error-927_161839" data-func="mean_squared_error" title="💡 클릭하여 우측 'mean_squared_error' 해설 보기">mean_squared_error<span class="kw-sparkle">💡</span></span>(y_test, y_pred) # 실제 값(y_test)과 예측 값(y_pred)을 비교하여 평균 제곱 오차 계산
+print(f&quot;테스트 세트 MSE: {mse:.4f}&quot;) # 평균 제곱 오차 출력 (소수점 4째 자리까지 표시)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>테스트 세트 MSE: 2900.1936
+</pre></div></div></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (MARKDOWN)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (2) <span class="chrono-tag">⏱ 시간순 정렬</span></div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step3" data-tab="step3-model_predict-927_161811" onclick="switchTab('step3', 'step3-model_predict-927_161811')"><span class="tab-func-name">model.predict() (예측)</span></button><button class="func-tab-btn " data-step="step3" data-tab="step3-mean_squared_error-927_161839" onclick="switchTab('step3', 'step3-mean_squared_error-927_161839')"><span class="tab-func-name">mean_squared_error (MSE)</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step3-model_predict-927_161811"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>model.predict</code></div><div class="note-time-badge">⏱ 2026-09-27 16:18:11</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: model.predict</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 16:18:11</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">model.predict</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">안녕하세요! 파이썬 머신러닝에서 가장 자주 쓰이는 핵심 코드 중 하나인 <code class="inline-code">y_pred = model.predict(X_test)</code>에 대해 초보자분들도 1분 만에 이해하실 수 있도록 알기 쉽게 정리해 드리겠습니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">model.predict()</code>는 <strong>이미 훈련(학습)이 끝난 머신러닝 모델에게 새로운 질문(문제)을 던지고, 그에 대한 예상되는 정답(예측값)을 받아내는 함수</strong>입니다.</p>
+<p class="note-p">마치 시험 공부를 마친 학생에게 새로운 모의고사를 풀게 하고 그 결과를 채점하기 위해 답안을 적어내는 과정과 같습니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">이 코드에서 괄호 안에 들어간 인자는 하나입니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">X_test</code> (테스트 데이터의 특징/문제 데이터)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 모델이 <strong>한 번도 본 적 없는 테스트용 데이터</strong>로, 정답을 맞혀야 하는 &#x27;문제지&#x27;에 해당합니다. (예: 집의 평수, 방 개수, 위치 등이 담긴 표)</li>
+<li class="note-list-item"><strong>설정된 값의 의미:</strong> 앞서 전체 데이터에서 학습용(<code class="inline-code">train</code>)과 떼어놓은 테스트용 데이터셋(<code class="inline-code">X_test</code>)을 통째로 집어넣어, 모델의 실력을 공정하게 평가하기 위한 예측을 수행합니다.</li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p">함수가 실행된 후 결과물이 저장되는 변수에 대한 설명입니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">y_pred</code> (예측된 정답)</strong></li>
+<li class="note-list-item"><strong>이게 무슨 데이터인가요?:</strong> 모델이 <code class="inline-code">X_test</code>(문제)를 받아 열심히 풀고 나서 <strong>&quot;내가 유추해 본 결과, 정답은 이거야!&quot; 하고 내놓은 예측값들의 모음</strong>입니다. (<code class="inline-code">pred</code>는 예측을 뜻하는 <em>Prediction</em>의 약자입니다.)</li>
+<li class="note-list-item"><strong>데이터 형태:</strong> 보통 파이썬의 리스트나 넘파이 배열(NumPy Array) 형태로 반환되며, 모델의 종류에 따라 집값(숫자)이 될 수도 있고, 스팸 메일 여부(0 또는 1)가 될 수도 있습니다.</li>
+<li class="note-list-item"><strong>활용:</strong> 이 <code class="inline-code">y_pred</code>와 실제 정답인 <code class="inline-code">y_test</code>를 서로 비교(예: <code class="inline-code">accuracy_score(y_test, y_pred)</code>)하여 &quot;우리 모델이 100문제 중에 몇 개를 맞혔지?&quot; 하며 성능을 평가하게 됩니다.</li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p"><strong>💡 한 줄 요약</strong></p>
+<blockquote class="note-quote"><em>&quot;선생님(모델)에게 새로운 시험문제(<code class="inline-code">X_test</code>)를 풀게 시킨 뒤, 그 답안지(<code class="inline-code">y_pred</code>)를 거두어들이는 과정입니다!&quot;</em></blockquote>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step3', 'model.predict')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step3-mean_squared_error-927_161839"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>mean_squared_error</code></div><div class="note-time-badge">⏱ 2026-09-27 16:18:39</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: mean_squared_error</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 16:18:39</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">mean_squared_error</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">파이썬 머신러닝 코드에서 자주 사용되는 <code class="inline-code">mean_squared_error</code> 함수에 대한 상세 해설입니다. 초보자분들도 쉽게 이해하실 수 있도록 항목별로 친절하게 정리해 드릴게요!</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">mean_squared_error</code> 함수는 머신러닝 모델이 예측한 값(<code class="inline-code">y_pred</code>)이 실제 정답(<code class="inline-code">y_test</code>)과 비교해서 <strong>얼마나 빗나갔는지(오차)</strong>를 계산해 주는 평가 함수입니다.</p>
+<p class="note-p">이름 그대로 오차의 제곱들의 평균(MSE, Mean Squared Error)을 구해줍니다. <strong>이 값이 0에 가까울수록 모델이 예측을 완벽하게 잘했다</strong>는 뜻입니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">코드에서 <code class="inline-code">mean_squared_error(y_test, y_pred)</code> 안에 들어간 두 개의 인자의 역할은 다음과 같습니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">y_test</code> (첫 번째 인자: 실제 값)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 모델이 맞혀야 하는 &#x27;진짜 정답&#x27; 데이터입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 테스트 데이터셋에 해당하는 실제 타겟값(Label)들이 들어있는 리스트나 배열입니다. 모델 채점으로 비유하자면 &#x27;정답지&#x27;에 해당합니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">y_pred</code> (두 번째 인자: 예측 값)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 학습이 끝난 머신러닝 모델이 <code class="inline-code">y_test</code>를 보고 &#x27;스스로 예측해 낸 값&#x27;입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 모델이 테스트 데이터를 입력받아 출력한 결과물입니다. 비유하자면 학생이 적어낸 &#x27;답안지&#x27;에 해당합니다.</li>
+</ul>
+<div class="note-empty-line"></div>
+<blockquote class="note-quote">💡 <strong>참고:</strong> 함수를 사용할 때는 반드시 <strong><code class="inline-code">(실제값, 예측값)</code></strong> 순서로 넣어야 정확한 오차가 계산됩니다. (순서를 바꿔 넣어도 계산 결과 자체는 같지만, 보통 이 순서로 약속되어 있습니다.)</blockquote>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p">함수가 실행된 후 결과를 받아 저장하는 변수인 <code class="inline-code">mse</code>에 대한 설명입니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">mse</code> (평균 제곱 오차 결과)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> <code class="inline-code">y_test</code>와 <code class="inline-code">y_pred</code>를 비교해 계산된 <strong>최종 오차 점수(숫자)</strong>를 담는 변수입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 오차들을 제곱해서 평균을 낸 단 하나의 실수(Float) 값이 반환됩니다.</li>
+<li class="note-list-item"><strong>해석 팁:</strong> 값이 크면 모델이 예측을 아주 엉터리로 하고 있다는 뜻이고, 값이 작을수록(예: 0.1, 0.01 등) 모델이 정확하게 예측하고 있다는 뜻입니다. (단, 데이터의 단위에 따라 값이 크게 달라질 수 있습니다.)</li>
+</ul>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step3', 'mean_squared_error')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section><section class="step-section" id="step4"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">4단계</span><h2 class="step-title-text">Joblib 모델 파일 직렬화(dump), 복원(load) 및 재검증</h2></div><p class="step-summary-desc">학습된 모델을 .pkl 파일로 영구 저장(dump)하고, 새로 불러와(load) 기존 예측 결과와 동일한지 무결성 검증</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 주피터 노트북 실행 코드 및 결과</div><div class="code-cell-wrapper" id="cell-10"><div class="cell-header"><span class="cell-badge">In [10]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">model_filename = &#x27;<span class="code-kw-interactive" data-step="step4" data-tab="step4-diabetes_model_pkl-927_161943" data-func="diabetes_model.pkl" title="💡 클릭하여 우측 'diabetes_model.pkl' 해설 보기">diabetes_model.pkl<span class="kw-sparkle">💡</span></span>&#x27; # 모델을 저장할 파일 이름 지정
+<span class="code-kw-interactive" data-step="step4" data-tab="step4-joblib_dump-927_162152" data-func="joblib.dump" title="💡 클릭하여 우측 'joblib.dump' 해설 보기">joblib.dump<span class="kw-sparkle">💡</span></span>(model, model_filename) # 훈련된 모델을 joblib을 사용하여 파일로 저장</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item text-output"><div class="output-type-tag">Result</div><pre>[&#x27;diabetes_model.pkl&#x27;]</pre></div></div></div></div><div class="code-cell-wrapper" id="cell-12"><div class="cell-header"><span class="cell-badge">In [12]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">loaded_model = <span class="code-kw-interactive" data-step="step4" data-tab="step4-joblib_load-927_162237" data-func="joblib.load" title="💡 클릭하여 우측 'joblib.load' 해설 보기">joblib.load<span class="kw-sparkle">💡</span></span>(model_filename) # 저장된 모델 파일을 joblib을 사용하여 다시 로드</code></pre></div></div><div class="code-cell-wrapper" id="cell-14"><div class="cell-header"><span class="cell-badge">In [14]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 파일로 저장했다가 새로 불러온 모델이 손상 없이 정상적으로 동작하는지 확인하는 과정
+loaded_model_pred = <span class="code-kw-interactive" data-step="step4" data-tab="step4-loaded_model_predict-927_162326" data-func="loaded_model.predict" title="💡 클릭하여 우측 'loaded_model.predict' 해설 보기">loaded_model.predict<span class="kw-sparkle">💡</span></span>(X_test) # 로드된 모델을 사용하여 테스트 세트 예측
+print(loaded_model_pred) # 예측 결과 출력</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>[139.5475584  179.51720835 134.03875572 291.41702925 123.78965872
+  92.1723465  258.23238899 181.33732057  90.22411311 108.63375858
+  94.13865744 168.43486358  53.5047888  206.63081659 100.12925869
+ 130.66657085 219.53071499 250.7803234  196.3688346  218.57511815
+ 207.35050182  88.48340941  70.43285917 188.95914235 154.8868162
+ 159.36170122 188.31263363 180.39094033  47.99046561 108.97453871
+ 174.77897633  86.36406656 132.95761215 184.53819483 173.83220911
+ 190.35858492 124.4156176  119.65110656 147.95168682  59.05405241
+  71.62331856 107.68284704 165.45365458 155.00975931 171.04799096
+  61.45761356  71.66672581 114.96732206  51.57975523 167.57599528
+ 152.52291955  62.95568515 103.49741722 109.20751489 175.64118426
+ 154.60296242  94.41704366 210.74209145 120.2566205   77.61585399
+ 187.93203995 206.49337474 140.63167076 105.59678023 130.70432536
+ 202.18534537 171.13039501 164.91423047 124.72472569 144.81030894
+ 181.99635452 199.41369642 234.21436188 145.95665512  79.86703276
+ 157.36941275 192.74412541 208.89814032 158.58722555 206.02195855
+ 107.47971675 140.93598906  54.82129332  55.92573195 115.01180018
+  78.95584188  81.56087285  54.37997256 166.2543518 ]
+</pre></div></div></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (MARKDOWN)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (4) <span class="chrono-tag">⏱ 시간순 정렬</span></div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step4" data-tab="step4-diabetes_model_pkl-927_161943" onclick="switchTab('step4', 'step4-diabetes_model_pkl-927_161943')"><span class="tab-func-name">diabetes_model.pkl (저장명)</span></button><button class="func-tab-btn " data-step="step4" data-tab="step4-joblib_dump-927_162152" onclick="switchTab('step4', 'step4-joblib_dump-927_162152')"><span class="tab-func-name">joblib.dump() (직렬화)</span></button><button class="func-tab-btn " data-step="step4" data-tab="step4-joblib_load-927_162237" onclick="switchTab('step4', 'step4-joblib_load-927_162237')"><span class="tab-func-name">joblib.load() (모델 복원)</span></button><button class="func-tab-btn " data-step="step4" data-tab="step4-loaded_model_predict-927_162326" onclick="switchTab('step4', 'step4-loaded_model_predict-927_162326')"><span class="tab-func-name">loaded_model.predict (검증)</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step4-diabetes_model_pkl-927_161943"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>diabetes_model.pkl</code></div><div class="note-time-badge">⏱ 2026-09-27 16:19:43</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: diabetes_model.pkl</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 16:19:43</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">diabetes_model.pkl</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">diabetes_model.pkl이라는 파일 이름은 마치 열심히 공부를 마친 인공지능 의사의 머릿속 지식을 쏙쏙 뽑아 담아둔 &#x27;비법 노트&#x27; 같은 역할을 해요. 우리가 만든 당뇨병 예측 프로그램이 앞으로 언제든 바로 꺼내 쓸 수 있도록 똑똑한 뇌 구조를 컴퓨터 파일 형태로 안전하게 보관할 때 쓴답니다.</p>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step4', 'diabetes_model.pkl')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step4-joblib_dump-927_162152"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>joblib.dump</code></div><div class="note-time-badge">⏱ 2026-09-27 16:21:52</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: joblib.dump</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 16:21:52</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">joblib.dump</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">파이썬 머신러닝 작업에서 널리 쓰이는 <code class="inline-code">joblib.dump</code> 함수에 대한 상세 해설입니다. 초보자분들도 쉽게 이해하실 수 있도록 비유를 곁들여 설명해 드릴게요!</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">joblib.dump()</code> 함수는 <strong>파이썬의 훈련된 머신러닝 모델이나 복잡한 데이터 객체를 컴퓨터 하드디스크에 파일 형태로 저장(직렬화, Serialization)</strong>하는 역할을 합니다.</p>
+<div class="note-empty-line"></div>
+<blockquote class="note-quote">💡 <strong>쉽게 이해하기:</strong> 열심히 공부해서 똘똘해진 인공지능(모델)의 기억을 USB(파일)에 백업해 두는 것과 같습니다. 나중에 이 파일을 다시 불러오면(load), 학습을 처음부터 다시 하지 않고도 똑같이 사용할 수 있습니다.</blockquote>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">제시해주신 코드 <code class="inline-code">joblib.dump(model, model_filename)</code>에는 총 2개의 인자가 전달되었습니다. 각각의 역할은 다음과 같습니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>첫 번째 인자: <code class="inline-code">model</code> (저장할 대상)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 하드디스크에 저장하고자 하는 파이썬 객체입니다. 보통은 훈련(Training)이 완료된 머신러닝 모델(예: 사이킷런의 LinearRegression, RandomForest 등)이 여기에 해당합니다.</li>
+<li class="note-list-item"><strong>의미:</strong> &quot;이 모델(객체)을 파일로 만들어 줘&quot;라고 지정하는 것입니다.</li>
+<li class="note-list-item"><strong>두 번째 인자: <code class="inline-code">model_filename</code> (저장될 파일 경로 및 이름)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 모델이 저장될 파일의 이름과 경로를 지정하는 문자열(String)입니다. (예: <code class="inline-code">&quot;my_model.pkl&quot;</code>, <code class="inline-code">&quot;models/trained_rf.joblib&quot;</code> 등)</li>
+<li class="note-list-item"><strong>의미:</strong> &quot;이 파일 이름으로 저장해 줘&quot;라는 뜻이며, 보통 확장자는 <code class="inline-code">.pkl</code>이나 <code class="inline-code">.joblib</code>을 주로 사용합니다.</li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">3. 📤 반환값 및 파일 결과</h3>
+<p class="note-p"><code class="inline-code">joblib.dump()</code> 함수는 별도의 복잡한 데이터 구조를 반환하지 않고, 파일을 성공적으로 저장하면 <strong>저장된 파일들의 경로(문자열 리스트)</strong>를 반환합니다. (만약 파일이 크서 여러 조각으로 쪼개져 저장된 경우 여러 경로가 반환될 수 있지만, 일반적인 단일 모델 저장 시에는 크게 신경 쓰지 않아도 됩니다.)</p>
+<div class="note-empty-line"></div>
+<blockquote class="note-quote">💡 <strong>핵심 결과:</strong> 이 함수가 실행되고 나면, 컴퓨터의 지정된 폴더에 <code class="inline-code">model_filename</code> 이름의 파일이  생성됩니다. 나중에 이 파일을 불러올 때는 짝꿍 함수인 <code class="inline-code">joblib.load(model_filename)</code>을 사용하면 됩니다.</blockquote>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step4', 'joblib.dump')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step4-joblib_load-927_162237"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>joblib.load</code></div><div class="note-time-badge">⏱ 2026-09-27 16:22:37</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: joblib.load</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 16:22:37</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">joblib.load</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">파이썬 코드에서 사용된 <code class="inline-code">joblib.load</code> 함수에 대해 초보자의 눈높이에 맞춰 친절하고 명쾌하게 해설해 드리겠습니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">joblib.load()</code>는 컴퓨터의 <strong>저장장치(하드디스크 등)에 파일 형태로 저장되어 있는 파이썬 객체(머신러닝 모델, 데이터 등)를 다시 메모리로 불러와서 파이썬 프로그램이 즉시 사용할 수 있게 만들어주는 함수</strong>입니다.</p>
+<p class="note-p">마치 컴퓨터 게임을 하다가 중간에 저장해 둔 &#x27;세이브 파일&#x27;을 다시 불러와서 이어서 하는 것과 같습니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">제시해주신 코드에서 <code class="inline-code">joblib.load()</code>에 전달된 인자는 다음과 같습니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">model_filename</code></strong></li>
+<li class="note-list-item"><strong>역할:</strong> 불러올 파일의 경로와 이름이 담긴 문자열(String) 변수입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> &quot;어떤 파일을 불러올 것인가?&quot;에 대한 정답으로, 예를 들어 이 변수 안에 <code class="inline-code">&#x27;linear_regression_model.pkl&#x27;</code>이나 <code class="inline-code">&#x27;my_model.joblib&#x27;</code> 같은 파일 이름이 들어있게 됩니다.</li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p">함수가 실행된 후 결과물이 대입되는 변수에 대한 설명입니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">loaded_model</code></strong></li>
+<li class="note-list-item"><strong>이게 무엇인가요?:</strong> 파일로부터 성공적으로 읽어와서, <strong>다시 살아난(복원된) 머신러닝 모델 객체</strong>입니다.</li>
+<li class="note-list-item"><strong>어떻게 쓰이나요?:</strong> 이 변수를 마치 학습 직후의 모델처럼 사용하여 새로운 데이터에 대한 예측(<code class="inline-code">loaded_model.predict(new_data)</code>)을 수행할 수 있습니다. 데이터를 다시 처음부터 힘들게 학습시킬 필요 없이, 저장해 둔 모델을 그대로 꺼내 쓰기 위해 이 변수에 담아두는 것입니다.</li>
+</ul>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step4', 'joblib.load')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step4-loaded_model_predict-927_162326"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>loaded_model.predict</code></div><div class="note-time-badge">⏱ 2026-09-27 16:23:26</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: loaded_model.predict</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 16:23:26</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">loaded_model.predict</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">파이썬 머신러닝 코드에서 사용된 <code class="inline-code">loaded_model.predict(X_test)</code> 문맥에 대해 초보자의 눈높이에 맞춰 쉽고 명쾌하게 해설해 드릴게요!</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">loaded_model.predict()</code>는 <strong>이미 학습(훈련)이 끝난 머신러닝 모델에 새로운 질문(데이터)을 던져서 정답을 맞히게 하는(예측) 핵심 함수</strong>입니다.</p>
+<p class="note-p">마치 공부를 마친 학생에게 모의고사 시험지를 주고 풀게 하는 것과 같습니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">이 코드에서 괄호 안에는 하나의 인자가 전달되었습니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">X_test</code> (테스트용 문제 데이터)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 모델이 한 번도 보지 못한 미지의 데이터(특징, Feature)들의 모음입니다.</li>
+<li class="note-list-item"><strong>설정된 값의 의미:</strong> 보통 전체 데이터를 쪼갤 때 모델 학습용(<code class="inline-code">X_train</code>)과 시험용(<code class="inline-code">X_test</code>)으로 나누는데, 여기서 <code class="inline-code">X_test</code>는 <strong>&quot;진짜 실력(예측력)을 테스트하기 위해 남겨둔 시험지&quot;</strong>를 의미합니다. 정답(<code class="inline-code">y_test</code>)은 떼고 문제만 담겨 있습니다.</li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p">함수가 실행된 결과는 등호(<code class="inline-code">=</code>) 왼쪽의 변수에 저장됩니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">loaded_model_pred</code> (모델의 예측 결과)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> <code class="inline-code">X_test</code>(시험지)를 받아 모델이 최종적으로 예측해 낸 <strong>&#x27;답안지&#x27;</strong>입니다.</li>
+<li class="note-list-item"><strong>데이터 형태:</strong></li>
+<li class="note-list-item">만약 <strong>분류(Classification) 문제</strong>였다면 (예: 스팸 메일 판별, 고양이/강아지 분류), 모델이 예측한 <strong>클래스 레이블(예: <code class="inline-code">[0, 1, 1, 0...]</code>)</strong>이 담깁니다.</li>
+<li class="note-list-item">만약 <strong>회귀(Regression) 문제</strong>였다면 (예: 집값 예측, 온도 예측), 모델이 예측한 <strong>연속적인 숫자 값(예: <code class="inline-code">[3억 5천, 4억 2천...]</code>)</strong>이 담깁니다.</li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">💡 <strong>한 줄 요약:</strong></p>
+<blockquote class="note-quote"><em>&quot;학습이 완료된 모델(<code class="inline-code">loaded_model</code>)에게 테스트용 문제지(<code class="inline-code">X_test</code>)를 풀게 하여 얻은 <strong>예측 답안(<code class="inline-code">loaded_model_pred</code>)</strong>을 받아오는 과정입니다!&quot;</em></blockquote>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step4', 'loaded_model.predict')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section>
+  </main>
+
+  <div class="toast-msg" id="toast">✅ 알림 메시지</div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('study_theme_05', next);
+      localStorage.setItem('study_theme', next);
+      
+      const btn = document.getElementById('theme-btn');
+      btn.textContent = next === 'dark' ? '☀️ 라이트 모드' : '🌙 다크 모드';
+      showToast(next === 'dark' ? '🌙 다크 테마 적용됨' : '☀️ 라이트 테마 적용됨');
+    }
+
+    (function initTheme() {
+      const saved = localStorage.getItem('study_theme_05') || localStorage.getItem('study_theme');
+      if (saved) {
+        document.documentElement.setAttribute('data-theme', saved);
+        const btn = document.getElementById('theme-btn');
+        if (btn) btn.textContent = saved === 'dark' ? '☀️ 라이트 모드' : '🌙 다크 모드';
+      }
+    })();
+
+    function switchTab(stepId, tabId) {
+      const stepElem = document.getElementById(stepId);
+      if (!stepElem) return;
+
+      const tabBtns = stepElem.querySelectorAll('.func-tab-btn');
+      tabBtns.forEach(btn => {
+        if (btn.getAttribute('data-tab') === tabId) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+
+      const panes = stepElem.querySelectorAll('.func-note-pane');
+      panes.forEach(pane => {
+        if (pane.id === tabId) {
+          pane.classList.add('active');
+          pane.classList.remove('highlight-pulse');
+          void pane.offsetWidth;
+          pane.classList.add('highlight-pulse');
+        } else {
+          pane.classList.remove('active');
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const kwSpans = document.querySelectorAll('.code-kw-interactive');
+      kwSpans.forEach(span => {
+        span.addEventListener('click', (e) => {
+          const stepId = span.getAttribute('data-step');
+          const tabId = span.getAttribute('data-tab');
+          const funcName = span.getAttribute('data-func');
+
+          kwSpans.forEach(s => s.classList.remove('active-target'));
+          span.classList.add('active-target');
+
+          switchTab(stepId, tabId);
+
+          if (window.innerWidth <= 1180) {
+            const notePane = document.getElementById(tabId);
+            if (notePane) {
+              notePane.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          }
+
+          showToast("💡 '" + funcName + "' AI 학습 노트로 이동");
+        });
+      });
+    });
+
+    function highlightMatchingKeyword(stepId, funcName) {
+      const stepElem = document.getElementById(stepId);
+      if (!stepElem) return;
+
+      const kwSpans = stepElem.querySelectorAll('.code-kw-interactive');
+      let found = false;
+      kwSpans.forEach(span => {
+        if (span.getAttribute('data-func') === funcName) {
+          span.classList.add('active-target');
+          span.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          found = true;
+        } else {
+          span.classList.remove('active-target');
+        }
+      });
+
+      if (found) {
+        showToast("🔍 좌측 코드에서 '" + funcName + "' 위치 강조");
+      }
+    }
+
+    function copyCode(btn) {
+      const cellWrapper = btn.closest('.code-cell-wrapper');
+      const codeBlock = cellWrapper.querySelector('pre code');
+      if (codeBlock) {
+        const text = codeBlock.innerText;
+        navigator.clipboard.writeText(text).then(() => {
+          const original = btn.textContent;
+          btn.textContent = '✅ 복사됨!';
+          btn.style.borderColor = 'var(--accent-success)';
+          btn.style.color = 'var(--accent-success)';
+          setTimeout(() => {
+            btn.textContent = original;
+            btn.style.borderColor = '';
+            btn.style.color = '';
+          }, 2000);
+          showToast('📋 코드가 클립보드에 복사되었습니다.');
+        });
+      }
+    }
+
+    function toggleOutput(btn) {
+      const container = btn.closest('.cell-outputs-container');
+      const body = container.querySelector('.outputs-body');
+      if (body.style.display === 'none') {
+        body.style.display = 'flex';
+        btn.textContent = '접기 ▲';
+      } else {
+        body.style.display = 'none';
+        btn.textContent = '펼치기 ▼';
+      }
+    }
+
+    let allExpanded = true;
+    function toggleAllOutputs() {
+      const allBodies = document.querySelectorAll('.outputs-body');
+      const allBtns = document.querySelectorAll('.toggle-output-btn');
+      allExpanded = !allExpanded;
+
+      allBodies.forEach(b => b.style.display = allExpanded ? 'flex' : 'none');
+      allBtns.forEach(btn => btn.textContent = allExpanded ? '접기 ▲' : '펼치기 ▼');
+      
+      const toggleAllBtn = document.querySelector('.expand-all-btn');
+      toggleAllBtn.textContent = allExpanded ? '결과 전체 접기' : '결과 전체 펼치기';
+      showToast(allExpanded ? '⚡ 모든 실행 결과가 펼쳐졌습니다.' : '⚡ 모든 실행 결과가 접혔습니다.');
+    }
+
+    function filterFunctions(query) {
+      const q = query.trim().toLowerCase();
+      const tabBtns = document.querySelectorAll('.func-tab-btn');
+      const sections = document.querySelectorAll('.step-section');
+
+      if (!q) {
+        tabBtns.forEach(b => b.style.display = '');
+        sections.forEach(s => s.style.opacity = '1');
+        return;
+      }
+
+      tabBtns.forEach(b => {
+        const text = b.textContent.toLowerCase();
+        if (text.includes(q)) {
+          b.style.display = '';
+          b.style.border = '2px solid var(--accent-primary)';
+        } else {
+          b.style.display = 'none';
+          b.style.border = '';
+        }
+      });
+    }
+
+    window.addEventListener('scroll', () => {
+      const sections = document.querySelectorAll('.step-section');
+      const navLinks = document.querySelectorAll('.step-nav-item');
+      let currentId = '';
+
+      sections.forEach(s => {
+        const rect = s.getBoundingClientRect();
+        if (rect.top <= 200 && rect.bottom >= 200) {
+          currentId = s.id;
+        }
+      });
+
+      if (currentId) {
+        navLinks.forEach(link => {
+          if (link.getAttribute('data-step') === currentId) {
+            link.classList.add('active');
+          } else {
+            link.classList.remove('active');
+          }
+        });
+      }
+    });
+
+    let toastTimeout = null;
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        t.classList.remove('show');
+      }, 2500);
+    }
+  </script>
+</body>
+</html>

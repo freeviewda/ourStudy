@@ -1,0 +1,2103 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>10. 머신러닝 기초: 분류 성능 지표 (Classification Metrics)</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Pretendard:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  
+  <style>
+    :root[data-theme="dark"] {
+      --bg-base: #090d16;
+      --bg-surface: #101726;
+      --bg-card: #172136;
+      --bg-card-hover: #1e2c47;
+      --bg-code: #0b1120;
+      
+      --border-subtle: #24324d;
+      --border-focus: #38bdf8;
+      
+      --text-main: #f3f4f6;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      
+      --accent-primary: #38bdf8;
+      --accent-primary-hover: #0ea5e9;
+      --accent-secondary: #818cf8;
+      --accent-success: #34d399;
+      --accent-warning: #fbbf24;
+      --accent-glow: rgba(56, 189, 248, 0.25);
+      
+      --pill-bg: rgba(56, 189, 248, 0.12);
+      --pill-border: rgba(56, 189, 248, 0.3);
+      --pill-text: #7dd3fc;
+      --pill-hover-bg: rgba(56, 189, 248, 0.22);
+      
+      --table-th-bg: #1e293b;
+      --table-td-stripe: #0f172a;
+      --table-border: #334155;
+      
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6);
+      --shadow-glow: 0 0 20px rgba(56, 189, 248, 0.25);
+    }
+
+    :root[data-theme="light"] {
+      --bg-base: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-card: #f1f5f9;
+      --bg-card-hover: #e2e8f0;
+      --bg-code: #1e293b;
+      
+      --border-subtle: #e2e8f0;
+      --border-focus: #0284c7;
+      
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-dim: #94a3b8;
+      
+      --accent-primary: #0284c7;
+      --accent-primary-hover: #0369a1;
+      --accent-secondary: #6366f1;
+      --accent-success: #059669;
+      --accent-warning: #d97706;
+      --accent-glow: rgba(2, 132, 199, 0.2);
+      
+      --pill-bg: #e0f2fe;
+      --pill-border: #7dd3fc;
+      --pill-text: #0369a1;
+      --pill-hover-bg: #bae6fd;
+      
+      --table-th-bg: #f1f5f9;
+      --table-td-stripe: #f8fafc;
+      --table-border: #e2e8f0;
+      
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --shadow-glow: 0 0 20px rgba(2, 132, 199, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 15px;
+    }
+
+    body {
+      font-family: 'Pretendard', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      line-height: 1.6;
+      transition: background-color 0.25s ease, color 0.25s ease;
+      min-height: 100vh;
+    }
+
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(17, 24, 39, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+      transition: background-color 0.25s ease;
+    }
+    :root[data-theme="light"] .app-header {
+      background: rgba(255, 255, 255, 0.88);
+    }
+
+    .header-main-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1720px;
+      margin: 0 auto;
+      padding: 0.85rem 1.5rem;
+      gap: 1.5rem;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-icon {
+      font-size: 1.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+    }
+
+    .brand-titles h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+    }
+
+    .brand-titles p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .stats-pill {
+      display: inline-block;
+      padding: 0.15rem 0.55rem;
+      border-radius: 9999px;
+      background: var(--pill-bg);
+      border: 1px solid var(--pill-border);
+      color: var(--pill-text);
+      font-weight: 600;
+      font-size: 0.75rem;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .search-box-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-input {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 0.45rem 0.85rem 0.45rem 2rem;
+      color: var(--text-main);
+      font-size: 0.85rem;
+      outline: none;
+      width: 220px;
+      transition: all 0.2s ease;
+    }
+    .search-input:focus {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+      width: 280px;
+    }
+    .search-icon {
+      position: absolute;
+      left: 0.65rem;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      pointer-events: none;
+    }
+
+    .theme-toggle-btn, .expand-all-btn, .home-hub-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 0.45rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .theme-toggle-btn:hover, .expand-all-btn:hover, .home-hub-btn:hover {
+      background: var(--bg-card);
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+    }
+
+    .steps-nav-bar {
+      display: flex;
+      align-items: center;
+      overflow-x: auto;
+      max-width: 1720px;
+      margin: 0 auto;
+      padding: 0.35rem 1.5rem 0.65rem 1.5rem;
+      gap: 0.6rem;
+      scrollbar-width: thin;
+    }
+    .steps-nav-bar::-webkit-scrollbar {
+      height: 4px;
+    }
+    .steps-nav-bar::-webkit-scrollbar-thumb {
+      background: var(--border-subtle);
+      border-radius: 4px;
+    }
+
+    .step-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 20px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+    .step-nav-item:hover {
+      color: var(--accent-primary);
+      border-color: var(--accent-primary);
+      background: var(--bg-card);
+      transform: translateY(-1px);
+    }
+    .step-nav-item.active {
+      background: var(--accent-primary);
+      color: #ffffff;
+      border-color: var(--accent-primary);
+      box-shadow: 0 2px 8px var(--accent-glow);
+    }
+    .step-nav-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.2);
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+    .nav-note-badge {
+      font-size: 0.7rem;
+      padding: 0.1rem 0.4rem;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .app-main {
+      max-width: 1720px;
+      margin: 1.5rem auto 4rem auto;
+      padding: 0 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    .step-section {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    .step-section:hover {
+      border-color: rgba(56, 189, 248, 0.35);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .step-section-header {
+      padding: 1.25rem 1.75rem;
+      background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-surface) 100%);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .step-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .step-number-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+      color: #ffffff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      border-radius: 6px;
+      letter-spacing: 0.03em;
+    }
+
+    .step-title-text {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.01em;
+    }
+
+    .step-summary-desc {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
+    .step-dual-grid {
+      display: grid;
+      grid-template-columns: 50% 50%;
+      min-height: 480px;
+    }
+    @media (max-width: 1180px) {
+      .step-dual-grid {
+        grid-template-columns: 100%;
+      }
+    }
+
+    .grid-col-code {
+      border-right: 1px solid var(--border-subtle);
+      padding: 1.5rem;
+      background: var(--bg-base);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      overflow-x: hidden;
+    }
+    @media (max-width: 1180px) {
+      .grid-col-code {
+        border-right: none;
+        border-bottom: 2px dashed var(--border-subtle);
+      }
+    }
+
+    .grid-col-notes {
+      padding: 1.5rem;
+      background: var(--bg-surface);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .col-sticky-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-dim);
+      padding-bottom: 0.65rem;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .code-cell-wrapper {
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      background: var(--bg-code);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+
+    .cell-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.45rem 0.85rem;
+      background: rgba(0, 0, 0, 0.25);
+      border-bottom: 1px solid var(--border-subtle);
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+    }
+    .cell-badge {
+      color: var(--accent-primary);
+      font-weight: 600;
+    }
+
+    .cell-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .copy-code-btn {
+      background: transparent;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      border-radius: 4px;
+      padding: 0.15rem 0.5rem;
+      font-size: 0.72rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .copy-code-btn:hover {
+      background: var(--bg-card);
+      color: var(--text-main);
+      border-color: var(--accent-primary);
+    }
+
+    .code-editor-look {
+      padding: 0.85rem 1rem;
+      overflow-x: auto;
+    }
+    .code-editor-look pre {
+      margin: 0;
+      background: transparent !important;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+    .code-editor-look code {
+      font-family: 'Fira Code', monospace;
+      background: transparent !important;
+    }
+
+    .code-kw-interactive {
+      display: inline-block;
+      cursor: pointer;
+      font-weight: 700;
+      color: #38bdf8 !important;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px dashed rgba(56, 189, 248, 0.45);
+      padding: 0.05rem 0.35rem;
+      border-radius: 4px;
+      margin: 0 0.1rem;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .code-kw-interactive:hover {
+      background: rgba(56, 189, 248, 0.3);
+      border-color: #38bdf8;
+      box-shadow: 0 0 10px var(--accent-glow);
+      transform: translateY(-1px);
+    }
+    .code-kw-interactive.active-target {
+      background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+      color: #ffffff !important;
+      border-color: transparent;
+      box-shadow: 0 0 14px var(--accent-glow);
+      animation: pulse-glow 1.5s infinite;
+    }
+    .kw-sparkle {
+      font-size: 0.75em;
+      margin-left: 0.2rem;
+      opacity: 0.8;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 10px var(--accent-glow); }
+      50% { transform: scale(1.04); box-shadow: 0 0 18px var(--accent-glow); }
+    }
+
+    .cell-outputs-container {
+      border-top: 1px solid var(--border-subtle);
+      background: rgba(0, 0, 0, 0.18);
+    }
+
+    .outputs-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.4rem 0.85rem;
+      background: rgba(0, 0, 0, 0.1);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .outputs-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .toggle-output-btn {
+      background: transparent;
+      border: none;
+      color: var(--accent-primary);
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .outputs-body {
+      padding: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .output-type-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-dim);
+      margin-bottom: 0.4rem;
+    }
+
+    .stream-output pre, .text-output pre {
+      background: #090d16;
+      border: 1px solid #1e293b;
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.82rem;
+      color: #38bdf8;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .table-responsive-wrapper {
+      max-width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--table-border);
+      border-radius: 8px;
+      background: var(--bg-surface);
+      box-shadow: var(--shadow-sm);
+    }
+
+    table.modern-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      text-align: right;
+    }
+    table.modern-table th, table.modern-table td {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--table-border);
+      white-space: nowrap;
+    }
+    table.modern-table thead th {
+      background: var(--table-th-bg);
+      color: var(--text-main);
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+    }
+    table.modern-table tbody tr:nth-child(even) {
+      background: var(--table-td-stripe);
+    }
+    table.modern-table tbody tr:hover {
+      background: rgba(56, 189, 248, 0.12);
+    }
+    table.modern-table th:first-child, table.modern-table td:first-child {
+      text-align: center;
+      font-weight: 600;
+      background: var(--table-th-bg);
+    }
+
+    .cell-markdown-box {
+      padding: 0.75rem 1rem;
+      background: var(--bg-card);
+      border-left: 4px solid var(--accent-primary);
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .notes-panel-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .notes-tabs-header {
+      margin-bottom: 1.25rem;
+    }
+
+    .tabs-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent-primary);
+      margin-bottom: 0.65rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .chrono-tag {
+      font-size: 0.72rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-dim);
+      font-weight: normal;
+    }
+
+    .tabs-scroll-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .func-tab-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 0.45rem 0.85rem;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+    }
+    .func-tab-btn:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent-primary);
+      color: var(--text-main);
+    }
+    .func-tab-btn.active {
+      background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+      color: #ffffff;
+      border-color: transparent;
+      box-shadow: 0 4px 12px var(--accent-glow);
+    }
+
+    .notes-panes-wrapper {
+      flex: 1;
+      position: relative;
+    }
+
+    .func-note-pane {
+      display: none;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      animation: fadeIn 0.25s ease-out;
+    }
+    .func-note-pane.active {
+      display: block;
+    }
+    .func-note-pane.highlight-pulse {
+      animation: pulse-border 1.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse-border {
+      0% { box-shadow: 0 0 0 4px var(--accent-primary); border-color: var(--accent-primary); }
+      100% { box-shadow: var(--shadow-sm); border-color: var(--border-subtle); }
+    }
+
+    .note-meta-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding-bottom: 0.85rem;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 1.25rem;
+    }
+
+    .note-target-badge {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .note-target-badge code {
+      font-family: 'Fira Code', monospace;
+      color: var(--accent-primary);
+      background: var(--bg-base);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .note-time-badge {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      background: var(--bg-base);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+    }
+
+    .note-body-content {
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: var(--text-main);
+    }
+
+    .note-h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin: 1rem 0 0.75rem 0;
+    }
+    .note-h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin: 1.2rem 0 0.65rem 0;
+    }
+    .note-h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--accent-primary);
+      margin: 1.4rem 0 0.6rem 0;
+      padding-bottom: 0.3rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .note-h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin: 0.8rem 0 0.4rem 0;
+    }
+
+    .note-p {
+      margin-bottom: 0.85rem;
+    }
+
+    .note-list {
+      margin: 0.5rem 0 1rem 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .note-list-item {
+      list-style-type: disc;
+    }
+
+    .inline-code {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85em;
+      background: var(--bg-base);
+      color: var(--accent-primary);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .note-code-block {
+      background: var(--bg-code);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+      margin: 0.85rem 0;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.84rem;
+      overflow-x: auto;
+    }
+
+    .note-divider {
+      border: none;
+      height: 1px;
+      background: var(--border-subtle);
+      margin: 1.25rem 0;
+    }
+
+    .note-footer-actions {
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px dashed var(--border-subtle);
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .jump-to-code-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      color: var(--accent-primary);
+      padding: 0.35rem 0.75rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .jump-to-code-btn:hover {
+      background: var(--accent-primary);
+      color: #ffffff;
+      border-color: var(--accent-primary);
+    }
+
+    .toast-msg {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--text-main);
+      color: var(--bg-base);
+      padding: 0.65rem 1.25rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      box-shadow: var(--shadow-lg);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.25s ease;
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .toast-msg.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="app-header">
+    <div class="header-main-bar">
+      <div class="brand-wrap">
+        <div class="brand-icon">📈</div>
+        <div class="brand-titles">
+          <h1>10. 머신러닝 기초: 분류 성능 지표 (Classification Metrics)</h1>
+          <p>
+            <span>인터랙티브 듀얼 학습 뷰어</span>
+            <span class="stats-pill">4개 파이프라인 단계</span>
+            <span class="stats-pill">22개 AI 해설 노트 (시간순)</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <a href="../index.html" class="home-hub-btn" title="메인 학습 포털로 이동">🏠 메인 포털</a>
+        <div class="search-box-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="global-search" class="search-input" placeholder="함수 검색 (ex: matrix, f1...)" oninput="filterFunctions(this.value)" />
+        </div>
+        <button class="expand-all-btn" onclick="toggleAllOutputs()">결과 전체 펼치기</button>
+        <button class="theme-toggle-btn" id="theme-btn" onclick="toggleTheme()">☀️ 테마 전환</button>
+      </div>
+    </div>
+
+    <nav class="steps-nav-bar" id="steps-nav">
+      <a href="#step1" class="step-nav-item" data-step="step1"><span class="step-nav-num">1</span><span class="step-nav-label">Pima 당뇨병 데이터 로드, 레이블 분포 확인 및 층화 분할</span><span class="nav-note-badge">6개 해설</span></a><a href="#step2" class="step-nav-item" data-step="step2"><span class="step-nav-num">2</span><span class="step-nav-label">LogisticRegression 모델 생성, 학습</span><span class="nav-note-badge">3개 해설</span></a><a href="#step3" class="step-nav-item" data-step="step3"><span class="step-nav-num">3</span><span class="step-nav-label">혼동 행렬</span><span class="nav-note-badge">8개 해설</span></a><a href="#step4" class="step-nav-item" data-step="step4"><span class="step-nav-num">4</span><span class="step-nav-label">정확도, 정밀도, 재현율, F1-Score 지표 및 Classification Report 분석</span><span class="nav-note-badge">5개 해설</span></a>
+    </nav>
+  </header>
+
+  <main class="app-main">
+    <section class="step-section" id="step1"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">1단계</span><h2 class="step-title-text">Pima 당뇨병 데이터 로드, 레이블 분포 확인 및 층화 분할 (8:2)</h2></div><p class="step-summary-desc">Pima Indians 당뇨병 데이터셋 CSV를 로드하고, head() 미리보기 및 outcome 타깃 컬럼 확인 후 stratify=y 층화추출 80:20 분할</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 주피터 노트북 실행 코드 및 결과</div><div class="code-cell-wrapper" id="cell-1"><div class="cell-header"><span class="cell-badge">In [1]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.datasets import load_diabetes
+from sklearn.model_selection import <span class="code-kw-interactive" data-step="step1" data-tab="step1-train_test_split-927_175705" data-func="train_test_split" title="💡 클릭하여 우측 'train_test_split' 해설 보기">train_test_split<span class="kw-sparkle">💡</span></span>
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import (
+    confusion_matrix,
+    accuracy_score,
+    precision_score,
+    recall_score,
+    f1_score,
+    classification_report
+)
+import warnings
+warnings.filterwarnings(&#x27;ignore&#x27;)</code></pre></div></div><div class="code-cell-wrapper" id="cell-3"><div class="cell-header"><span class="cell-badge">In [3]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">pima_columns = [&#x27;pregnancies&#x27;, &#x27;glucose&#x27;, &#x27;blood_pressure&#x27;, &#x27;skin_thickness&#x27;, &#x27;insulin&#x27;, &#x27;bmi&#x27;, &#x27;diabetes_pedigree_function&#x27;, &#x27;age&#x27;, &#x27;outcome&#x27;]
+pima_data_url = &#x27;https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.data.csv&#x27;
+df = <span class="code-kw-interactive" data-step="step1" data-tab="step1-pd_read_csv-927_175558" data-func="pd.read_csv" title="💡 클릭하여 우측 'pd.read_csv' 해설 보기">pd.read_csv<span class="kw-sparkle">💡</span></span>(pima_data_url, names=pima_columns)</code></pre></div></div><div class="code-cell-wrapper" id="cell-4"><div class="cell-header"><span class="cell-badge">In [4]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">df.head()</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item html-table-output"><div class="output-type-tag">DataFrame Display</div><div class="table-responsive-wrapper"><table border="1" class="dataframe modern-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>pregnancies</th>
+      <th>glucose</th>
+      <th>blood_pressure</th>
+      <th>skin_thickness</th>
+      <th>insulin</th>
+      <th>bmi</th>
+      <th>diabetes_pedigree_function</th>
+      <th>age</th>
+      <th>outcome</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>6</td>
+      <td>148</td>
+      <td>72</td>
+      <td>35</td>
+      <td>0</td>
+      <td>33.6</td>
+      <td>0.627</td>
+      <td>50</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>85</td>
+      <td>66</td>
+      <td>29</td>
+      <td>0</td>
+      <td>26.6</td>
+      <td>0.351</td>
+      <td>31</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>8</td>
+      <td>183</td>
+      <td>64</td>
+      <td>0</td>
+      <td>0</td>
+      <td>23.3</td>
+      <td>0.672</td>
+      <td>32</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1</td>
+      <td>89</td>
+      <td>66</td>
+      <td>23</td>
+      <td>94</td>
+      <td>28.1</td>
+      <td>0.167</td>
+      <td>21</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0</td>
+      <td>137</td>
+      <td>40</td>
+      <td>35</td>
+      <td>168</td>
+      <td>43.1</td>
+      <td>2.288</td>
+      <td>33</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table></div></div></div></div></div><div class="code-cell-wrapper" id="cell-5"><div class="cell-header"><span class="cell-badge">In [5]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 타겟 변수 확인 (outcome: 0=정상, 1=당뇨병)
+print(df[&#x27;outcome&#x27;].<span class="code-kw-interactive" data-step="step1" data-tab="step1-value_counts-927_175622" data-func="value_counts" title="💡 클릭하여 우측 'value_counts' 해설 보기">value_counts<span class="kw-sparkle">💡</span></span>())</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>outcome
+0    500
+1    268
+Name: count, dtype: int64
+</pre></div></div></div></div><div class="code-cell-wrapper" id="cell-7"><div class="cell-header"><span class="cell-badge">In [7]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># Feature(X)와 Target(y) 분리
+X = <span class="code-kw-interactive" data-step="step1" data-tab="step1-df_drop-927_175634" data-func="df.drop" title="💡 클릭하여 우측 'df.drop' 해설 보기">df.drop<span class="kw-sparkle">💡</span></span>(&#x27;outcome&#x27;, axis=1)
+y = df[&#x27;outcome&#x27;]
+
+# 학습용/테스트용 데이터 분할 (8:2)
+# stratify=y: 타겟 변수의 클래스 비율을 유지하며 분할
+X_train, X_test, y_train, y_test = <span class="code-kw-interactive" data-step="step1" data-tab="step1-train_test_split-927_175705" data-func="train_test_split" title="💡 클릭하여 우측 'train_test_split' 해설 보기">train_test_split<span class="kw-sparkle">💡</span></span>(
+    X, y, test_size=0.2, random_state=42, stratify=y
+)
+
+print(f&quot;학습 데이터: {<span class="code-kw-interactive" data-step="step1" data-tab="step1-X_train_shape-927_175724" data-func="X_train.shape" title="💡 클릭하여 우측 'X_train.shape' 해설 보기">X_train.shape<span class="kw-sparkle">💡</span></span>}&quot;)
+print(f&quot;테스트 데이터: {<span class="code-kw-interactive" data-step="step1" data-tab="step1-X_test_shape-927_175733" data-func="X_test.shape" title="💡 클릭하여 우측 'X_test.shape' 해설 보기">X_test.shape<span class="kw-sparkle">💡</span></span>}&quot;)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>학습 데이터: (614, 8)
+테스트 데이터: (154, 8)
+</pre></div></div></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (MARKDOWN)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (6) <span class="chrono-tag">⏱ 시간순 정렬</span></div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step1" data-tab="step1-pd_read_csv-927_175558" onclick="switchTab('step1', 'step1-pd_read_csv-927_175558')"><span class="tab-func-name">pd.read_csv (데이터 로드)</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-value_counts-927_175622" onclick="switchTab('step1', 'step1-value_counts-927_175622')"><span class="tab-func-name">value_counts (레이블 분포)</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-df_drop-927_175634" onclick="switchTab('step1', 'step1-df_drop-927_175634')"><span class="tab-func-name">df.drop (특성 분리)</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-train_test_split-927_175705" onclick="switchTab('step1', 'step1-train_test_split-927_175705')"><span class="tab-func-name">train_test_split (8:2 층화)</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-X_train_shape-927_175724" onclick="switchTab('step1', 'step1-X_train_shape-927_175724')"><span class="tab-func-name">X_train.shape</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-X_test_shape-927_175733" onclick="switchTab('step1', 'step1-X_test_shape-927_175733')"><span class="tab-func-name">X_test.shape</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step1-pd_read_csv-927_175558"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>pd.read_csv</code></div><div class="note-time-badge">⏱ 2026-09-27 17:55:58</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: pd.read_csv</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 17:55:58</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">pd.read_csv</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">파이썬으로 데이터 분석을 할 때 가장 많이 사용하는 함수 중 하나인 <code class="inline-code">pd.read_csv</code>에 대한 상세 해설입니다. 초보자분들도 쉽게 이해하실 수 있도록 항목별로 나누어 친절하게 설명해 드릴게요!</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">pd.read_csv()</code> 함수는 <strong>컴마(,)로 값이 구분되어 있는 텍스트 파일(CSV 파일)이나 웹상의 데이터셋을 읽어와서 파이썬이 다루기 쉬운 표 형태의 데이터(DataFrame)로 만들어 주는 함수</strong>입니다. 엑셀 파일을 불러오는 것과 비슷한 역할을 한다고 생각하시면 됩니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">제시해주신 코드 <code class="inline-code">pd.read_csv(pima_data_url, names=pima_columns)</code>에는 총 2개의 인자가 전달되었습니다. 각각의 역할은 다음과 같습니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>첫 번째 위치 인자: <code class="inline-code">pima_data_url</code></strong></li>
+<li class="note-list-item"><strong>역할:</strong> 불러올 데이터가 위치한 주소(경로)를 지정합니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 내 컴퓨터(로컬)에 있는 파일의 경로(예: <code class="inline-code">&quot;data/pima.csv&quot;</code>)가 될 수도 있고, 위 코드처럼 인터넷상에 존재하는 <strong>웹 주소(URL)</strong>가 될 수도 있습니다. 판다스는 이 주소에 접속하여 데이터를 다운로드한 뒤 읽어옵니다.</li>
+</ul>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>두 번째 키워드 인자: <code class="inline-code">names=pima_columns</code></strong></li>
+<li class="note-list-item"><strong>역할:</strong> 데이터프레임의 <strong>열 이름(컬럼명)</strong>을 새로 지정해 줍니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 만약 읽어온 원본 데이터 파일에 맨 첫 줄(헤더)에 컬럼 이름이 없거나, 기존 컬럼 이름을 우리가 원하는 이름으로 싹 바꾸고 싶을 때 사용합니다. <code class="inline-code">pima_columns</code>라는 이름의 리스트(예: <code class="inline-code">[&#x27;Pregnancies&#x27;, &#x27;Glucose&#x27;, ...]</code>)를 전달하여 각 열의 이름을 보기 쉽게 붙여주는 것입니다.</li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p"><code class="inline-code">df = pd.read_csv(...)</code> 형태에서 반환되어 <code class="inline-code">df</code> 변수에 저장되는 데이터는 다음과 같습니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>변수명: <code class="inline-code">df</code></strong></li>
+<li class="note-list-item"><strong>데이터 종류:</strong> 판다스의 핵심 자료구조인 <strong>데이터프레임(DataFrame)</strong> 객체입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 엑셀의 스프레드시트처럼 <strong>행(Row)과 열(Column)</strong>로 이루어진 2차원 표 형태의 데이터가 통째로 저장됩니다. 이제 이 <code class="inline-code">df</code> 변수를 이용해 데이터 조회, 통계치 확인, 머신러닝 모델 학습을 위한 데이터 전처리 등을 수행할 수 있게 됩니다.</li>
+</ul>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'pd.read_csv')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step1-value_counts-927_175622"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>value_counts</code></div><div class="note-time-badge">⏱ 2026-09-27 17:56:22</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: value_counts</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 17:56:22</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">value_counts</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">파이썬 데이터 분석에서 가장 유용하게 쓰이는 함수 중 하나인 <code class="inline-code">value_counts()</code>에 대해 초보자의 눈높이에 맞춰 쉽고 명쾌하게 해설해 드릴게요!</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">value_counts()</code>는 판다스(Pandas)의 시리즈(Series, 표의 한 줄/열) 데이터에 들어있는 <strong>각 고유한 값(데이터 종류)의 개수를 세어주는 함수</strong>입니다. 데이터프레임의 특정 열에 어떤 데이터가 몇 개씩 들어있는지(데이터의 분포나 빈도수)를 한눈에 파악할 때 사용합니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">제시해주신 코드 <code class="inline-code">df[&#x27;outcome&#x27;].value_counts()</code>를 보면, 괄호 안(<code class="inline-code">()</code>)에 <strong>아무런 인자도 전달되지 않았습니다.</strong></p>
+<div class="note-empty-line"></div>
+<p class="note-p">이렇게 인자를 비워둘 경우, 함수는 기본값(Default)을 사용하여 다음과 같이 작동합니다:</p>
+<ul class="note-list">
+<li class="note-list-item"><strong>기본 동작</strong>: 데이터의 빈도수(개수)가 <strong>많은 것부터 적은 순서(내림차순)</strong>로 정렬되어 출력됩니다.</li>
+<li class="note-list-item"><em>(참고)</em> 만약 인자를 넣는다면 <code class="inline-code">dropna=False</code>(결측치 포함 여부)나 <code class="inline-code">normalize=True</code>(개수 대신 비율로 출력) 같은 옵션들을 설정할 수 있지만, 현재 코드에서는 기본 설정대로 가장 많이 쓰이는 &#x27;빈도수 순위&#x27;를 출력하게 됩니다.</li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p">이 코드에서는 별도의 변수에 값을 저장(할당)하지 않고, 바로 <code class="inline-code">print()</code> 함수로 감싸서 결과를 화면에 출력하고 있습니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>반환되는 데이터의 형태</strong>: 판다스 <strong>시리즈(Series)</strong> 객체로 반환됩니다.</li>
+<li class="note-list-item"><strong>인덱스(Index)</strong>: 데이터에 들어있던 고유한 값들 (예: <code class="inline-code">outcome</code> 열에 &#x27;성공&#x27;, &#x27;실패&#x27;가 있었다면 인덱스는 &#x27;성공&#x27;, &#x27;실패&#x27;가 됩니다.)</li>
+<li class="note-list-item"><strong>값(Values)</strong>: 각 고유한 값이 등장한 횟수(빈도수)</li>
+<li class="note-list-item"><strong>출력 예시</strong>:</li>
+</ul>
+<pre class="note-code-block"><code class="language-text">  0    300  &lt;-- &#x27;0&#x27;이라는 결과가 300번 등장함
+  1    150  &lt;-- &#x27;1&#x27;이라는 결과가 150번 등장함
+  Name: outcome, dtype: int64</code></pre>
+<div class="note-empty-line"></div>
+<blockquote class="note-quote"><strong>💡 요약하자면:</strong></blockquote>
+<blockquote class="note-quote"><code class="inline-code">df[&#x27;outcome&#x27;]</code> 열에 들어있는 값들의 종류와 각각 몇 개씩 있는지 세어서, 많은 것부터 차례대로 화면에 예쁘게 출력해 주는 코드입니다!</blockquote>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'value_counts')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step1-df_drop-927_175634"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>df.drop</code></div><div class="note-time-badge">⏱ 2026-09-27 17:56:34</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: df.drop</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 17:56:34</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">df.drop</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">파이썬 머신러닝 데이터 분석에서 가장 많이 쓰이는 코드 중 하나인 <code class="inline-code">X = df.drop(&#x27;outcome&#x27;, axis=1)</code>에 대한 상세 해설입니다. 초보자분들께서 이해하기 쉽도록 항목별로 나누어 설명해 드릴게요!</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">df.drop()</code>은 판다스(Pandas) 데이터프레임에서 <strong>특정 행(Row)이나 열(Column)을 삭제(제거)할 때 사용하는 함수</strong>입니다. 주로 머신러닝 모델에 학습시킬 데이터(정답을 제외한 특징 데이터)를 만들 때 정답(Label) 열을 쏙 빼내는 용도로 아주 빈번하게 사용됩니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">작성해주신 코드 <code class="inline-code">df.drop(&#x27;outcome&#x27;, axis=1)</code>에 전달된 두 가지 인자의 역할을 자세히 알아볼까요?</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>첫 번째 인자: <code class="inline-code">&#x27;outcome&#x27;</code> (삭제할 대상)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 지우고 싶은 행이나 열의 <strong>이름(라벨)</strong>을 지정합니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 여기서는 <code class="inline-code">&#x27;outcome&#x27;</code>이라는 이름을 가진 열(Column)을 데이터프레임에서 없애겠다는 뜻입니다. 보통 이 <code class="inline-code">&#x27;outcome&#x27;</code>은 우리가 예측하고자 하는 &#x27;정답(Label)&#x27; 데이터인 경우가 많습니다.</li>
+</ul>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>두 번째 인자: <code class="inline-code">axis=1</code> (방향 설정)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 삭제할 대상이 <strong>행(가로)인지, 열(세로)인지</strong>를 컴퓨터에게 알려주는 길잡이입니다.</li>
+<li class="note-list-item"><strong>의미:</strong></li>
+<li class="note-list-item"><code class="inline-code">axis=0</code> 이면 <strong>행(Row, 가로줄)</strong>을 삭제합니다.</li>
+<li class="note-list-item"><code class="inline-code">axis=1</code> 이면 <strong>열(Column, 세로줄)</strong>을 삭제합니다.</li>
+<li class="note-list-item">따라서 <code class="inline-code">axis=1</code>은 <code class="inline-code">&#x27;outcome&#x27;</code>이라는 <strong>세로 열 전체를 통째로 날려버리라</strong>는 뜻이 됩니다.</li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<ul class="note-list">
+<li class="note-list-item"><strong>할당된 변수: <code class="inline-code">X</code></strong></li>
+</ul>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>반환되는 데이터의 의미:</strong></li>
+<li class="note-list-item">원래 전체 데이터를 담고 있던 <code class="inline-code">df</code>(데이터프레임)에서 정답에 해당하는 <code class="inline-code">&#x27;outcome&#x27;</code> 열만 쏙 빼고 남은 <strong>나머지 모든 열(Column)들의 모음</strong>이 반환되어 변수 <code class="inline-code">X</code>에 저장됩니다.</li>
+<li class="note-list-item">머신러닝에서는 이 <code class="inline-code">X</code>를 <strong>&#x27;특징(Feature) 데이터&#x27;</strong> 또는 <strong>&#x27;독립 변수&#x27;</strong>라고 부르며, 정답을 맞추기 위한 힌트(나이, 성별, 소득 등)들로 이루어진 데이터셋이 됩니다.</li>
+</ul>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'df.drop')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step1-train_test_split-927_175705"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>train_test_split</code></div><div class="note-time-badge">⏱ 2026-09-27 17:57:05</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: train_test_split</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 17:57:05</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">train_test_split</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">안녕하세요! 머신러닝을 공부할 때 가장 많이 마주치는 함수 중 하나인 <code class="inline-code">train_test_split</code>에 대해 초보자의 눈높이에 맞춰 쉽고 명쾌하게 설명해 드리겠습니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">train_test_split</code>은 머신러닝 모델을 학습시키기 위해 가지고 있는 전체 데이터(<code class="inline-code">X</code>, <code class="inline-code">y</code>)를 <strong>공부용 데이터(Train Set)</strong>와 <strong>시험용 데이터(Test Set)</strong>로 무작위로 쪼개주는 함수입니다. (주로 파이썬의 대표적인 머신러닝 라이브러리인 <code class="inline-code">scikit-learn</code>에서 가져와 사용합니다.)</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">코드에서 사용된 5가지 인자가 각각 어떤 역할을 하는지 살펴볼까요?</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">X</code></strong>:</li>
+<li class="note-list-item"><strong>역할:</strong> 모델에게 입력으로 줄 <strong>특징(Feature, 독립변수)</strong> 데이터입니다. (예: 집의 크기, 방 개수, 위치 등)</li>
+<li class="note-list-item"><strong><code class="inline-code">y</code></strong>:</li>
+<li class="note-list-item"><strong>역할:</strong> 모델이 예측해야 할 <strong>정답(Label, 종속변수)</strong> 데이터입니다. (예: 집의 실제 가격)</li>
+<li class="note-list-item"><strong><code class="inline-code">test_size=0.2</code></strong>:</li>
+<li class="note-list-item"><strong>역할:</strong> 전체 데이터를 몇 대 몇의 비율로 나눌지 정합니다.</li>
+<li class="note-list-item"><strong>의미:</strong> <code class="inline-code">0.2</code>는 <strong>20%</strong>를 의미하며, 전체 데이터 중 20%는 시험용(Test)으로 빼놓고, 나머지 80%만 공부용(Train)으로 쓰겠다는 뜻입니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">random_state=42</code></strong>:</li>
+<li class="note-list-item"><strong>역할:</strong> 데이터를 무작위로 섞을 때 사용하는 <strong>&#x27;랜덤 시드(씨앗)&#x27;</strong> 번호입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 컴퓨터가 데이터를 섞을 때 매번 다르게 섞이면 코드를 실행할 때마다 결과가 달라져 디버깅이 어렵습니다. 숫자를 <code class="inline-code">42</code>(어떤 숫자든 상관없음)로 지정해 주면, <strong>코드를 몇 번을 다시 실행해도 항상 똑같은 방식으로 데이터를 섞어줍니다.</strong> (재현성 확보)</li>
+<li class="note-list-item"><strong><code class="inline-code">stratify=y</code></strong>:</li>
+<li class="note-list-item"><strong>역할:</strong> 데이터를 쪼갤 때 정답(<code class="inline-code">y</code>)의 <strong>비율을 골고루 유지</strong>해 주는 기능입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 예를 들어 전체 데이터에 합격자(1)가 10%, 불합격자(0)가 90%라면, 공부용과 시험용 데이터 모두 합격자가 정확히 10%씩 포함되도록 비율을 맞춰줍니다. (치우친 데이터 분할을 방지하는 매우 유용한 옵션입니다.)</li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">3. 📤 반환값 및 할당 변수</h3>
+<p class="note-p">함수가 실행되면 총 4개의 묶음 데이터가 튀어나오는데, 이를 좌변의 변수 4개에 순서대로 쏙쏙 나누어 담는 것을 <strong>&#x27;언패킹(Unpacking)&#x27;</strong>이라고 합니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">X_train</code> (학습용 특징):</strong> 전체 <code class="inline-code">X</code> 데이터의 80%. 모델이 &quot;아, 이런 조건일 때 이렇구나!&quot; 하고 <strong>공부할 때 쓰는 문제지</strong>입니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">X_test</code> (테스트용 특징):</strong> 전체 <code class="inline-code">X</code> 데이터의 20%. 모델이 공부를 다 마친 후, &quot;너 실력 좀 보자!&quot; 하고 <strong>시험을 볼 때 쓰는 문제지</strong>입니다. (정답은 가리고 출제됨)</li>
+<li class="note-list-item"><strong><code class="inline-code">y_train</code> (학습용 정답):</strong> 전체 <code class="inline-code">y</code> 데이터의 80%. <code class="inline-code">X_train</code>에 대응하는 <strong>공부용 정답지</strong>입니다. 모델은 이걸 보며 자신의 오답을 고쳐나갑니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">y_test</code> (테스트용 정답):</strong> 전체 <code class="inline-code">y</code> 데이터의 20%. <code class="inline-code">X_test</code>에 대응하는 <strong>시험용 정답지</strong>입니다. 모델이 시험을 본 후, 점수를 매길 때(채점할 때) 사용합니다.</li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p"><strong>💡 한 줄 요약:</strong></p>
+<p class="note-p">이 코드는 전체 데이터(<code class="inline-code">X</code>, <code class="inline-code">y</code>)를 8:2 비율로 나누되, 정답 비율(<code class="inline-code">stratify</code>)을 유지하면서, 언제 실행해도 똑같이 섞이도록(<code class="inline-code">random_state=42</code>) 공부용 세트(<code class="inline-code">X_train</code>, <code class="inline-code">y_train</code>)와 시험용 세트(<code class="inline-code">X_test</code>, <code class="inline-code">y_test</code>)로 예쁘게 포장해 주는 작업입니다!</p>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'train_test_split')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step1-X_train_shape-927_175724"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>X_train.shape</code></div><div class="note-time-badge">⏱ 2026-09-27 17:57:24</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: X_train.shape</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 17:57:24</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">X_train.shape</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">X_train.shape은 우리가 공부에 사용할 문제집의 전체 규모가 어떻게 되는지, 즉 &#x27;문제집의 가로 세로 크기(몇 문제의 몇 가지 정보가 있는지)&#x27;를 한눈에 확인하고 싶을 때 사용하는 도구예요.</p>
+<div class="note-empty-line"></div>
+<p class="note-p">우리가 새로운 문제집을 풀기 전에 문제가 총 몇 개 들어있고 보기는 몇 개인지 차례를 훑어보는 것처럼, 머신러닝 모델에게 공부를 시키기 전 데이터의 생김새와 크기를 꼼꼼히 점검할 때 쓴답니다.</p>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'X_train.shape')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step1-X_test_shape-927_175733"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>X_test.shape</code></div><div class="note-time-badge">⏱ 2026-09-27 17:57:33</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: X_test.shape</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 17:57:33</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">X_test.shape</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">X_test.shape은 AI 공부에 쓸 시험 문제들이 가로세로 몇 장씩 쌓여 있는지, 즉 데이터의 전체 크기와 모양을 한눈에 알려주는 이름표 같은 역할을 해요.</p>
+<div class="note-empty-line"></div>
+<p class="note-p">우리가 새로운 물건을 사기 전에 가로, 세로, 높이 크기를 먼저 확인해보는 것처럼, 머신러닝 모델에 시험(테스트)을 보기 전 데이터가 우리가 생각한 대로 잘 준비되었는지 확인하고 싶을 때 주로 사용한답니다.</p>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'X_test.shape')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section><section class="step-section" id="step2"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">2단계</span><h2 class="step-title-text">LogisticRegression 모델 생성, 학습 (fit) 및 테스트셋 예측</h2></div><p class="step-summary-desc">LogisticRegression(max_iter=1000) 분류 모델을 학습 데이터에 적합(fit)시키고 테스트셋 X_test에 대한 클래스 예측 수행</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 주피터 노트북 실행 코드 및 결과</div><div class="code-cell-wrapper" id="cell-9"><div class="cell-header"><span class="cell-badge">In [9]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># max_iter=1000: 수렴을 위해 반복 횟수 충분히 설정
+model = <span class="code-kw-interactive" data-step="step2" data-tab="step2-LogisticRegression-927_175749" data-func="LogisticRegression" title="💡 클릭하여 우측 'LogisticRegression' 해설 보기">LogisticRegression<span class="kw-sparkle">💡</span></span>(max_iter=1000, random_state=42)
+<span class="code-kw-interactive" data-step="step2" data-tab="step2-model_fit-927_175803" data-func="model.fit" title="💡 클릭하여 우측 'model.fit' 해설 보기">model.fit<span class="kw-sparkle">💡</span></span>(X_train, y_train)
+
+# 테스트 데이터 예측
+y_pred = <span class="code-kw-interactive" data-step="step2" data-tab="step2-model_predict-927_175820" data-func="model.predict" title="💡 클릭하여 우측 'model.predict' 해설 보기">model.predict<span class="kw-sparkle">💡</span></span>(X_test)</code></pre></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (MARKDOWN)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (3) <span class="chrono-tag">⏱ 시간순 정렬</span></div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step2" data-tab="step2-LogisticRegression-927_175749" onclick="switchTab('step2', 'step2-LogisticRegression-927_175749')"><span class="tab-func-name">LogisticRegression (모델)</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-model_fit-927_175803" onclick="switchTab('step2', 'step2-model_fit-927_175803')"><span class="tab-func-name">model.fit() (학습)</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-model_predict-927_175820" onclick="switchTab('step2', 'step2-model_predict-927_175820')"><span class="tab-func-name">model.predict() (예측)</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step2-LogisticRegression-927_175749"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>LogisticRegression</code></div><div class="note-time-badge">⏱ 2026-09-27 17:57:49</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: LogisticRegression</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 17:57:49</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">LogisticRegression</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">파이썬 머신러닝 라이브러리인 <strong>Scikit-Learn(사이킷런)</strong>에서 사용되는 <code class="inline-code">LogisticRegression</code> 함수에 대한 상세 해설입니다. 초보자의 눈높이에 맞춰 쉽고 명쾌하게 정리해 드릴게요!</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">LogisticRegression</code>은 데이터가 어떤 범주에 속할지 확률을 계산하여 <strong>&#x27;분류(Classification)&#x27;</strong>를 수행하는 대표적인 머신러닝 알고리즘입니다. 이름에 &#x27;Regression(회귀)&#x27;이 들어가지만, 실제로는 <strong>&quot;이것이다/아니다(예: 스팸 메일 판별, 합격/불합격 예측)&quot;</strong>를 맞추는 <strong>분류 문제</strong>에 사용됩니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">제시해주신 코드 <code class="inline-code">model = LogisticRegression(max_iter=1000, random_state=42)</code>에서 사용된 두 가지 인자의 역할은 다음과 같습니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">max_iter=1000</code> (최대 반복 횟수)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 컴퓨터가 정답을 찾아가며 학습(최적화)을 시도하는 최대 횟수를 지정합니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 기본값은 100회인데, 데이터에 따라 100번 만에 정답을 못 찾고 &quot;학습을 다 못 끝냈어요!&quot;라는 경고(ConvergenceWarning)가 뜰 수 있습니다. 이를 방지하기 위해 넉넉하게 <strong>1,000번</strong>까지 학습할 수 있도록 허용해 준 것입니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">random_state=42</code> (랜덤 시드 고정)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 컴퓨터가 난수를 생성할 때 사용하는 &#x27;기준점&#x27;을 고정합니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 머신러닝 모델은 내부적으로 무작위(랜덤) 요소를 사용하는 경우가 많습니다. 이때 <code class="inline-code">random_state</code>에 특정 숫자(여기서는 42)를 지정해주면, <strong>코드를 실행할 때마다 언제나 똑같은 결과</strong>가 나오도록 재현성을 보장해 줍니다. (다른 사람과 결과를 똑같이 맞추고 싶을 때도 필수적입니다!)</li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p">코드에서 반환되어 <code class="inline-code">model</code> 변수에 할당되는 객체에 대한 설명입니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">model</code> (로지스틱 회귀 모델 객체)</strong></li>
+<li class="note-list-item"><strong>이게 무엇인가요?:</strong> 위에서 설정한 옵션(<code class="inline-code">max_iter=1000, random_state=42</code>)을 바탕으로, 앞으로 데이터를 학습하고 예측할 <strong>&#x27;빈 인공지능 뇌(모델)&#x27;</strong>가 만들어져 <code class="inline-code">model</code>이라는 변수에 담긴 것입니다.</li>
+<li class="note-list-item"><strong>앞으로 무엇을 하나요?:</strong> 이 <code class="inline-code">model</code>에 나중에 <code class="inline-code">.fit(X_train, y_train)</code> 코드를 사용해 실제 데이터를 보여주어 학습시키고, <code class="inline-code">.predict()</code> 코드를 사용해 새로운 데이터의 결과를 예측하게 됩니다.</li>
+</ul>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step2', 'LogisticRegression')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step2-model_fit-927_175803"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>model.fit</code></div><div class="note-time-badge">⏱ 2026-09-27 17:58:03</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: model.fit</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 17:58:03</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">model.fit</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">파이썬 머신러닝 코드에서 사용된 <strong><code class="inline-code">model.fit(X_train, y_train)</code></strong>에 대한 상세 해설입니다. 초보자의 눈높이에 맞춰 쉽고 명쾌하게 정리해 드릴게요!</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">model.fit()</code> 함수는 AI(머신러닝 모델)에게 <strong>&quot;문제집(<code class="inline-code">X_train</code>)과 정답지(<code class="inline-code">y_train</code>)를 줄 테니 열심히 공부해서 패턴을 찾아내라&quot;</strong>고 명령하는 <strong>학습(Training) 함수</strong>입니다. 이 과정을 거쳐야 모델이 비로소 데이터를 이해하고 예측할 수 있게 됩니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">괄호 안에 들어간 <code class="inline-code">X_train</code>과 <code class="inline-code">y_train</code>은 모델을 가르치기 위해 준비한 &#x27;학습용 데이터&#x27;입니다. 각각의 역할은 다음과 같습니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">X_train</code> (학습용 문제 데이터, Feature)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 모델이 학습할 <strong>&#x27;독립변수(특징, Feature)&#x27;</strong>들입니다. 보통 엑셀 표처럼 행과 열로 이루어진 2차원 데이터(데이터프레임 또는 넘파이 배열) 형태입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 집값 예측이라면 &#x27;방 개수, 평수, 지역&#x27; 같은 정보들이 여기에 해당합니다. 모델에게 &quot;이런 조건들을 보고 판단해 봐&quot; 하고 던져주는 문제입니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">y_train</code> (학습용 정답 데이터, Label/Target)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> <code class="inline-code">X_train</code>에 대응하는 <strong>&#x27;종속변수(정답, Label)&#x27;</strong>입니다. 결과값이 들어 있는 1차원 데이터(시리즈 또는 배열) 형태입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 집값 예측이라면 &#x27;실제 집값&#x27;이 여기에 해당합니다. 모델에게 &quot;방이 3개고 30평인 이 집의 진짜 정답(가격)은 이거야&quot;라고 알려주는 정답지입니다.</li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<blockquote class="note-quote">💡 <strong>참고 (중요한 차이점):</strong> 질문에서 언급하신 <code class="inline-code">train_test_split</code> 같은 함수와 달리, <strong><code class="inline-code">model.fit()</code>은 새로운 변수에 값을 담아 반환(Return)하지 않습니다.</strong></blockquote>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>동작 방식:</strong> <code class="inline-code">model.fit(X_train, y_train)</code>은 새로운 데이터를 만들어내는 것이 아니라, <strong>이미 내 컴퓨터 메모리에 만들어져 있는 <code class="inline-code">model</code>이라는 객체(인스턴스)의 내부 상태를 직접 업데이트(수정)</strong>합니다.</li>
+<li class="note-list-item"><strong>결과적으로:</strong> 코드를 실행하고 나면, <code class="inline-code">model</code> 자체가 &#x27;공부가 완료된 똑똑한 상태(학습된 모델)&#x27;로 변신하게 됩니다.</li>
+<li class="note-list-item"><strong>이후 활용:</strong> 학습이 끝난 모델은 나중에 <code class="inline-code">model.predict(X_test)</code> 같은 함수를 통해 새로운 문제를 풀 때 사용됩니다.</li>
+</ul>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step2', 'model.fit')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step2-model_predict-927_175820"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>model.predict</code></div><div class="note-time-badge">⏱ 2026-09-27 17:58:20</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: model.predict</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 17:58:20</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">model.predict</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">파이썬 머신러닝/딥러닝 코드에서 가장 흔하게 쓰이는 <strong><code class="inline-code">y_pred = model.predict(X_test)</code></strong> 문장에 대한 상세 해설입니다. 초보자의 눈높이에 맞춰 하나씩 친절하게 풀어드릴게요!</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">model.predict()</code>는 <strong>학습이 완료된 인공지능(모델)에게 새로운 질문(문제)을 던지고, 그에 대한 예상 답안(예측값)을 받아내는 함수</strong>입니다.</p>
+<p class="note-p">학생이 공부(학습)를 끝낸 뒤 모의고사(테스트 데이터)를 보고 정답을 적어내는 과정과 같습니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">이 코드에서 괄호 안(<code class="inline-code">(...)</code>)에 들어간 인자는 다음과 같습니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">X_test</code> (테스트 데이터의 특징/문제집)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 모델이 한 번도 보지 못한 <strong>새로운 테스트 데이터의 입력값</strong>입니다. 보통 &#x27;특징(Feature)&#x27;이라고 부르며, 2차원 표(데이터프레임 또는 배열) 형태를 가집니다.</li>
+<li class="note-list-item"><strong>설정된 값의 의미:</strong> 이미 훈련에 사용하지 않고 아껴둔 시험용 데이터(<code class="inline-code">X_test</code>)를 모델에게 건네주어, &quot;이 데이터의 결과를 맞춰봐&quot;라고 지시하는 것입니다.</li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p">등호(<code class="inline-code">=</code>) 왼쪽에 있는 변수는 함수가 실행된 후 돌려주는 결과를 받아오는 역할을 합니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">y_pred</code> (예측된 정답 데이터)</strong></li>
+<li class="note-list-item"><strong>설명:</strong> 모델이 <code class="inline-code">X_test</code>를 바탕으로 <strong>스스로 예측해 낸 결과값(Prediction)</strong>이 담기는 변수입니다.</li>
+<li class="note-list-item"><strong>데이터의 형태:</strong> 집값 예측이라면 &#x27;예측된 가격(숫자)&#x27;들이 들어가고, 스팸 메일 분류라면 &#x27;스팸인지 아닌지(0 또는 1)&#x27;와 같은 분류 결과가 1차원 배열 형태로 저장됩니다.</li>
+<li class="note-list-item"><strong>활용:</strong> 이 <code class="inline-code">y_pred</code>와 실제 정답인 <code class="inline-code">y_test</code>를 비교하여 모델이 얼마나 맞췄는지 성능(정확도 등)을 평가하게 됩니다.</li>
+</ul>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step2', 'model.predict')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section><section class="step-section" id="step3"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">3단계</span><h2 class="step-title-text">혼동 행렬(Confusion Matrix) 계산, TP/TN/FP/FN 분해 및 Seaborn 히트맵 시각화</h2></div><p class="step-summary-desc">confusion_matrix를 산출하고 cm.ravel()로 TN, FP, FN, TP 값을 도출한 후 Seaborn heatmap으로 직관적 오차 행렬 시각화</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 주피터 노트북 실행 코드 및 결과</div><div class="code-cell-wrapper" id="cell-11"><div class="cell-header"><span class="cell-badge">In [11]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 혼동 행렬 계산
+cm = <span class="code-kw-interactive" data-step="step3" data-tab="step3-confusion_matrix-927_175841" data-func="confusion_matrix" title="💡 클릭하여 우측 'confusion_matrix' 해설 보기">confusion_matrix<span class="kw-sparkle">💡</span></span>(y_test, y_pred)
+
+# 혼동 행렬 값 추출 (TP, TN, FP, FN)
+# sklearn의 <span class="code-kw-interactive" data-step="step3" data-tab="step3-confusion_matrix-927_175841" data-func="confusion_matrix" title="💡 클릭하여 우측 'confusion_matrix' 해설 보기">confusion_matrix<span class="kw-sparkle">💡</span></span>는 [[TN, FP], [FN, TP]] 순서로 반환함
+tn, fp, fn, tp = <span class="code-kw-interactive" data-step="step3" data-tab="step3-cm_ravel-927_175859" data-func="cm.ravel" title="💡 클릭하여 우측 'cm.ravel' 해설 보기">cm.ravel<span class="kw-sparkle">💡</span></span>()
+
+print(f&quot;True Negative (TN): {tn}&quot;)
+print(f&quot;False Positive (FP): {fp} (Type I Error)&quot;)
+print(f&quot;False Negative (FN): {fn} (Type II Error)&quot;)
+print(f&quot;True Positive (TP): {tp}&quot;)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>True Negative (TN): 82
+False Positive (FP): 18 (Type I Error)
+False Negative (FN): 26 (Type II Error)
+True Positive (TP): 28
+</pre></div></div></div></div><div class="code-cell-wrapper" id="cell-12"><div class="cell-header"><span class="cell-badge">In [12]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 혼동 행렬 시각화
+<span class="code-kw-interactive" data-step="step3" data-tab="step3-plt_figure-927_175957" data-func="plt.figure" title="💡 클릭하여 우측 'plt.figure' 해설 보기">plt.figure<span class="kw-sparkle">💡</span></span>(figsize=(5, 4))
+<span class="code-kw-interactive" data-step="step3" data-tab="step3-sns_heatmap-927_180013" data-func="sns.heatmap" title="💡 클릭하여 우측 'sns.heatmap' 해설 보기">sns.heatmap<span class="kw-sparkle">💡</span></span>(cm, annot=True, fmt=&#x27;d&#x27;, cmap=&#x27;Blues&#x27;, cbar=False,
+            xticklabels=[&#x27;Predicted Negative (0)&#x27;, &#x27;Predicted Positive (1)&#x27;],
+            yticklabels=[&#x27;Actual Negative (0)&#x27;, &#x27;Actual Positive (1)&#x27;])
+<span class="code-kw-interactive" data-step="step3" data-tab="step3-plt_title-927_180025" data-func="plt.title" title="💡 클릭하여 우측 'plt.title' 해설 보기">plt.title<span class="kw-sparkle">💡</span></span>(&#x27;Confusion Matrix&#x27;)
+<span class="code-kw-interactive" data-step="step3" data-tab="step3-plt_xlabel-927_180036" data-func="plt.xlabel" title="💡 클릭하여 우측 'plt.xlabel' 해설 보기">plt.xlabel<span class="kw-sparkle">💡</span></span>(&#x27;Predicted Label&#x27;)
+<span class="code-kw-interactive" data-step="step3" data-tab="step3-plt_ylabel-927_180101" data-func="plt.ylabel" title="💡 클릭하여 우측 'plt.ylabel' 해설 보기">plt.ylabel<span class="kw-sparkle">💡</span></span>(&#x27;True Label&#x27;)
+<span class="code-kw-interactive" data-step="step3" data-tab="step3-plt_show-927_180130" data-func="plt.show" title="💡 클릭하여 우측 'plt.show' 해설 보기">plt.show<span class="kw-sparkle">💡</span></span>()</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item plot-image-output"><div class="output-type-tag">Visual Plot</div><div class="plot-img-container"><img src="data:image/png;base64,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
+" class="zoomable-plot" alt="Visualization plot" /></div></div></div></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (MARKDOWN)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (8) <span class="chrono-tag">⏱ 시간순 정렬</span></div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step3" data-tab="step3-confusion_matrix-927_175841" onclick="switchTab('step3', 'step3-confusion_matrix-927_175841')"><span class="tab-func-name">confusion_matrix (혼동행렬)</span></button><button class="func-tab-btn " data-step="step3" data-tab="step3-cm_ravel-927_175859" onclick="switchTab('step3', 'step3-cm_ravel-927_175859')"><span class="tab-func-name">cm.ravel() (TN,FP,FN,TP)</span></button><button class="func-tab-btn " data-step="step3" data-tab="step3-plt_figure-927_175957" onclick="switchTab('step3', 'step3-plt_figure-927_175957')"><span class="tab-func-name">plt.figure (캔버스)</span></button><button class="func-tab-btn " data-step="step3" data-tab="step3-sns_heatmap-927_180013" onclick="switchTab('step3', 'step3-sns_heatmap-927_180013')"><span class="tab-func-name">sns.heatmap (히트맵)</span></button><button class="func-tab-btn " data-step="step3" data-tab="step3-plt_title-927_180025" onclick="switchTab('step3', 'step3-plt_title-927_180025')"><span class="tab-func-name">plt.title (제목)</span></button><button class="func-tab-btn " data-step="step3" data-tab="step3-plt_xlabel-927_180036" onclick="switchTab('step3', 'step3-plt_xlabel-927_180036')"><span class="tab-func-name">plt.xlabel (X축)</span></button><button class="func-tab-btn " data-step="step3" data-tab="step3-plt_ylabel-927_180101" onclick="switchTab('step3', 'step3-plt_ylabel-927_180101')"><span class="tab-func-name">plt.ylabel (Y축)</span></button><button class="func-tab-btn " data-step="step3" data-tab="step3-plt_show-927_180130" onclick="switchTab('step3', 'step3-plt_show-927_180130')"><span class="tab-func-name">plt.show() (출력)</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step3-confusion_matrix-927_175841"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>confusion_matrix</code></div><div class="note-time-badge">⏱ 2026-09-27 17:58:41</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: confusion_matrix</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 17:58:41</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">confusion_matrix</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">안녕하세요! 머신러닝을 공부할 때 가장 중요하고 자주 쓰이는 <strong><code class="inline-code">confusion_matrix</code></strong> 함수에 대해 초보자의 눈높이에 맞춰 아주 쉽게 정리해 드릴게요.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">confusion_matrix</code>(오차 행렬 또는 혼동 행렬)는 <strong>인공지능(모델)이 예측한 결과가 실제 정답과 얼마나 일치하는지를 2차원 표(행렬) 형태로 보여주는 함수</strong>입니다. 모델이 무엇을 맞혔고, 무엇을 틀렸는지(어떤 클래스로 헷갈렸는지) 한눈에 파악할 수 있게 도와줍니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">제시해주신 코드 <code class="inline-code">confusion_matrix(y_test, y_pred)</code>에서 사용된 두 가지 입력 인자의 역할은 다음과 같습니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">y_test</code> (첫 번째 인자)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 머신러닝 모델에게 보여준 적 없는 <strong>&#x27;실제 정답&#x27;</strong> 데이터입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 테스트 데이터셋의 진짜 레이블(Label)들이 들어 있으며, 모델의 성적을 채점하기 위한 &#x27;정답지&#x27; 역할을 합니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">y_pred</code> (두 번째 인자)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 모델이 <code class="inline-code">y_test</code>를 보고 <strong>&#x27;예측한 값&#x27;</strong>입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 테스트 데이터셋을 입력받은 모델이 &quot;이 데이터는 이럴 것이다!&quot;라고 결론 내린 &#x27;학생의 답안지&#x27; 역할을 합니다.</li>
+</ul>
+<div class="note-empty-line"></div>
+<blockquote class="note-quote">💡 <strong>정리하자면:</strong> <code class="inline-code">confusion_matrix(정답지, 답안지)</code> 순서로 입력하여, &quot;진짜 정답(<code class="inline-code">y_test</code>)과 모델이 쓴 답(<code class="inline-code">y_pred</code>)을 비교해 줘!&quot;라고 명령하는 것입니다.</blockquote>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p">함수가 실행된 후 결과를 담는 변수 <code class="inline-code">cm</code>에 대한 설명입니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">cm</code> (Confusion Matrix의 약자)</strong></li>
+<li class="note-list-item"><strong>반환되는 데이터:</strong> 2차원 NumPy 배열(Array) 형태의 <strong>오차 행렬 표</strong>가 반환됩니다.</li>
+<li class="note-list-item"><strong>상세 설명:</strong> 이진 분류(맞다/틀리다)인 경우 보통 $2 \times 2$ 크기의 표가 만들어집니다.</li>
+<li class="note-list-item"><strong>[0행 0열]:</strong> 실제로 &#x27;아니오(0)&#x27;인데, 모델도 &#x27;아니오(0)&#x27;로 잘 맞춘 개수 (TN)</li>
+<li class="note-list-item"><strong>[0행 1열]:</strong> 실제로 &#x27;아니오(0)&#x27;인데, 모델이 &#x27;예(1)&#x27;라고 잘못 예측한 개수 (FP)</li>
+<li class="note-list-item"><strong>[1행 0열]:</strong> 실제로 &#x27;예(1)&#x27;인데, 모델이 &#x27;아니오(0)&#x27;라고 잘못 예측한 개수 (FN)</li>
+<li class="note-list-item"><strong>[1행 1열]:</strong> 실제로 &#x27;예(1)&#x27;인데, 모델도 &#x27;예(1)&#x27;로 잘 맞춘 개수 (TP)</li>
+<li class="note-list-item">이 변수(<code class="inline-code">cm</code>)를 출력해 보면 우리 모델이 어느 부분에서 강하고, 어떤 실수를 자주 하는지 구체적인 수치로 확인할 수 있습니다.</li>
+</ul>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step3', 'confusion_matrix')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step3-cm_ravel-927_175859"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>cm.ravel</code></div><div class="note-time-badge">⏱ 2026-09-27 17:58:59</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: cm.ravel</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 17:58:59</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">cm.ravel</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">안녕하세요! 파이썬을 배우시면서 헷갈릴 수 있는 부분을 아주 쉽게 비유해서 설명해 드릴게요.</p>
+<div class="note-empty-line"></div>
+<p class="note-p">&#x27;cm.ravel()&#x27;은 인공지능이 문제를 맞춘 결과를 모아놓은 커다란 네모 상자(혼동 행렬)를 한 줄로 쭉 펼쳐서, 네 개의 칸을 각각 낱개로 꺼내 쓰기 쉽게 정리해 주는 역할을 해요. 마치 여러 칸으로 나뉜 달걀 판을 한 줄로 길게 쫙 펼쳐서, 네 개의 달걀(맞춘 것과 틀린 것들)을 하나씩 쏙쏙 집어내기 편하게 만들어 주는 것과 같아요. 인공지능 모델의 성능을 평가할 때 맞은 개수와 틀린 개수를 각각 4개의 변수에 척척 담아서 한눈에 확인하고 싶을 때 주로 쓴답니다.</p>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step3', 'cm.ravel')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step3-plt_figure-927_175957"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>plt.figure</code></div><div class="note-time-badge">⏱ 2026-09-27 17:59:57</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: plt.figure</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 17:59:57</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">plt.figure</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">파이썬의 데이터 시각화 라이브러리인 <strong>Matplotlib</strong>에서 가장 자주 쓰이는 <code class="inline-code">plt.figure</code> 함수에 대한 상세 해설입니다. 초보자분들이 쉽게 이해하실 수 있도록 요청하신 항목별로 정리해 드립니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">plt.figure</code>는 파이썬에서 그래프(그림판)를 새로 그리거나, 그릴 도화지의 전체적인 크기와 속성을 설정할 때 사용하는 함수입니다. 새로운 그림판(캔버스)을 펴는 역할을 한다고 이해하시면 됩니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">제시된 코드 <code class="inline-code">plt.figure(figsize=(5, 4))</code>에서 사용된 인자의 역할과 의미는 다음과 같습니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">figsize</code> (도화지 크기 설정)</strong></li>
+<li class="note-list-item"><strong>설정값:</strong> <code class="inline-code">(5, 4)</code></li>
+<li class="note-list-item"><strong>의미:</strong> 생성할 그래프(도화지)의 가로와 세로 크기를 인치(inch) 단위로 설정합니다.</li>
+<li class="note-list-item"><strong>상세 설명:</strong></li>
+<li class="note-list-item">첫 번째 값 <code class="inline-code">5</code>는 <strong>가로 길이(5인치)</strong>, 두 번째 값 <code class="inline-code">4</code>는 <strong>세로 길이(4인치)</strong>를 의미합니다.</li>
+<li class="note-list-item">이 값을 조절하여 그래프를 더 넓게 만들거나 정사각형 모양에 가깝게 만들 수 있습니다. (예: <code class="inline-code">(10, 6)</code>으로 바꾸면 더 큰 그래프가 만들어집니다.)</li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<ul class="note-list">
+<li class="note-list-item"><strong>해당 코드의 반환 방식:</strong></li>
+<li class="note-list-item">제시된 코드(<code class="inline-code">plt.figure(figsize=(5, 4))</code>)는 별도의 변수에 값을 대입(할당)하지 않고, 단독으로 호출되었습니다.</li>
+<li class="note-list-item">이 경우, 파이썬은 <strong>기본 도화지(Figure 객체)</strong>를 메모리상에 생성하고 활성화(Active) 상태로 만듭니다. 그 다음에 작성되는 <code class="inline-code">plt.plot()</code>이나 <code class="inline-code">plt.scatter()</code> 같은 시각화 함수들은 자동으로 이 도화지 위에 그려지게 됩니다.</li>
+<li class="note-list-item"><strong>참고 (변수에 할당하는 경우):</strong></li>
+<li class="note-list-item">만약 <code class="inline-code">fig = plt.figure(figsize=(5, 4))</code>와 같이 변수에 담는다면, <code class="inline-code">fig</code>라는 변수에는 방금 만든 <strong>도화지(Figure) 객체</strong>가 저장됩니다. 이를 통해 나중에 도화지의 세부 설정을 바꾸거나 이미지 파일로 저장(<code class="inline-code">fig.savefig()</code>)할 때 유용하게 사용할 수 있습니다.</li>
+</ul>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step3', 'plt.figure')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step3-sns_heatmap-927_180013"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>sns.heatmap</code></div><div class="note-time-badge">⏱ 2026-09-27 18:00:13</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: sns.heatmap</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 18:00:13</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">sns.heatmap</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">파이썬 코드에서 사용된 <code class="inline-code">sns.heatmap</code> 함수와 전달된 인자들에 대해 초보자의 눈높이에 맞춰 쉽고 명쾌하게 해설해 드리겠습니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">sns.heatmap</code>은 파이썬의 데이터 시각화 라이브러리인 <strong>Seaborn</strong>에서 제공하는 함수로, <strong>행렬 형태의 숫자 데이터를 색상의 강도로 표현하여 2차원 히트맵(Heatmap) 그래프로 그려주는 역할</strong>을 합니다. 주로 머신러닝의 성능을 평가할 때 사용하는 <strong>혼동 행렬(Confusion Matrix)</strong>을 시각화할 때 가장 많이 쓰입니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">코드에 전달된 6개의 인자가 각각 어떤 의미를 가지고 있는지 하나씩 살펴보겠습니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">cm</code> (첫 번째 위치 인자)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 시각화할 원본 데이터입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 보통 2차원 배열 형태의 <strong>혼동 행렬(Confusion Matrix)</strong> 데이터가 들어갑니다. 모델이 예측한 결과와 실제 정답을 비교한 숫자 데이터가 이 행렬에 담겨 있습니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">annot=True</code></strong></li>
+<li class="note-list-item"><strong>역할:</strong> 각 칸(셀) 안에 실제 숫자(데이터 값)를 표시할지 여부입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> <code class="inline-code">True</code>로 설정했기 때문에, 색상만 채워지는 것이 아니라 <strong>각 칸마다 정확한 숫자 값(예: 50, 10 등)이 텍스트로 함께 출력</strong>됩니다. 숫자가 같이 보여야 직관적으로 분석하기 좋습니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">fmt=&#x27;d&#x27;</code></strong></li>
+<li class="note-list-item"><strong>역할:</strong> 셀에 표시되는 숫자의 형식(Format)을 지정합니다.</li>
+<li class="note-list-item"><strong>의미:</strong> <code class="inline-code">&#x27;d&#x27;</code>는 <strong>정수(Integer)</strong>를 의미합니다. 혼동 행렬의 데이터는 개수(몇 개 맞췄는지 등)를 세는 것이므로 소수점 없이 깔끔한 정수로 표시하겠다는 뜻입니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">cmap=&#x27;Blues&#x27;</code></strong></li>
+<li class="note-list-item"><strong>역할:</strong> 히트맵의 색상 팔레트(Colormap)를 지정합니다.</li>
+<li class="note-list-item"><strong>의미:</strong> <code class="inline-code">&#x27;Blues&#x27;</code>는 파란색 계열을 의미합니다. <strong>숫자가 클수록(데이터가 많을수록) 더 진한 파란색</strong>으로 칠해져서 한눈에 어떤 결과가 많은지 쉽게 알아볼 수 있습니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">cbar=False</code></strong></li>
+<li class="note-list-item"><strong>역할:</strong> 오른쪽에 색상의 의미를 알려주는 막대(Colorbar)를 표시할지 여부입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> <code class="inline-code">False</code>로 설정하여 <strong>색상 막대를 숨겼습니다.</strong> 혼동 행렬의 경우 굳이 컬러바가 없어도 직관적으로 이해할 수 있기 때문에 깔끔한 출력을 위해주로 숨깁니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">xticklabels=[&#x27;Predicted Negative (0)&#x27;, &#x27;Predicted Positive (1)&#x27;]</code></strong></li>
+<li class="note-list-item"><strong>역할:</strong> X축(가로축) 눈금의 이름(라벨)을 직접 지정합니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 모델이 <strong>예측한(Predicted)</strong> 값의 이름을 설정한 것으로, 왼쪽은 &#x27;예측 부정(0)&#x27;, 오른쪽은 &#x27;예측 긍정(1)&#x27;으로 축의 이름을 보기 쉽게 바꿔줍니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">yticklabels=[&#x27;Actual Negative (0)&#x27;, &#x27;Actual Positive (1)&#x27;]</code></strong></li>
+<li class="note-list-item"><strong>역할:</strong> Y축(세로축) 눈금의 이름(라벨)을 직접 지정합니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 데이터의 <strong>실제(Actual)</strong> 정답 값을 의미하며, 위쪽은 &#x27;실제 부정(0)&#x27;, 아래쪽은 &#x27;실제 긍정(1)&#x27;으로 축의 이름을 보기 쉽게 설정합니다.</li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<blockquote class="note-quote">💡 <strong>참고:</strong> 질문하신 내용 중 <code class="inline-code">train_test_split</code>의 반환값에 대한 언급이 있으셨으나, <strong>현재 보여주신 <code class="inline-code">sns.heatmap</code> 코드에는 변수에 결과를 할당하는 부분이 없습니다.</strong></blockquote>
+<div class="note-empty-line"></div>
+<p class="note-p"><code class="inline-code">sns.heatmap</code> 함수는 데이터를 별도의 변수로 쪼개어 반환(Unpacking)하는 함수가 아니라, <strong>그림(Axes 객체)을 그려서 화면에 띄워주는 시각화 함수</strong>입니다.</p>
+<div class="note-empty-line"></div>
+<p class="note-p">따라서 이 코드가 실행되면 별도의 변수가 생성되는 대신, <strong>Jupyter Notebook이나 파이썬 실행 창에 예측 결과와 실제 정답을 비교하는 멋지고 직관적인 파란색 격자 모양의 표(혼동 행렬 시각화 그래프)가 즉시 출력</strong>되게 됩니다.</p>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step3', 'sns.heatmap')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step3-plt_title-927_180025"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>plt.title</code></div><div class="note-time-badge">⏱ 2026-09-27 18:00:25</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: plt.title</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 18:00:25</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">plt.title</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">파이썬의 시각화 라이브러리인 맷플롯립(Matplotlib)에서 사용되는 <code class="inline-code">plt.title()</code> 함수에 대한 상세 해설입니다. 초보자분들도 쉽게 이해하실 수 있도록 요청하신 항목별로 친절하게 정리해 드립니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">plt.title()</code>은 현재 그려지고 있는 그래프의 <strong>상단 중앙에 제목(Title)을 달아주는 함수</strong>입니다. 그래프가 무엇을 나타내는지 시각적으로 쉽게 알아볼 수 있도록 이름을 붙여줄 때 사용합니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">제시해주신 코드 <code class="inline-code">plt.title(&#x27;Confusion Matrix&#x27;)</code>에서 사용된 인자는 다음과 같습니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">&#x27;Confusion Matrix&#x27;</code> (문자열, 문자)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 그래프의 제목으로 표시할 텍스트를 전달합니다.</li>
+<li class="note-list-item"><strong>설정된 값의 의미:</strong> &#x27;오차 행렬&#x27; 또는 &#x27;혼동 행렬&#x27;이라는 뜻으로, 머신러닝 분류 모델이 예측한 결과가 실제 정답과 얼마나 일치하는지(맞았는지 틀렸는지)를 보여주는 행렬 그래프임을 나타냅니다.</li>
+</ul>
+<div class="note-empty-line"></div>
+<p class="note-p"><em>(참고: 이외에도 글자 크기를 키우는 <code class="inline-code">fontsize</code>, 글자 색상을 바꾸는 <code class="inline-code">color</code>, 위치를 조정하는 <code class="inline-code">loc</code> 등 다양한 추가 인자를 함께 사용할 수 있습니다.)</em></p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p"><code class="inline-code">plt.title()</code> 함수는 화면의 그래프 객체에 제목을 추가하는 <strong>시각화 설정 작업</strong>을 수행합니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>반환값 여부:</strong> 이 함수는 데이터를 따로 반환하거나 변수에 대입해서 사용하는 함수가 아닙니다. 따라서 <code class="inline-code">=</code> 기호를 사용하여 변수에 값을 할당하지 않고, 단독으로 호출하여 사용합니다. (화면이나 메모리 상의 그래프에 직접 제목을 슥~ 써주는 역할만 하고 끝납니다.)</li>
+</ul>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step3', 'plt.title')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step3-plt_xlabel-927_180036"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>plt.xlabel</code></div><div class="note-time-badge">⏱ 2026-09-27 18:00:36</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: plt.xlabel</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 18:00:36</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">plt.xlabel</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">안녕하세요! 파이썬 데이터 시각화에서 가장 많이 쓰이는 <code class="inline-code">plt.xlabel</code> 함수에 대해 초보자의 눈높이에 맞춰 아주 쉽고 명쾌하게 설명해 드리겠습니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">plt.xlabel()</code>은 맷플롯립(Matplotlib) 그래프에서 <strong>X축(가로축)의 이름(라벨)</strong>을 지정해 주는 함수입니다. 그래프를 보는 사람이 X축이 무엇을 나타내는지 직관적으로 이해할 수 있도록 도와줍니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">제시해주신 코드 <code class="inline-code">plt.xlabel(&#x27;Predicted Label&#x27;)</code>에 전달된 인자의 의미는 다음과 같습니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">&#x27;Predicted Label&#x27;</code> (문자열, string)</strong></li>
+<li class="note-list-item"><strong>역할</strong>: X축에 표시될 텍스트를 지정합니다.</li>
+<li class="note-list-item"><strong>설정된 값의 의미</strong>: 머신러닝 모델이 <strong>&#x27;예측한 라벨(값)&#x27;</strong>을 X축에 나타내겠다는 뜻입니다. (주로 오차 행렬(Confusion Matrix) 등의 시각화에서 예측값을 X축에 둘 때 사용됩니다.)</li>
+<li class="note-list-item"><em>(참고)</em> 이 외에도 글자 크기를 바꾸는 <code class="inline-code">fontsize=12</code>, 글자 색상을 바꾸는 <code class="inline-code">color=&#x27;red&#x27;</code> 등 다양한 추가 인자를 함께 사용할 수 있습니다.</li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p"><code class="inline-code">plt.xlabel()</code> 함수는 데이터를 가공하여 변수에 담아주는 함수가 아닙니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>반환값 없음 (<code class="inline-code">None</code>)</strong>: 이 함수는 화면에 X축 이름을 그려주는(출력하는) 역할만 수행하므로, 별도로 변수에 값을 할당해 주거나 언패킹(Unpacking)하는 과정이 필요 없습니다.</li>
+<li class="note-list-item">코드 실행 시 변수에 담을 필요 없이 단독으로 <code class="inline-code">plt.xlabel(&#x27;Predicted Label&#x27;)</code> 형태로 호출하여 사용합니다.</li>
+</ul>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step3', 'plt.xlabel')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step3-plt_ylabel-927_180101"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>plt.ylabel</code></div><div class="note-time-badge">⏱ 2026-09-27 18:01:01</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: plt.ylabel</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 18:01:01</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">plt.ylabel</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">파이썬의 데이터 시각화 라이브러리인 맷플롯립(Matplotlib)에서 사용되는 <code class="inline-code">plt.ylabel</code> 함수에 대한 상세 해설입니다. 초보자의 눈높이에 맞춰 쉽고 명쾌하게 정리해 드립니다!</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">plt.ylabel()</code>은 <strong>현재 그려지고 있는 그래프의 Y축(세로축)에 이름(라벨)을 달아주는 함수</strong>입니다. 그래프를 보는 사람이 세로축이 무엇을 나타내는지 직관적으로 이해할 수 있도록 도와줍니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">코드에서 전달된 인자인 <code class="inline-code">&#x27;True Label&#x27;</code>의 역할과 의미는 다음과 같습니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">&#x27;True Label&#x27;</code> (문자열, string)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> Y축 옆에 표시될 텍스트를 지정합니다.</li>
+<li class="note-list-item"><strong>설정된 값의 의미:</strong></li>
+<li class="note-list-item">영어 그대로 해석하면 <strong>&#x27;실제 정답(라벨)&#x27;</strong>이라는 뜻입니다.</li>
+<li class="note-list-item">주로 머신러닝이나 딥러닝 모델의 성능을 평가할 때, <strong>혼동 행렬(Confusion Matrix)</strong> 등의 그래프에서 <strong>데이터의 실제 진짜 값(Ground Truth)</strong>이 세로축에 위치함을 나타낼 때 사용됩니다.</li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p"><code class="inline-code">plt.ylabel()</code> 함수는 별도의 데이터를 반환하여 변수에 할당하는 형태가 아닙니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>반환값 없음 (<code class="inline-code">None</code> 또는 텍스트 객체)</strong></li>
+<li class="note-list-item">이 함수는 화면에 보이는 그래프 그림(Figure) 자체를 직접 수정하는 <strong>시각화 작업</strong>을 수행합니다.</li>
+<li class="note-list-item">따라서 <code class="inline-code">X_train</code>이나 <code class="inline-code">y_pred</code>처럼 데이터를 담는 변수에 대입해서 사용하는 것이 아니라, <code class="inline-code">plt.ylabel(&#x27;True Label&#x27;)</code> 형태로 <strong>단독 호출</strong>하여 사용합니다.</li>
+</ul>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step3', 'plt.ylabel')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step3-plt_show-927_180130"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>plt.show</code></div><div class="note-time-badge">⏱ 2026-09-27 18:01:30</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: plt.show</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 18:01:30</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">plt.show</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">plt.show는 도화지에 열심히 그린 그림을 액자에 쏙 넣어 세상에 짠하고 전시해 주는 마법의 버튼 같은 역할이에요.</p>
+<div class="note-empty-line"></div>
+<p class="note-p">우리가 파이썬으로 그래프를 그리라고 시킨 모든 명령어들을 화면에 실제로 띄워주는 최종 단계일 때 쓴답니다.</p>
+<div class="note-empty-line"></div>
+<p class="note-p">이 코드가 없으면 컴퓨터 속 메모리에만 그림이 그려져 있어서 우리 눈에는 보이지 않으니, 그린 그림을 확인하고 싶을 때 꼭 마지막에 불러주어야 해요.</p>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step3', 'plt.show')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section><section class="step-section" id="step4"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">4단계</span><h2 class="step-title-text">정확도, 정밀도, 재현율, F1-Score 지표 및 Classification Report 분석</h2></div><p class="step-summary-desc">정확도(Accuracy), 정밀도(Precision), 재현율(Recall), F1-Score를 각각 산출하고 종합 classification_report로 불균형 분류 성능 다각도 평가</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 주피터 노트북 실행 코드 및 결과</div><div class="code-cell-wrapper" id="cell-14"><div class="cell-header"><span class="cell-badge">In [14]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 정확도 (Accuracy): 전체 중 정확히 예측한 비율
+accuracy = <span class="code-kw-interactive" data-step="step4" data-tab="step4-accuracy_score-927_180146" data-func="accuracy_score" title="💡 클릭하여 우측 'accuracy_score' 해설 보기">accuracy_score<span class="kw-sparkle">💡</span></span>(y_test, y_pred)
+print(f&quot;정확도 (Accuracy) : {accuracy:.4f}&quot;)
+
+# 정밀도 (Precision): TP / (TP + FP)
+# 모델이 Positive라고 예측한 것 중 실제 Positive의 비율
+precision = <span class="code-kw-interactive" data-step="step4" data-tab="step4-precision_score-927_180201" data-func="precision_score" title="💡 클릭하여 우측 'precision_score' 해설 보기">precision_score<span class="kw-sparkle">💡</span></span>(y_test, y_pred)
+print(f&quot;정밀도 (Precision): {precision:.4f}&quot;)
+
+# 재현율 (Recall): TP / (TP + FN)
+# 실제 Positive인 것 중 모델이 정확히 예측한 비율
+recall = <span class="code-kw-interactive" data-step="step4" data-tab="step4-recall_score-927_180230" data-func="recall_score" title="💡 클릭하여 우측 'recall_score' 해설 보기">recall_score<span class="kw-sparkle">💡</span></span>(y_test, y_pred)
+print(f&quot;재현율 (Recall)   : {recall:.4f}&quot;)
+
+# F1-Score: 정밀도와 재현율의 조화 평균
+f1 = <span class="code-kw-interactive" data-step="step4" data-tab="step4-f1_score-927_180303" data-func="f1_score" title="💡 클릭하여 우측 'f1_score' 해설 보기">f1_score<span class="kw-sparkle">💡</span></span>(y_test, y_pred)
+print(f&quot;F1-Score          : {f1:.4f}&quot;)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>정확도 (Accuracy) : 0.7143
+정밀도 (Precision): 0.6087
+재현율 (Recall)   : 0.5185
+F1-Score          : 0.5600
+</pre></div></div></div></div><div class="code-cell-wrapper" id="cell-15"><div class="cell-header"><span class="cell-badge">In [15]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">print(<span class="code-kw-interactive" data-step="step4" data-tab="step4-classification_report-927_180345" data-func="classification_report" title="💡 클릭하여 우측 'classification_report' 해설 보기">classification_report<span class="kw-sparkle">💡</span></span>(y_test, y_pred))</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>              precision    recall  f1-score   support
+
+           0       0.76      0.82      0.79       100
+           1       0.61      0.52      0.56        54
+
+    accuracy                           0.71       154
+   macro avg       0.68      0.67      0.67       154
+weighted avg       0.71      0.71      0.71       154
+
+</pre></div></div></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (MARKDOWN)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (5) <span class="chrono-tag">⏱ 시간순 정렬</span></div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step4" data-tab="step4-accuracy_score-927_180146" onclick="switchTab('step4', 'step4-accuracy_score-927_180146')"><span class="tab-func-name">accuracy_score (정확도)</span></button><button class="func-tab-btn " data-step="step4" data-tab="step4-precision_score-927_180201" onclick="switchTab('step4', 'step4-precision_score-927_180201')"><span class="tab-func-name">precision_score (정밀도)</span></button><button class="func-tab-btn " data-step="step4" data-tab="step4-recall_score-927_180230" onclick="switchTab('step4', 'step4-recall_score-927_180230')"><span class="tab-func-name">recall_score (재현율)</span></button><button class="func-tab-btn " data-step="step4" data-tab="step4-f1_score-927_180303" onclick="switchTab('step4', 'step4-f1_score-927_180303')"><span class="tab-func-name">f1_score (F1점수)</span></button><button class="func-tab-btn " data-step="step4" data-tab="step4-classification_report-927_180345" onclick="switchTab('step4', 'step4-classification_report-927_180345')"><span class="tab-func-name">classification_report (종합리포트)</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step4-accuracy_score-927_180146"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>accuracy_score</code></div><div class="note-time-badge">⏱ 2026-09-27 18:01:46</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: accuracy_score</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 18:01:46</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">accuracy_score</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">파이썬 머신러닝에서 자주 사용되는 <code class="inline-code">accuracy_score</code> 함수에 대한 상세 해설입니다. 초보자도 이해하기 쉽도록 항목별로 나누어 설명해 드릴게요!</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">accuracy_score</code>는 머신러닝 모델이 예측한 결과가 실제 정답과 얼마나 일치하는지, 즉 <strong>&#x27;정확도(Accuracy)&#x27;를 계산해 주는 평가 함수</strong>입니다. 전체 예측 데이터 중 모델이 맞춘 데이터의 비율(0.0 ~ 1.0 사이의 값, 백분율로는 0% ~ 100%)을 출력해 줍니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">제공해주신 코드 <code class="inline-code">accuracy_score(y_test, y_pred)</code>에 사용된 두 가지 인자의 역할은 다음과 같습니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>첫 번째 인자: <code class="inline-code">y_test</code> (실제 정답)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 모델이 학습에 전혀 사용하지 않고 아껴두었던 테스트 데이터의 <strong>실제 정답(True Labels)</strong>입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> &quot;이 데이터의 진짜 레이블(결과)은 이거야&quot;라고 알려주는 채점표의 정답지 역할을 합니다.</li>
+<li class="note-list-item"><strong>두 번째 인자: <code class="inline-code">y_pred</code> (모델의 예측값)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 머신러닝 모델(<code class="inline-code">y_test</code>에 대응하는 <code class="inline-code">X_test</code> 데이터를 넣었을 때 나옴)이 <strong>예측한 결과(Predicted Labels)</strong>입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> &quot;우리 모델이 풀어본 결과는 이거야&quot;라고 제출하는 학생의 답안지 역할을 합니다.</li>
+</ul>
+<div class="note-empty-line"></div>
+<blockquote class="note-quote">💡 <strong>동작 원리:</strong> <code class="inline-code">accuracy_score</code>는 채점표(<code class="inline-code">y_test</code>)와 학생 답안지(<code class="inline-code">y_pred</code>)를 나란히 놓고 몇 개나 맞았는지 비교한 뒤, 전체 개수로 나누어 정확도를 계산합니다.</blockquote>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p">함수가 실행된 후 결과값이 저장되는 <code class="inline-code">accuracy</code> 변수에 대한 설명입니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>할당 변수: <code class="inline-code">accuracy</code></strong></li>
+<li class="note-list-item"><strong>종류:</strong> 하나의 실수(float) 값</li>
+<li class="note-list-item"><strong>의미:</strong> 모델의 예측 정확도를 나타냅니다.</li>
+<li class="note-list-item">예를 들어 이 변수에 <code class="inline-code">0.85</code>가 들어있다면, 모델이 전체 테스트 데이터 중 <strong>85%를 맞췄고 15%는 틀렸다</strong>는 것을 의미합니다. (최대값은 완벽한 예측을 뜻하는 <code class="inline-code">1.0</code>입니다.)</li>
+</ul>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step4', 'accuracy_score')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step4-precision_score-927_180201"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>precision_score</code></div><div class="note-time-badge">⏱ 2026-09-27 18:02:01</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: precision_score</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 18:02:01</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">precision_score</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">파이썬의 머신러닝 라이브러리인 <code class="inline-code">scikit-learn(sklearn)</code>에서 사용되는 <code class="inline-code">precision_score</code> 함수에 대한 상세 해설입니다. 초보자의 눈높이에 맞춰 친절하고 명쾌하게 정리해 드릴게요!</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">precision_score</code>는 머신러닝 분류 모델의 성능을 평가하기 위해 사용하는 <strong>&#x27;정밀도(Precision)&#x27;</strong> 계산 함수입니다.</p>
+<p class="note-p">모델이 <strong>&#x27;정답(Positive)&#x27;이라고 예측한 것들 중에서 실제로 정답이 맞았던 비율</strong>을 계산해 줍니다. (즉, 모델의 예측이 얼마나 믿을 만한지 측정하는 지표입니다.)</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">제시해주신 코드 <code class="inline-code">precision_score(y_test, y_pred)</code>에 사용된 두 개의 인자를 하나씩 살펴보겠습니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>첫 번째 인자: <code class="inline-code">y_test</code> (실제값)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 테스트 데이터의 <strong>실제 정답(Ground Truth)</strong> 레이블입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 모델이 맞혀야 하는 진짜 판정 결과들이 들어있는 리스트나 배열입니다. (예: <code class="inline-code">[0, 1, 1, 0, 1]</code> 등)</li>
+</ul>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>두 번째 인자: <code class="inline-code">y_pred</code> (예측값)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 머신러닝 모델이 테스트 데이터를 보고 <strong>예측한 결과(Prediction)</strong> 레이블입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 모델이 &quot;이건 정답이야!&quot;라고 판단하여 뱉어낸 결과들이 들어있는 리스트나 배열입니다. (예: <code class="inline-code">[0, 1, 0, 0, 1]</code> 등)</li>
+</ul>
+<div class="note-empty-line"></div>
+<blockquote class="note-quote"><strong>💡 요약하자면:</strong> <code class="inline-code">y_test</code>(실제 시험지 답안)와 <code class="inline-code">y_pred</code>(학생이 적어낸 답안)를 비교하여, 학생이 &quot;맞다&quot;고 쓴 것 중 실제로 맞은 게 몇 개나 되는지 채점하는 재료로 쓰입니다.</blockquote>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p">함수가 실행된 후 결과값이 어떤 변수에 담기는지 설명해 드릴게요.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>할당 변수: <code class="inline-code">precision</code></strong></li>
+<li class="note-list-item"><strong>역할:</strong> <code class="inline-code">precision_score</code> 함수가 계산을 끝내고 돌려준 <strong>정밀도 점수(실수형 데이터, Float)</strong>를 저장하는 변수입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 0.0에서 1.0 사이의 값(또는 백분율 형태)으로 반환됩니다.</li>
+<li class="note-list-item">예시로 값이 <code class="inline-code">0.85</code>가 나왔다면, 모델이 &quot;정답&quot;이라고 예측한 것 중 <strong>85%만 실제로 맞았고, 15%는 틀렸다(오탐지)</strong>는 것을 의미합니다.</li>
+</ul>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step4', 'precision_score')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step4-recall_score-927_180230"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>recall_score</code></div><div class="note-time-badge">⏱ 2026-09-27 18:02:30</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: recall_score</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 18:02:30</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">recall_score</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">파이썬 머신러닝 코드에서 사용된 <code class="inline-code">recall_score</code> 함수에 대해 초보자의 눈높이에 맞춰 쉽고 명쾌하게 해설해 드리겠습니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">recall_score</code>는 머신러닝 분류 모델의 성능을 평가하기 위한 지표 중 하나인 <strong>&#x27;재현율(Recall)&#x27;</strong>을 계산해 주는 함수입니다.</p>
+<p class="note-p">쉽게 말해, <strong>&quot;실제 정답(참)인 데이터 중에서 모델이 &#x27;참&#x27;이라고 맞춘 비율이 얼마나 되는가?&quot;</strong>를 측정합니다. (예: 실제 암 환자 중 AI가 암 환자라고 정확히 찾아낸 비율)</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">제공해주신 코드 <code class="inline-code">recall_score(y_test, y_pred)</code>에서 사용된 두 가지 인자의 역할은 다음과 같습니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">y_test</code> (첫 번째 인자)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 테스트 데이터의 <strong>실제 정답(Ground Truth)</strong> 값입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 모델이 예측하기 전, 데이터가 실제로 가지고 있던 진짜 결과값(0 또는 1, 혹은 여러 클래스 레이블)들의 모음입니다. 모델의 성적을 채점하기 위한 &#x27;정답지&#x27; 역할을 합니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">y_pred</code> (두 번째 인자)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 머신러닝 모델이 테스트 데이터를 보고 <strong>예측한 값(Predicted Value)</strong>입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 모델이 <code class="inline-code">y_test</code>를 맞추기 위해 &quot;이 데이터는 이럴 것이다!&quot;라고 추정하여 뱉어낸 결과값들의 모음입니다. 학생이 시험지에 적어낸 &#x27;답안지&#x27; 역할을 합니다.</li>
+</ul>
+<div class="note-empty-line"></div>
+<p class="note-p"><em>(※ 즉, 이 함수는 진짜 정답지(<code class="inline-code">y_test</code>)와 학생의 답안지(<code class="inline-code">y_pred</code>)를 비교하여 재현율 점수를 매깁니다.)</em></p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p">함수의 실행 결과가 저장되는 변수에 대한 설명입니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">recall</code></strong></li>
+<li class="note-list-item"><strong>역할:</strong> 계산된 <strong>재현율 점수(Score)</strong>가 저장되는 변수입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 보통 <code class="inline-code">0.0</code>에서 <code class="inline-code">1.0</code> 사이의 실수(또는 백분율 형태)로 반환됩니다. <code class="inline-code">1.0</code>에 가까울수록 모델이 실제 정답을 하나도 놓치지 않고 잘 찾아냈다는 뜻이며, <code class="inline-code">0.0</code>에 가까울수록 정답을 엄청나게 많이 놓쳤다는(실제 참인 것들을 거짓으로 잘못 판단했다는) 뜻입니다.</li>
+</ul>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step4', 'recall_score')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step4-f1_score-927_180303"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>f1_score</code></div><div class="note-time-badge">⏱ 2026-09-27 18:03:03</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: f1_score</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 18:03:03</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">f1_score</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">파이썬 머신러닝에서 자주 쓰이는 <code class="inline-code">f1_score</code> 함수 호출부에 대한 상세 해설입니다. 초보자분들도 쉽게 이해하실 수 있도록 항목별로 친절하게 정리해 드립니다!</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">f1_score</code>는 머신러닝 분류(Classification) 모델의 <strong>성능을 평가하는 지표</strong> 중 하나입니다.</p>
+<p class="note-p">정밀도(Precision)와 재현율(Recall)의 조화 평균으로 계산되며, 데이터가 불균형할 때 모델이 얼마나 정확하게 예측했는지 종합적으로 판단할 때 사용하는 핵심 함수입니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">제시해주신 코드 <code class="inline-code">f1_score(y_test, y_pred)</code>에 전달된 두 가지 인자의 역할은 다음과 같습니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">y_test</code> (정답 / 레이블)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 모델이 맞혀야 하는 <strong>실제 정답 데이터</strong>입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 테스트 데이터셋(X_test)에 대응하는 실제 0 또는 1(또는 다중 클래스)의 참값(Ground Truth)들이 들어 있습니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">y_pred</code> (예측값)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 학습이 완료된 머신러닝 <strong>모델이 예측한 결과 데이터</strong>입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 모델이 테스트 데이터(X_test)를 보고 &quot;이 데이터는 이럴 것이다&quot;라고 추정하여 뱉어낸 예측값들입니다.</li>
+</ul>
+<div class="note-empty-line"></div>
+<blockquote class="note-quote">💡 <strong>요약하자면:</strong> &quot;실제 정답(<code class="inline-code">y_test</code>)과 모델이 예측한 값(<code class="inline-code">y_pred</code>)을 서로 비교해서 모델이 얼마나 잘 맞혔는지 채점해줘!&quot; 라는 의미입니다.</blockquote>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p">함수가 실행된 후 결과를 받아 저장하는 변수에 대한 설명입니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">f1</code> (F1 스코어 점수)</strong></li>
+<li class="note-list-item"><strong>종류:</strong> 실수(Float) 형태의 단일 숫자 값</li>
+<li class="note-list-item"><strong>의미:</strong> 모델의 F1 점수 결과를 담는 변수입니다.</li>
+<li class="note-list-item"><strong>해석:</strong> 이 값은 <strong>0에서 1 사이</strong>의 범위를 가집니다. <strong>1에 가까울수록</strong> 모델의 성능이 완벽하게 우수하다는 뜻이며, <strong>0에 가까울수록</strong> 모델이 예측을 전혀 못 하고 있다는 뜻입니다. (보통 0.8 이상이면 꽤 잘 나온 모델로 평가합니다.)</li>
+</ul>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step4', 'f1_score')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step4-classification_report-927_180345"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>classification_report</code></div><div class="note-time-badge">⏱ 2026-09-27 18:03:45</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: classification_report</h1>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 18:03:45</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">classification_report</code></li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<p class="note-p">안녕하세요! 파이썬 머신러닝에서 모델의 성능을 평가할 때 가장 자주 쓰이는 <code class="inline-code">classification_report</code> 함수에 대해 초보자의 눈높이에 맞춰 쉽고 명쾌하게 설명해 드리겠습니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">classification_report</code>는 머신러닝 분류(Classification) 모델이 <strong>얼마나 일을 잘했는지 종합적으로 평가하고 텍스트 리포트로 뱉어주는 함수</strong>입니다. 정답(<code class="inline-code">y_test</code>)과 모델이 예측한 값(<code class="inline-code">y_pred</code>)을 비교하여 정밀도(Precision), 재현율(Recall), F1-점수(F1-score) 등 핵심 성능 지표를 한눈에 보기 쉽게 표 형태로 출력해 줍니다.</p>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">제시해주신 코드 <code class="inline-code">print(classification_report(y_test, y_pred))</code>에서 전달된 2개의 입력 인자의 역할은 다음과 같습니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>첫 번째 인자: <code class="inline-code">y_test</code> (실제 정답)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 테스트 데이터셋에 실제로 속해 있던 진짜 정답 레이블(Label)입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 모델이 채점받기 위해 제출해야 하는 &#x27;진짜 답안지&#x27;라고 생각하시면 됩니다.</li>
+<li class="note-list-item"><strong>두 번째 인자: <code class="inline-code">y_pred</code> (모델의 예측값)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 머신러닝 모델이 학습을 마치고 <code class="inline-code">y_test</code>에 해당하는 데이터들을 보고 <strong>&quot;이것은 0번일 거야&quot;, &quot;저것은 1번일 거야&quot;</strong>라고 예측한 결과입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 학생들이 시험을 보고 적어낸 &#x27;내 답안지&#x27;이며, 이 두 답안지를 비교하여 성적표를 매기게 됩니다.</li>
+</ul>
+<div class="note-empty-line"></div>
+<hr class="note-divider" />
+<div class="note-empty-line"></div>
+<h3 class="note-h3">3. 📤 반환값과 출력 결과 해설</h3>
+<p class="note-p"><em>(요청하신 문맥에 맞춰 변수 언패킹 형태는 아니지만, 이 함수가 반환하여 <code class="inline-code">print</code>를 통해 화면에 보여주는 결과물이 무엇인지 설명해 드릴게요!)</em></p>
+<div class="note-empty-line"></div>
+<p class="note-p">이 함수는 별도의 변수에 값을 담기보다 보통 <code class="inline-code">print()</code> 함수와 함께 써서 화면에 텍스트 표를 출력합니다. 반환되어 출력되는 주요 지표들은 초보자에게 다소 생소할 수 있으므로 간단히 짚어보겠습니다.</p>
+<div class="note-empty-line"></div>
+<ul class="note-list">
+<li class="note-list-item"><strong>Precision (정밀도):</strong> 모델이 <strong>&#x27;이거 정답이야!&#x27;</strong>라고 예측한 것들 중에서 <strong>실제로 정답</strong>인 비율입니다. (거짓 경보를 얼마나 줄였는가?)</li>
+<li class="note-list-item"><strong>Recall (재현율):</strong> 실제 정답들 중에서 모델이 <strong>&#x27;이거 정답이야!&#x27;</strong>라고 <strong>맞춰낸</strong> 비율입니다. (진짜 정답을 얼마나 놓치지 않고 찾았는가?)</li>
+<li class="note-list-item"><strong>F1-score (F1 점수):</strong> 정밀도와 재현율의 조화 평균입니다. 어느 한쪽으로 치우치지 않고 모델이 균형 있게 잘 작동했는종합적으로 보여주는 지표입니다.</li>
+<li class="note-list-item"><strong>Support:</strong> 각 클래스(카테고리)별로 실제 데이터에 속해 있던 <strong>진짜 데이터의 개수</strong>입니다.</li>
+</ul>
+<div class="note-empty-line"></div>
+<p class="note-p">💡 <strong>요약하자면:</strong></p>
+<p class="note-p">이 코드는 <strong>&quot;우리 모델이 진짜 정답(<code class="inline-code">y_test</code>)과 자기가 예측한 답(<code class="inline-code">y_pred</code>)을 비교해서 얼마나 잘 맞혔는지 성적표(보고서)를 뽑아줘!&quot;</strong>라고 컴퓨터에게 명령하는 아주 유용한 코드입니다.</p>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step4', 'classification_report')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section>
+  </main>
+
+  <div class="toast-msg" id="toast">✅ 알림 메시지</div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('study_theme_10', next);
+      localStorage.setItem('study_theme', next);
+      
+      const btn = document.getElementById('theme-btn');
+      btn.textContent = next === 'dark' ? '☀️ 라이트 모드' : '🌙 다크 모드';
+      showToast(next === 'dark' ? '🌙 다크 테마 적용됨' : '☀️ 라이트 테마 적용됨');
+    }
+
+    (function initTheme() {
+      const saved = localStorage.getItem('study_theme_10') || localStorage.getItem('study_theme');
+      if (saved) {
+        document.documentElement.setAttribute('data-theme', saved);
+        const btn = document.getElementById('theme-btn');
+        if (btn) btn.textContent = saved === 'dark' ? '☀️ 라이트 모드' : '🌙 다크 모드';
+      }
+    })();
+
+    function switchTab(stepId, tabId) {
+      const stepElem = document.getElementById(stepId);
+      if (!stepElem) return;
+
+      const tabBtns = stepElem.querySelectorAll('.func-tab-btn');
+      tabBtns.forEach(btn => {
+        if (btn.getAttribute('data-tab') === tabId) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+
+      const panes = stepElem.querySelectorAll('.func-note-pane');
+      panes.forEach(pane => {
+        if (pane.id === tabId) {
+          pane.classList.add('active');
+          pane.classList.remove('highlight-pulse');
+          void pane.offsetWidth;
+          pane.classList.add('highlight-pulse');
+        } else {
+          pane.classList.remove('active');
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const kwSpans = document.querySelectorAll('.code-kw-interactive');
+      kwSpans.forEach(span => {
+        span.addEventListener('click', (e) => {
+          const stepId = span.getAttribute('data-step');
+          const tabId = span.getAttribute('data-tab');
+          const funcName = span.getAttribute('data-func');
+
+          kwSpans.forEach(s => s.classList.remove('active-target'));
+          span.classList.add('active-target');
+
+          switchTab(stepId, tabId);
+
+          if (window.innerWidth <= 1180) {
+            const notePane = document.getElementById(tabId);
+            if (notePane) {
+              notePane.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          }
+
+          showToast("💡 '" + funcName + "' AI 학습 노트로 이동");
+        });
+      });
+    });
+
+    function highlightMatchingKeyword(stepId, funcName) {
+      const stepElem = document.getElementById(stepId);
+      if (!stepElem) return;
+
+      const kwSpans = stepElem.querySelectorAll('.code-kw-interactive');
+      let found = false;
+      kwSpans.forEach(span => {
+        if (span.getAttribute('data-func') === funcName) {
+          span.classList.add('active-target');
+          span.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          found = true;
+        } else {
+          span.classList.remove('active-target');
+        }
+      });
+
+      if (found) {
+        showToast("🔍 좌측 코드에서 '" + funcName + "' 위치 강조");
+      }
+    }
+
+    function copyCode(btn) {
+      const cellWrapper = btn.closest('.code-cell-wrapper');
+      const codeBlock = cellWrapper.querySelector('pre code');
+      if (codeBlock) {
+        const text = codeBlock.innerText;
+        navigator.clipboard.writeText(text).then(() => {
+          const original = btn.textContent;
+          btn.textContent = '✅ 복사됨!';
+          btn.style.borderColor = 'var(--accent-success)';
+          btn.style.color = 'var(--accent-success)';
+          setTimeout(() => {
+            btn.textContent = original;
+            btn.style.borderColor = '';
+            btn.style.color = '';
+          }, 2000);
+          showToast('📋 코드가 클립보드에 복사되었습니다.');
+        });
+      }
+    }
+
+    function toggleOutput(btn) {
+      const container = btn.closest('.cell-outputs-container');
+      const body = container.querySelector('.outputs-body');
+      if (body.style.display === 'none') {
+        body.style.display = 'flex';
+        btn.textContent = '접기 ▲';
+      } else {
+        body.style.display = 'none';
+        btn.textContent = '펼치기 ▼';
+      }
+    }
+
+    let allExpanded = true;
+    function toggleAllOutputs() {
+      const allBodies = document.querySelectorAll('.outputs-body');
+      const allBtns = document.querySelectorAll('.toggle-output-btn');
+      allExpanded = !allExpanded;
+
+      allBodies.forEach(b => b.style.display = allExpanded ? 'flex' : 'none');
+      allBtns.forEach(btn => btn.textContent = allExpanded ? '접기 ▲' : '펼치기 ▼');
+      
+      const toggleAllBtn = document.querySelector('.expand-all-btn');
+      toggleAllBtn.textContent = allExpanded ? '결과 전체 접기' : '결과 전체 펼치기';
+      showToast(allExpanded ? '⚡ 모든 실행 결과가 펼쳐졌습니다.' : '⚡ 모든 실행 결과가 접혔습니다.');
+    }
+
+    function filterFunctions(query) {
+      const q = query.trim().toLowerCase();
+      const tabBtns = document.querySelectorAll('.func-tab-btn');
+      const sections = document.querySelectorAll('.step-section');
+
+      if (!q) {
+        tabBtns.forEach(b => b.style.display = '');
+        sections.forEach(s => s.style.opacity = '1');
+        return;
+      }
+
+      tabBtns.forEach(b => {
+        const text = b.textContent.toLowerCase();
+        if (text.includes(q)) {
+          b.style.display = '';
+          b.style.border = '2px solid var(--accent-primary)';
+        } else {
+          b.style.display = 'none';
+          b.style.border = '';
+        }
+      });
+    }
+
+    window.addEventListener('scroll', () => {
+      const sections = document.querySelectorAll('.step-section');
+      const navLinks = document.querySelectorAll('.step-nav-item');
+      let currentId = '';
+
+      sections.forEach(s => {
+        const rect = s.getBoundingClientRect();
+        if (rect.top <= 200 && rect.bottom >= 200) {
+          currentId = s.id;
+        }
+      });
+
+      if (currentId) {
+        navLinks.forEach(link => {
+          if (link.getAttribute('data-step') === currentId) {
+            link.classList.add('active');
+          } else {
+            link.classList.remove('active');
+          }
+        });
+      }
+    });
+
+    let toastTimeout = null;
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        t.classList.remove('show');
+      }, 2500);
+    }
+  </script>
+</body>
+</html>
