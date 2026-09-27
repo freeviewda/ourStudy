@@ -975,7 +975,7 @@ Data columns (total 9 columns):
  8   outcome                     768 non-null    int64  
 dtypes: float64(2), int64(7)
 memory usage: 54.1 KB
-</pre></div></div></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (Markdown)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (6)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step1" data-tab="step1-pandas-927_134620" onclick="switchTab('step1', 'step1-pandas-927_134620')"><span class="tab-func-name">pandas (개요)</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-pd_read_csv-927_134739" onclick="switchTab('step1', 'step1-pd_read_csv-927_134739')"><span class="tab-func-name">pd.read_csv</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-pima_df_head-927_150157" onclick="switchTab('step1', 'step1-pima_df_head-927_150157')"><span class="tab-func-name">pima_df.head</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-pima_df_info-927_150220" onclick="switchTab('step1', 'step1-pima_df_info-927_150220')"><span class="tab-func-name">pima_df.info</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_model_selection-927_134645" onclick="switchTab('step1', 'step1-sklearn_model_selection-927_134645')"><span class="tab-func-name">sklearn.model_selection</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-train_test_split-927_134707" onclick="switchTab('step1', 'step1-train_test_split-927_134707')"><span class="tab-func-name">train_test_split (소개)</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step1-pandas-927_134620"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>pandas</code></div><div class="note-time-badge">⏱ 2026-09-27 13:46:20</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: pandas</h1>
+</pre></div></div></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (Markdown)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (6)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step1" data-tab="step1-pandas-927_134620" onclick="switchTab('step1', 'step1-pandas-927_134620')"><span class="tab-func-name">pandas (개요)</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_model_selection-927_134645" onclick="switchTab('step1', 'step1-sklearn_model_selection-927_134645')"><span class="tab-func-name">sklearn.model_selection</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-train_test_split-927_134707" onclick="switchTab('step1', 'step1-train_test_split-927_134707')"><span class="tab-func-name">train_test_split (소개)</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-pd_read_csv-927_134739" onclick="switchTab('step1', 'step1-pd_read_csv-927_134739')"><span class="tab-func-name">pd.read_csv</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-pima_df_head-927_150157" onclick="switchTab('step1', 'step1-pima_df_head-927_150157')"><span class="tab-func-name">pima_df.head</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-pima_df_info-927_150220" onclick="switchTab('step1', 'step1-pima_df_info-927_150220')"><span class="tab-func-name">pima_df.info</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step1-pandas-927_134620"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>pandas</code></div><div class="note-time-badge">⏱ 2026-09-27 13:46:20</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: pandas</h1>
 <ul class="note-list">
 <li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 13:46:20</li>
 <li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">pandas</code></li>
@@ -983,7 +983,23 @@ memory usage: 54.1 KB
 <hr class="note-divider" />
 <p class="note-p">안녕하세요! 파이썬에서 데이터를 다룰 때 꼭 필요한 마법 같은 도구인 &#x27;판다스(pandas)&#x27;에 대해 친절하게 설명해 드릴게요.</p>
 <p class="note-p">판다스는 마치 컴퓨터 안에 들어있는 엄청나게 거대한 &#x27;엑셀 장부&#x27;라고 생각하시면 아주 쉬워요. 복잡하고 지저분한 표나 데이터들을 깔끔하게 정리하고, 우리가 원하는 대로 쉽게 계산하거나 분석할 수 있도록 도와주는 역할을 한답니다.</p>
-<p class="note-p">엑셀 파일이나 CSV 파일처럼 표로 된 데이터를 불러와서 수정하거나, 통계를 내고 싶을 때 언제든 꺼내 쓰는 필수 영양제 같은 친구예요! 지금 작성하신 &#x27;import pandas as pd&#x27;는 앞으로 이 멋진 엑셀 장부를 쓰기 위해 내 작업상 위에 살짝 꺼내두는 준비 과정이랍니다.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'pandas')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step1-pd_read_csv-927_134739"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>pd.read_csv</code></div><div class="note-time-badge">⏱ 2026-09-27 13:47:39</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: pd.read_csv</h1>
+<p class="note-p">엑셀 파일이나 CSV 파일처럼 표로 된 데이터를 불러와서 수정하거나, 통계를 내고 싶을 때 언제든 꺼내 쓰는 필수 영양제 같은 친구예요! 지금 작성하신 &#x27;import pandas as pd&#x27;는 앞으로 이 멋진 엑셀 장부를 쓰기 위해 내 작업상 위에 살짝 꺼내두는 준비 과정이랍니다.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'pandas')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step1-sklearn_model_selection-927_134645"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>sklearn.model_selection</code></div><div class="note-time-badge">⏱ 2026-09-27 13:46:45</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: sklearn.model_selection</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 13:46:45</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">sklearn.model_selection</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">우리가 공부를 열심히 했는지 확인하려고 선생님이 예상 문제집을 주시는 것처럼, sklearn.model_selection은 컴퓨터에게 공부할 문제와 실력을 테스트할 시험 문제를 공평하게 나눠주는 마법의 도구 상자랍니다.</p>
+<p class="note-p">그중에서 지금 쓰신 train_test_split이라는 기능은 전체 데이터 중에서 80퍼센트는 공부용 교재로, 나머지 20퍼센트는 진짜 실력 테스트용 시험지로 깔끔하게 쪼개주는 역할을 해요.</p>
+<p class="note-p">인공지능 모델을 만들어서 얘가 진짜로 제대로 배웠는지, 아니면 그냥 정답을 외운 건지 공정하게 시험을 치르고 싶을 때 꼭 사용한답니다.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'sklearn.model_selection')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step1-train_test_split-927_134707"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>train_test_split</code></div><div class="note-time-badge">⏱ 2026-09-27 13:47:07</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: train_test_split</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 13:47:07</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">train_test_split</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">train_test_split은 가지고 있는 전체 데이터를 공부용(훈련용)과 시험용으로 척척 나누어 주는 고마운 도구랍니다.</p>
+<p class="note-p">마치 선생님이 학생에게 예상 문제집을 줄 때, 절반은 미리 공부하도록 주고 나머지 절반은 실력 테스트용으로 아껴두는 것과 같아요.</p>
+<p class="note-p">인공지능 모델을 만들기 전에 데이터가 잘 만들어졌는지 공정하게 시험해 보고 싶을 때 꼭 사용한답니다.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'train_test_split')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step1-pd_read_csv-927_134739"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>pd.read_csv</code></div><div class="note-time-badge">⏱ 2026-09-27 13:47:39</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: pd.read_csv</h1>
 <ul class="note-list">
 <li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 13:47:39</li>
 <li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">pd.read_csv</code></li>
@@ -1029,23 +1045,7 @@ memory usage: 54.1 KB
 <hr class="note-divider" />
 <p class="note-p">pima_df.info()는 우리가 새로운 공책을 샀을 때 첫 페이지나 목차를 펴서 몇 페이지까지 있는지, 각 단원이 무엇에 관한 내용인지 쓱 훑어보는 것과 같아요.</p>
 <p class="note-p">우리 표 안에 어떤 제목들이 들어 있는지, 비어 있는 칸은 없는지, 숫자인지 글자인지 전체적인 살림살이를 한눈에 보여주는 역할을 한답니다.</p>
-<p class="note-p">주로 분석을 시작하기 전에 데이터가 잘 들어왔는지, 이상한 곳은 없는지 전체적인 건강 검진을 하고 싶을 때 쓴답니다.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'pima_df.info')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step1-sklearn_model_selection-927_134645"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>sklearn.model_selection</code></div><div class="note-time-badge">⏱ 2026-09-27 13:46:45</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: sklearn.model_selection</h1>
-<ul class="note-list">
-<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 13:46:45</li>
-<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">sklearn.model_selection</code></li>
-</ul>
-<hr class="note-divider" />
-<p class="note-p">우리가 공부를 열심히 했는지 확인하려고 선생님이 예상 문제집을 주시는 것처럼, sklearn.model_selection은 컴퓨터에게 공부할 문제와 실력을 테스트할 시험 문제를 공평하게 나눠주는 마법의 도구 상자랍니다.</p>
-<p class="note-p">그중에서 지금 쓰신 train_test_split이라는 기능은 전체 데이터 중에서 80퍼센트는 공부용 교재로, 나머지 20퍼센트는 진짜 실력 테스트용 시험지로 깔끔하게 쪼개주는 역할을 해요.</p>
-<p class="note-p">인공지능 모델을 만들어서 얘가 진짜로 제대로 배웠는지, 아니면 그냥 정답을 외운 건지 공정하게 시험을 치르고 싶을 때 꼭 사용한답니다.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'sklearn.model_selection')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step1-train_test_split-927_134707"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>train_test_split</code></div><div class="note-time-badge">⏱ 2026-09-27 13:47:07</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: train_test_split</h1>
-<ul class="note-list">
-<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 13:47:07</li>
-<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">train_test_split</code></li>
-</ul>
-<hr class="note-divider" />
-<p class="note-p">train_test_split은 가지고 있는 전체 데이터를 공부용(훈련용)과 시험용으로 척척 나누어 주는 고마운 도구랍니다.</p>
-<p class="note-p">마치 선생님이 학생에게 예상 문제집을 줄 때, 절반은 미리 공부하도록 주고 나머지 절반은 실력 테스트용으로 아껴두는 것과 같아요.</p>
-<p class="note-p">인공지능 모델을 만들기 전에 데이터가 잘 만들어졌는지 공정하게 시험해 보고 싶을 때 꼭 사용한답니다.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'train_test_split')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section><section class="step-section" id="step2"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">2단계</span><h2 class="step-title-text">특성(X)/타깃(y) 분리 및 훈련/테스트 8:2 분할 (Train-Test Split)</h2></div><p class="step-summary-desc">drop('outcome')으로 특성 행렬 X와 레이블 y를 분리하고, stratify=y 층화추출을 적용하여 80:20 비율 분할 및 Shape 검증</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 실행 코드 및 결과 (Jupyter Notebook)</div><div class="code-cell-wrapper" id="cell-6"><div class="cell-header"><span class="cell-badge">In [6]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># Feature(X)과 Target(y) 분리
+<p class="note-p">주로 분석을 시작하기 전에 데이터가 잘 들어왔는지, 이상한 곳은 없는지 전체적인 건강 검진을 하고 싶을 때 쓴답니다.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'pima_df.info')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section><section class="step-section" id="step2"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">2단계</span><h2 class="step-title-text">특성(X)/타깃(y) 분리 및 훈련/테스트 8:2 분할 (Train-Test Split)</h2></div><p class="step-summary-desc">drop('outcome')으로 특성 행렬 X와 레이블 y를 분리하고, stratify=y 층화추출을 적용하여 80:20 비율 분할 및 Shape 검증</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 실행 코드 및 결과 (Jupyter Notebook)</div><div class="code-cell-wrapper" id="cell-6"><div class="cell-header"><span class="cell-badge">In [6]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># Feature(X)과 Target(y) 분리
 X = <span class="code-kw-interactive" data-step="step2" data-tab="step2-pima_df_drop-927_150250" data-func="pima_df.drop" title="💡 클릭하여 우측 'pima_df.drop' 해설 보기">pima_df.drop<span class="kw-sparkle">💡</span></span>(&#x27;outcome&#x27;, axis=1)
 y = pima_df[&#x27;outcome&#x27;]
 
@@ -1063,27 +1063,7 @@ print(&quot;X_train shape:&quot;, <span class="code-kw-interactive" data-step="s
 print(&quot;X_test shape:&quot;, <span class="code-kw-interactive" data-step="step2" data-tab="step2-X_test_shape-927_150433" data-func="X_test.shape" title="💡 클릭하여 우측 'X_test.shape' 해설 보기">X_test.shape<span class="kw-sparkle">💡</span></span>)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>Original data shape: (768, 8)
 X_train shape: (614, 8)
 X_test shape: (154, 8)
-</pre></div></div></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (Markdown)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (5)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step2" data-tab="step2-X_shape-927_150405" onclick="switchTab('step2', 'step2-X_shape-927_150405')"><span class="tab-func-name">X.shape</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-X_test_shape-927_150433" onclick="switchTab('step2', 'step2-X_test_shape-927_150433')"><span class="tab-func-name">X_test.shape (8:2)</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-X_train_shape-927_150419" onclick="switchTab('step2', 'step2-X_train_shape-927_150419')"><span class="tab-func-name">X_train.shape</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-pima_df_drop-927_150250" onclick="switchTab('step2', 'step2-pima_df_drop-927_150250')"><span class="tab-func-name">pima_df.drop</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-train_test_split-927_150338" onclick="switchTab('step2', 'step2-train_test_split-927_150338')"><span class="tab-func-name">train_test_split (8:2)</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step2-X_shape-927_150405"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>X.shape</code></div><div class="note-time-badge">⏱ 2026-09-27 15:04:05</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: X.shape</h1>
-<ul class="note-list">
-<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:04:05</li>
-<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">X.shape</code></li>
-</ul>
-<hr class="note-divider" />
-<p class="note-p">X.shape은 파이썬에서 데이터가 가로와 세로로 각각 몇 칸씩 이루어져 있는지, 그 크기와 모양을 알려주는 고마운 친구예요. 마치 거대한 상자를 열어보기 전에 겉면에 적힌 &#x27;가로 몇 개, 세로 몇 개&#x27;라는 설명서를 읽어보는 것과 같답니다. 주로 우리가 분석하려는 데이터가 컴퓨터에게 잘 들어갔는지, 찌그러지지 않고 반듯한 모양을 잘 유지하고 있는지 확인할 때 쓴답니다.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step2', 'X.shape')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step2-X_test_shape-927_150433"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>X_test.shape</code></div><div class="note-time-badge">⏱ 2026-09-27 15:04:33</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: X_test.shape</h1>
-<ul class="note-list">
-<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:04:33</li>
-<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">X_test.shape</code></li>
-</ul>
-<hr class="note-divider" />
-<p class="note-p">X_test.shape은 AI 공부에 쓸 시험 문제들이 가로세로 몇 장씩 쌓여 있는지, 즉 데이터의 전체 크기와 모양을 한눈에 알려주는 이름표 같은 역할을 해요.</p>
-<p class="note-p">우리가 새로운 물건을 사기 전에 가로, 세로, 높이 크기를 먼저 확인해보는 것처럼, 머신러닝 모델에 시험(테스트)을 보기 전 데이터가 우리가 생각한 대로 잘 준비되었는지 확인하고 싶을 때 주로 사용한답니다.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step2', 'X_test.shape')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step2-X_train_shape-927_150419"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>X_train.shape</code></div><div class="note-time-badge">⏱ 2026-09-27 15:04:19</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: X_train.shape</h1>
-<ul class="note-list">
-<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:04:19</li>
-<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">X_train.shape</code></li>
-</ul>
-<hr class="note-divider" />
-<p class="note-p">X_train.shape은 우리가 공부에 사용할 문제집의 전체 규모가 어떻게 되는지, 즉 &#x27;문제집의 가로 세로 크기(몇 문제의 몇 가지 정보가 있는지)&#x27;를 한눈에 확인하고 싶을 때 사용하는 도구예요.</p>
-<p class="note-p">우리가 새로운 문제집을 풀기 전에 문제가 총 몇 개 들어있고 보기는 몇 개인지 차례를 훑어보는 것처럼, 머신러닝 모델에게 공부를 시키기 전 데이터의 생김새와 크기를 꼼꼼히 점검할 때 쓴답니다.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step2', 'X_train.shape')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step2-pima_df_drop-927_150250"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>pima_df.drop</code></div><div class="note-time-badge">⏱ 2026-09-27 15:02:50</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: pima_df.drop</h1>
+</pre></div></div></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (Markdown)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (5)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step2" data-tab="step2-pima_df_drop-927_150250" onclick="switchTab('step2', 'step2-pima_df_drop-927_150250')"><span class="tab-func-name">pima_df.drop</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-train_test_split-927_150338" onclick="switchTab('step2', 'step2-train_test_split-927_150338')"><span class="tab-func-name">train_test_split (8:2)</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-X_shape-927_150405" onclick="switchTab('step2', 'step2-X_shape-927_150405')"><span class="tab-func-name">X.shape</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-X_train_shape-927_150419" onclick="switchTab('step2', 'step2-X_train_shape-927_150419')"><span class="tab-func-name">X_train.shape</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-X_test_shape-927_150433" onclick="switchTab('step2', 'step2-X_test_shape-927_150433')"><span class="tab-func-name">X_test.shape (8:2)</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step2-pima_df_drop-927_150250"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>pima_df.drop</code></div><div class="note-time-badge">⏱ 2026-09-27 15:02:50</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: pima_df.drop</h1>
 <ul class="note-list">
 <li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:02:50</li>
 <li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">pima_df.drop</code></li>
@@ -1145,7 +1125,27 @@ X_test shape: (154, 8)
 <li class="note-list-item"><strong><code class="inline-code">X_test</code> (테스트용 특징)</strong>: 전체 문제집(<code class="inline-code">X</code>) 중 20%에 해당하는 시험용 문제입니다. AI에게 이 문제를 풀게 한 뒤 정답을 숨겨두고 얼마나 맞히나 채점합니다.</li>
 <li class="note-list-item"><strong><code class="inline-code">y_train</code> (학습용 정답)</strong>: <code class="inline-code">X_train</code>에 짝이 되는 정답지입니다. AI가 공부할 때 &quot;이 문제는 답이 이거구나&quot; 하고 정답을 확인하는 용도입니다.</li>
 <li class="note-list-item"><strong><code class="inline-code">y_test</code> (테스트용 정답)</strong>: <code class="inline-code">X_test</code>에 짝이 되는 진짜 정답지입니다. AI가 시험을 다 본 후, 진짜 채점을 매길 때 사용합니다.</li>
-</ul></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step2', 'train_test_split')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section><section class="step-section" id="step3"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">3단계</span><h2 class="step-title-text">검증 데이터셋 3단 분할 6:2:2 (Train-Val-Test Split)</h2></div><p class="step-summary-desc">훈련 데이터(80%)에서 25%를 떼어내어 최종 훈련(60%), 검증(20%), 테스트(20%)의 표준 3단 데이터셋 분할 체계 구축</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 실행 코드 및 결과 (Jupyter Notebook)</div><div class="code-cell-wrapper" id="cell-7"><div class="cell-header"><span class="cell-badge">In [7]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 이전 단계에서 X_train, y_train을 추가로 분할
+</ul></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step2', 'train_test_split')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step2-X_shape-927_150405"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>X.shape</code></div><div class="note-time-badge">⏱ 2026-09-27 15:04:05</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: X.shape</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:04:05</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">X.shape</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">X.shape은 파이썬에서 데이터가 가로와 세로로 각각 몇 칸씩 이루어져 있는지, 그 크기와 모양을 알려주는 고마운 친구예요. 마치 거대한 상자를 열어보기 전에 겉면에 적힌 &#x27;가로 몇 개, 세로 몇 개&#x27;라는 설명서를 읽어보는 것과 같답니다. 주로 우리가 분석하려는 데이터가 컴퓨터에게 잘 들어갔는지, 찌그러지지 않고 반듯한 모양을 잘 유지하고 있는지 확인할 때 쓴답니다.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step2', 'X.shape')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step2-X_train_shape-927_150419"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>X_train.shape</code></div><div class="note-time-badge">⏱ 2026-09-27 15:04:19</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: X_train.shape</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:04:19</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">X_train.shape</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">X_train.shape은 우리가 공부에 사용할 문제집의 전체 규모가 어떻게 되는지, 즉 &#x27;문제집의 가로 세로 크기(몇 문제의 몇 가지 정보가 있는지)&#x27;를 한눈에 확인하고 싶을 때 사용하는 도구예요.</p>
+<p class="note-p">우리가 새로운 문제집을 풀기 전에 문제가 총 몇 개 들어있고 보기는 몇 개인지 차례를 훑어보는 것처럼, 머신러닝 모델에게 공부를 시키기 전 데이터의 생김새와 크기를 꼼꼼히 점검할 때 쓴답니다.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step2', 'X_train.shape')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step2-X_test_shape-927_150433"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>X_test.shape</code></div><div class="note-time-badge">⏱ 2026-09-27 15:04:33</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: X_test.shape</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:04:33</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">X_test.shape</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">X_test.shape은 AI 공부에 쓸 시험 문제들이 가로세로 몇 장씩 쌓여 있는지, 즉 데이터의 전체 크기와 모양을 한눈에 알려주는 이름표 같은 역할을 해요.</p>
+<p class="note-p">우리가 새로운 물건을 사기 전에 가로, 세로, 높이 크기를 먼저 확인해보는 것처럼, 머신러닝 모델에 시험(테스트)을 보기 전 데이터가 우리가 생각한 대로 잘 준비되었는지 확인하고 싶을 때 주로 사용한답니다.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step2', 'X_test.shape')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section><section class="step-section" id="step3"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">3단계</span><h2 class="step-title-text">검증 데이터셋 3단 분할 6:2:2 (Train-Val-Test Split)</h2></div><p class="step-summary-desc">훈련 데이터(80%)에서 25%를 떼어내어 최종 훈련(60%), 검증(20%), 테스트(20%)의 표준 3단 데이터셋 분할 체계 구축</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 실행 코드 및 결과 (Jupyter Notebook)</div><div class="code-cell-wrapper" id="cell-7"><div class="cell-header"><span class="cell-badge">In [7]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 이전 단계에서 X_train, y_train을 추가로 분할
 # test_size=0.25 -&gt; 80% 중 25%를 검증셋으로 할당 (전체의 20%)
 X_train_final, X_val, y_train_final, y_val = <span class="code-kw-interactive" data-step="step3" data-tab="step3-train_test_split-927_150946" data-func="train_test_split" title="💡 클릭하여 우측 'train_test_split' 해설 보기">train_test_split<span class="kw-sparkle">💡</span></span>(
     X_train, y_train,
@@ -1160,29 +1160,7 @@ print(&quot;X_val shape:&quot;, <span class="code-kw-interactive" data-step="ste
 print(&quot;X_test shape:&quot;, <span class="code-kw-interactive" data-step="step3" data-tab="step3-X_test_shape-927_151055" data-func="X_test.shape" title="💡 클릭하여 우측 'X_test.shape' 해설 보기">X_test.shape<span class="kw-sparkle">💡</span></span>)               # 20%</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>X_train_final shape: (460, 8)
 X_val shape: (154, 8)
 X_test shape: (154, 8)
-</pre></div></div></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (Markdown)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (4)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step3" data-tab="step3-X_test_shape-927_151055" onclick="switchTab('step3', 'step3-X_test_shape-927_151055')"><span class="tab-func-name">X_test.shape (6:2:2)</span></button><button class="func-tab-btn " data-step="step3" data-tab="step3-X_train_final_shape-927_151024" onclick="switchTab('step3', 'step3-X_train_final_shape-927_151024')"><span class="tab-func-name">X_train_final.shape</span></button><button class="func-tab-btn " data-step="step3" data-tab="step3-X_val_shape-927_151035" onclick="switchTab('step3', 'step3-X_val_shape-927_151035')"><span class="tab-func-name">X_val.shape</span></button><button class="func-tab-btn " data-step="step3" data-tab="step3-train_test_split-927_150946" onclick="switchTab('step3', 'step3-train_test_split-927_150946')"><span class="tab-func-name">train_test_split (6:2:2)</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step3-X_test_shape-927_151055"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>X_test.shape</code></div><div class="note-time-badge">⏱ 2026-09-27 15:10:55</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: X_test.shape</h1>
-<ul class="note-list">
-<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:10:55</li>
-<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">X_test.shape</code></li>
-</ul>
-<hr class="note-divider" />
-<p class="note-p">X_test.shape은 AI 공부에 쓸 시험 문제들이 가로세로 몇 장씩 쌓여 있는지, 즉 데이터의 전체 크기와 모양을 한눈에 알려주는 이름표 같은 역할을 해요.</p>
-<p class="note-p">우리가 새로운 물건을 사기 전에 가로, 세로, 높이 크기를 먼저 확인해보는 것처럼, 머신러닝 모델에 시험(테스트)을 보기 전 데이터가 우리가 생각한 대로 잘 준비되었는지 확인하고 싶을 때 주로 사용한답니다.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step3', 'X_test.shape')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step3-X_train_final_shape-927_151024"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>X_train_final.shape</code></div><div class="note-time-badge">⏱ 2026-09-27 15:10:24</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: X_train_final.shape</h1>
-<ul class="note-list">
-<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:10:24</li>
-<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">X_train_final.shape</code></li>
-</ul>
-<hr class="note-divider" />
-<p class="note-p">안녕하세요! 궁금해하신 코드에 대해 쉽고 친근하게 설명해 드릴게요.</p>
-<p class="note-p">이 코드는 쉽게 비유하자면 커다란 바둑판이나 엑셀 표의 크기를 재어주는 세로 가로 줄자 같다고 생각하시면 돼요. 내가 만든 표에 세로로 몇 줄이 들어있고, 가로로 몇 칸이 그려져 있는지 전체적인 판의 크기를 확인해 주는 친절한 도구랍니다.</p>
-<p class="note-p">X_train_final.shape는 인공지능을 학습시킬 최종 데이터 표의 전체적인 크기, 즉 데이터 개수(행)와 정보 종류(열)가 몇 개씩 있는지 확인해 주는 역할을 해요. 데이터를 여러 단계로 깔끔하게 정리한 후, AI에게 공부시키기 직전에 계획한 대로 데이터가 빠짐없이 잘 준비되었는지 최종 점검할 때 사용합니다. 만약 출력 결과가 (1000, 5)라면 1000명의 정보가 5가지 항목으로 예쁘게 정리되어 있다는 뜻이에요.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step3', 'X_train_final.shape')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step3-X_val_shape-927_151035"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>X_val.shape</code></div><div class="note-time-badge">⏱ 2026-09-27 15:10:35</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: X_val.shape</h1>
-<ul class="note-list">
-<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:10:35</li>
-<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">X_val.shape</code></li>
-</ul>
-<hr class="note-divider" />
-<p class="note-p">X_val.shape는 마치 택배 상자에 적힌 가로, 세로, 높이 치수처럼 우리가 가진 데이터가 전체 몇 개이고 각각 크기가 어떻게 되는지 그 크기 정보를 알려주는 아주 친절한 안내판 같은 역할을 한답니다.</p>
-<p class="note-p">주로 머신러닝 모델에게 공부를 시키거나 시험을 보기 전에, 데이터가 우리가 생각한 모양과 크기로 아주 잘 준비되었는지 꼼꼼하게 확인하고 싶을 때 쓴답니다.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step3', 'X_val.shape')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step3-train_test_split-927_150946"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>train_test_split</code></div><div class="note-time-badge">⏱ 2026-09-27 15:09:46</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: train_test_split</h1>
+</pre></div></div></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (Markdown)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (4)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step3" data-tab="step3-train_test_split-927_150946" onclick="switchTab('step3', 'step3-train_test_split-927_150946')"><span class="tab-func-name">train_test_split (6:2:2)</span></button><button class="func-tab-btn " data-step="step3" data-tab="step3-X_train_final_shape-927_151024" onclick="switchTab('step3', 'step3-X_train_final_shape-927_151024')"><span class="tab-func-name">X_train_final.shape</span></button><button class="func-tab-btn " data-step="step3" data-tab="step3-X_val_shape-927_151035" onclick="switchTab('step3', 'step3-X_val_shape-927_151035')"><span class="tab-func-name">X_val.shape</span></button><button class="func-tab-btn " data-step="step3" data-tab="step3-X_test_shape-927_151055" onclick="switchTab('step3', 'step3-X_test_shape-927_151055')"><span class="tab-func-name">X_test.shape (6:2:2)</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step3-train_test_split-927_150946"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>train_test_split</code></div><div class="note-time-badge">⏱ 2026-09-27 15:09:46</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: train_test_split</h1>
 <ul class="note-list">
 <li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:09:46</li>
 <li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">train_test_split</code></li>
@@ -1238,11 +1216,33 @@ X_test shape: (154, 8)
 <ul class="note-list">
 <li class="note-list-item"><code class="inline-code">X_val</code>에 1:1로 대응되는 <strong>25%</strong>의 정답 데이터입니다.</li>
 <li class="note-list-item">모의고사(X_val)를 푼 모델의 답안지와 비교하여 점수를 매길 때(채점용) 사용됩니다.</li>
-</ul></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step3', 'train_test_split')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section><section class="step-section" id="step4"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">4단계</span><h2 class="step-title-text">분할 데이터셋 레이블 빈도 및 비율 분석 (Stratified Check)</h2></div><p class="step-summary-desc">학습셋(y_train_final), 검증셋(y_val), 평가셋(y_test)의 당뇨병 양성/음성 클래스 비율이 원본과 동일하게 유지되었는지 value_counts로 검증</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 실행 코드 및 결과 (Jupyter Notebook)</div><div class="cell-markdown-box"><h3 class="note-h3"><code class="inline-code">y_train_final</code> 빈도 및 비율 분석</h3></div><div class="code-cell-wrapper" id="cell-9"><div class="cell-header"><span class="cell-badge">In [9]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">print(&#x27;y_train_final 빈도 분석:&#x27;)
-display(<span class="code-kw-interactive" data-step="step4" data-tab="step4-y_train_final_value_counts-927_151129" data-func="y_train_final.value_counts" title="💡 클릭하여 우측 'y_train_final.value_counts' 해설 보기">y_train_final.value_counts<span class="kw-sparkle">💡</span></span>().sort_index())
+</ul></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step3', 'train_test_split')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step3-X_train_final_shape-927_151024"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>X_train_final.shape</code></div><div class="note-time-badge">⏱ 2026-09-27 15:10:24</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: X_train_final.shape</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:10:24</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">X_train_final.shape</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">안녕하세요! 궁금해하신 코드에 대해 쉽고 친근하게 설명해 드릴게요.</p>
+<p class="note-p">이 코드는 쉽게 비유하자면 커다란 바둑판이나 엑셀 표의 크기를 재어주는 세로 가로 줄자 같다고 생각하시면 돼요. 내가 만든 표에 세로로 몇 줄이 들어있고, 가로로 몇 칸이 그려져 있는지 전체적인 판의 크기를 확인해 주는 친절한 도구랍니다.</p>
+<p class="note-p">X_train_final.shape는 인공지능을 학습시킬 최종 데이터 표의 전체적인 크기, 즉 데이터 개수(행)와 정보 종류(열)가 몇 개씩 있는지 확인해 주는 역할을 해요. 데이터를 여러 단계로 깔끔하게 정리한 후, AI에게 공부시키기 직전에 계획한 대로 데이터가 빠짐없이 잘 준비되었는지 최종 점검할 때 사용합니다. 만약 출력 결과가 (1000, 5)라면 1000명의 정보가 5가지 항목으로 예쁘게 정리되어 있다는 뜻이에요.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step3', 'X_train_final.shape')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step3-X_val_shape-927_151035"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>X_val.shape</code></div><div class="note-time-badge">⏱ 2026-09-27 15:10:35</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: X_val.shape</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:10:35</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">X_val.shape</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">X_val.shape는 마치 택배 상자에 적힌 가로, 세로, 높이 치수처럼 우리가 가진 데이터가 전체 몇 개이고 각각 크기가 어떻게 되는지 그 크기 정보를 알려주는 아주 친절한 안내판 같은 역할을 한답니다.</p>
+<p class="note-p">주로 머신러닝 모델에게 공부를 시키거나 시험을 보기 전에, 데이터가 우리가 생각한 모양과 크기로 아주 잘 준비되었는지 꼼꼼하게 확인하고 싶을 때 쓴답니다.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step3', 'X_val.shape')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step3-X_test_shape-927_151055"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>X_test.shape</code></div><div class="note-time-badge">⏱ 2026-09-27 15:10:55</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: X_test.shape</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:10:55</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">X_test.shape</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">X_test.shape은 AI 공부에 쓸 시험 문제들이 가로세로 몇 장씩 쌓여 있는지, 즉 데이터의 전체 크기와 모양을 한눈에 알려주는 이름표 같은 역할을 해요.</p>
+<p class="note-p">우리가 새로운 물건을 사기 전에 가로, 세로, 높이 크기를 먼저 확인해보는 것처럼, 머신러닝 모델에 시험(테스트)을 보기 전 데이터가 우리가 생각한 대로 잘 준비되었는지 확인하고 싶을 때 주로 사용한답니다.</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step3', 'X_test.shape')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section><section class="step-section" id="step4"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">4단계</span><h2 class="step-title-text">분할 데이터셋 레이블 빈도 및 비율 분석 (Stratified Check)</h2></div><p class="step-summary-desc">학습셋(y_train_final), 검증셋(y_val), 평가셋(y_test)의 당뇨병 양성/음성 클래스 비율이 원본과 동일하게 유지되었는지 value_counts로 검증</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 실행 코드 및 결과 (Jupyter Notebook)</div><div class="cell-markdown-box"><h3 class="note-h3"><code class="inline-code">y_train_final</code> 빈도 및 비율 분석</h3></div><div class="code-cell-wrapper" id="cell-9"><div class="cell-header"><span class="cell-badge">In [9]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">print(&#x27;y_train_final 빈도 분석:&#x27;)
+display(<span class="code-kw-interactive" data-step="step4" data-tab="step4-y_train_final_value_counts-927_151228" data-func="y_train_final.value_counts" title="💡 클릭하여 우측 'y_train_final.value_counts' 해설 보기">y_train_final.value_counts<span class="kw-sparkle">💡</span></span>().sort_index())
 
 print(&#x27;\ny_train_final 비율 분석:&#x27;)
-display(<span class="code-kw-interactive" data-step="step4" data-tab="step4-y_train_final_value_counts-927_151129" data-func="y_train_final.value_counts" title="💡 클릭하여 우측 'y_train_final.value_counts' 해설 보기">y_train_final.value_counts<span class="kw-sparkle">💡</span></span>(normalize=True).sort_index())</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (4)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>y_train_final 빈도 분석:
+display(<span class="code-kw-interactive" data-step="step4" data-tab="step4-y_train_final_value_counts-927_151228" data-func="y_train_final.value_counts" title="💡 클릭하여 우측 'y_train_final.value_counts' 해설 보기">y_train_final.value_counts<span class="kw-sparkle">💡</span></span>(normalize=True).sort_index())</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (4)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>y_train_final 빈도 분석:
 </pre></div><div class="output-item html-table-output"><div class="output-type-tag">DataFrame Display</div><div class="table-responsive-wrapper"><table border="1" class="dataframe modern-table">
   <thead>
     <tr style="text-align: right;">
@@ -1288,10 +1288,10 @@ y_train_final 비율 분석:
     </tr>
   </tbody>
 </table></div></div></div></div></div><div class="cell-markdown-box"><h3 class="note-h3"><code class="inline-code">y_val</code> 빈도 및 비율 분석</h3></div><div class="code-cell-wrapper" id="cell-11"><div class="cell-header"><span class="cell-badge">In [11]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">print(&#x27;y_val 빈도 분석:&#x27;)
-display(<span class="code-kw-interactive" data-step="step4" data-tab="step4-y_val_value_counts-927_151442" data-func="y_val.value_counts" title="💡 클릭하여 우측 'y_val.value_counts' 해설 보기">y_val.value_counts<span class="kw-sparkle">💡</span></span>().sort_index())
+display(<span class="code-kw-interactive" data-step="step4" data-tab="step4-y_val_value_counts-927_151545" data-func="y_val.value_counts" title="💡 클릭하여 우측 'y_val.value_counts' 해설 보기">y_val.value_counts<span class="kw-sparkle">💡</span></span>().sort_index())
 
 print(&#x27;\ny_val 비율 분석:&#x27;)
-display(<span class="code-kw-interactive" data-step="step4" data-tab="step4-y_val_value_counts-927_151442" data-func="y_val.value_counts" title="💡 클릭하여 우측 'y_val.value_counts' 해설 보기">y_val.value_counts<span class="kw-sparkle">💡</span></span>(normalize=True).sort_index())</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (4)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>y_val 빈도 분석:
+display(<span class="code-kw-interactive" data-step="step4" data-tab="step4-y_val_value_counts-927_151545" data-func="y_val.value_counts" title="💡 클릭하여 우측 'y_val.value_counts' 해설 보기">y_val.value_counts<span class="kw-sparkle">💡</span></span>(normalize=True).sort_index())</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (4)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>y_val 빈도 분석:
 </pre></div><div class="output-item html-table-output"><div class="output-type-tag">DataFrame Display</div><div class="table-responsive-wrapper"><table border="1" class="dataframe modern-table">
   <thead>
     <tr style="text-align: right;">
@@ -1337,10 +1337,10 @@ y_val 비율 분석:
     </tr>
   </tbody>
 </table></div></div></div></div></div><div class="cell-markdown-box"><h3 class="note-h3"><code class="inline-code">y_test</code> 빈도 및 비율 분석</h3></div><div class="code-cell-wrapper" id="cell-13"><div class="cell-header"><span class="cell-badge">In [13]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">print(&#x27;y_test 빈도 분석:&#x27;)
-display(<span class="code-kw-interactive" data-step="step4" data-tab="step4-y_test_value_counts-927_151611" data-func="y_test.value_counts" title="💡 클릭하여 우측 'y_test.value_counts' 해설 보기">y_test.value_counts<span class="kw-sparkle">💡</span></span>().sort_index())
+display(<span class="code-kw-interactive" data-step="step4" data-tab="step4-y_test_value_counts-927_151623" data-func="y_test.value_counts" title="💡 클릭하여 우측 'y_test.value_counts' 해설 보기">y_test.value_counts<span class="kw-sparkle">💡</span></span>().sort_index())
 
 print(&#x27;\ny_test 비율 분석:&#x27;)
-display(<span class="code-kw-interactive" data-step="step4" data-tab="step4-y_test_value_counts-927_151611" data-func="y_test.value_counts" title="💡 클릭하여 우측 'y_test.value_counts' 해설 보기">y_test.value_counts<span class="kw-sparkle">💡</span></span>(normalize=True).sort_index())</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (4)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>y_test 빈도 분석:
+display(<span class="code-kw-interactive" data-step="step4" data-tab="step4-y_test_value_counts-927_151623" data-func="y_test.value_counts" title="💡 클릭하여 우측 'y_test.value_counts' 해설 보기">y_test.value_counts<span class="kw-sparkle">💡</span></span>(normalize=True).sort_index())</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (4)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>y_test 빈도 분석:
 </pre></div><div class="output-item html-table-output"><div class="output-type-tag">DataFrame Display</div><div class="table-responsive-wrapper"><table border="1" class="dataframe modern-table">
   <thead>
     <tr style="text-align: right;">
@@ -1385,78 +1385,7 @@ y_test 비율 분석:
       <td>0.350649</td>
     </tr>
   </tbody>
-</table></div></div></div></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (Markdown)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (6)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step4" data-tab="step4-y_test_value_counts-927_151611" onclick="switchTab('step4', 'step4-y_test_value_counts-927_151611')"><span class="tab-func-name">y_test (빈도)</span></button><button class="func-tab-btn " data-step="step4" data-tab="step4-y_test_value_counts-927_151623" onclick="switchTab('step4', 'step4-y_test_value_counts-927_151623')"><span class="tab-func-name">y_test (비율)</span></button><button class="func-tab-btn " data-step="step4" data-tab="step4-y_train_final_value_counts-927_151129" onclick="switchTab('step4', 'step4-y_train_final_value_counts-927_151129')"><span class="tab-func-name">y_train_final (빈도)</span></button><button class="func-tab-btn " data-step="step4" data-tab="step4-y_train_final_value_counts-927_151228" onclick="switchTab('step4', 'step4-y_train_final_value_counts-927_151228')"><span class="tab-func-name">y_train_final (비율)</span></button><button class="func-tab-btn " data-step="step4" data-tab="step4-y_val_value_counts-927_151442" onclick="switchTab('step4', 'step4-y_val_value_counts-927_151442')"><span class="tab-func-name">y_val (빈도)</span></button><button class="func-tab-btn " data-step="step4" data-tab="step4-y_val_value_counts-927_151545" onclick="switchTab('step4', 'step4-y_val_value_counts-927_151545')"><span class="tab-func-name">y_val (비율)</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step4-y_test_value_counts-927_151611"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>y_test.value_counts</code></div><div class="note-time-badge">⏱ 2026-09-27 15:16:11</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: y_test.value_counts</h1>
-<ul class="note-list">
-<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:16:11</li>
-<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">y_test.value_counts</code></li>
-</ul>
-<hr class="note-divider" />
-<p class="note-p">파이썬 머신러닝 코드에서 자주 사용되는 <code class="inline-code">y_test.value_counts().sort_index()</code> 구문 중, 핵심이 되는 <strong><code class="inline-code">y_test.value_counts</code></strong> 함수와 주변 메서드들에 대해 초보자의 눈높이에 맞춰 알기 쉽게 설명해 드리겠습니다.</p>
-<hr class="note-divider" />
-<h3 class="note-h3">1. 📌 함수 개요</h3>
-<p class="note-p"><code class="inline-code">y_test.value_counts()</code>는 <strong>정답 데이터(y_test)에 포함된 각 정답(클래스)별 개수가 총 몇 개인지 세어주는 함수</strong>입니다. 여기에 <code class="inline-code">.sort_index()</code>를 붙이면 그 결과(데이터의 종류)를 오름차순으로 예쁘게 정렬해서 보여줍니다. 머신러닝 모델이 특정 정답에 편향되어 학습되지 않았는지(데이터가 골고루 잘 나뉘었는지) 확인할 때 주로 사용합니다.</p>
-<hr class="note-divider" />
-<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
-<p class="note-p">제시해주신 코드 문맥(<code class="inline-code">display(y_test.value_counts().sort_index())</code>)에서 <strong><code class="inline-code">value_counts()</code></strong> 함수와 <strong><code class="inline-code">sort_index()</code></strong> 함수에 사용된 인자들을 분석해 보겠습니다.</p>
-<ul class="note-list">
-<li class="note-list-item"><strong><code class="inline-code">y_test.value_counts()</code> 안의 괄호 <code class="inline-code">()</code> (전달된 인자 없음)</strong></li>
-<li class="note-list-item"><strong>역할:</strong> 이 괄호 안에는 아무런 값도 넣지 않았습니다.</li>
-<li class="note-list-item"><strong>의미:</strong> 기본값(Default)을 그대로 사용하여, <code class="inline-code">y_test</code>에 있는 모든 데이터의 종류별 개수를 빠짐없이 세라는 뜻입니다. (참고로 이 안에 <code class="inline-code">normalize=True</code> 같은 인자를 넣으면 개수 대신 비율로 보여줄 수도 있지만, 기본은 개수입니다.)</li>
-<li class="note-list-item"><strong><code class="inline-code">.sort_index()</code> 안의 괄호 <code class="inline-code">()</code> (전달된 인자 없음)</strong></li>
-<li class="note-list-item"><strong>역할:</strong> 역시 비어 있는 괄호입니다.</li>
-<li class="note-list-item"><strong>의미:</strong> 데이터의 이름(Index, 예를 들어 0, 1, 2 또는 &#x27;Cat&#x27;, &#x27;Dog&#x27; 같은 정답 라벨)을 기준으로 <strong>가나다순 또는 오름차순(작은 것부터 큰 것 순서)</strong>으로 결과를 정렬하라는 뜻입니다. 결과가 뒤죽박죽 섞여 있으면 보기 불편하기 때문에 정렬을 위해 세트로 자주 붙여 씁니다.</li>
-</ul>
-<p class="note-p"><em>(※ 질문에서 예시로 언급하신 <code class="inline-code">test_size</code>, <code class="inline-code">random_state</code>, <code class="inline-code">stratify</code> 등은 이 함수가 아니라, 데이터를 훈련용과 테스트용으로 쪼갤 때 쓰는 <code class="inline-code">train_test_split</code> 함수의 인자이므로 여기서는 사용되지 않았습니다!)</em></p>
-<hr class="note-divider" />
-<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
-<p class="note-p">이 코드는 변수에 값을 새롭게 할당하는 코드가 아니라, 결과를 화면에 예쁘게 보여주는(<code class="inline-code">display</code>) 코드입니다. 이 코드가 실행되었을 때 <strong>출력되는 결과(반환값)</strong>가 무엇을 의미하는지 설명해 드릴게요.</p>
-<ul class="note-list">
-<li class="note-list-item"><strong>반환되는 데이터 형태 (Pandas Series):</strong></li>
-<li class="note-list-item">왼쪽에는 <strong>정답의 이름(라벨)</strong>이 나오고, 오른쪽에는 <strong>그 정답이 테스트 데이터(y_test)에 몇 개 들어있는지(개수)</strong>가 짝을 지어 출력됩니다.</li>
-<li class="note-list-item"><strong>출력 예시 및 해석:</strong></li>
-</ul>
-<pre class="note-code-block"><code class="language-text">    0    30
-    1    25
-    Name: count, dtype: int64</code></pre>
-<ul class="note-list">
-<li class="note-list-item"><strong><code class="inline-code">0</code>과 <code class="inline-code">1</code> (Index):</strong> 모델이 맞춰야 할 정답의 종류(예: 0번 고양이, 1번 강아지)입니다. <code class="inline-code">.sort_index()</code> 덕분에 0이 먼저, 1이 나중에 오도록 깔끔하게 정렬되었습니다.</li>
-<li class="note-list-item"><strong><code class="inline-code">30</code>과 <code class="inline-code">25</code> (Value):</strong> 테스트 데이터(<code class="inline-code">y_test</code>) 안에 0번 정답이 30개, 1번 정답이 25개 들어있다는 뜻입니다.</li>
-<li class="note-list-item"><strong><code class="inline-code">Name: count, dtype: int64</code>:</strong> 데이터의 개수를 세었으며, 숫자의 데이터 타입이 정수(int)라는 안내입니다.</li>
-</ul></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step4', 'y_test.value_counts')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step4-y_test_value_counts-927_151623"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>y_test.value_counts</code></div><div class="note-time-badge">⏱ 2026-09-27 15:16:23</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: y_test.value_counts</h1>
-<ul class="note-list">
-<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:16:23</li>
-<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">y_test.value_counts</code></li>
-</ul>
-<hr class="note-divider" />
-<p class="note-p">파이썬 머신러닝 코드에서 자주 사용되는 <code class="inline-code">y_test.value_counts(normalize=True).sort_index()</code> 문맥 중, <strong><code class="inline-code">y_test.value_counts</code> 함수와 그 인자들</strong>에 대한 상세 해설입니다.</p>
-<hr class="note-divider" />
-<h3 class="note-h3">1. 📌 함수 개요</h3>
-<p class="note-p"><code class="inline-code">y_test.value_counts()</code>는 판다스(Pandas) 데이터 구조(Series)에서 <strong>각 데이터(값)가 몇 번 나타나는지(개수)를 세어주는 함수</strong>입니다. 정답 데이터(<code class="inline-code">y_test</code>)에 어떤 종류의 값이 얼마나 들어있는지 파악하여, 데이터의 균형 상태를 확인할 때 주로 사용합니다.</p>
-<hr class="note-divider" />
-<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
-<p class="note-p">제시해주신 코드에는 함수 내부의 인자와 함께 결과값을 조작하는 메서드들이 연결(Chaining)되어 있습니다. 각각의 역할을 살펴볼게요.</p>
-<ul class="note-list">
-<li class="note-list-item"><strong><code class="inline-code">normalize=True</code> (<code class="inline-code">value_counts</code>의 인자)</strong></li>
-<li class="note-list-item"><strong>역할:</strong> 개수를 그대로 보여주는 대신, <strong>전체 대비 비율(백분율의 소수점 형태)</strong>로 변환해 줍니다.</li>
-<li class="note-list-item"><strong>의미:</strong> 예를 들어 총 100개의 데이터 중 0이 80개, 1이 20개라면, 개수 대신 각각 <code class="inline-code">0.8</code>, <code class="inline-code">0.2</code>로 비율을 계산해서 보여줍니다. (불균형 데이터셋인지 확인할 때 매우 유용합니다.)</li>
-</ul>
-<ul class="note-list">
-<li class="note-list-item"><strong><code class="inline-code">.sort_index()</code> (추가 메서드)</strong></li>
-<li class="note-list-item"><strong>역할:</strong> 계산된 결과의 <strong>기준값(Index)을 오름차순으로 정렬</strong>해 줍니다.</li>
-<li class="note-list-item"><strong>의미:</strong> 예를 들어 정답 라벨이 <code class="inline-code">[0, 1, 2]</code>라면, 뒤죽박죽 섞여서 출력될 수 있는 결과를 <code class="inline-code">0</code>, <code class="inline-code">1</code>, <code class="inline-code">2</code> 순서대로 깔끔하게 줄 세워 줍니다.</li>
-</ul>
-<hr class="note-divider" />
-<h3 class="note-h3">3. 📤 반환값/할당 변수 설명</h3>
-<p class="note-p">이 코드는 변수에 값을 다시 할당하지 않고, 주피터 노트북 등의 환경에서 결과를 예쁘게 출력하기 위해 <code class="inline-code">display()</code> 함수로 감싸져 있습니다.</p>
-<ul class="note-list">
-<li class="note-list-item"><strong>출력되는 결과:</strong></li>
-<li class="note-list-item"><code class="inline-code">y_test</code>(테스트용 정답 데이터)에 들어있는 <strong>각 클래스(라벨)별 비율</strong>이 <strong>정렬된 순서</strong>로 화면에 표 형태로 출력됩니다.</li>
-<li class="note-list-item"><em>(예시)</em></li>
-</ul>
-<pre class="note-code-block"><code class="language-text">        0    0.75
-        1    0.25
-        dtype: float64</code></pre>
-<p class="note-p"><em>(해석: 테스트 데이터 중 0번 정답이 75%, 1번 정답이 25% 비율로 들어있음을 한눈에 알 수 있습니다.)</em></p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step4', 'y_test.value_counts')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step4-y_train_final_value_counts-927_151129"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>y_train_final.value_counts</code></div><div class="note-time-badge">⏱ 2026-09-27 15:11:29</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: y_train_final.value_counts</h1>
+</table></div></div></div></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (Markdown)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (6)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step4" data-tab="step4-y_train_final_value_counts-927_151129" onclick="switchTab('step4', 'step4-y_train_final_value_counts-927_151129')"><span class="tab-func-name">y_train_final (빈도)</span></button><button class="func-tab-btn " data-step="step4" data-tab="step4-y_train_final_value_counts-927_151228" onclick="switchTab('step4', 'step4-y_train_final_value_counts-927_151228')"><span class="tab-func-name">y_train_final (비율)</span></button><button class="func-tab-btn " data-step="step4" data-tab="step4-y_val_value_counts-927_151442" onclick="switchTab('step4', 'step4-y_val_value_counts-927_151442')"><span class="tab-func-name">y_val (빈도)</span></button><button class="func-tab-btn " data-step="step4" data-tab="step4-y_val_value_counts-927_151545" onclick="switchTab('step4', 'step4-y_val_value_counts-927_151545')"><span class="tab-func-name">y_val (비율)</span></button><button class="func-tab-btn " data-step="step4" data-tab="step4-y_test_value_counts-927_151611" onclick="switchTab('step4', 'step4-y_test_value_counts-927_151611')"><span class="tab-func-name">y_test (빈도)</span></button><button class="func-tab-btn " data-step="step4" data-tab="step4-y_test_value_counts-927_151623" onclick="switchTab('step4', 'step4-y_test_value_counts-927_151623')"><span class="tab-func-name">y_test (비율)</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step4-y_train_final_value_counts-927_151129"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>y_train_final.value_counts</code></div><div class="note-time-badge">⏱ 2026-09-27 15:11:29</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: y_train_final.value_counts</h1>
 <ul class="note-list">
 <li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:11:29</li>
 <li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">y_train_final.value_counts</code></li>
@@ -1607,7 +1536,78 @@ y_test 비율 분석:
 <ul class="note-list">
 <li class="note-list-item"><strong>어따가 쓰나요?:</strong></li>
 <li class="note-list-item">검증용 정답 데이터(<code class="inline-code">y_val</code>)에 특정 데이터가 너무 편중되지는 않았는지(데이터 불균형 문제)를 파악할 때 유용하게 쓰입니다.</li>
-</ul></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step4', 'y_val.value_counts')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section>
+</ul></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step4', 'y_val.value_counts')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step4-y_test_value_counts-927_151611"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>y_test.value_counts</code></div><div class="note-time-badge">⏱ 2026-09-27 15:16:11</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: y_test.value_counts</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:16:11</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">y_test.value_counts</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">파이썬 머신러닝 코드에서 자주 사용되는 <code class="inline-code">y_test.value_counts().sort_index()</code> 구문 중, 핵심이 되는 <strong><code class="inline-code">y_test.value_counts</code></strong> 함수와 주변 메서드들에 대해 초보자의 눈높이에 맞춰 알기 쉽게 설명해 드리겠습니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">y_test.value_counts()</code>는 <strong>정답 데이터(y_test)에 포함된 각 정답(클래스)별 개수가 총 몇 개인지 세어주는 함수</strong>입니다. 여기에 <code class="inline-code">.sort_index()</code>를 붙이면 그 결과(데이터의 종류)를 오름차순으로 예쁘게 정렬해서 보여줍니다. 머신러닝 모델이 특정 정답에 편향되어 학습되지 않았는지(데이터가 골고루 잘 나뉘었는지) 확인할 때 주로 사용합니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">제시해주신 코드 문맥(<code class="inline-code">display(y_test.value_counts().sort_index())</code>)에서 <strong><code class="inline-code">value_counts()</code></strong> 함수와 <strong><code class="inline-code">sort_index()</code></strong> 함수에 사용된 인자들을 분석해 보겠습니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">y_test.value_counts()</code> 안의 괄호 <code class="inline-code">()</code> (전달된 인자 없음)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 이 괄호 안에는 아무런 값도 넣지 않았습니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 기본값(Default)을 그대로 사용하여, <code class="inline-code">y_test</code>에 있는 모든 데이터의 종류별 개수를 빠짐없이 세라는 뜻입니다. (참고로 이 안에 <code class="inline-code">normalize=True</code> 같은 인자를 넣으면 개수 대신 비율로 보여줄 수도 있지만, 기본은 개수입니다.)</li>
+<li class="note-list-item"><strong><code class="inline-code">.sort_index()</code> 안의 괄호 <code class="inline-code">()</code> (전달된 인자 없음)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 역시 비어 있는 괄호입니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 데이터의 이름(Index, 예를 들어 0, 1, 2 또는 &#x27;Cat&#x27;, &#x27;Dog&#x27; 같은 정답 라벨)을 기준으로 <strong>가나다순 또는 오름차순(작은 것부터 큰 것 순서)</strong>으로 결과를 정렬하라는 뜻입니다. 결과가 뒤죽박죽 섞여 있으면 보기 불편하기 때문에 정렬을 위해 세트로 자주 붙여 씁니다.</li>
+</ul>
+<p class="note-p"><em>(※ 질문에서 예시로 언급하신 <code class="inline-code">test_size</code>, <code class="inline-code">random_state</code>, <code class="inline-code">stratify</code> 등은 이 함수가 아니라, 데이터를 훈련용과 테스트용으로 쪼갤 때 쓰는 <code class="inline-code">train_test_split</code> 함수의 인자이므로 여기서는 사용되지 않았습니다!)</em></p>
+<hr class="note-divider" />
+<h3 class="note-h3">3. 📤 반환값/할당 변수</h3>
+<p class="note-p">이 코드는 변수에 값을 새롭게 할당하는 코드가 아니라, 결과를 화면에 예쁘게 보여주는(<code class="inline-code">display</code>) 코드입니다. 이 코드가 실행되었을 때 <strong>출력되는 결과(반환값)</strong>가 무엇을 의미하는지 설명해 드릴게요.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong>반환되는 데이터 형태 (Pandas Series):</strong></li>
+<li class="note-list-item">왼쪽에는 <strong>정답의 이름(라벨)</strong>이 나오고, 오른쪽에는 <strong>그 정답이 테스트 데이터(y_test)에 몇 개 들어있는지(개수)</strong>가 짝을 지어 출력됩니다.</li>
+<li class="note-list-item"><strong>출력 예시 및 해석:</strong></li>
+</ul>
+<pre class="note-code-block"><code class="language-text">    0    30
+    1    25
+    Name: count, dtype: int64</code></pre>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">0</code>과 <code class="inline-code">1</code> (Index):</strong> 모델이 맞춰야 할 정답의 종류(예: 0번 고양이, 1번 강아지)입니다. <code class="inline-code">.sort_index()</code> 덕분에 0이 먼저, 1이 나중에 오도록 깔끔하게 정렬되었습니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">30</code>과 <code class="inline-code">25</code> (Value):</strong> 테스트 데이터(<code class="inline-code">y_test</code>) 안에 0번 정답이 30개, 1번 정답이 25개 들어있다는 뜻입니다.</li>
+<li class="note-list-item"><strong><code class="inline-code">Name: count, dtype: int64</code>:</strong> 데이터의 개수를 세었으며, 숫자의 데이터 타입이 정수(int)라는 안내입니다.</li>
+</ul></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step4', 'y_test.value_counts')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step4-y_test_value_counts-927_151623"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>y_test.value_counts</code></div><div class="note-time-badge">⏱ 2026-09-27 15:16:23</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: y_test.value_counts</h1>
+<ul class="note-list">
+<li class="note-list-item"><strong>기록 일시</strong>: 2026-09-27 15:16:23</li>
+<li class="note-list-item"><strong>대상 코드/함수</strong>: <code class="inline-code">y_test.value_counts</code></li>
+</ul>
+<hr class="note-divider" />
+<p class="note-p">파이썬 머신러닝 코드에서 자주 사용되는 <code class="inline-code">y_test.value_counts(normalize=True).sort_index()</code> 문맥 중, <strong><code class="inline-code">y_test.value_counts</code> 함수와 그 인자들</strong>에 대한 상세 해설입니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">1. 📌 함수 개요</h3>
+<p class="note-p"><code class="inline-code">y_test.value_counts()</code>는 판다스(Pandas) 데이터 구조(Series)에서 <strong>각 데이터(값)가 몇 번 나타나는지(개수)를 세어주는 함수</strong>입니다. 정답 데이터(<code class="inline-code">y_test</code>)에 어떤 종류의 값이 얼마나 들어있는지 파악하여, 데이터의 균형 상태를 확인할 때 주로 사용합니다.</p>
+<hr class="note-divider" />
+<h3 class="note-h3">2. 🔍 입력 인자(매개변수) 분석</h3>
+<p class="note-p">제시해주신 코드에는 함수 내부의 인자와 함께 결과값을 조작하는 메서드들이 연결(Chaining)되어 있습니다. 각각의 역할을 살펴볼게요.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">normalize=True</code> (<code class="inline-code">value_counts</code>의 인자)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 개수를 그대로 보여주는 대신, <strong>전체 대비 비율(백분율의 소수점 형태)</strong>로 변환해 줍니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 예를 들어 총 100개의 데이터 중 0이 80개, 1이 20개라면, 개수 대신 각각 <code class="inline-code">0.8</code>, <code class="inline-code">0.2</code>로 비율을 계산해서 보여줍니다. (불균형 데이터셋인지 확인할 때 매우 유용합니다.)</li>
+</ul>
+<ul class="note-list">
+<li class="note-list-item"><strong><code class="inline-code">.sort_index()</code> (추가 메서드)</strong></li>
+<li class="note-list-item"><strong>역할:</strong> 계산된 결과의 <strong>기준값(Index)을 오름차순으로 정렬</strong>해 줍니다.</li>
+<li class="note-list-item"><strong>의미:</strong> 예를 들어 정답 라벨이 <code class="inline-code">[0, 1, 2]</code>라면, 뒤죽박죽 섞여서 출력될 수 있는 결과를 <code class="inline-code">0</code>, <code class="inline-code">1</code>, <code class="inline-code">2</code> 순서대로 깔끔하게 줄 세워 줍니다.</li>
+</ul>
+<hr class="note-divider" />
+<h3 class="note-h3">3. 📤 반환값/할당 변수 설명</h3>
+<p class="note-p">이 코드는 변수에 값을 다시 할당하지 않고, 주피터 노트북 등의 환경에서 결과를 예쁘게 출력하기 위해 <code class="inline-code">display()</code> 함수로 감싸져 있습니다.</p>
+<ul class="note-list">
+<li class="note-list-item"><strong>출력되는 결과:</strong></li>
+<li class="note-list-item"><code class="inline-code">y_test</code>(테스트용 정답 데이터)에 들어있는 <strong>각 클래스(라벨)별 비율</strong>이 <strong>정렬된 순서</strong>로 화면에 표 형태로 출력됩니다.</li>
+<li class="note-list-item"><em>(예시)</em></li>
+</ul>
+<pre class="note-code-block"><code class="language-text">        0    0.75
+        1    0.25
+        dtype: float64</code></pre>
+<p class="note-p"><em>(해석: 테스트 데이터 중 0번 정답이 75%, 1번 정답이 25% 비율로 들어있음을 한눈에 알 수 있습니다.)</em></p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step4', 'y_test.value_counts')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section>
   </main>
 
   <div class="toast-msg" id="toast">✅ 알림 메시지</div>
