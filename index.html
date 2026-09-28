@@ -547,21 +547,21 @@
       <div class="stat-card">
         <span class="stat-icon">📚</span>
         <div class="stat-text">
-          <div class="stat-value">10 / 12+</div>
+          <div class="stat-value">11 / 16+</div>
           <div class="stat-label">학습 모듈 (순차 오픈 중)</div>
         </div>
       </div>
       <div class="stat-card">
         <span class="stat-icon">💡</span>
         <div class="stat-text">
-          <div class="stat-value">253개</div>
+          <div class="stat-value">278개</div>
           <div class="stat-label">AI 핵심 함수 상세 해설</div>
         </div>
       </div>
       <div class="stat-card">
         <span class="stat-icon">⚡</span>
         <div class="stat-text">
-          <div class="stat-value">56단계</div>
+          <div class="stat-value">62단계</div>
           <div class="stat-label">실습 전처리/모델링 파이프라인</div>
         </div>
       </div>
@@ -573,6 +573,7 @@
       <button class="filter-chip" onclick="filterCategory('active', this)">학습 가능 (Active)</button>
       <button class="filter-chip" onclick="filterCategory('prep', this)">데이터 전처리</button>
       <button class="filter-chip" onclick="filterCategory('supervised', this)">지도학습 (회귀/분류)</button>
+      <button class="filter-chip" onclick="filterCategory('unsupervised', this)">비지도학습 (군집/PCA)</button>
       <button class="filter-chip" onclick="filterCategory('upcoming', this)">순차 오픈 예정</button>
     </div>
   </section>
@@ -881,6 +882,36 @@
         </div>
       </div>
 
+      <!-- Module 16 (Active) -->
+      <div class="module-card" data-category="active unsupervised">
+        <div>
+          <div class="card-top">
+            <span class="chapter-tag">CHAPTER 16</span>
+            <span class="status-badge active"><span class="status-dot"></span>학습 가능</span>
+          </div>
+          <h3 class="module-title">16. 머신러닝 기초: 비지도 학습 (K-Means Clustering & PCA)</h3>
+          <p class="module-desc">
+            당뇨병(Diabetes) 벤치마크 데이터를 StandardScaler로 표준화한 후, K=2부터 10까지 silhouette_score(실루엣 점수)를 비교하여 최적의 군집 수(k)를 탐색합니다. 최적 KMeans 모델로 환자 군집 레이블을 생성하고, 군집별 환자 수 및 질병 진행도(target) 평균을 도출하며, PCA 2차원 차원 축소를 적용하여 군집 분포를 2차원 산점도로 시각화합니다.
+          </p>
+          <div class="topic-tags">
+            <span class="topic-tag">StandardScaler 표준화</span>
+            <span class="topic-tag">KMeans (k 군집화)</span>
+            <span class="topic-tag">silhouette_score (최적 k)</span>
+            <span class="topic-tag">df.groupby & mean</span>
+            <span class="topic-tag">PCA 2D 시각화</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="card-metrics">
+            <span>⚡ 6개 파이프라인 단계</span>
+            <span>📝 25개 AI 해설 노트 매칭</span>
+          </div>
+          <a href="16 머신러닝 기초_비지도_Kmeans/index16.html" class="open-btn">
+            뷰어 열기 ➔
+          </a>
+        </div>
+      </div>
+
       <!-- Module Upcoming: Feature Engineering & PCA -->
       <div class="module-card upcoming" data-category="upcoming prep">
         <div>
@@ -907,21 +938,21 @@
         </div>
       </div>
 
-      <!-- Module Upcoming: Ensemble & Clustering -->
+      <!-- Module Upcoming: Advanced Ensemble -->
       <div class="module-card upcoming" data-category="upcoming supervised">
         <div>
           <div class="card-top">
-            <span class="chapter-tag">CHAPTER 13+</span>
+            <span class="chapter-tag">CHAPTER 13~15</span>
             <span class="status-badge upcoming"><span class="status-dot"></span>순차 오픈 예정</span>
           </div>
-          <h3 class="module-title">13+. 고급 앙상블 및 비지도 학습 (RandomForest, XGBoost & K-Means)</h3>
+          <h3 class="module-title">13~15. 고급 앙상블 및 부스팅 (RandomForest, XGBoost & LightGBM)</h3>
           <p class="module-desc">
-            배깅(Bagging)과 부스팅(XGBoost, LightGBM)의 강력한 앙상블 모델링 및 비지도 학습 군집화(K-Means, 실루엣 스코어) 파이프라인을 실습합니다.
+            배깅(Bagging)과 그라디언트 부스팅(GBM)의 강력한 앙상블 모델링 및 하이퍼파라미터 튜닝(GridSearchCV) 파이프라인을 실습합니다.
           </p>
           <div class="topic-tags">
             <span class="topic-tag">RandomForest</span>
             <span class="topic-tag">XGBoost / LightGBM</span>
-            <span class="topic-tag">K-Means Clustering</span>
+            <span class="topic-tag">GridSearchCV</span>
           </div>
         </div>
         <div class="card-footer">
@@ -943,7 +974,7 @@
 
   <script>
     // Theme Switcher (Synchronized with module viewers)
-    const ALL_MODULES = ['01', '02', '05', '06', '07', '08', '09', '10', '11', '12'];
+    const ALL_MODULES = ['01', '02', '05', '06', '07', '08', '09', '10', '11', '12', '16'];
 
     function toggleTheme() {
       const html = document.documentElement;
@@ -971,7 +1002,6 @@
         document.documentElement.setAttribute('data-theme', saved);
         const btn = document.getElementById('theme-btn');
         if (btn) btn.textContent = saved === 'dark' ? '☀️ 라이트 모드' : '🌙 다크 모드';
-      }
     })();
 
     // Search Filter
