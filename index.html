@@ -1039,16 +1039,16 @@
         </div>
         <h3 class="gateway-card-title">🚀 머신러닝 심화 과정</h3>
         <p class="gateway-card-desc">
-          Mean Shift 밀도 기반 군집화 & PCA 2차원 투영, XGBoost / LightGBM 최신 앙상블 부스팅, Optuna 베이지안 하이퍼파라미터 자동화, SHAP & LIME 모델 설명가능성(XAI), 이상 탐지 및 MLOps 파이프라인 구축.
+          Mean Shift & DBSCAN 밀도 기반 군집화, RFECV 특성 선택 및 피처 엔지니어링, XGBoost / LightGBM 최신 앙상블 부스팅, Optuna 베이지안 최적화, SHAP & LIME 모델 설명가능성(XAI) 및 MLOps 파이프라인 구축.
         </p>
         <div class="gateway-features">
-          <span class="gateway-feat-badge">밀도 군집화 Mean Shift (01)</span>
-          <span class="gateway-feat-badge">앙상블 & 부스팅 (XGB/LGBM/Cat)</span>
+          <span class="gateway-feat-badge">밀도 군집화 Mean Shift (01) & DBSCAN (02)</span>
+          <span class="gateway-feat-badge">특성 공학 RFECV 분류 (05)</span>
           <span class="gateway-feat-badge">Optuna 자동화 튜닝</span>
           <span class="gateway-feat-badge">XAI 모델 해석 (SHAP/LIME)</span>
         </div>
         <div class="gateway-footer">
-          <span class="gateway-stat-text">🔥 1개 모듈 운영 중 • 64개 AI 해설</span>
+          <span class="gateway-stat-text">🔥 3개 모듈 운영 중 • 172개 AI 해설</span>
           <span class="gateway-action-btn">
             심화 과정 들어가기 ➔
           </span>
@@ -1515,21 +1515,21 @@
         <div class="stat-card">
           <span class="stat-icon">🔥</span>
           <div class="stat-text">
-            <div class="stat-value adv-color">1 / 8개</div>
-            <div class="stat-label">심화 모듈 (순차 오픈 중)</div>
+            <div class="stat-value adv-color">3 / 8개</div>
+            <div class="stat-label">심화 모듈 (운영 중)</div>
           </div>
         </div>
         <div class="stat-card">
           <span class="stat-icon">💡</span>
           <div class="stat-text">
-            <div class="stat-value adv-color">64개</div>
+            <div class="stat-value adv-color">172개</div>
             <div class="stat-label">AI 핵심 함수 상세 해설 (시간순)</div>
           </div>
         </div>
         <div class="stat-card">
           <span class="stat-icon">⚡</span>
           <div class="stat-text">
-            <div class="stat-value adv-color">7단계</div>
+            <div class="stat-value adv-color">19단계</div>
             <div class="stat-label">실습 전처리/모델링 파이프라인</div>
           </div>
         </div>
@@ -1540,8 +1540,8 @@
         <button class="filter-chip active adv-active" onclick="filterCategory('all', this, 'view-advanced')">전체 심화 (All)</button>
         <button class="filter-chip" onclick="filterCategory('active', this, 'view-advanced')">학습 가능 (Active)</button>
         <button class="filter-chip" onclick="filterCategory('unsupervised-adv', this, 'view-advanced')">밀도군집 & 고급비지도</button>
+        <button class="filter-chip" onclick="filterCategory('optimization', this, 'view-advanced')">최적화 & 특성공학</button>
         <button class="filter-chip" onclick="filterCategory('boosting', this, 'view-advanced')">앙상블 & 부스팅</button>
-        <button class="filter-chip" onclick="filterCategory('optimization', this, 'view-advanced')">최적화 & XAI</button>
         <button class="filter-chip" onclick="filterCategory('applied', this, 'view-advanced')">시계열 & NLP & MLOps</button>
       </div>
     </section>
@@ -1555,7 +1555,7 @@
         <div class="guidance-content">
           <h4>심화 모듈 운영 및 작업 안내</h4>
           <p>
-            현재 <strong>01. Mean Shift 군집화</strong> 뷰어가 오픈되어 64개 해설 노트와 함께 학습할 수 있습니다. 후속 심화 모듈(Optuna, XAI, 앙상블 등)도 동일하게 전용 폴더 및 뷰어 형태로 순차 개설됩니다.
+            현재 <strong>01. Mean Shift 군집화</strong>, <strong>02. DBSCAN 군집화</strong>, <strong>05. Feature Engineering (분류)</strong> 뷰어가 오픈되어 총 172개 해설 노트와 함께 학습할 수 있습니다. 후속 심화 모듈(Optuna, XAI, 앙상블 등)도 동일하게 전용 폴더 및 뷰어 형태로 순차 개설됩니다.
           </p>
         </div>
       </div>
@@ -1593,14 +1593,44 @@
           </div>
         </div>
 
-        <!-- Adv Module 02: Optuna & Hyperparameter Tuning -->
-        <div class="module-card adv-card-style" data-category="optimization">
+        <!-- Adv Module 02: DBSCAN Clustering (Active) -->
+        <div class="module-card adv-card-style" data-category="active unsupervised-adv">
           <div>
             <div class="card-top">
-              <span class="chapter-tag adv-tag">ADVANCED 02</span>
-              <span class="status-badge adv-ready"><span class="status-dot"></span>심화 작업 준비</span>
+              <span class="chapter-tag adv-tag">CHAPTER 02 (심화)</span>
+              <span class="status-badge active"><span class="status-dot"></span>학습 가능</span>
             </div>
-            <h3 class="module-title">02. 차세대 하이퍼파라미터 자동 최적화: Optuna & Bayesian Optimization</h3>
+            <h3 class="module-title">02. 머신러닝 심화: DBSCAN 밀도 기반 군집화 (비선형 군집 & 노이즈 자동 검출)</h3>
+            <p class="module-desc">
+              make_moons 초승달 비선형 합성 데이터를 생성 및 표준화한 후, K-Means가 실패하는 기하학적 비구형 군집을 밀도 기반 군집 알고리즘인 DBSCAN으로 완벽하게 분리합니다. 반경(eps=0.2)과 최소 샘플 수(min_samples=5)에 따른 핵심점(Core)·경계점(Border) 판별 원리와 이상치/노이즈(Noise: -1) 자동 검출 메커니즘을 비교 분석합니다.
+            </p>
+            <div class="topic-tags">
+              <span class="topic-tag adv-topic">make_moons 비선형 데이터</span>
+              <span class="topic-tag adv-topic">StandardScaler 표준화</span>
+              <span class="topic-tag adv-topic">DBSCAN (eps=0.2, min_samples=5)</span>
+              <span class="topic-tag adv-topic">노이즈(Noise: -1) 자동 검출</span>
+              <span class="topic-tag adv-topic">KMeans vs DBSCAN 비교</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="card-metrics">
+              <span>⚡ 5개 파이프라인 단계</span>
+              <span>📝 42개 AI 해설 노트 (시간순 매칭)</span>
+            </div>
+            <a href="02 머신러닝 심화 DBSCAN Clustering/index02.html" class="open-btn adv-btn">
+              뷰어 열기 ➔
+            </a>
+          </div>
+        </div>
+
+        <!-- Adv Module 03: Optuna & Hyperparameter Tuning -->
+        <div class="module-card adv-card-style upcoming" data-category="upcoming optimization">
+          <div>
+            <div class="card-top">
+              <span class="chapter-tag adv-tag">ADVANCED 03</span>
+              <span class="status-badge upcoming"><span class="status-dot"></span>순차 오픈 예정</span>
+            </div>
+            <h3 class="module-title">03. 차세대 하이퍼파라미터 자동 최적화: Optuna & Bayesian Optimization</h3>
             <p class="module-desc">
               느리고 비효율적인 GridSearchCV/RandomizedSearchCV를 대체하는 베이지안 최적화 프레임워크 Optuna를 구축합니다. Tree-structured Parzen Estimator(TPE) 샘플러와 MedianPruner 가지치기를 활용하여 최적의 모델 하이퍼파라미터를 초고속으로 탐색합니다.
             </p>
@@ -1617,20 +1647,18 @@
               <span>🎯 TPE 베이지안 최적화</span>
               <span>📊 파라미터 중요도 시각화</span>
             </div>
-            <a href="심화 02_Optuna_최적화/index.html" class="open-btn adv-btn">
-              작업 착수 & 열기 ➔
-            </a>
+            <button class="open-btn adv-btn disabled">순차 오픈 예정</button>
           </div>
         </div>
 
-        <!-- Adv Module 03: XAI (Explainable AI - SHAP & LIME) -->
-        <div class="module-card adv-card-style" data-category="optimization">
+        <!-- Adv Module 04: XAI (Explainable AI - SHAP & LIME) -->
+        <div class="module-card adv-card-style upcoming" data-category="upcoming optimization">
           <div>
             <div class="card-top">
-              <span class="chapter-tag adv-tag">ADVANCED 03</span>
-              <span class="status-badge adv-ready"><span class="status-dot"></span>심화 작업 준비</span>
+              <span class="chapter-tag adv-tag">ADVANCED 04</span>
+              <span class="status-badge upcoming"><span class="status-dot"></span>순차 오픈 예정</span>
             </div>
-            <h3 class="module-title">03. 설명 가능한 AI (XAI): SHAP & LIME을 활용한 블랙박스 모델 해석</h3>
+            <h3 class="module-title">04. 설명 가능한 AI (XAI): SHAP & LIME을 활용한 블랙박스 모델 해석</h3>
             <p class="module-desc">
               복잡한 머신러닝 모델의 예측 이유를 정량적으로 밝히는 Shapley Value 기반 TreeSHAP 알고리즘을 실습합니다. Summary Plot, Waterfall Plot, Force Plot, 그리고 국소적 모델 해석 기법인 LIME을 통해 개별 예측값에 대한 피처 기여도를 정밀 해부합니다.
             </p>
@@ -1647,78 +1675,47 @@
               <span>🎯 전역/국소적 피처 기여도</span>
               <span>📊 인터랙티브 XAI 시각화</span>
             </div>
-            <a href="심화 03_XAI_SHAP_해석/index.html" class="open-btn adv-btn">
-              작업 착수 & 열기 ➔
-            </a>
+            <button class="open-btn adv-btn disabled">순차 오픈 예정</button>
           </div>
         </div>
 
-        <!-- Adv Module 04: Non-linear Dimensionality Reduction (t-SNE & UMAP) -->
-        <div class="module-card adv-card-style" data-category="unsupervised-adv">
+        <!-- Adv Module 05: Feature Engineering & RFECV (Active) -->
+        <div class="module-card adv-card-style" data-category="active optimization">
           <div>
             <div class="card-top">
-              <span class="chapter-tag adv-tag">ADVANCED 04</span>
-              <span class="status-badge adv-ready"><span class="status-dot"></span>심화 작업 준비</span>
+              <span class="chapter-tag adv-tag">CHAPTER 05 (심화)</span>
+              <span class="status-badge active"><span class="status-dot"></span>학습 가능</span>
             </div>
-            <h3 class="module-title">04. 고급 차원 축소 & 매니폴드 학습: t-SNE & UMAP 시각화</h3>
+            <h3 class="module-title">05. 머신러닝 심화: 분류 특성 공학 & RFECV 재귀적 피처 선택</h3>
             <p class="module-desc">
-              선형 변환인 PCA의 한계를 극복하는 비선형 차원 축소 기법을 배웁니다. 확률 기반의 t-SNE(t-Distributed Stochastic Neighbor Embedding)와 위상수학 기반의 초고속 UMAP을 적용하여 고차원 비정형·복합 데이터를 2D/3D 공간에 클러스터링 시각화합니다.
+              유방암(Breast Cancer) 30개 다차원 특성을 StandardScaler로 표준화하고, 로지스틱 회귀와 5-Fold 계층적 교차 검증(StratifiedKFold)을 결합한 RFECV(재귀적 특성 제거) 파이프라인을 구축합니다. 교차 검증 ROC-AUC 점수가 최대화되는 최적의 피처 개수(Optimal Features)를 자동 선별하고, 선택 마스크(support_) 및 탈락 랭킹(ranking_) 추이를 시각화 검증합니다.
             </p>
             <div class="topic-tags">
-              <span class="topic-tag adv-topic">sklearn.manifold.TSNE</span>
-              <span class="topic-tag adv-topic">umap.UMAP</span>
-              <span class="topic-tag adv-topic">매니폴드 (Manifold)</span>
-              <span class="topic-tag adv-topic">Perplexity 튜닝</span>
-              <span class="topic-tag adv-topic">2D/3D 클러스터 매핑</span>
+              <span class="topic-tag adv-topic">load_breast_cancer</span>
+              <span class="topic-tag adv-topic">StandardScaler 표준화</span>
+              <span class="topic-tag adv-topic">StratifiedKFold (5-Fold CV)</span>
+              <span class="topic-tag adv-topic">RFECV (재귀적 특성 제거)</span>
+              <span class="topic-tag adv-topic">LogisticRegression & ROC-AUC</span>
+              <span class="topic-tag adv-topic">최적 피처 수 시각화</span>
             </div>
           </div>
           <div class="card-footer">
             <div class="card-metrics">
-              <span>🎯 국소 구조 보존 차원축소</span>
-              <span>⚡ PCA vs t-SNE vs UMAP</span>
+              <span>⚡ 7개 파이프라인 단계</span>
+              <span>📝 66개 AI 해설 노트 (시간순 매칭)</span>
             </div>
-            <a href="심화 04_차원축소_TSNE_UMAP/index.html" class="open-btn adv-btn">
-              작업 착수 & 열기 ➔
-            </a>
-          </div>
-        </div>
-
-        <!-- Adv Module 05: Anomaly Detection -->
-        <div class="module-card adv-card-style" data-category="unsupervised-adv">
-          <div>
-            <div class="card-top">
-              <span class="chapter-tag adv-tag">ADVANCED 05</span>
-              <span class="status-badge adv-ready"><span class="status-dot"></span>심화 작업 준비</span>
-            </div>
-            <h3 class="module-title">05. 이상 탐지(Anomaly Detection) & 비지도 사기 탐지(FDS)</h3>
-            <p class="module-desc">
-              정상 데이터가 대다수이고 이상치가 극소수인 실무 환경에서 활용되는 Isolation Forest, One-Class SVM, Local Outlier Factor(LOF) 알고리즘을 학습합니다. 오염도(contamination) 설정과 이상치 스코어 임계값 최적화 파이프라인을 구축합니다.
-            </p>
-            <div class="topic-tags">
-              <span class="topic-tag adv-topic">IsolationForest</span>
-              <span class="topic-tag adv-topic">OneClassSVM</span>
-              <span class="topic-tag adv-topic">LocalOutlierFactor</span>
-              <span class="topic-tag adv-topic">Contamination 파라미터</span>
-              <span class="topic-tag adv-topic">이상치 점수화 (Scoring)</span>
-            </div>
-          </div>
-          <div class="card-footer">
-            <div class="card-metrics">
-              <span>🎯 이상치 분리 격리 원리</span>
-              <span>🛡️ 사기/결함 탐지 워크플로우</span>
-            </div>
-            <a href="심화 05_이상탐지_IsolationForest/index.html" class="open-btn adv-btn">
-              작업 착수 & 열기 ➔
+            <a href="05 머신러닝 심화 Feature Engineering_classification/index05.html" class="open-btn adv-btn">
+              뷰어 열기 ➔
             </a>
           </div>
         </div>
 
         <!-- Adv Module 06: Time-Series Machine Learning -->
-        <div class="module-card adv-card-style" data-category="applied">
+        <div class="module-card adv-card-style upcoming" data-category="upcoming applied">
           <div>
             <div class="card-top">
               <span class="chapter-tag adv-tag">ADVANCED 06</span>
-              <span class="status-badge adv-ready"><span class="status-dot"></span>심화 작업 준비</span>
+              <span class="status-badge upcoming"><span class="status-dot"></span>순차 오픈 예정</span>
             </div>
             <h3 class="module-title">06. 시계열 머신러닝: 특성 공학과 Walk-Forward 교차 검증</h3>
             <p class="module-desc">
@@ -1737,18 +1734,16 @@
               <span>🎯 시계열 피처 엔지니어링</span>
               <span>📈 미래 예측 롤링 윈도우</span>
             </div>
-            <a href="심화 06_시계열_머신러닝/index.html" class="open-btn adv-btn">
-              작업 착수 & 열기 ➔
-            </a>
+            <button class="open-btn adv-btn disabled">순차 오픈 예정</button>
           </div>
         </div>
 
         <!-- Adv Module 07: NLP Machine Learning -->
-        <div class="module-card adv-card-style" data-category="applied">
+        <div class="module-card adv-card-style upcoming" data-category="upcoming applied">
           <div>
             <div class="card-top">
               <span class="chapter-tag adv-tag">ADVANCED 07</span>
-              <span class="status-badge adv-ready"><span class="status-dot"></span>심화 작업 준비</span>
+              <span class="status-badge upcoming"><span class="status-dot"></span>순차 오픈 예정</span>
             </div>
             <h3 class="module-title">07. 텍스트 마이닝 & 머신러닝 NLP: TF-IDF와 토픽 모델링(LDA)</h3>
             <p class="module-desc">
@@ -1767,18 +1762,16 @@
               <span>🎯 텍스트 벡터화 파이프라인</span>
               <span>📰 뉴스 군집화 & 토픽 추출</span>
             </div>
-            <a href="심화 07_텍스트_NLP_머신러닝/index.html" class="open-btn adv-btn">
-              작업 착수 & 열기 ➔
-            </a>
+            <button class="open-btn adv-btn disabled">순차 오픈 예정</button>
           </div>
         </div>
 
         <!-- Adv Module 08: Pipeline & MLOps Serving -->
-        <div class="module-card adv-card-style" data-category="applied">
+        <div class="module-card adv-card-style upcoming" data-category="upcoming applied">
           <div>
             <div class="card-top">
               <span class="chapter-tag adv-tag">ADVANCED 08</span>
-              <span class="status-badge adv-ready"><span class="status-dot"></span>심화 작업 준비</span>
+              <span class="status-badge upcoming"><span class="status-dot"></span>순차 오픈 예정</span>
             </div>
             <h3 class="module-title">08. Scikit-Learn 파이프라인(Pipeline)과 MLOps 서빙 기초</h3>
             <p class="module-desc">
@@ -1797,9 +1790,7 @@
               <span>🎯 데이터 누수 원천 차단</span>
               <span>🚀 모델 직렬화 & 실시간 서빙</span>
             </div>
-            <a href="심화 08_파이프라인_MLOps/index.html" class="open-btn adv-btn">
-              작업 착수 & 열기 ➔
-            </a>
+            <button class="open-btn adv-btn disabled">순차 오픈 예정</button>
           </div>
         </div>
 
@@ -1814,7 +1805,7 @@
 
   <script>
     // Theme Switcher (Synchronized with module viewers)
-    const ALL_MODULES = ['01', '02', '05', '06', '07', '08', '09', '10', '11', '12', '16', 'adv_01'];
+    const ALL_MODULES = ['01', '02', '05', '06', '07', '08', '09', '10', '11', '12', '16', 'adv_01', 'adv02', 'fe05'];
 
     function toggleTheme() {
       const html = document.documentElement;
