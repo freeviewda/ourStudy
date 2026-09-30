@@ -913,7 +913,7 @@
   <!-- Sticky Step Quick Navigation Bar -->
   <nav class="step-quick-nav">
     <div class="nav-inner">
-      <a href="#step1" class="step-nav-item" data-step="step1"><span class="step-nav-num">1</span><span class="step-nav-label">라이브러리 임포트 및 Pima Indians 당뇨병 데이터셋 로드</span><span class="nav-note-badge">14개 해설</span></a><a href="#step2" class="step-nav-item" data-step="step2"><span class="step-nav-num">2</span><span class="step-nav-label">타깃 이진 인코딩 및 탐색적 데이터 분석(EDA)</span><span class="nav-note-badge">8개 해설</span></a><a href="#step3" class="step-nav-item" data-step="step3"><span class="step-nav-num">3</span><span class="step-nav-label">계층적 데이터 분할 (Stratified Train/Test Split)</span><span class="nav-note-badge">5개 해설</span></a><a href="#step4" class="step-nav-item" data-step="step4"><span class="step-nav-num">4</span><span class="step-nav-label">RFECV 및 Pipeline 구축</span><span class="nav-note-badge">5개 해설</span></a><a href="#step5" class="step-nav-item" data-step="step5"><span class="step-nav-num">5</span><span class="step-nav-label">선택된 최적 피처(support_) 및 피처 순위표(ranking_) 분석</span><span class="nav-note-badge">9개 해설</span></a><a href="#step6" class="step-nav-item" data-step="step6"><span class="step-nav-num">6</span><span class="step-nav-label">테스트 세트 평가 및 Baseline(전체 피처) 모델과의 성능 비교</span><span class="nav-note-badge">7개 해설</span></a><a href="#step7" class="step-nav-item" data-step="step7"><span class="step-nav-num">7</span><span class="step-nav-label">피처 수에 따른 교차 검증 점수 시각화 및 최적 성능 분석</span><span class="nav-note-badge">18개 해설</span></a>
+      <a href="#step1" class="step-nav-item" data-step="step1"><span class="step-nav-num">1</span><span class="step-nav-label">필수 라이브러리 임포트 및 분석 환경 구축</span><span class="nav-note-badge">12개 해설</span></a><a href="#step2" class="step-nav-item" data-step="step2"><span class="step-nav-num">2</span><span class="step-nav-label">Pima Indians 당뇨병 데이터셋 로드 및 탐색적 데이터 분석(EDA)</span><span class="nav-note-badge">10개 해설</span></a><a href="#step3" class="step-nav-item" data-step="step3"><span class="step-nav-num">3</span><span class="step-nav-label">계층적 데이터 분할 (Stratified Train/Test Split)</span><span class="nav-note-badge">5개 해설</span></a><a href="#step4" class="step-nav-item" data-step="step4"><span class="step-nav-num">4</span><span class="step-nav-label">RFECV 및 Pipeline 구축</span><span class="nav-note-badge">5개 해설</span></a><a href="#step5" class="step-nav-item" data-step="step5"><span class="step-nav-num">5</span><span class="step-nav-label">선택된 최적 피처(support_) 및 피처 순위표(ranking_) 분석</span><span class="nav-note-badge">9개 해설</span></a><a href="#step6" class="step-nav-item" data-step="step6"><span class="step-nav-num">6</span><span class="step-nav-label">테스트 세트 평가 및 Baseline(전체 피처) 모델과의 성능 비교</span><span class="nav-note-badge">7개 해설</span></a><a href="#step7" class="step-nav-item" data-step="step7"><span class="step-nav-num">7</span><span class="step-nav-label">피처 수에 따른 교차 검증 점수 시각화 및 최적 성능 분석</span><span class="nav-note-badge">18개 해설</span></a>
     </div>
   </nav>
 
@@ -941,7 +941,7 @@
     </section>
 
     <!-- Pipeline Step Sections -->
-    <section class="step-section" id="step1"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">1단계</span><h2 class="step-title-text">라이브러리 임포트 및 Pima Indians 당뇨병 데이터셋 로드</h2></div><p class="step-summary-desc">Scikit-Learn 및 분석 라이브러리를 임포트하고, OpenML에서 피마 인디언 당뇨병 데이터(768x8)를 로드합니다.</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 주피터 노트북 실행 코드 및 결과</div><div class="cell-markdown-box"><h2 class="note-h2">라이브러리 임포트</h2></div><div class="code-cell-wrapper" id="cell-2"><div class="cell-header"><span class="cell-badge">In [2]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">import <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-pandas-20260930_234118')" data-step="step1" data-tab="step1-pandas-20260930_234118" data-func="pandas" title="💡 클릭하여 우측 'pandas' 해설 보기">pandas<span class="kw-sparkle">💡</span></span> as pd
+    <section class="step-section" id="step1"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">1단계</span><h2 class="step-title-text">필수 라이브러리 임포트 및 분석 환경 구축</h2></div><p class="step-summary-desc">Pandas, NumPy, Matplotlib, OpenML, Scikit-Learn 전처리 및 모델링 모듈(RFECV, RandomForest, Pipeline)을 불러옵니다.</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 주피터 노트북 실행 코드 및 결과</div><div class="cell-markdown-box"><h2 class="note-h2">라이브러리 임포트</h2></div><div class="code-cell-wrapper" id="cell-2"><div class="cell-header"><span class="cell-badge">In [2]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">import <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-pandas-20260930_234118')" data-step="step1" data-tab="step1-pandas-20260930_234118" data-func="pandas" title="💡 클릭하여 우측 'pandas' 해설 보기">pandas<span class="kw-sparkle">💡</span></span> as pd
 import <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-numpy-20260930_234127')" data-step="step1" data-tab="step1-numpy-20260930_234127" data-func="numpy" title="💡 클릭하여 우측 'numpy' 해설 보기">numpy<span class="kw-sparkle">💡</span></span> as np
 import <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-matplotlib_pyplot-20260930_234138')" data-step="step1" data-tab="step1-matplotlib_pyplot-20260930_234138" data-func="matplotlib.pyplot" title="💡 클릭하여 우측 'matplotlib.pyplot' 해설 보기">matplotlib.pyplot<span class="kw-sparkle">💡</span></span> as plt
 from sklearn.datasets import <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-fetch_openml-20260930_234149')" data-step="step1" data-tab="step1-fetch_openml-20260930_234149" data-func="fetch_openml" title="💡 클릭하여 우측 'fetch_openml' 해설 보기">fetch_openml<span class="kw-sparkle">💡</span></span>
@@ -950,85 +950,7 @@ from sklearn.preprocessing import <span class="interactive-kw" onclick="activate
 from sklearn.feature_selection import <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-RFECV-20260930_234240')" data-step="step1" data-tab="step1-RFECV-20260930_234240" data-func="RFECV" title="💡 클릭하여 우측 'RFECV' 해설 보기">RFECV<span class="kw-sparkle">💡</span></span>
 from sklearn.ensemble import <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-RandomForestClassifier-20260930_234252')" data-step="step1" data-tab="step1-RandomForestClassifier-20260930_234252" data-func="RandomForestClassifier" title="💡 클릭하여 우측 'RandomForestClassifier' 해설 보기">RandomForestClassifier<span class="kw-sparkle">💡</span></span>
 from sklearn.pipeline import <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-Pipeline-20260930_234306')" data-step="step1" data-tab="step1-Pipeline-20260930_234306" data-func="Pipeline" title="💡 클릭하여 우측 'Pipeline' 해설 보기">Pipeline<span class="kw-sparkle">💡</span></span>
-from sklearn.metrics import <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-accuracy_score-20260930_234327')" data-step="step1" data-tab="step1-accuracy_score-20260930_234327" data-func="accuracy_score" title="💡 클릭하여 우측 'accuracy_score' 해설 보기">accuracy_score<span class="kw-sparkle">💡</span></span>, <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-classification_report-20260930_234336')" data-step="step1" data-tab="step1-classification_report-20260930_234336" data-func="classification_report" title="💡 클릭하여 우측 'classification_report' 해설 보기">classification_report<span class="kw-sparkle">💡</span></span></code></pre></div></div><div class="cell-markdown-box"><h2 class="note-h2">1. 데이터 로드</h2>
-<div class="note-empty-line"></div>
-<p class="note-p"><strong>Pima Indians Diabetes 데이터셋</strong></p>
-<ul class="note-ul">
-<li class="note-li">768개 샘플, 8개 피처</li>
-<li class="note-li">당뇨병 발병 여부 이진 분류</li>
-<li class="note-li">피처: 임신 횟수, 혈당, BMI, 나이 등</li>
-</ul></div><div class="code-cell-wrapper" id="cell-4"><div class="cell-header"><span class="cell-badge">In [4]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">print(&quot;Loading Pima Indians Diabetes Dataset...&quot;)
-pima = <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-fetch_openml-20260930_234149')" data-step="step1" data-tab="step1-fetch_openml-20260930_234149" data-func="fetch_openml" title="💡 클릭하여 우측 'fetch_openml' 해설 보기">fetch_openml<span class="kw-sparkle">💡</span></span>(name=&#x27;diabetes&#x27;, version=1, as_frame=True)
-X = <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-pima_data-20260930_234426')" data-step="step1" data-tab="step1-pima_data-20260930_234426" data-func="pima.data" title="💡 클릭하여 우측 'pima.data' 해설 보기">pima.data<span class="kw-sparkle">💡</span></span>
-# Convert target labels from string to integer
-y = pima.target.map({&#x27;tested_negative&#x27;: 0, &#x27;tested_positive&#x27;: 1}).astype(int)
-
-print(f&quot;데이터 크기: {X.shape}&quot;)
-print(f&quot;클래스 분포:\n{y.value_counts()}&quot;)
-print(f&quot;\n피처 목록:\n{list(X.columns)}&quot;)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>Loading Pima Indians Diabetes Dataset...
-데이터 크기: (768, 8)
-클래스 분포:
-class
-0    500
-1    268
-Name: count, dtype: int64
-
-피처 목록:
-[&#x27;preg&#x27;, &#x27;plas&#x27;, &#x27;pres&#x27;, &#x27;skin&#x27;, &#x27;insu&#x27;, &#x27;mass&#x27;, &#x27;pedi&#x27;, &#x27;age&#x27;]
-</pre></div></div></div></div><div class="code-cell-wrapper" id="cell-5"><div class="cell-header"><span class="cell-badge">In [5]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">pima.target</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item html-table-output"><div class="output-type-tag">DataFrame Display</div><div class="table-responsive-wrapper"><table border="1" class="dataframe modern-table">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>class</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>tested_positive</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>tested_negative</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>tested_positive</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>tested_negative</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>tested_positive</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>763</th>
-      <td>tested_negative</td>
-    </tr>
-    <tr>
-      <th>764</th>
-      <td>tested_negative</td>
-    </tr>
-    <tr>
-      <th>765</th>
-      <td>tested_negative</td>
-    </tr>
-    <tr>
-      <th>766</th>
-      <td>tested_positive</td>
-    </tr>
-    <tr>
-      <th>767</th>
-      <td>tested_negative</td>
-    </tr>
-  </tbody>
-</table></div></div></div></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (MARKDOWN)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (14)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step1" data-tab="step1-pandas-20260930_234118" onclick="switchTab('step1', 'step1-pandas-20260930_234118')"><span class="tab-func-name">import pandas as pd</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-numpy-20260930_234127" onclick="switchTab('step1', 'step1-numpy-20260930_234127')"><span class="tab-func-name">import numpy as np</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-matplotlib_pyplot-20260930_234138" onclick="switchTab('step1', 'step1-matplotlib_pyplot-20260930_234138')"><span class="tab-func-name">import matplotlib.pyplot</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-fetch_openml-20260930_234149" onclick="switchTab('step1', 'step1-fetch_openml-20260930_234149')"><span class="tab-func-name">from sklearn.datasets</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-train_test_split-20260930_234159" onclick="switchTab('step1', 'step1-train_test_split-20260930_234159')"><span class="tab-func-name">import train_test_split</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-StratifiedKFold-20260930_234211" onclick="switchTab('step1', 'step1-StratifiedKFold-20260930_234211')"><span class="tab-func-name">import StratifiedKFold</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-StandardScaler-20260930_234221" onclick="switchTab('step1', 'step1-StandardScaler-20260930_234221')"><span class="tab-func-name">import StandardScaler</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-RFECV-20260930_234240" onclick="switchTab('step1', 'step1-RFECV-20260930_234240')"><span class="tab-func-name">import RFECV</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-RandomForestClassifier-20260930_234252" onclick="switchTab('step1', 'step1-RandomForestClassifier-20260930_234252')"><span class="tab-func-name">import RandomForestClassifier</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-Pipeline-20260930_234306" onclick="switchTab('step1', 'step1-Pipeline-20260930_234306')"><span class="tab-func-name">import Pipeline</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-accuracy_score-20260930_234327" onclick="switchTab('step1', 'step1-accuracy_score-20260930_234327')"><span class="tab-func-name">import accuracy_score</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-classification_report-20260930_234336" onclick="switchTab('step1', 'step1-classification_report-20260930_234336')"><span class="tab-func-name">import classification_report</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-fetch_openml-20260930_234356" onclick="switchTab('step1', 'step1-fetch_openml-20260930_234356')"><span class="tab-func-name">fetch_openml('diabetes')</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-pima_data-20260930_234426" onclick="switchTab('step1', 'step1-pima_data-20260930_234426')"><span class="tab-func-name">pima.data (특성 확인)</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step1-pandas-20260930_234118"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>pandas</code></div><div class="note-time-badge">⏱ 2026-09-30 23:41:18</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: pandas</h1>
+from sklearn.metrics import <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-accuracy_score-20260930_234327')" data-step="step1" data-tab="step1-accuracy_score-20260930_234327" data-func="accuracy_score" title="💡 클릭하여 우측 'accuracy_score' 해설 보기">accuracy_score<span class="kw-sparkle">💡</span></span>, <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-classification_report-20260930_234336')" data-step="step1" data-tab="step1-classification_report-20260930_234336" data-func="classification_report" title="💡 클릭하여 우측 'classification_report' 해설 보기">classification_report<span class="kw-sparkle">💡</span></span></code></pre></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (MARKDOWN)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (12)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step1" data-tab="step1-pandas-20260930_234118" onclick="switchTab('step1', 'step1-pandas-20260930_234118')"><span class="tab-func-name">import pandas as pd</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-numpy-20260930_234127" onclick="switchTab('step1', 'step1-numpy-20260930_234127')"><span class="tab-func-name">import numpy as np</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-matplotlib_pyplot-20260930_234138" onclick="switchTab('step1', 'step1-matplotlib_pyplot-20260930_234138')"><span class="tab-func-name">import matplotlib.pyplot</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-fetch_openml-20260930_234149" onclick="switchTab('step1', 'step1-fetch_openml-20260930_234149')"><span class="tab-func-name">from sklearn.datasets</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-train_test_split-20260930_234159" onclick="switchTab('step1', 'step1-train_test_split-20260930_234159')"><span class="tab-func-name">import train_test_split</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-StratifiedKFold-20260930_234211" onclick="switchTab('step1', 'step1-StratifiedKFold-20260930_234211')"><span class="tab-func-name">import StratifiedKFold</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-StandardScaler-20260930_234221" onclick="switchTab('step1', 'step1-StandardScaler-20260930_234221')"><span class="tab-func-name">import StandardScaler</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-RFECV-20260930_234240" onclick="switchTab('step1', 'step1-RFECV-20260930_234240')"><span class="tab-func-name">import RFECV</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-RandomForestClassifier-20260930_234252" onclick="switchTab('step1', 'step1-RandomForestClassifier-20260930_234252')"><span class="tab-func-name">import RandomForestClassifier</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-Pipeline-20260930_234306" onclick="switchTab('step1', 'step1-Pipeline-20260930_234306')"><span class="tab-func-name">import Pipeline</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-accuracy_score-20260930_234327" onclick="switchTab('step1', 'step1-accuracy_score-20260930_234327')"><span class="tab-func-name">import accuracy_score</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-classification_report-20260930_234336" onclick="switchTab('step1', 'step1-classification_report-20260930_234336')"><span class="tab-func-name">import classification_report</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step1-pandas-20260930_234118"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>pandas</code></div><div class="note-time-badge">⏱ 2026-09-30 23:41:18</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: pandas</h1>
 <div class="note-empty-line"></div>
 <ul class="note-ul">
 <li class="note-li"><strong>기록 일시</strong>: 2026-09-30 23:41:18</li>
@@ -1190,7 +1112,117 @@ Name: count, dtype: int64
 <p class="note-p">이 친구는 시험을 치른 학생(인공지능)이 과목별로, 그리고 전체적으로 얼마나 잘 맞췄는지를 정밀하게 분석해서 한눈에 보기 쉽게 종합 성적표로 뽑아주는 역할을 해요.</p>
 <div class="note-empty-line"></div>
 <p class="note-p">인공지능이 단순히 전체 정답률만 보여주는 게 아니라 어떤 부분에서 자주 틀리는지 꼼꼼하게 점검하고 싶을 때 꼭 필요하니까요, 모델의 실력을 세세하게 평가하고 싶을 때 사용하시면 된답니다.</p>
-<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'classification_report')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step1-fetch_openml-20260930_234356"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>fetch_openml</code></div><div class="note-time-badge">⏱ 2026-09-30 23:43:56</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: fetch_openml</h1>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'classification_report')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section><section class="step-section" id="step2"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">2단계</span><h2 class="step-title-text">Pima Indians 당뇨병 데이터셋 로드 및 탐색적 데이터 분석(EDA)</h2></div><p class="step-summary-desc">OpenML에서 피마 인디언 당뇨병 데이터(768x8)를 로드하고, 타깃 레이블(0/1) 매핑 및 기술 통계량(describe)과 결측치를 확인합니다.</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 주피터 노트북 실행 코드 및 결과</div><div class="cell-markdown-box"><h2 class="note-h2">1. 데이터 로드</h2>
+<div class="note-empty-line"></div>
+<p class="note-p"><strong>Pima Indians Diabetes 데이터셋</strong></p>
+<ul class="note-ul">
+<li class="note-li">768개 샘플, 8개 피처</li>
+<li class="note-li">당뇨병 발병 여부 이진 분류</li>
+<li class="note-li">피처: 임신 횟수, 혈당, BMI, 나이 등</li>
+</ul></div><div class="code-cell-wrapper" id="cell-4"><div class="cell-header"><span class="cell-badge">In [4]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">print(&quot;Loading Pima Indians Diabetes Dataset...&quot;)
+pima = <span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-fetch_openml-20260930_234356')" data-step="step2" data-tab="step2-fetch_openml-20260930_234356" data-func="fetch_openml" title="💡 클릭하여 우측 'fetch_openml' 해설 보기">fetch_openml<span class="kw-sparkle">💡</span></span>(name=&#x27;diabetes&#x27;, version=1, as_frame=True)
+X = <span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-pima_data-20260930_234426')" data-step="step2" data-tab="step2-pima_data-20260930_234426" data-func="pima.data" title="💡 클릭하여 우측 'pima.data' 해설 보기">pima.data<span class="kw-sparkle">💡</span></span>
+# Convert target labels from string to integer
+y = <span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-pima_target_map-20260930_234439')" data-step="step2" data-tab="step2-pima_target_map-20260930_234439" data-func="<span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-pima_target-20260930_234641')" data-step="step2" data-tab="step2-pima_target-20260930_234641" data-func="pima.target" title="💡 클릭하여 우측 'pima.target' 해설 보기">pima.target<span class="kw-sparkle">💡</span></span>.map" title="💡 클릭하여 우측 '<span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-pima_target-20260930_234641')" data-step="step2" data-tab="step2-pima_target-20260930_234641" data-func="pima.target" title="💡 클릭하여 우측 'pima.target' 해설 보기">pima.target<span class="kw-sparkle">💡</span></span>.map' 해설 보기"><span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-pima_target-20260930_234641')" data-step="step2" data-tab="step2-pima_target-20260930_234641" data-func="pima.target" title="💡 클릭하여 우측 'pima.target' 해설 보기">pima.target<span class="kw-sparkle">💡</span></span>.map<span class="kw-sparkle">💡</span></span>({&#x27;tested_negative&#x27;: 0, &#x27;tested_positive&#x27;: 1}).astype(int)
+
+print(f&quot;데이터 크기: {<span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-X_shape-20260930_234556')" data-step="step2" data-tab="step2-X_shape-20260930_234556" data-func="X.shape" title="💡 클릭하여 우측 'X.shape' 해설 보기">X.shape<span class="kw-sparkle">💡</span></span>}&quot;)
+print(f&quot;클래스 분포:\n{<span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-y_value_counts-20260930_234610')" data-step="step2" data-tab="step2-y_value_counts-20260930_234610" data-func="y.value_counts" title="💡 클릭하여 우측 'y.value_counts' 해설 보기">y.value_counts<span class="kw-sparkle">💡</span></span>()}&quot;)
+print(f&quot;\n피처 목록:\n{<span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-list-20260930_234630')" data-step="step2" data-tab="step2-list-20260930_234630" data-func="list" title="💡 클릭하여 우측 'list' 해설 보기">list<span class="kw-sparkle">💡</span></span>(X.columns)}&quot;)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>Loading Pima Indians Diabetes Dataset...
+데이터 크기: (768, 8)
+클래스 분포:
+class
+0    500
+1    268
+Name: count, dtype: int64
+
+피처 목록:
+[&#x27;preg&#x27;, &#x27;plas&#x27;, &#x27;pres&#x27;, &#x27;skin&#x27;, &#x27;insu&#x27;, &#x27;mass&#x27;, &#x27;pedi&#x27;, &#x27;age&#x27;]
+</pre></div></div></div></div><div class="code-cell-wrapper" id="cell-5"><div class="cell-header"><span class="cell-badge">In [5]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"><span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-pima_target-20260930_234641')" data-step="step2" data-tab="step2-pima_target-20260930_234641" data-func="pima.target" title="💡 클릭하여 우측 'pima.target' 해설 보기">pima.target<span class="kw-sparkle">💡</span></span></code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item html-table-output"><div class="output-type-tag">DataFrame Display</div><div class="table-responsive-wrapper"><table border="1" class="dataframe modern-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>class</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>tested_positive</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>tested_negative</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>tested_positive</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>tested_negative</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>tested_positive</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>763</th>
+      <td>tested_negative</td>
+    </tr>
+    <tr>
+      <th>764</th>
+      <td>tested_negative</td>
+    </tr>
+    <tr>
+      <th>765</th>
+      <td>tested_negative</td>
+    </tr>
+    <tr>
+      <th>766</th>
+      <td>tested_positive</td>
+    </tr>
+    <tr>
+      <th>767</th>
+      <td>tested_negative</td>
+    </tr>
+  </tbody>
+</table></div></div></div></div></div><div class="cell-markdown-box"><p class="note-p"><strong>데이터 샘플 확인</strong></p></div><div class="code-cell-wrapper" id="cell-7"><div class="cell-header"><span class="cell-badge">In [7]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 데이터 샘플
+print(&quot;데이터 샘플:&quot;)
+print(<span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-X_head-20260930_234652')" data-step="step2" data-tab="step2-X_head-20260930_234652" data-func="X.head" title="💡 클릭하여 우측 'X.head' 해설 보기">X.head<span class="kw-sparkle">💡</span></span>())
+print(f&quot;\n기술 통계:&quot;)
+print(<span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-X_describe-20260930_234705')" data-step="step2" data-tab="step2-X_describe-20260930_234705" data-func="X.describe" title="💡 클릭하여 우측 'X.describe' 해설 보기">X.describe<span class="kw-sparkle">💡</span></span>())</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>데이터 샘플:
+   preg  plas  pres  skin  insu  mass   pedi  age
+0     6   148    72    35     0  33.6  0.627   50
+1     1    85    66    29     0  26.6  0.351   31
+2     8   183    64     0     0  23.3  0.672   32
+3     1    89    66    23    94  28.1  0.167   21
+4     0   137    40    35   168  43.1  2.288   33
+
+기술 통계:
+             preg        plas        pres        skin        insu        mass  \
+count  768.000000  768.000000  768.000000  768.000000  768.000000  768.000000   
+mean     3.845052  120.894531   69.105469   20.536458   79.799479   31.992578   
+std      3.369578   31.972618   19.355807   15.952218  115.244002    7.884160   
+min      0.000000    0.000000    0.000000    0.000000    0.000000    0.000000   
+25%      1.000000   99.000000   62.000000    0.000000    0.000000   27.300000   
+50%      3.000000  117.000000   72.000000   23.000000   30.500000   32.000000   
+75%      6.000000  140.250000   80.000000   32.000000  127.250000   36.600000   
+max     17.000000  199.000000  122.000000   99.000000  846.000000   67.100000   
+
+             pedi         age  
+count  768.000000  768.000000  
+mean     0.471876   33.240885  
+std      0.331329   11.760232  
+min      0.078000   21.000000  
+25%      0.243750   24.000000  
+50%      0.372500   29.000000  
+75%      0.626250   41.000000  
+max      2.420000   81.000000  
+</pre></div></div></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (MARKDOWN)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (10)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step2" data-tab="step2-fetch_openml-20260930_234356" onclick="switchTab('step2', 'step2-fetch_openml-20260930_234356')"><span class="tab-func-name">fetch_openml('diabetes')</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-pima_data-20260930_234426" onclick="switchTab('step2', 'step2-pima_data-20260930_234426')"><span class="tab-func-name">pima.data (특성 확인)</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-pima_target_map-20260930_234439" onclick="switchTab('step2', 'step2-pima_target_map-20260930_234439')"><span class="tab-func-name">pima.target.map (이진 매핑)</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-astype-20260930_234535" onclick="switchTab('step2', 'step2-astype-20260930_234535')"><span class="tab-func-name">astype(int) (정수 변환)</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-X_shape-20260930_234556" onclick="switchTab('step2', 'step2-X_shape-20260930_234556')"><span class="tab-func-name">X.shape (768 x 8)</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-y_value_counts-20260930_234610" onclick="switchTab('step2', 'step2-y_value_counts-20260930_234610')"><span class="tab-func-name">y.value_counts() (클래스 빈도)</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-list-20260930_234630" onclick="switchTab('step2', 'step2-list-20260930_234630')"><span class="tab-func-name">list(pima.target)</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-pima_target-20260930_234641" onclick="switchTab('step2', 'step2-pima_target-20260930_234641')"><span class="tab-func-name">pima.target (타깃 컬럼)</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-X_head-20260930_234652" onclick="switchTab('step2', 'step2-X_head-20260930_234652')"><span class="tab-func-name">X.head() (상위 샘플)</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-X_describe-20260930_234705" onclick="switchTab('step2', 'step2-X_describe-20260930_234705')"><span class="tab-func-name">X.describe() (요약 통계량)</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step2-fetch_openml-20260930_234356"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>fetch_openml</code></div><div class="note-time-badge">⏱ 2026-09-30 23:43:56</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: fetch_openml</h1>
 <div class="note-empty-line"></div>
 <ul class="note-ul">
 <li class="note-li"><strong>기록 일시</strong>: 2026-09-30 23:43:56</li>
@@ -1238,7 +1270,7 @@ Name: count, dtype: int64
 <div class="note-empty-line"></div>
 <blockquote class="note-quote"><strong>💡 요약하자면:</strong></blockquote>
 <blockquote class="note-quote"><code class="inline-code">pima = fetch_openml(name=&#x27;diabetes&#x27;, version=1, as_frame=True)</code> 코드는 <strong>&quot;OpenML 서버에서 당뇨병 데이터셋 1번 버전을 가져와서, 다루기 편한 표(DataFrame) 형태로 만든 뒤 <code class="inline-code">pima</code>라는 이름의 상자에 담아줘!&quot;</strong> 라는 뜻입니다.</blockquote>
-<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'fetch_openml')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step1-pima_data-20260930_234426"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>pima.data</code></div><div class="note-time-badge">⏱ 2026-09-30 23:44:26</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: pima.data</h1>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step2', 'fetch_openml')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step2-pima_data-20260930_234426"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>pima.data</code></div><div class="note-time-badge">⏱ 2026-09-30 23:44:26</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: pima.data</h1>
 <div class="note-empty-line"></div>
 <ul class="note-ul">
 <li class="note-li"><strong>기록 일시</strong>: 2026-09-30 23:44:26</li>
@@ -1250,39 +1282,7 @@ Name: count, dtype: int64
 <p class="note-p">안녕하세요! 초보자분들의 코딩 공부를 따뜻하게 응원합니다.</p>
 <div class="note-empty-line"></div>
 <p class="note-p">pima.data는 당뇨병 예측 실습에 자주 쓰이는 피마 인디언 데이터셋에서 &#x27;순수한 숫자 정보(문제들)&#x27;만 쏙쏙 골라 담는 마법의 주머니랍니다. 요리할 때 껍질을 다 벗기고 다듬은 알맹이 재료들만 모아둔 도마 위라고 생각하시면 정말 쉬워요. 컴퓨터에게 &quot;자, 이제 우리가 분석하고 풀어나갈 진짜 문제들의 재료는 바로 이것이야!&quot;라고 알려줄 때 쓴답니다.</p>
-<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step1', 'pima.data')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section><section class="step-section" id="step2"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">2단계</span><h2 class="step-title-text">타깃 이진 인코딩 및 탐색적 데이터 분석(EDA)</h2></div><p class="step-summary-desc">문자열 레이블을 0과 1로 매핑하고 결측치 및 기술 통계량(describe)을 확인합니다.</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 주피터 노트북 실행 코드 및 결과</div><div class="cell-markdown-box"><p class="note-p"><strong>데이터 샘플 확인</strong></p></div><div class="code-cell-wrapper" id="cell-7"><div class="cell-header"><span class="cell-badge">In [7]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 데이터 샘플
-print(&quot;데이터 샘플:&quot;)
-print(<span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-X_head-20260930_234652')" data-step="step2" data-tab="step2-X_head-20260930_234652" data-func="X.head" title="💡 클릭하여 우측 'X.head' 해설 보기">X.head<span class="kw-sparkle">💡</span></span>())
-print(f&quot;\n기술 통계:&quot;)
-print(<span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-X_describe-20260930_234705')" data-step="step2" data-tab="step2-X_describe-20260930_234705" data-func="X.describe" title="💡 클릭하여 우측 'X.describe' 해설 보기">X.describe<span class="kw-sparkle">💡</span></span>())</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>데이터 샘플:
-   preg  plas  pres  skin  insu  mass   pedi  age
-0     6   148    72    35     0  33.6  0.627   50
-1     1    85    66    29     0  26.6  0.351   31
-2     8   183    64     0     0  23.3  0.672   32
-3     1    89    66    23    94  28.1  0.167   21
-4     0   137    40    35   168  43.1  2.288   33
-
-기술 통계:
-             preg        plas        pres        skin        insu        mass  \
-count  768.000000  768.000000  768.000000  768.000000  768.000000  768.000000   
-mean     3.845052  120.894531   69.105469   20.536458   79.799479   31.992578   
-std      3.369578   31.972618   19.355807   15.952218  115.244002    7.884160   
-min      0.000000    0.000000    0.000000    0.000000    0.000000    0.000000   
-25%      1.000000   99.000000   62.000000    0.000000    0.000000   27.300000   
-50%      3.000000  117.000000   72.000000   23.000000   30.500000   32.000000   
-75%      6.000000  140.250000   80.000000   32.000000  127.250000   36.600000   
-max     17.000000  199.000000  122.000000   99.000000  846.000000   67.100000   
-
-             pedi         age  
-count  768.000000  768.000000  
-mean     0.471876   33.240885  
-std      0.331329   11.760232  
-min      0.078000   21.000000  
-25%      0.243750   24.000000  
-50%      0.372500   29.000000  
-75%      0.626250   41.000000  
-max      2.420000   81.000000  
-</pre></div></div></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (MARKDOWN)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (8)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step2" data-tab="step2-pima_target_map-20260930_234439" onclick="switchTab('step2', 'step2-pima_target_map-20260930_234439')"><span class="tab-func-name">pima.target.map (이진 매핑)</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-astype-20260930_234535" onclick="switchTab('step2', 'step2-astype-20260930_234535')"><span class="tab-func-name">astype(int) (정수 변환)</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-X_shape-20260930_234556" onclick="switchTab('step2', 'step2-X_shape-20260930_234556')"><span class="tab-func-name">X.shape (768 x 8)</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-y_value_counts-20260930_234610" onclick="switchTab('step2', 'step2-y_value_counts-20260930_234610')"><span class="tab-func-name">y.value_counts() (클래스 빈도)</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-list-20260930_234630" onclick="switchTab('step2', 'step2-list-20260930_234630')"><span class="tab-func-name">list(pima.target)</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-pima_target-20260930_234641" onclick="switchTab('step2', 'step2-pima_target-20260930_234641')"><span class="tab-func-name">pima.target (타깃 컬럼)</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-X_head-20260930_234652" onclick="switchTab('step2', 'step2-X_head-20260930_234652')"><span class="tab-func-name">X.head() (상위 샘플)</span></button><button class="func-tab-btn " data-step="step2" data-tab="step2-X_describe-20260930_234705" onclick="switchTab('step2', 'step2-X_describe-20260930_234705')"><span class="tab-func-name">X.describe() (요약 통계량)</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step2-pima_target_map-20260930_234439"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>pima.target.map</code></div><div class="note-time-badge">⏱ 2026-09-30 23:44:39</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: pima.target.map</h1>
+<div class="note-empty-line"></div></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step2', 'pima.data')">👈 좌측 코드 위치 보기</button></div></div><div class="func-note-pane " id="step2-pima_target_map-20260930_234439"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>pima.target.map</code></div><div class="note-time-badge">⏱ 2026-09-30 23:44:39</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: pima.target.map</h1>
 <div class="note-empty-line"></div>
 <ul class="note-ul">
 <li class="note-li"><strong>기록 일시</strong>: 2026-09-30 23:44:39</li>
