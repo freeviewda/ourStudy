@@ -456,6 +456,10 @@
     }
 
     .code-editor-look {
+      background: #2d2d2d;
+      border: 1px solid #3e4451;
+      border-radius: 8px;
+      padding: 1.1rem 1.35rem;
       font-family: 'Fira Code', monospace;
       font-size: 0.88rem;
       line-height: 1.6;
@@ -466,6 +470,14 @@
       margin: 0;
       background: transparent !important;
       padding: 0 !important;
+    }
+    .code-editor-look code {
+      background: transparent !important;
+    }
+    :root[data-theme="light"] .code-editor-look {
+      background: #2d2d2d;
+      border-color: #3e4451;
+      color: #f8fafc;
     }
 
     /* Interactive Keyword in Code */
@@ -631,55 +643,49 @@
     .notes-tabs-header {
       background: var(--bg-card);
       border-bottom: 1px solid var(--border-subtle);
-      padding: 0.6rem 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      flex-wrap: nowrap;
+      padding: 0.9rem 1.25rem;
     }
     .tabs-label {
-      font-size: 0.76rem;
-      font-weight: 800;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
       color: var(--accent-primary);
-      white-space: nowrap;
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
+      margin-bottom: 0.65rem;
     }
+
     .tabs-scroll-wrapper {
       display: flex;
-      align-items: center;
-      gap: 0.35rem;
-      overflow-x: auto;
-      white-space: nowrap;
-      scrollbar-width: thin;
-      padding-bottom: 2px;
+      flex-wrap: wrap;
+      gap: 0.5rem;
     }
 
     .func-tab-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45rem 0.85rem;
+      border-radius: 8px;
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
       color: var(--text-muted);
-      padding: 0.35rem 0.75rem;
-      border-radius: 6px;
-      font-size: 0.78rem;
+      font-size: 0.82rem;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.15s ease;
       white-space: nowrap;
-      flex-shrink: 0;
+      transition: all 0.2s ease;
+      line-height: 1.3;
     }
     .func-tab-btn:hover {
-      background: var(--bg-card-hover);
       color: var(--text-main);
       border-color: var(--accent-primary);
+      background: var(--bg-card-hover);
     }
     .func-tab-btn.active {
-      background: var(--accent-primary);
-      color: #0b1120;
-      font-weight: 700;
-      border-color: var(--accent-primary);
-      box-shadow: 0 2px 8px var(--accent-glow);
+      background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+      border-color: transparent;
+      color: #ffffff !important;
+      box-shadow: 0 4px 12px var(--accent-glow);
     }
 
     .notes-panes-wrapper {
@@ -773,8 +779,8 @@
       color: var(--accent-secondary);
     }
     .note-code-block {
-      background: #0f172a;
-      border: 1px solid var(--border-subtle);
+      background: #2d2d2d;
+      border: 1px solid #3e4451;
       border-radius: 8px;
       padding: 0.85rem 1rem;
       overflow-x: auto;
@@ -1022,7 +1028,7 @@ Name: count, dtype: int64
       <td>tested_negative</td>
     </tr>
   </tbody>
-</table></div></div></div></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (MARKDOWN)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (14)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step1" data-tab="step1-pandas-20260930_234118" onclick="switchTab('step1', 'step1-pandas-20260930_234118')"><span class="tab-func-name">import pandas as pd</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-numpy-20260930_234127" onclick="switchTab('step1', 'step1-numpy-20260930_234127')"><span class="tab-func-name">import numpy as np</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-matplotlib_pyplot-20260930_234138" onclick="switchTab('step1', 'step1-matplotlib_pyplot-20260930_234138')"><span class="tab-func-name">import matplotlib.pyplot</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-fetch_openml-20260930_234149" onclick="switchTab('step1', 'step1-fetch_openml-20260930_234149')"><span class="tab-func-name">from sklearn.datasets fetch_openml</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-train_test_split-20260930_234159" onclick="switchTab('step1', 'step1-train_test_split-20260930_234159')"><span class="tab-func-name">from sklearn.model_selection split</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-StratifiedKFold-20260930_234211" onclick="switchTab('step1', 'step1-StratifiedKFold-20260930_234211')"><span class="tab-func-name">from sklearn.model_selection KFold</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-StandardScaler-20260930_234221" onclick="switchTab('step1', 'step1-StandardScaler-20260930_234221')"><span class="tab-func-name">from sklearn.preprocessing StandardScaler</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-RFECV-20260930_234240" onclick="switchTab('step1', 'step1-RFECV-20260930_234240')"><span class="tab-func-name">from sklearn.feature_selection RFECV</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-RandomForestClassifier-20260930_234252" onclick="switchTab('step1', 'step1-RandomForestClassifier-20260930_234252')"><span class="tab-func-name">from sklearn.ensemble RandomForest</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-Pipeline-20260930_234306" onclick="switchTab('step1', 'step1-Pipeline-20260930_234306')"><span class="tab-func-name">from sklearn.pipeline Pipeline</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-accuracy_score-20260930_234327" onclick="switchTab('step1', 'step1-accuracy_score-20260930_234327')"><span class="tab-func-name">from sklearn.metrics accuracy_score</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-classification_report-20260930_234336" onclick="switchTab('step1', 'step1-classification_report-20260930_234336')"><span class="tab-func-name">from sklearn.metrics classification_report</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-fetch_openml-20260930_234356" onclick="switchTab('step1', 'step1-fetch_openml-20260930_234356')"><span class="tab-func-name">fetch_openml('diabetes')</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-pima_data-20260930_234426" onclick="switchTab('step1', 'step1-pima_data-20260930_234426')"><span class="tab-func-name">pima.data (특성 데이터프레임)</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step1-pandas-20260930_234118"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>pandas</code></div><div class="note-time-badge">⏱ 2026-09-30 23:41:18</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: pandas</h1>
+</table></div></div></div></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (MARKDOWN)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (14)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step1" data-tab="step1-pandas-20260930_234118" onclick="switchTab('step1', 'step1-pandas-20260930_234118')"><span class="tab-func-name">import pandas as pd</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-numpy-20260930_234127" onclick="switchTab('step1', 'step1-numpy-20260930_234127')"><span class="tab-func-name">import numpy as np</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-matplotlib_pyplot-20260930_234138" onclick="switchTab('step1', 'step1-matplotlib_pyplot-20260930_234138')"><span class="tab-func-name">import matplotlib.pyplot</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-fetch_openml-20260930_234149" onclick="switchTab('step1', 'step1-fetch_openml-20260930_234149')"><span class="tab-func-name">from sklearn.datasets</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-train_test_split-20260930_234159" onclick="switchTab('step1', 'step1-train_test_split-20260930_234159')"><span class="tab-func-name">import train_test_split</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-StratifiedKFold-20260930_234211" onclick="switchTab('step1', 'step1-StratifiedKFold-20260930_234211')"><span class="tab-func-name">import StratifiedKFold</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-StandardScaler-20260930_234221" onclick="switchTab('step1', 'step1-StandardScaler-20260930_234221')"><span class="tab-func-name">import StandardScaler</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-RFECV-20260930_234240" onclick="switchTab('step1', 'step1-RFECV-20260930_234240')"><span class="tab-func-name">import RFECV</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-RandomForestClassifier-20260930_234252" onclick="switchTab('step1', 'step1-RandomForestClassifier-20260930_234252')"><span class="tab-func-name">import RandomForestClassifier</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-Pipeline-20260930_234306" onclick="switchTab('step1', 'step1-Pipeline-20260930_234306')"><span class="tab-func-name">import Pipeline</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-accuracy_score-20260930_234327" onclick="switchTab('step1', 'step1-accuracy_score-20260930_234327')"><span class="tab-func-name">import accuracy_score</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-classification_report-20260930_234336" onclick="switchTab('step1', 'step1-classification_report-20260930_234336')"><span class="tab-func-name">import classification_report</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-fetch_openml-20260930_234356" onclick="switchTab('step1', 'step1-fetch_openml-20260930_234356')"><span class="tab-func-name">fetch_openml('diabetes')</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-pima_data-20260930_234426" onclick="switchTab('step1', 'step1-pima_data-20260930_234426')"><span class="tab-func-name">pima.data (특성 확인)</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step1-pandas-20260930_234118"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>pandas</code></div><div class="note-time-badge">⏱ 2026-09-30 23:41:18</div></div><div class="note-body-content"><h1 class="note-h1">🤖 AI 파이썬 학습 노트: pandas</h1>
 <div class="note-empty-line"></div>
 <ul class="note-ul">
 <li class="note-li"><strong>기록 일시</strong>: 2026-09-30 23:41:18</li>
