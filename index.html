@@ -34,17 +34,17 @@
       --accent-warning: #fbbf24;
       --accent-glow: rgba(56, 189, 248, 0.25);
       
-      /* Advanced Track Accent (Violet / Magenta / Purple) */
-      --accent-adv-primary: #c084fc;
-      --accent-adv-hover: #a855f7;
-      --accent-adv-secondary: #f472b6;
-      --accent-adv-glow: rgba(192, 132, 252, 0.3);
-      --badge-adv-bg: rgba(192, 132, 252, 0.16);
-      --badge-adv-text: #e9d5ff;
-      --badge-adv-border: rgba(192, 132, 252, 0.4);
-      --tag-adv-bg: rgba(244, 114, 182, 0.12);
-      --tag-adv-text: #fbcfe8;
-      --tag-adv-border: rgba(244, 114, 182, 0.28);
+      /* Advanced Track Accent (Electric Amber & Neon Orange) */
+      --accent-adv-primary: #fb923c;
+      --accent-adv-hover: #f97316;
+      --accent-adv-secondary: #fbbf24;
+      --accent-adv-glow: rgba(249, 115, 22, 0.35);
+      --badge-adv-bg: rgba(249, 115, 22, 0.16);
+      --badge-adv-text: #fed7aa;
+      --badge-adv-border: rgba(249, 115, 22, 0.4);
+      --tag-adv-bg: rgba(251, 191, 36, 0.12);
+      --tag-adv-text: #fef08a;
+      --tag-adv-border: rgba(251, 191, 36, 0.28);
 
       --badge-active-bg: rgba(52, 211, 153, 0.15);
       --badge-active-text: #6ee7b7;
@@ -60,7 +60,7 @@
       
       --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
       --shadow-hover: 0 20px 35px -5px rgba(56, 189, 248, 0.2), 0 10px 15px -5px rgba(0, 0, 0, 0.4);
-      --shadow-adv-hover: 0 20px 35px -5px rgba(192, 132, 252, 0.25), 0 10px 15px -5px rgba(0, 0, 0, 0.4);
+      --shadow-adv-hover: 0 20px 35px -5px rgba(249, 115, 22, 0.25), 0 10px 15px -5px rgba(0, 0, 0, 0.4);
     }
 
     :root[data-theme="light"] {
@@ -84,16 +84,16 @@
       --accent-glow: rgba(2, 132, 199, 0.15);
       
       /* Advanced Track Accent */
-      --accent-adv-primary: #9333ea;
-      --accent-adv-hover: #7e22ce;
-      --accent-adv-secondary: #db2777;
-      --accent-adv-glow: rgba(147, 51, 234, 0.15);
-      --badge-adv-bg: #f3e8ff;
-      --badge-adv-text: #7e22ce;
-      --badge-adv-border: #d8b4fe;
-      --tag-adv-bg: #fdf2f8;
-      --tag-adv-text: #be185d;
-      --tag-adv-border: #fbcfe8;
+      --accent-adv-primary: #ea580c;
+      --accent-adv-hover: #c2410c;
+      --accent-adv-secondary: #d97706;
+      --accent-adv-glow: rgba(234, 88, 12, 0.2);
+      --badge-adv-bg: #fff7ed;
+      --badge-adv-text: #c2410c;
+      --badge-adv-border: #fed7aa;
+      --tag-adv-bg: #fffbeb;
+      --tag-adv-text: #b45309;
+      --tag-adv-border: #fef3c7;
 
       --badge-active-bg: #ecfdf5;
       --badge-active-text: #059669;
@@ -109,7 +109,7 @@
       
       --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
       --shadow-hover: 0 15px 25px -5px rgba(2, 132, 199, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
-      --shadow-adv-hover: 0 15px 25px -5px rgba(147, 51, 234, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+      --shadow-adv-hover: 0 15px 25px -5px rgba(234, 88, 12, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
     }
 
     * {
@@ -170,7 +170,7 @@
       width: 42px;
       height: 42px;
       border-radius: 12px;
-      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+      background: linear-gradient(135deg, #38bdf8 0%, #fb923c 60%, #f97316 100%);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -234,9 +234,9 @@
     }
 
     .header-track-btn.active.adv-link {
-      background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
-      color: #ffffff;
-      box-shadow: 0 2px 10px rgba(168, 85, 247, 0.35);
+      background: linear-gradient(135deg, #f97316 0%, #fbbf24 100%);
+      color: #0b1120;
+      box-shadow: 0 2px 10px rgba(249, 115, 22, 0.35);
     }
 
     .track-badge-mini {
@@ -405,7 +405,7 @@
 
     /* Advanced Card Specifics */
     .gateway-card.adv-card::before {
-      background: linear-gradient(90deg, #c084fc, #f472b6);
+      background: linear-gradient(90deg, var(--accent-adv-primary), var(--accent-adv-secondary));
     }
     .gateway-card.adv-card:hover, .gateway-card.adv-card.selected {
       border-color: var(--accent-adv-primary);
@@ -413,7 +413,7 @@
       box-shadow: var(--shadow-adv-hover);
     }
     .gateway-card.adv-card.selected {
-      background: linear-gradient(180deg, rgba(192, 132, 252, 0.06) 0%, var(--bg-surface) 100%);
+      background: linear-gradient(180deg, rgba(249, 115, 22, 0.06) 0%, var(--bg-surface) 100%);
     }
 
     .gateway-top {
@@ -542,7 +542,7 @@
     }
 
     .adv-card .gateway-action-btn {
-      background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+      background: linear-gradient(135deg, var(--accent-adv-primary) 0%, var(--accent-adv-secondary) 100%);
       color: #ffffff;
       box-shadow: 0 4px 14px var(--accent-adv-glow);
     }
@@ -897,12 +897,12 @@
     }
 
     .open-btn.adv-btn {
-      background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+      background: linear-gradient(135deg, var(--accent-adv-primary) 0%, var(--accent-adv-secondary) 100%);
       color: #ffffff;
       box-shadow: 0 4px 12px var(--accent-adv-glow);
     }
     .open-btn.adv-btn:hover {
-      box-shadow: 0 6px 18px rgba(168, 85, 247, 0.45);
+      box-shadow: 0 6px 18px var(--accent-adv-glow);
     }
 
     .open-btn.disabled {
@@ -915,7 +915,7 @@
 
     /* Advance Guidance Notice Box */
     .guidance-banner {
-      background: linear-gradient(135deg, rgba(168, 85, 247, 0.08) 0%, rgba(236, 72, 153, 0.08) 100%);
+      background: linear-gradient(135deg, rgba(249, 115, 22, 0.08) 0%, rgba(245, 158, 11, 0.08) 100%);
       border: 1px solid var(--badge-adv-border);
       border-radius: 16px;
       padding: 1.5rem 1.75rem;
