@@ -1043,12 +1043,12 @@
         </p>
         <div class="gateway-features">
           <span class="gateway-feat-badge">밀도 군집화 Mean Shift (01) & DBSCAN (02)</span>
-          <span class="gateway-feat-badge">특성 공학 RFECV 분류 (05)</span>
-          <span class="gateway-feat-badge">Optuna 자동화 튜닝</span>
-          <span class="gateway-feat-badge">XAI 모델 해석 (SHAP/LIME)</span>
+          <span class="gateway-feat-badge">특성 공학 RFECV (05) & Grid Search (05-1)</span>
+          <span class="gateway-feat-badge">SVC 분류 (06-1) & SVR 회귀 (07)</span>
+          <span class="gateway-feat-badge">Random Forest 앙상블 (08)</span>
         </div>
         <div class="gateway-footer">
-          <span class="gateway-stat-text">🔥 4개 모듈 운영 중 • 214개 AI 해설</span>
+          <span class="gateway-stat-text">🔥 7개 모듈 운영 중 • 470개 AI 해설</span>
           <span class="gateway-action-btn">
             심화 과정 들어가기 ➔
           </span>
@@ -1515,21 +1515,21 @@
         <div class="stat-card">
           <span class="stat-icon">🔥</span>
           <div class="stat-text">
-            <div class="stat-value adv-color">4 / 8개</div>
+            <div class="stat-value adv-color">7 / 8개</div>
             <div class="stat-label">심화 모듈 (운영 중)</div>
           </div>
         </div>
         <div class="stat-card">
           <span class="stat-icon">💡</span>
           <div class="stat-text">
-            <div class="stat-value adv-color">214개</div>
+            <div class="stat-value adv-color">470개</div>
             <div class="stat-label">AI 핵심 함수 상세 해설 (시간순)</div>
           </div>
         </div>
         <div class="stat-card">
           <span class="stat-icon">⚡</span>
           <div class="stat-text">
-            <div class="stat-value adv-color">25단계</div>
+            <div class="stat-value adv-color">54단계</div>
             <div class="stat-label">실습 전처리/모델링 파이프라인</div>
           </div>
         </div>
@@ -1555,7 +1555,7 @@
         <div class="guidance-content">
           <h4>심화 모듈 운영 및 작업 안내</h4>
           <p>
-            현재 <strong>01. Mean Shift 군집화</strong>, <strong>02. DBSCAN 군집화</strong>, <strong>05. Feature Engineering (분류)</strong>, <strong>05-1. Grid Search 하이퍼파라미터 최적화</strong> 뷰어가 오픈되어 총 214개 해설 노트와 함께 학습할 수 있습니다. 후속 심화 모듈(Optuna, XAI, 앙상블 등)도 동일하게 전용 폴더 및 뷰어 형태로 순차 개설됩니다.
+            현재 <strong>01. Mean Shift 군집화</strong>, <strong>02. DBSCAN 군집화</strong>, <strong>05. Feature Engineering (분류)</strong>, <strong>05-1. Grid Search 하이퍼파라미터 최적화</strong>, <strong>06-1. SVC & Label Encoding</strong>, <strong>07. SVR 서포트 벡터 회귀</strong>, <strong>08. Random Forest 분류</strong> 뷰어가 정식 오픈되어 총 470개 해설 노트 및 54개 실습 파이프라인 단계와 함께 학습할 수 있습니다.
           </p>
         </div>
       </div>
@@ -1742,85 +1742,122 @@
           </div>
         </div>
 
-        <!-- Adv Module 06: Time-Series Machine Learning -->
-        <div class="module-card adv-card-style upcoming" data-category="upcoming applied">
+        <!-- Adv Module 06-1: SVC & Label Encoding (Active) -->
+        <div class="module-card adv-card-style" data-category="active applied">
           <div>
             <div class="card-top">
-              <span class="chapter-tag adv-tag">ADVANCED 06</span>
-              <span class="status-badge upcoming"><span class="status-dot"></span>순차 오픈 예정</span>
+              <span class="chapter-tag adv-tag">CHAPTER 06-1 (심화)</span>
+              <span class="status-badge active"><span class="status-dot"></span>학습 가능</span>
             </div>
-            <h3 class="module-title">06. 시계열 머신러닝: 특성 공학과 Walk-Forward 교차 검증</h3>
+            <h3 class="module-title">06-1. 머신러닝 심화: 서포트 벡터 머신(SVC) 분류 & 레이블 인코딩 (Car Evaluation)</h3>
             <p class="module-desc">
-              시간 순서가 존재하는 시계열 데이터를 지도학습으로 변환하기 위한 Lag(시차) 피처, Rolling/Expanding 윈도우 통계량, 계절성 인코딩을 실습합니다. 데이터 누수(Data Leakage)를 방지하는 TimeSeriesSplit 교차 검증과 다중 시계열 부스팅 모델을 구현합니다.
+              Car Evaluation 차량 평가 데이터셋(1728개 샘플, 6개 범주형 특성)을 대상으로 범주형 특성의 정수형 변환(LabelEncoder)과 Scikit-Learn Pipeline(StandardScaler + 비선형 RBF 커널 SVC)을 구축합니다. 훈련/테스트 8:2 분할, 혼동 행렬(Confusion Matrix) 평가 및 분류 보고서(정확도 98.27%, F1-Score 0.98)를 심층 분석합니다.
             </p>
             <div class="topic-tags">
-              <span class="topic-tag adv-topic">TimeSeriesSplit</span>
-              <span class="topic-tag adv-topic">Lag & Rolling Features</span>
-              <span class="topic-tag adv-topic">Walk-Forward Validation</span>
-              <span class="topic-tag adv-topic">Data Leakage 방지</span>
-              <span class="topic-tag adv-topic">시계열 부스팅 회귀</span>
+              <span class="topic-tag adv-topic">Car Evaluation 데이터 (1728x6)</span>
+              <span class="topic-tag adv-topic">LabelEncoder 범주형 전처리</span>
+              <span class="topic-tag adv-topic">Pipeline (StandardScaler + SVC)</span>
+              <span class="topic-tag adv-topic">RBF 커널 서포트 벡터 분류기</span>
+              <span class="topic-tag adv-topic">Confusion Matrix & 분류 보고서</span>
+              <span class="topic-tag adv-topic">정확도 98.27% 고성능 달성</span>
             </div>
           </div>
           <div class="card-footer">
             <div class="card-metrics">
-              <span>🎯 시계열 피처 엔지니어링</span>
-              <span>📈 미래 예측 롤링 윈도우</span>
+              <span>⚡ 10개 파이프라인 단계</span>
+              <span>📝 86개 AI 해설 노트 (시간순 100% 매칭)</span>
             </div>
-            <button class="open-btn adv-btn disabled">순차 오픈 예정</button>
+            <a href="06_1 머신러닝 심화 SVC Label Encoding/index.html" class="open-btn adv-btn">
+              뷰어 열기 ➔
+            </a>
           </div>
         </div>
 
-        <!-- Adv Module 07: NLP Machine Learning -->
-        <div class="module-card adv-card-style upcoming" data-category="upcoming applied">
+        <!-- Adv Module 07: SVR & RFECV (Active) -->
+        <div class="module-card adv-card-style" data-category="active applied optimization">
           <div>
             <div class="card-top">
-              <span class="chapter-tag adv-tag">ADVANCED 07</span>
-              <span class="status-badge upcoming"><span class="status-dot"></span>순차 오픈 예정</span>
+              <span class="chapter-tag adv-tag">CHAPTER 07 (심화)</span>
+              <span class="status-badge active"><span class="status-dot"></span>학습 가능</span>
             </div>
-            <h3 class="module-title">07. 텍스트 마이닝 & 머신러닝 NLP: TF-IDF와 토픽 모델링(LDA)</h3>
+            <h3 class="module-title">07. 머신러닝 심화: 서포트 벡터 회귀(SVR) & RFECV 피처 선택 (Diabetes Dataset)</h3>
             <p class="module-desc">
-              자연어 텍스트 데이터를 토큰화하고 TfidfVectorizer를 적용하여 희소 행렬을 생성한 뒤 나이브 베이즈 및 로지스틱 분류기를 학습합니다. 비지도 잠재 디리클레 할당(LDA)을 통해 대규모 문서 군집에서 핵심 토픽 단어 분포를 자동 추출합니다.
+              Scikit-Learn Diabetes 당뇨병 진행도 데이터셋(442x10)을 대상으로 마진 최대화 기반 서포트 벡터 회귀(SVR) 모델과 계수(coef_) 기반 RFECV 파이프라인을 설계합니다. 전체 특성 대비 최적 5개 특성 추출, RMSE 및 R2 스코어 정량 비교, 실제값-예측값 산점도 및 특성 수에 따른 CV 점수 곡선을 통해 회귀 성능 최적화를 완성합니다.
             </p>
             <div class="topic-tags">
-              <span class="topic-tag adv-topic">TfidfVectorizer</span>
-              <span class="topic-tag adv-topic">LatentDirichletAllocation</span>
-              <span class="topic-tag adv-topic">N-gram & Stopwords</span>
-              <span class="topic-tag adv-topic">MultinomialNB</span>
-              <span class="topic-tag adv-topic">토픽 단어 가중치 시각화</span>
+              <span class="topic-tag adv-topic">Diabetes Dataset (442x10)</span>
+              <span class="topic-tag adv-topic">Linear SVR RFECV (5-Fold CV)</span>
+              <span class="topic-tag adv-topic">최적 피처 선택 (support_ & ranking_)</span>
+              <span class="topic-tag adv-topic">Pipeline (StandardScaler + SVR)</span>
+              <span class="topic-tag adv-topic">RMSE & R2 Score 회귀 평가</span>
+              <span class="topic-tag adv-topic">Actual vs Predicted 산점도 시각화</span>
             </div>
           </div>
           <div class="card-footer">
             <div class="card-metrics">
-              <span>🎯 텍스트 벡터화 파이프라인</span>
-              <span>📰 뉴스 군집화 & 토픽 추출</span>
+              <span>⚡ 11개 파이프라인 단계</span>
+              <span>📝 95개 AI 해설 노트 (시간순 100% 매칭)</span>
             </div>
-            <button class="open-btn adv-btn disabled">순차 오픈 예정</button>
+            <a href="07 머신러닝 심화 SVR/index.html" class="open-btn adv-btn">
+              뷰어 열기 ➔
+            </a>
           </div>
         </div>
 
-        <!-- Adv Module 08: Pipeline & MLOps Serving -->
-        <div class="module-card adv-card-style upcoming" data-category="upcoming applied">
+        <!-- Adv Module 08: Random Forest Classification (Active) -->
+        <div class="module-card adv-card-style" data-category="active boosting">
           <div>
             <div class="card-top">
-              <span class="chapter-tag adv-tag">ADVANCED 08</span>
-              <span class="status-badge upcoming"><span class="status-dot"></span>순차 오픈 예정</span>
+              <span class="chapter-tag adv-tag">CHAPTER 08 (심화)</span>
+              <span class="status-badge active"><span class="status-dot"></span>학습 가능</span>
             </div>
-            <h3 class="module-title">08. Scikit-Learn 파이프라인(Pipeline)과 MLOps 서빙 기초</h3>
+            <h3 class="module-title">08. 머신러닝 심화: Random Forest 분류 & 하이퍼파라미터 튜닝 (Pima Indians Diabetes)</h3>
             <p class="module-desc">
-              수치형·범주형 데이터의 결측치 처리, 스케일링, 인코딩을 일체화하는 ColumnTransformer와 Pipeline 아키텍처를 구축합니다. 학습된 모델을 joblib으로 직렬화/패키징하고 단일 REST API 및 경량 웹 뷰어로 실시간 추론을 서빙하는 파이프라인을 완성합니다.
+              Pima Indians Diabetes 당뇨병 데이터셋(768x8)을 바탕으로 배깅(Bagging)과 무작위 특성 선택 기반 RandomForestClassifier 앙상블 모델을 실습합니다. Stratified 5-Fold GridSearchCV를 통한 최적 파라미터 도출, 혼동 행렬(Confusion Matrix) 히트맵, 지니 불순도 기반 피처 중요도(Feature Importances) 시각화 및 상위 5개 주요 피처 경량화 모델 성능을 1:1 비교 검증합니다.
             </p>
             <div class="topic-tags">
-              <span class="topic-tag adv-topic">sklearn.pipeline.Pipeline</span>
-              <span class="topic-tag adv-topic">ColumnTransformer</span>
-              <span class="topic-tag adv-topic">FunctionTransformer</span>
-              <span class="topic-tag adv-topic">joblib.dump & load</span>
-              <span class="topic-tag adv-topic">End-to-End 배포</span>
+              <span class="topic-tag adv-topic">Pima Indians Diabetes (768x8)</span>
+              <span class="topic-tag adv-topic">RandomForestClassifier 앙상블</span>
+              <span class="topic-tag adv-topic">Stratified 5-Fold GridSearchCV</span>
+              <span class="topic-tag adv-topic">Confusion Matrix Seaborn Heatmap</span>
+              <span class="topic-tag adv-topic">Feature Importances 막대 차트</span>
+              <span class="topic-tag adv-topic">상위 5개 피처 모델 경량화 비교</span>
             </div>
           </div>
           <div class="card-footer">
             <div class="card-metrics">
-              <span>🎯 데이터 누수 원천 차단</span>
-              <span>🚀 모델 직렬화 & 실시간 서빙</span>
+              <span>⚡ 8개 파이프라인 단계</span>
+              <span>📝 75개 AI 해설 노트 (시간순 100% 매칭)</span>
+            </div>
+            <a href="08 머신러닝 심화 Random Forest Classification/index.html" class="open-btn adv-btn">
+              뷰어 열기 ➔
+            </a>
+          </div>
+        </div>
+
+        <!-- Adv Module 09: XGBoost & LightGBM (Upcoming) -->
+        <div class="module-card adv-card-style upcoming" data-category="upcoming boosting">
+          <div>
+            <div class="card-top">
+              <span class="chapter-tag adv-tag">ADVANCED 09</span>
+              <span class="status-badge upcoming"><span class="status-dot"></span>순차 오픈 예정</span>
+            </div>
+            <h3 class="module-title">09. 그래디언트 부스팅: XGBoost & LightGBM 고성능 모델링</h3>
+            <p class="module-desc">
+              잔차 학습(Residual Learning) 기반 Gradient Boosting의 원리를 탐구하고 대용량 정형 데이터에서 최고 속도와 정확도를 자랑하는 XGBoost와 LightGBM 모델을 구축 및 비교 평가합니다.
+            </p>
+            <div class="topic-tags">
+              <span class="topic-tag adv-topic">XGBClassifier</span>
+              <span class="topic-tag adv-topic">LGBMClassifier</span>
+              <span class="topic-tag adv-topic">Early Stopping</span>
+              <span class="topic-tag adv-topic">Learning Rate & Subsample</span>
+              <span class="topic-tag adv-topic">GOSS & EFB 알고리즘</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="card-metrics">
+              <span>🎯 초고속 부스팅 알고리즘</span>
+              <span>⚡ GPU 가속 학습</span>
             </div>
             <button class="open-btn adv-btn disabled">순차 오픈 예정</button>
           </div>
@@ -1837,7 +1874,7 @@
 
   <script>
     // Theme Switcher (Synchronized with module viewers)
-    const ALL_MODULES = ['01', '02', '05', '06', '07', '08', '09', '10', '11', '12', '16', 'adv_01', 'adv_02', 'adv02', 'adv_05', 'fe05'];
+    const ALL_MODULES = ['01', '02', '05', '06', '07', '08', '09', '10', '11', '12', '16', 'adv_01', 'adv_02', 'adv02', 'adv_05', 'fe05', 'adv_05_1', 'adv_06_1', 'adv_07', 'adv_08'];
 
     function toggleTheme() {
       const html = document.documentElement;
