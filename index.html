@@ -1515,21 +1515,21 @@
         <div class="stat-card">
           <span class="stat-icon">🔥</span>
           <div class="stat-text">
-            <div class="stat-value adv-color">7 / 8개</div>
-            <div class="stat-label">심화 모듈 (운영 중)</div>
+            <div class="stat-value adv-color">12개</div>
+            <div class="stat-label">심화 모듈 (정식 운영 중)</div>
           </div>
         </div>
         <div class="stat-card">
           <span class="stat-icon">💡</span>
           <div class="stat-text">
-            <div class="stat-value adv-color">470개</div>
-            <div class="stat-label">AI 핵심 함수 상세 해설 (시간순)</div>
+            <div class="stat-value adv-color">985개</div>
+            <div class="stat-label">AI 핵심 함수 상세 해설 (시간순 100%)</div>
           </div>
         </div>
         <div class="stat-card">
           <span class="stat-icon">⚡</span>
           <div class="stat-text">
-            <div class="stat-value adv-color">54단계</div>
+            <div class="stat-value adv-color">97단계</div>
             <div class="stat-label">실습 전처리/모델링 파이프라인</div>
           </div>
         </div>
@@ -1555,7 +1555,7 @@
         <div class="guidance-content">
           <h4>심화 모듈 운영 및 작업 안내</h4>
           <p>
-            현재 <strong>01. Mean Shift 군집화</strong>, <strong>02. DBSCAN 군집화</strong>, <strong>05. Feature Engineering (분류)</strong>, <strong>05-1. Grid Search 하이퍼파라미터 최적화</strong>, <strong>06-1. SVC & Label Encoding</strong>, <strong>07. SVR 서포트 벡터 회귀</strong>, <strong>08. Random Forest 분류</strong> 뷰어가 정식 오픈되어 총 470개 해설 노트 및 54개 실습 파이프라인 단계와 함께 학습할 수 있습니다.
+            현재 <strong>01. Mean Shift</strong>, <strong>02. DBSCAN</strong>, <strong>05. Feature Engineering</strong>, <strong>05-1. Grid Search</strong>, <strong>06-1. SVC</strong>, <strong>07. SVR</strong>, <strong>08. Random Forest 분류</strong>, <strong>08-1. Extra Trees 분류</strong>, <strong>09. Random Forest 회귀</strong>, <strong>16. LightGBM 분류</strong>, <strong>18. CatBoost 분류</strong>, <strong>21-1. GridSearch vs RandomSearch</strong> 등 총 12개 심화 모듈(985개 AI 해설 노트 및 97개 실습 파이프라인 단계)이 완벽하게 오픈되어 실시간 학습 가능합니다.
           </p>
         </div>
       </div>
@@ -1835,6 +1835,165 @@
           </div>
         </div>
 
+        
+        <!-- Adv Module 08-1: Extra Trees Classification (Active) -->
+        <div class="module-card adv-card-style" data-category="active boosting">
+          <div>
+            <div class="card-top">
+              <span class="chapter-tag adv-tag">CHAPTER 08-1 (심화)</span>
+              <span class="status-badge active"><span class="status-dot"></span>학습 가능</span>
+            </div>
+            <h3 class="module-title">08-1. 머신러닝 심화: Extra Trees 분류 & 하이퍼파라미터 튜닝 (Pima Indians Diabetes)</h3>
+            <p class="module-desc">
+              배깅과 무작위 특성 분할을 극대화한 ExtraTreesClassifier 앙상블을 구축합니다. 랜덤 포레스트 대비 분산을 대폭 낮추고 학습 속도를 개선하며, Stratified 5-Fold GridSearchCV(24개 조합)를 통해 최적 파라미터 도출, 혼동 행렬 히트맵 및 지니 불순도 기반 피처 중요도 분석, 상위 5개 주요 피처 경량화 모델 성능을 1:1 비교 검증합니다.
+            </p>
+            <div class="topic-tags">
+              <span class="topic-tag adv-topic">Pima Indians Diabetes (768x8)</span>
+              <span class="topic-tag adv-topic">ExtraTreesClassifier 무작위 앙상블</span>
+              <span class="topic-tag adv-topic">Stratified 5-Fold GridSearchCV</span>
+              <span class="topic-tag adv-topic">Confusion Matrix Seaborn Heatmap</span>
+              <span class="topic-tag adv-topic">Feature Importances 막대 차트</span>
+              <span class="topic-tag adv-topic">상위 5개 피처 모델 경량화 비교</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="card-metrics">
+              <span>⚡ 8개 파이프라인 단계</span>
+              <span>📝 69개 AI 해설 노트 (시간순 100% 매칭)</span>
+            </div>
+            <a href="08_1 머신러닝 심화 ExtraTrees Classification/index.html" class="open-btn adv-btn">
+              뷰어 열기 ➔
+            </a>
+          </div>
+        </div>
+
+        <!-- Adv Module 09: Random Forest Regression (Active) -->
+        <div class="module-card adv-card-style" data-category="active applied">
+          <div>
+            <div class="card-top">
+              <span class="chapter-tag adv-tag">CHAPTER 09 (심화)</span>
+              <span class="status-badge active"><span class="status-dot"></span>학습 가능</span>
+            </div>
+            <h3 class="module-title">09. 머신러닝 심화: Random Forest 회귀 & 하이퍼파라미터 튜닝 (Diabetes Dataset)</h3>
+            <p class="module-desc">
+              당뇨병 진행도 회귀 데이터셋(442x10)을 대상으로 비선형 트리 앙상블 회귀 모델인 RandomForestRegressor를 실습합니다. KFold(5-Fold) 기반 GridSearchCV 전수 격자 탐색(24개 조합)으로 최적 파라미터를 도출하고, RMSE 및 R2 Score 결정계수 정량 평가, 실제값 대비 예측값 산점도(Scatter Plot) 시각화, 피처 중요도 분석 및 기본 모델 대비 튜닝 최적 모델의 회귀 성능 개선 효과를 비교 검증합니다.
+            </p>
+            <div class="topic-tags">
+              <span class="topic-tag adv-topic">Diabetes Dataset (442x10)</span>
+              <span class="topic-tag adv-topic">RandomForestRegressor 회귀 앙상블</span>
+              <span class="topic-tag adv-topic">KFold(5) 기반 GridSearchCV</span>
+              <span class="topic-tag adv-topic">RMSE & R2 Score 정량 회귀 평가</span>
+              <span class="topic-tag adv-topic">Actual vs Predicted 산점도 시각화</span>
+              <span class="topic-tag adv-topic">MSE 감소 기반 피처 중요도 분석</span>
+              <span class="topic-tag adv-topic">기본 vs 최적화 모델 성능 비교</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="card-metrics">
+              <span>⚡ 9개 파이프라인 단계</span>
+              <span>📝 87개 AI 해설 노트 (시간순 100% 매칭)</span>
+            </div>
+            <a href="09 머신러닝 심화 Random Forest Regression/index.html" class="open-btn adv-btn">
+              뷰어 열기 ➔
+            </a>
+          </div>
+        </div>
+
+        <!-- Adv Module 16: LightGBM Classification (Active) -->
+        <div class="module-card adv-card-style" data-category="active boosting">
+          <div>
+            <div class="card-top">
+              <span class="chapter-tag adv-tag">CHAPTER 16 (심화)</span>
+              <span class="status-badge active"><span class="status-dot"></span>학습 가능</span>
+            </div>
+            <h3 class="module-title">16. 머신러닝 심화: LightGBM 분류 & 하이퍼파라미터 최적화 (Pima Indians Diabetes)</h3>
+            <p class="module-desc">
+              마이크로소프트의 초고속 그래디언트 부스팅 프레임워크인 LightGBM(LGBMClassifier)을 마스터합니다. 오차를 가장 크게 줄이는 노드를 수직 확장하는 리프 중심(Leaf-wise) 트리 분할 원리를 학습하고, Stratified 5-Fold GridSearchCV(72개 조합, 360 fits) 전수 격자 탐색을 통해 최적 파라미터를 도출하며, 내장 plot_importance(Gain 기준) 및 Seaborn 히트맵을 통해 압도적인 속도와 성능을 검증합니다.
+            </p>
+            <div class="topic-tags">
+              <span class="topic-tag adv-topic">Pima Indians Diabetes (768x8)</span>
+              <span class="topic-tag adv-topic">LGBMClassifier 리프 중심(Leaf-wise)</span>
+              <span class="topic-tag adv-topic">Stratified 5-Fold GridSearchCV</span>
+              <span class="topic-tag adv-topic">72개 후보군 (총 360 fits)</span>
+              <span class="topic-tag adv-topic">Confusion Matrix Seaborn Heatmap</span>
+              <span class="topic-tag adv-topic">LightGBM plot_importance (Gain)</span>
+              <span class="topic-tag adv-topic">피처 중요도 바 차트 시각화</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="card-metrics">
+              <span>⚡ 9개 파이프라인 단계</span>
+              <span>📝 70개 AI 해설 노트 (시간순 100% 매칭)</span>
+            </div>
+            <a href="16 머신러닝 심화 Light GBM Classification/index.html" class="open-btn adv-btn">
+              뷰어 열기 ➔
+            </a>
+          </div>
+        </div>
+
+        <!-- Adv Module 18: CatBoost Classification (Active) -->
+        <div class="module-card adv-card-style" data-category="active boosting">
+          <div>
+            <div class="card-top">
+              <span class="chapter-tag adv-tag">CHAPTER 18 (심화)</span>
+              <span class="status-badge active"><span class="status-dot"></span>학습 가능</span>
+            </div>
+            <h3 class="module-title">18. 머신러닝 심화: CatBoost 분류 & 조기 종료(Early Stopping) 최적화 (Pima Diabetes)</h3>
+            <p class="module-desc">
+              범주형 특성에 특화되고 과적합에 극도로 강건한 CatBoostClassifier 모델을 실습합니다. 대칭 트리(Oblivious Trees)와 순서형 부스팅(Ordered Boosting) 원리를 바탕으로 Stratified 3-Fold GridSearchCV 하이퍼파라미터 튜닝을 수행하고, 기본 모델 vs 튜닝 모델 성능 비교 차트, PredictionValuesChange 기준 피처 중요도 분석, 그리고 eval_set 기반 조기 종료(Early Stopping) 최적화를 완성합니다.
+            </p>
+            <div class="topic-tags">
+              <span class="topic-tag adv-topic">Pima Indians Diabetes (768x8)</span>
+              <span class="topic-tag adv-topic">CatBoostClassifier 대칭 트리 부스팅</span>
+              <span class="topic-tag adv-topic">Stratified 3-Fold GridSearchCV</span>
+              <span class="topic-tag adv-topic">기본 vs 튜닝 모델 정량 성능 비교</span>
+              <span class="topic-tag adv-topic">PredictionValuesChange 피처 중요도</span>
+              <span class="topic-tag adv-topic">Early Stopping (early_stopping_rounds=20)</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="card-metrics">
+              <span>⚡ 9개 파이프라인 단계</span>
+              <span>📝 90개 AI 해설 노트 (시간순 100% 매칭)</span>
+            </div>
+            <a href="18 머신러닝 심화 Cat Boost Classification/index.html" class="open-btn adv-btn">
+              뷰어 열기 ➔
+            </a>
+          </div>
+        </div>
+
+        <!-- Adv Module 21-1: GridSearch vs RandomSearch (Active) -->
+        <div class="module-card adv-card-style" data-category="active optimization boosting">
+          <div>
+            <div class="card-top">
+              <span class="chapter-tag adv-tag">CHAPTER 21-1 (심화)</span>
+              <span class="status-badge active"><span class="status-dot"></span>학습 가능</span>
+            </div>
+            <h3 class="module-title">21-1. 머신러닝 심화: GridSearchCV vs RandomizedSearchCV 확률분포 비교 (3대 부스팅)</h3>
+            <p class="module-desc">
+              XGBoost, LightGBM, CatBoost 3대 최강 부스팅 모델을 대상으로 전수 격자 탐색(GridSearchCV)과 scipy.stats 연속/이산 확률분포(randint, uniform, loguniform, expon) 기반 무작위 표본 탐색(RandomizedSearchCV)의 최적화 효율성을 1:1 비교 검증합니다. 탐색 시간 50~70% 단축 효과, 최고 정확도/F1 스코어 개선율, 그리고 8종 대형 서브플롯 종합 대시보드(Gridspec)를 심층 분석합니다.
+            </p>
+            <div class="topic-tags">
+              <span class="topic-tag adv-topic">Pima Indians Diabetes (768x8)</span>
+              <span class="topic-tag adv-topic">XGBoost / LightGBM / CatBoost 3대 모델</span>
+              <span class="topic-tag adv-topic">GridSearchCV 전수 격자 탐색</span>
+              <span class="topic-tag adv-topic">RandomizedSearchCV 연속 확률분포</span>
+              <span class="topic-tag adv-topic">scipy.stats (randint, uniform, expon)</span>
+              <span class="topic-tag adv-topic">탐색 시간 vs 정확도 비용 효율 분석</span>
+              <span class="topic-tag adv-topic">8종 대형 서브플롯 대시보드 시각화</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="card-metrics">
+              <span>⚡ 8개 파이프라인 단계</span>
+              <span>📝 199개 AI 해설 노트 (시간순 100% 매칭)</span>
+            </div>
+            <a href="21-1 머신러닝 심화 GridSearch RandomSearch distribution/index.html" class="open-btn adv-btn">
+              뷰어 열기 ➔
+            </a>
+          </div>
+        </div>
+
         <!-- Adv Module 09: XGBoost & LightGBM (Upcoming) -->
         <div class="module-card adv-card-style upcoming" data-category="upcoming boosting">
           <div>
@@ -1874,7 +2033,7 @@
 
   <script>
     // Theme Switcher (Synchronized with module viewers)
-    const ALL_MODULES = ['01', '02', '05', '06', '07', '08', '09', '10', '11', '12', '16', 'adv_01', 'adv_02', 'adv02', 'adv_05', 'fe05', 'adv_05_1', 'adv_06_1', 'adv_07', 'adv_08'];
+    const ALL_MODULES = ['01', '02', '05', '06', '07', '08', '09', '10', '11', '12', '16', 'adv_01', 'adv_02', 'adv02', 'adv_05', 'fe05', 'adv_05_1', 'adv_06_1', 'adv_07', 'adv_08', 'adv_08_1', 'adv_09', 'adv_16', 'adv_18', 'adv_21_1'];
 
     function toggleTheme() {
       const html = document.documentElement;
