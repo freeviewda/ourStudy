@@ -1048,7 +1048,7 @@
           <span class="gateway-feat-badge">XAI 모델 해석 (SHAP/LIME)</span>
         </div>
         <div class="gateway-footer">
-          <span class="gateway-stat-text">🔥 3개 모듈 운영 중 • 172개 AI 해설</span>
+          <span class="gateway-stat-text">🔥 4개 모듈 운영 중 • 214개 AI 해설</span>
           <span class="gateway-action-btn">
             심화 과정 들어가기 ➔
           </span>
@@ -1515,21 +1515,21 @@
         <div class="stat-card">
           <span class="stat-icon">🔥</span>
           <div class="stat-text">
-            <div class="stat-value adv-color">3 / 8개</div>
+            <div class="stat-value adv-color">4 / 8개</div>
             <div class="stat-label">심화 모듈 (운영 중)</div>
           </div>
         </div>
         <div class="stat-card">
           <span class="stat-icon">💡</span>
           <div class="stat-text">
-            <div class="stat-value adv-color">172개</div>
+            <div class="stat-value adv-color">214개</div>
             <div class="stat-label">AI 핵심 함수 상세 해설 (시간순)</div>
           </div>
         </div>
         <div class="stat-card">
           <span class="stat-icon">⚡</span>
           <div class="stat-text">
-            <div class="stat-value adv-color">20단계</div>
+            <div class="stat-value adv-color">25단계</div>
             <div class="stat-label">실습 전처리/모델링 파이프라인</div>
           </div>
         </div>
@@ -1555,7 +1555,7 @@
         <div class="guidance-content">
           <h4>심화 모듈 운영 및 작업 안내</h4>
           <p>
-            현재 <strong>01. Mean Shift 군집화</strong>, <strong>02. DBSCAN 군집화</strong>, <strong>05. Feature Engineering (분류)</strong> 뷰어가 오픈되어 총 172개 해설 노트와 함께 학습할 수 있습니다. 후속 심화 모듈(Optuna, XAI, 앙상블 등)도 동일하게 전용 폴더 및 뷰어 형태로 순차 개설됩니다.
+            현재 <strong>01. Mean Shift 군집화</strong>, <strong>02. DBSCAN 군집화</strong>, <strong>05. Feature Engineering (분류)</strong>, <strong>05-1. Grid Search 하이퍼파라미터 최적화</strong> 뷰어가 오픈되어 총 214개 해설 노트와 함께 학습할 수 있습니다. 후속 심화 모듈(Optuna, XAI, 앙상블 등)도 동일하게 전용 폴더 및 뷰어 형태로 순차 개설됩니다.
           </p>
         </div>
       </div>
@@ -1706,6 +1706,37 @@
               <span>📝 66개 AI 해설 노트 (시간순 100% 매칭)</span>
             </div>
             <a href="05 머신러닝 심화 Feature Engineering_classification/index.html" class="open-btn adv-btn">
+              뷰어 열기 ➔
+            </a>
+          </div>
+        </div>
+
+        <!-- Adv Module 05-1: Grid Search Classification (Active) -->
+        <div class="module-card adv-card-style" data-category="active optimization">
+          <div>
+            <div class="card-top">
+              <span class="chapter-tag adv-tag">CHAPTER 05-1 (심화)</span>
+              <span class="status-badge active"><span class="status-dot"></span>학습 가능</span>
+            </div>
+            <h3 class="module-title">05-1. 머신러닝 심화: 그리드 서치(GridSearchCV) 하이퍼파라미터 최적화 (Pima Diabetes)</h3>
+            <p class="module-desc">
+              Pima Indians 당뇨병 데이터셋(768x8)을 바탕으로, RandomForestClassifier의 핵심 하이퍼파라미터 4종(n_estimators, max_depth, min_samples_split, min_samples_leaf) 총 144개 후보군을 5-Fold 계층적 교차 검증(StratifiedKFold)과 결합한 GridSearchCV로 전수 격자 탐색합니다. 최적 파라미터 도출과 최고 정확도(0.7834)를 기록한 최종 최적 모델(best_estimator_)을 추출합니다.
+            </p>
+            <div class="topic-tags">
+              <span class="topic-tag adv-topic">Pima Indians Diabetes (768x8)</span>
+              <span class="topic-tag adv-topic">RandomForestClassifier</span>
+              <span class="topic-tag adv-topic">GridSearchCV (cv=5, n_jobs=-1)</span>
+              <span class="topic-tag adv-topic">144개 후보군 (총 720 fits)</span>
+              <span class="topic-tag adv-topic">best_params_ & best_score_ (0.7834)</span>
+              <span class="topic-tag adv-topic">best_estimator_ 최적 모델 추출</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="card-metrics">
+              <span>⚡ 5개 파이프라인 단계</span>
+              <span>📝 42개 AI 해설 노트 (시간순 100% 매칭)</span>
+            </div>
+            <a href="05_1 머신러닝 심화 Grid Search classification/index.html" class="open-btn adv-btn">
               뷰어 열기 ➔
             </a>
           </div>
