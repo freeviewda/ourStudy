@@ -1149,6 +1149,73 @@
       }
     }
 
+  
+    /* ==========================================================================
+       Pure VS Code Dark+ Python Syntax Highlighting (No Blue Boxes, Vibrant Syntax)
+       ========================================================================== */
+    .code-editor-look {
+      background: #1e1e1e !important;
+      border: 1px solid #333333 !important;
+      border-radius: 8px;
+      padding: 1.1rem 1.35rem;
+      font-family: 'Fira Code', Consolas, Monaco, monospace;
+      font-size: 0.88rem;
+      line-height: 1.6;
+      overflow-x: auto;
+      margin-bottom: 0.85rem;
+    }
+    .code-editor-look pre {
+      margin: 0 !important;
+      padding: 0 !important;
+      background: transparent !important;
+    }
+    .code-editor-look code {
+      background: transparent !important;
+      font-family: 'Fira Code', Consolas, Monaco, monospace !important;
+      font-size: 0.88rem !important;
+      line-height: 1.6 !important;
+      color: #9cdcfe !important; /* VS Code Light Blue (Default Variable/Identifier) */
+    }
+
+    /* VS Code Dark+ Exact Token Palette */
+    .code-editor-look code .token.comment { color: #6a9955 !important; font-style: italic; }
+    .code-editor-look code .token.keyword { color: #c586c0 !important; font-weight: 500; }
+    .code-editor-look code .token.string, 
+    .code-editor-look code .token.string-interpolation { color: #ce9178 !important; }
+    .code-editor-look code .token.number { color: #b5cea8 !important; }
+    .code-editor-look code .token.function, 
+    .code-editor-look code .token.builtin { color: #dcdcaa !important; }
+    .code-editor-look code .token.class-name { color: #4ec9b0 !important; font-weight: 600; }
+    .code-editor-look code .token.operator { color: #d4d4d4 !important; }
+    .code-editor-look code .token.punctuation { color: #d4d4d4 !important; }
+    .code-editor-look code .token.identifier,
+    .code-editor-look code .token.variable,
+    .code-editor-look code .token.parameter { color: #9cdcfe !important; }
+
+    /* Interactive Hover on Code Tokens (Subtle Dashed Underline, NO Background Boxes) */
+    .code-editor-look code span[class*="token"] {
+      cursor: pointer;
+      transition: opacity 0.15s ease;
+    }
+    .code-editor-look code span[class*="token"]:hover {
+      text-decoration: underline dashed #38bdf8;
+      text-underline-offset: 3px;
+      opacity: 0.88;
+    }
+
+    .interactive-kw, .kw-clickable {
+      background: transparent !important;
+      color: inherit !important;
+      border: none !important;
+      border-bottom: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      cursor: pointer !important;
+      text-decoration: none !important;
+      font-weight: inherit !important;
+      box-shadow: none !important;
+    }
+
   </style>
 </head>
 <body>
@@ -1201,14 +1268,14 @@
     </section>
 
     <!-- Pipeline Step Sections -->
-    <section class="step-section" id="step1"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">1단계</span><h2 class="step-title-text">필수 라이브러리 임포트 및 분석 환경 구축</h2></div><p class="step-summary-desc">Pandas, NumPy, Matplotlib, Seaborn 및 Scikit-Learn 데이터셋(fetch_openml), 분할(train_test_split, StratifiedKFold), 튜닝(GridSearchCV), CatBoost(CatBoostClassifier), 평가 지표 모듈을 임포트합니다.</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 주피터 노트북 실행 코드 및 결과</div><div class="cell-markdown-box"><h2 class="note-h2">라이브러리 임포트</h2></div><div class="code-cell-wrapper" id="cell-2"><div class="cell-header"><span class="cell-badge">In [2]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">import <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-pandas-20261009_194459')" data-step="step1" data-tab="step1-pandas-20261009_194459" data-func="pandas" title="클릭하여 우측 'pandas' 해설 보기">pandas</span> as pd
-import <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-numpy-20261009_194524')" data-step="step1" data-tab="step1-numpy-20261009_194524" data-func="numpy" title="클릭하여 우측 'numpy' 해설 보기">numpy</span> as np
-import <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-matplotlib_pyplot-20261009_194529')" data-step="step1" data-tab="step1-matplotlib_pyplot-20261009_194529" data-func="matplotlib.pyplot" title="클릭하여 우측 'matplotlib.pyplot' 해설 보기">matplotlib.pyplot</span> as plt
-import <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-seaborn-20261009_194535')" data-step="step1" data-tab="step1-seaborn-20261009_194535" data-func="seaborn" title="클릭하여 우측 'seaborn' 해설 보기">seaborn</span> as sns
-from <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-sklearn_datasets-20261009_194541')" data-step="step1" data-tab="step1-sklearn_datasets-20261009_194541" data-func="sklearn.datasets" title="클릭하여 우측 'sklearn.datasets' 해설 보기">sklearn.datasets</span> import <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-fetch_openml-20261009_194546')" data-step="step1" data-tab="step1-fetch_openml-20261009_194546" data-func="fetch_openml" title="클릭하여 우측 'fetch_openml' 해설 보기">fetch_openml</span>
-from <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-sklearn_model_selection-20261009_194554')" data-step="step1" data-tab="step1-sklearn_model_selection-20261009_194554" data-func="sklearn.model_selection" title="클릭하여 우측 'sklearn.model_selection' 해설 보기">sklearn.model_selection</span> import <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-train_test_split-20261009_194557')" data-step="step1" data-tab="step1-train_test_split-20261009_194557" data-func="train_test_split" title="클릭하여 우측 'train_test_split' 해설 보기">train_test_split</span>, <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-StratifiedKFold-20261009_194602')" data-step="step1" data-tab="step1-StratifiedKFold-20261009_194602" data-func="StratifiedKFold" title="클릭하여 우측 'StratifiedKFold' 해설 보기">StratifiedKFold</span>, <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-GridSearchCV-20261009_194607')" data-step="step1" data-tab="step1-GridSearchCV-20261009_194607" data-func="GridSearchCV" title="클릭하여 우측 'GridSearchCV' 해설 보기">GridSearchCV</span>
-from <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-catboost-20261009_194617')" data-step="step1" data-tab="step1-catboost-20261009_194617" data-func="catboost" title="클릭하여 우측 'catboost' 해설 보기">catboost</span> import <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-CatBoostClassifier-20261009_194622')" data-step="step1" data-tab="step1-CatBoostClassifier-20261009_194622" data-func="CatBoostClassifier" title="클릭하여 우측 'CatBoostClassifier' 해설 보기">CatBoostClassifier</span>
-from <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-sklearn_metrics-20261009_194628')" data-step="step1" data-tab="step1-sklearn_metrics-20261009_194628" data-func="sklearn.metrics" title="클릭하여 우측 'sklearn.metrics' 해설 보기">sklearn.metrics</span> import <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-accuracy_score-20261009_194633')" data-step="step1" data-tab="step1-accuracy_score-20261009_194633" data-func="accuracy_score" title="클릭하여 우측 'accuracy_score' 해설 보기">accuracy_score</span>, <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-classification_report-20261009_194638')" data-step="step1" data-tab="step1-classification_report-20261009_194638" data-func="classification_report" title="클릭하여 우측 'classification_report' 해설 보기">classification_report</span></code></pre></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (MARKDOWN)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (15)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step1" data-tab="step1-pandas-20261009_194459" onclick="switchTab('step1', 'step1-pandas-20261009_194459')"><span class="tab-func-name">import pandas as pd</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-numpy-20261009_194524" onclick="switchTab('step1', 'step1-numpy-20261009_194524')"><span class="tab-func-name">import numpy as np</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-matplotlib_pyplot-20261009_194529" onclick="switchTab('step1', 'step1-matplotlib_pyplot-20261009_194529')"><span class="tab-func-name">import matplotlib.pyplot as plt</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-seaborn-20261009_194535" onclick="switchTab('step1', 'step1-seaborn-20261009_194535')"><span class="tab-func-name">import seaborn as sns</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_datasets-20261009_194541" onclick="switchTab('step1', 'step1-sklearn_datasets-20261009_194541')"><span class="tab-func-name">from sklearn.datasets import fetch_openml</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-fetch_openml-20261009_194546" onclick="switchTab('step1', 'step1-fetch_openml-20261009_194546')"><span class="tab-func-name">fetch_openml</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_model_selection-20261009_194554" onclick="switchTab('step1', 'step1-sklearn_model_selection-20261009_194554')"><span class="tab-func-name">from sklearn.model_selection import ...</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-train_test_split-20261009_194557" onclick="switchTab('step1', 'step1-train_test_split-20261009_194557')"><span class="tab-func-name">train_test_split</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-StratifiedKFold-20261009_194602" onclick="switchTab('step1', 'step1-StratifiedKFold-20261009_194602')"><span class="tab-func-name">StratifiedKFold</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-GridSearchCV-20261009_194607" onclick="switchTab('step1', 'step1-GridSearchCV-20261009_194607')"><span class="tab-func-name">GridSearchCV</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-catboost-20261009_194617" onclick="switchTab('step1', 'step1-catboost-20261009_194617')"><span class="tab-func-name">import catboost</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-CatBoostClassifier-20261009_194622" onclick="switchTab('step1', 'step1-CatBoostClassifier-20261009_194622')"><span class="tab-func-name">CatBoostClassifier</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_metrics-20261009_194628" onclick="switchTab('step1', 'step1-sklearn_metrics-20261009_194628')"><span class="tab-func-name">from sklearn.metrics import ...</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-accuracy_score-20261009_194633" onclick="switchTab('step1', 'step1-accuracy_score-20261009_194633')"><span class="tab-func-name">accuracy_score</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-classification_report-20261009_194638" onclick="switchTab('step1', 'step1-classification_report-20261009_194638')"><span class="tab-func-name">classification_report</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step1-pandas-20261009_194459"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>pandas</code></div><div class="note-time-badge">⏱ 2026-10-09 19:44:59</div></div><div class="note-body-content"><h1 class="note-h1">pandas - AI 파이썬 학습 노트</h1>
+    <section class="step-section" id="step1"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">1단계</span><h2 class="step-title-text">필수 라이브러리 임포트 및 분석 환경 구축</h2></div><p class="step-summary-desc">Pandas, NumPy, Matplotlib, Seaborn 및 Scikit-Learn 데이터셋(fetch_openml), 분할(train_test_split, StratifiedKFold), 튜닝(GridSearchCV), CatBoost(CatBoostClassifier), 평가 지표 모듈을 임포트합니다.</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 주피터 노트북 실행 코드 및 결과</div><div class="cell-markdown-box"><h2 class="note-h2">라이브러리 임포트</h2></div><div class="code-cell-wrapper" id="cell-2"><div class="cell-header"><span class="cell-badge">In [2]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">import  as pd
+import  as np
+import  as plt
+import  as sns
+from  import 
+from  import , , 
+from  import 
+from  import , </code></pre></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (MARKDOWN)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (15)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step1" data-tab="step1-pandas-20261009_194459" onclick="switchTab('step1', 'step1-pandas-20261009_194459')"><span class="tab-func-name">import pandas as pd</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-numpy-20261009_194524" onclick="switchTab('step1', 'step1-numpy-20261009_194524')"><span class="tab-func-name">import numpy as np</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-matplotlib_pyplot-20261009_194529" onclick="switchTab('step1', 'step1-matplotlib_pyplot-20261009_194529')"><span class="tab-func-name">import matplotlib.pyplot as plt</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-seaborn-20261009_194535" onclick="switchTab('step1', 'step1-seaborn-20261009_194535')"><span class="tab-func-name">import seaborn as sns</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_datasets-20261009_194541" onclick="switchTab('step1', 'step1-sklearn_datasets-20261009_194541')"><span class="tab-func-name">from sklearn.datasets import fetch_openml</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-fetch_openml-20261009_194546" onclick="switchTab('step1', 'step1-fetch_openml-20261009_194546')"><span class="tab-func-name">fetch_openml</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_model_selection-20261009_194554" onclick="switchTab('step1', 'step1-sklearn_model_selection-20261009_194554')"><span class="tab-func-name">from sklearn.model_selection import ...</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-train_test_split-20261009_194557" onclick="switchTab('step1', 'step1-train_test_split-20261009_194557')"><span class="tab-func-name">train_test_split</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-StratifiedKFold-20261009_194602" onclick="switchTab('step1', 'step1-StratifiedKFold-20261009_194602')"><span class="tab-func-name">StratifiedKFold</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-GridSearchCV-20261009_194607" onclick="switchTab('step1', 'step1-GridSearchCV-20261009_194607')"><span class="tab-func-name">GridSearchCV</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-catboost-20261009_194617" onclick="switchTab('step1', 'step1-catboost-20261009_194617')"><span class="tab-func-name">import catboost</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-CatBoostClassifier-20261009_194622" onclick="switchTab('step1', 'step1-CatBoostClassifier-20261009_194622')"><span class="tab-func-name">CatBoostClassifier</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_metrics-20261009_194628" onclick="switchTab('step1', 'step1-sklearn_metrics-20261009_194628')"><span class="tab-func-name">from sklearn.metrics import ...</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-accuracy_score-20261009_194633" onclick="switchTab('step1', 'step1-accuracy_score-20261009_194633')"><span class="tab-func-name">accuracy_score</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-classification_report-20261009_194638" onclick="switchTab('step1', 'step1-classification_report-20261009_194638')"><span class="tab-func-name">classification_report</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step1-pandas-20261009_194459"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>pandas</code></div><div class="note-time-badge">⏱ 2026-10-09 19:44:59</div></div><div class="note-body-content"><h1 class="note-h1">pandas - AI 파이썬 학습 노트</h1>
 <div class="note-empty-line"></div>
 <ul class="note-ul">
 <li class="note-li">생성 일시: 2026-10-09 19:44:59</li>
@@ -1384,14 +1451,14 @@ from <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-sklea
 <ul class="note-ul">
 <li class="note-li">768개 샘플, 8개 피처</li>
 <li class="note-li">당뇨병 발병 여부 이진 분류</li>
-</ul></div><div class="code-cell-wrapper" id="cell-4"><div class="cell-header"><span class="cell-badge">In [4]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">print(&quot;Loading Pima Indians Diabetes Dataset...&quot;)
-pima = <span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-fetch_openml-20261009_195123')" data-step="step2" data-tab="step2-fetch_openml-20261009_195123" data-func="fetch_openml" title="클릭하여 우측 'fetch_openml' 해설 보기">fetch_openml</span>(name=&#x27;diabetes&#x27;, version=1, as_frame=True)
-X = <span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-pima_data-20261009_195127')" data-step="step2" data-tab="step2-pima_data-20261009_195127" data-func="pima.data" title="클릭하여 우측 'pima.data' 해설 보기">pima.data</span>
-y = <span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-pima_target_map-20261009_195131')" data-step="step2" data-tab="step2-pima_target_map-20261009_195131" data-func="pima.target.map" title="클릭하여 우측 'pima.target.map' 해설 보기">pima.target.map</span>({&#x27;tested_negative&#x27;: 0, &#x27;tested_positive&#x27;: 1}).<span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-astype-20261009_195134')" data-step="step2" data-tab="step2-astype-20261009_195134" data-func="astype" title="클릭하여 우측 'astype' 해설 보기">astype</span>(int)
+</ul></div><div class="code-cell-wrapper" id="cell-4"><div class="cell-header"><span class="cell-badge">In [4]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">print("Loading Pima Indians Diabetes Dataset...")
+pima = (name='diabetes', version=1, as_frame=True)
+X = 
+y = ({'tested_negative': 0, 'tested_positive': 1}).(int)
 
-print(f&quot;데이터 크기: {<span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-X_shape-20261009_195138')" data-step="step2" data-tab="step2-X_shape-20261009_195138" data-func="X.shape" title="클릭하여 우측 'X.shape' 해설 보기">X.shape</span>}&quot;)
-print(f&quot;피처 목록: {<span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-list-20261009_195146')" data-step="step2" data-tab="step2-list-20261009_195146" data-func="list" title="클릭하여 우측 'list' 해설 보기">list</span>(X.columns)}&quot;)
-print(f&quot;\n클래스 분포:\n{<span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-y_value_counts-20261009_195150')" data-step="step2" data-tab="step2-y_value_counts-20261009_195150" data-func="y.value_counts" title="클릭하여 우측 'y.value_counts' 해설 보기">y.value_counts</span>()}&quot;)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>Loading Pima Indians Diabetes Dataset...
+print(f"데이터 크기: {}")
+print(f"피처 목록: {(X.columns)}")
+print(f"\n클래스 분포:\n{()}")</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>Loading Pima Indians Diabetes Dataset...
 데이터 크기: (768, 8)
 피처 목록: [&#x27;preg&#x27;, &#x27;plas&#x27;, &#x27;pres&#x27;, &#x27;skin&#x27;, &#x27;insu&#x27;, &#x27;mass&#x27;, &#x27;pedi&#x27;, &#x27;age&#x27;]
 
@@ -1401,11 +1468,11 @@ class
 1    268
 Name: count, dtype: int64
 </pre></div></div></div></div><div class="cell-markdown-box"><p class="note-p"><strong>데이터 샘플 확인</strong></p></div><div class="code-cell-wrapper" id="cell-6"><div class="cell-header"><span class="cell-badge">In [6]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 데이터 샘플
-print(&quot;\n데이터 샘플:&quot;)
-print(<span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-X_head-20261009_195215')" data-step="step2" data-tab="step2-X_head-20261009_195215" data-func="X.head" title="클릭하여 우측 'X.head' 해설 보기">X.head</span>())
+print("\n데이터 샘플:")
+print(())
 
-print(&quot;\n기술 통계:&quot;)
-print(<span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-X_describe-20261009_195219')" data-step="step2" data-tab="step2-X_describe-20261009_195219" data-func="X.describe" title="클릭하여 우측 'X.describe' 해설 보기">X.describe</span>())</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>
+print("\n기술 통계:")
+print(())</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>
 데이터 샘플:
    preg  plas  pres  skin  insu  mass   pedi  age
 0     6   148    72    35     0  33.6  0.627   50
@@ -1971,12 +2038,12 @@ min    70.000000    60.000000
 max    95.000000    95.000000</code></pre>
 <div class="note-empty-line"></div>
 <p class="note-p">💡 <strong>초보자를 위한 한 줄 요약</strong>: 데이터 분석을 시작할 때 <code class="inline-code">X.describe()</code>를 치면, 데이터의 전체적인 성격(평균은 얼마고 범위는 어디서부터 어디까지인지)을 <strong>1초 만에 파악</strong>할 수 있는 효자 함수입니다!</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step2', 'X.describe')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section><section class="step-section" id="step3"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">3단계</span><h2 class="step-title-text">훈련 및 테스트 데이터 분할 (Stratified Train/Test Split)</h2></div><p class="step-summary-desc">타깃 클래스 비율(정상 65% : 당뇨 35%)을 균등 유지하기 위해 stratify=y 옵션으로 8:2 비율의 학습(614개) 및 테스트(154개) 세트로 분할합니다.</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 주피터 노트북 실행 코드 및 결과</div><div class="cell-markdown-box"><p class="note-p"><strong>학습/테스트 데이터 분리</strong></p></div><div class="code-cell-wrapper" id="cell-8"><div class="cell-header"><span class="cell-badge">In [8]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 데이터 분리 (stratify로 클래스 비율 유지)
-X_train, X_test, y_train, y_test = <span class="interactive-kw" onclick="activateNoteTab('step3', 'step3-train_test_split-20261009_195223')" data-step="step3" data-tab="step3-train_test_split-20261009_195223" data-func="train_test_split" title="클릭하여 우측 'train_test_split' 해설 보기">train_test_split</span>(
+X_train, X_test, y_train, y_test = (
     X, y, test_size=0.2, random_state=42, stratify=y
 )
 
-print(f&quot;Train: {<span class="interactive-kw" onclick="activateNoteTab('step3', 'step3-X_train_shape-20261009_195230')" data-step="step3" data-tab="step3-X_train_shape-20261009_195230" data-func="X_train.shape" title="클릭하여 우측 'X_train.shape' 해설 보기">X_train.shape</span>}, Test: {<span class="interactive-kw" onclick="activateNoteTab('step3', 'step3-X_test_shape-20261009_195234')" data-step="step3" data-tab="step3-X_test_shape-20261009_195234" data-func="X_test.shape" title="클릭하여 우측 'X_test.shape' 해설 보기">X_test.shape</span>}&quot;)
-print(f&quot;\nTrain 클래스 분포:\n{<span class="interactive-kw" onclick="activateNoteTab('step3', 'step3-y_train_value_counts-20261009_195239')" data-step="step3" data-tab="step3-y_train_value_counts-20261009_195239" data-func="y_train.value_counts" title="클릭하여 우측 'y_train.value_counts' 해설 보기">y_train.value_counts</span>()}&quot;)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>Train: (614, 8), Test: (154, 8)
+print(f"Train: {}, Test: {}")
+print(f"\nTrain 클래스 분포:\n{()}")</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>Train: (614, 8), Test: (154, 8)
 
 Train 클래스 분포:
 class
@@ -2166,7 +2233,7 @@ dtype: int64</code></pre>
 <li class="note-li">border_count: 수치형 특성 분할 수</li>
 <li class="note-li">bagging_temperature: 베이지안 부트스트랩</li>
 </ul></div><div class="cell-markdown-box"><h2 class="note-h2">3. 기본 CatBoost 학습</h2></div><div class="code-cell-wrapper" id="cell-11"><div class="cell-header"><span class="cell-badge">In [11]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 기본 모델 생성
-cat_clf = <span class="interactive-kw" onclick="activateNoteTab('step4', 'step4-CatBoostClassifier-20261009_195249')" data-step="step4" data-tab="step4-CatBoostClassifier-20261009_195249" data-func="CatBoostClassifier" title="클릭하여 우측 'CatBoostClassifier' 해설 보기">CatBoostClassifier</span>(
+cat_clf = (
     iterations=100,
     learning_rate=0.1,
     depth=6,
@@ -2175,21 +2242,21 @@ cat_clf = <span class="interactive-kw" onclick="activateNoteTab('step4', 'step4-
 )
 
 # 학습
-<span class="interactive-kw" onclick="activateNoteTab('step4', 'step4-cat_clf_fit-20261009_195259')" data-step="step4" data-tab="step4-cat_clf_fit-20261009_195259" data-func="cat_clf.fit" title="클릭하여 우측 'cat_clf.fit' 해설 보기">cat_clf.fit</span>(X_train, y_train)
+(X_train, y_train)
 
 # 예측
-y_pred = <span class="interactive-kw" onclick="activateNoteTab('step4', 'step4-cat_clf_predict-20261009_195306')" data-step="step4" data-tab="step4-cat_clf_predict-20261009_195306" data-func="cat_clf.predict" title="클릭하여 우측 'cat_clf.predict' 해설 보기">cat_clf.predict</span>(X_test)
+y_pred = (X_test)
 
 # 평가
-train_acc = <span class="interactive-kw" onclick="activateNoteTab('step4', 'step4-cat_clf_score-20261009_195312')" data-step="step4" data-tab="step4-cat_clf_score-20261009_195312" data-func="cat_clf.score" title="클릭하여 우측 'cat_clf.score' 해설 보기">cat_clf.score</span>(X_train, y_train)
-test_acc = <span class="interactive-kw" onclick="activateNoteTab('step4', 'step4-accuracy_score-20261009_195318')" data-step="step4" data-tab="step4-accuracy_score-20261009_195318" data-func="accuracy_score" title="클릭하여 우측 'accuracy_score' 해설 보기">accuracy_score</span>(y_test, y_pred)
+train_acc = (X_train, y_train)
+test_acc = (y_test, y_pred)
 
-print(&quot;=&quot;*50)
-print(&quot;기본 CatBoost Classifier 결과&quot;)
-print(&quot;=&quot;*50)
-print(f&quot;Train Accuracy: {train_acc:.4f}&quot;)
-print(f&quot;Test Accuracy: {test_acc:.4f}&quot;)
-print(f&quot;\n분류 리포트:\n{<span class="interactive-kw" onclick="activateNoteTab('step4', 'step4-classification_report-20261009_195324')" data-step="step4" data-tab="step4-classification_report-20261009_195324" data-func="classification_report" title="클릭하여 우측 'classification_report' 해설 보기">classification_report</span>(y_test, y_pred)}&quot;)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>==================================================
+print("="*50)
+print("기본 CatBoost Classifier 결과")
+print("="*50)
+print(f"Train Accuracy: {train_acc:.4f}")
+print(f"Test Accuracy: {test_acc:.4f}")
+print(f"\n분류 리포트:\n{(y_test, y_pred)}")</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>==================================================
 기본 CatBoost Classifier 결과
 ==================================================
 Train Accuracy: 0.8664
@@ -2648,42 +2715,42 @@ weighted avg       0.75      0.75      0.75         8</code></pre>
 <li class="note-li">클래스 비율 유지</li>
 </ul></div><div class="code-cell-wrapper" id="cell-13"><div class="cell-header"><span class="cell-badge">In [13]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 하이퍼파라미터 그리드 정의
 param_grid = {
-    &#x27;iterations&#x27;: [100, 150, 200],
-    &#x27;learning_rate&#x27;: [0.01, 0.05, 0.1],
-    &#x27;depth&#x27;: [4, 6, 8],
-    &#x27;l2_leaf_reg&#x27;: [1, 3, 5]
+    'iterations': [100, 150, 200],
+    'learning_rate': [0.01, 0.05, 0.1],
+    'depth': [4, 6, 8],
+    'l2_leaf_reg': [1, 3, 5]
 }
 
-print(&quot;파라미터 그리드:&quot;)
-for key, value in <span class="interactive-kw" onclick="activateNoteTab('step5', 'step5-param_grid_items-20261009_195330')" data-step="step5" data-tab="step5-param_grid_items-20261009_195330" data-func="param_grid.items" title="클릭하여 우측 'param_grid.items' 해설 보기">param_grid.items</span>():
-    print(f&quot;  {key}: {value}&quot;)
+print("파라미터 그리드:")
+for key, value in ():
+    print(f"  {key}: {value}")
 
 # 총 조합 수
-total_combinations = <span class="interactive-kw" onclick="activateNoteTab('step5', 'step5-np_prod-20261009_195336')" data-step="step5" data-tab="step5-np_prod-20261009_195336" data-func="np.prod" title="클릭하여 우측 'np.prod' 해설 보기">np.prod</span>([<span class="interactive-kw" onclick="activateNoteTab('step5', 'step5-len-20261009_195340')" data-step="step5" data-tab="step5-len-20261009_195340" data-func="len" title="클릭하여 우측 'len' 해설 보기">len</span>(v) for v in <span class="interactive-kw" onclick="activateNoteTab('step5', 'step5-param_grid_values-20261009_195344')" data-step="step5" data-tab="step5-param_grid_values-20261009_195344" data-func="param_grid.values" title="클릭하여 우측 'param_grid.values' 해설 보기">param_grid.values</span>()])
-print(f&quot;\n총 파라미터 조합: {total_combinations}개&quot;)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>파라미터 그리드:
+total_combinations = ([(v) for v in ()])
+print(f"\n총 파라미터 조합: {total_combinations}개")</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>파라미터 그리드:
   iterations: [100, 150, 200]
   learning_rate: [0.01, 0.05, 0.1]
   depth: [4, 6, 8]
   l2_leaf_reg: [1, 3, 5]
 
 총 파라미터 조합: 81개
-</pre></div></div></div></div><div class="code-cell-wrapper" id="cell-14"><div class="cell-header"><span class="cell-badge">In [14]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># <span class="interactive-kw" onclick="activateNoteTab('step5', 'step5-StratifiedKFold-20261009_195348')" data-step="step5" data-tab="step5-StratifiedKFold-20261009_195348" data-func="StratifiedKFold" title="클릭하여 우측 'StratifiedKFold' 해설 보기">StratifiedKFold</span> 설정
-skf = <span class="interactive-kw" onclick="activateNoteTab('step5', 'step5-StratifiedKFold-20261009_195348')" data-step="step5" data-tab="step5-StratifiedKFold-20261009_195348" data-func="StratifiedKFold" title="클릭하여 우측 'StratifiedKFold' 해설 보기">StratifiedKFold</span>(n_splits=3, shuffle=True, random_state=42)
+</pre></div></div></div></div><div class="code-cell-wrapper" id="cell-14"><div class="cell-header"><span class="cell-badge">In [14]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">#  설정
+skf = (n_splits=3, shuffle=True, random_state=42)
 
-# <span class="interactive-kw" onclick="activateNoteTab('step5', 'step5-GridSearchCV-20261009_195354')" data-step="step5" data-tab="step5-GridSearchCV-20261009_195354" data-func="GridSearchCV" title="클릭하여 우측 'GridSearchCV' 해설 보기">GridSearchCV</span> 생성
-grid_clf = <span class="interactive-kw" onclick="activateNoteTab('step5', 'step5-GridSearchCV-20261009_195354')" data-step="step5" data-tab="step5-GridSearchCV-20261009_195354" data-func="GridSearchCV" title="클릭하여 우측 'GridSearchCV' 해설 보기">GridSearchCV</span>(
-    estimator=<span class="interactive-kw" onclick="activateNoteTab('step5', 'step5-CatBoostClassifier-20261009_195359')" data-step="step5" data-tab="step5-CatBoostClassifier-20261009_195359" data-func="CatBoostClassifier" title="클릭하여 우측 'CatBoostClassifier' 해설 보기">CatBoostClassifier</span>(random_state=42, verbose=0),
+#  생성
+grid_clf = (
+    estimator=(random_state=42, verbose=0),
     param_grid=param_grid,
     cv=skf,
-    scoring=&#x27;accuracy&#x27;,
+    scoring='accuracy',
     n_jobs=-1,
     verbose=1
 )
 
-print(&quot;<span class="interactive-kw" onclick="activateNoteTab('step5', 'step5-GridSearchCV-20261009_195354')" data-step="step5" data-tab="step5-GridSearchCV-20261009_195354" data-func="GridSearchCV" title="클릭하여 우측 'GridSearchCV' 해설 보기">GridSearchCV</span> 생성완료...\n&quot;)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>GridSearchCV 생성완료...
+print(" 생성완료...\n")</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>GridSearchCV 생성완료...
 
 </pre></div></div></div></div><div class="code-cell-wrapper" id="cell-15"><div class="cell-header"><span class="cell-badge">In [15]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">
-<span class="interactive-kw" onclick="activateNoteTab('step5', 'step5-grid_clf_fit-20261009_195406')" data-step="step5" data-tab="step5-grid_clf_fit-20261009_195406" data-func="grid_clf.fit" title="클릭하여 우측 'grid_clf.fit' 해설 보기">grid_clf.fit</span>(X_train, y_train)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (2)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>Fitting 3 folds for each of 81 candidates, totalling 243 fits
+(X_train, y_train)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (2)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>Fitting 3 folds for each of 81 candidates, totalling 243 fits
 </pre></div><div class="output-item html-table-output"><div class="output-type-tag">DataFrame Display</div><style>#sk-container-id-1 {
   /* Definition of color scheme common for light and dark mode */
   --sklearn-color-text: #000;
@@ -3654,13 +3721,13 @@ print(&quot;최고 교차 검증 점수:&quot;, grid_clf.best_score_)</code></pr
 <pre class="note-code-block"><code class="language-text">가장 좋았던 설정값: {&#x27;n_estimators&#x27;: 50}
 최고 교차 검증 점수: 0.9555...</code></pre>
 <p class="note-p"><em>(설명: 10개, 50개, 100개의 나무를 심어본 결과, 나무를 <strong>50개</strong> 심었을 때 시험 성적(정확도)이 가장 높았다고 모델이 스스로 찾아내어 알려줍니다!)</em></p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step5', 'grid_clf.fit')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section><section class="step-section" id="step6"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">6단계</span><h2 class="step-title-text">최적 모델 평가 및 기본 모델 vs 튜닝 모델 성능 비교</h2></div><p class="step-summary-desc">최적 파라미터로 학습된 best_estimator_의 테스트 정확도를 측정하고, 기본 모델과의 성능 비교 데이터프레임 및 막대 그래프를 시각화합니다.</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 주피터 노트북 실행 코드 및 결과</div><div class="cell-markdown-box"><h2 class="note-h2">5. 최적 모델 결과</h2></div><div class="code-cell-wrapper" id="cell-17"><div class="cell-header"><span class="cell-badge">In [17]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 최적 파라미터 출력
-print(&quot;=&quot;*50)
-print(&quot;최적 하이퍼파라미터&quot;)
-print(&quot;=&quot;*50)
-for param, value in <span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-grid_clf_best_params__items-20261009_195413')" data-step="step6" data-tab="step6-grid_clf_best_params__items-20261009_195413" data-func="grid_clf.best_params_.items" title="클릭하여 우측 'grid_clf.best_params_.items' 해설 보기">grid_clf.best_params_.items</span>():
-    print(f&quot;{param:20s}: {value}&quot;)
+print("="*50)
+print("최적 하이퍼파라미터")
+print("="*50)
+for param, value in ():
+    print(f"{param:20s}: {value}")
 
-print(f&quot;\n최적 CV Score: {grid_clf.best_score_:.4f}&quot;)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>==================================================
+print(f"\n최적 CV Score: {grid_clf.best_score_:.4f}")</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>==================================================
 최적 하이퍼파라미터
 ==================================================
 depth               : 4
@@ -3670,21 +3737,21 @@ learning_rate       : 0.1
 
 최적 CV Score: 0.7834
 </pre></div></div></div></div><div class="code-cell-wrapper" id="cell-18"><div class="cell-header"><span class="cell-badge">In [18]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 최적 모델 저장
-best_clf = <span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-grid_clf_best_estimator_-20261009_195418')" data-step="step6" data-tab="step6-grid_clf_best_estimator_-20261009_195418" data-func="grid_clf.best_estimator_" title="클릭하여 우측 'grid_clf.best_estimator_' 해설 보기">grid_clf.best_estimator_</span>
+best_clf = 
 
 # 테스트 데이터 예측
-y_pred_best = <span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-best_clf_predict-20261009_195424')" data-step="step6" data-tab="step6-best_clf_predict-20261009_195424" data-func="best_clf.predict" title="클릭하여 우측 'best_clf.predict' 해설 보기">best_clf.predict</span>(X_test)
+y_pred_best = (X_test)
 
 # 성능 평가
-train_acc_best = <span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-best_clf_score-20261009_195430')" data-step="step6" data-tab="step6-best_clf_score-20261009_195430" data-func="best_clf.score" title="클릭하여 우측 'best_clf.score' 해설 보기">best_clf.score</span>(X_train, y_train)
-test_acc_best = <span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-accuracy_score-20261009_195436')" data-step="step6" data-tab="step6-accuracy_score-20261009_195436" data-func="accuracy_score" title="클릭하여 우측 'accuracy_score' 해설 보기">accuracy_score</span>(y_test, y_pred_best)
+train_acc_best = (X_train, y_train)
+test_acc_best = (y_test, y_pred_best)
 
-print(&quot;=&quot;*50)
-print(&quot;최적화된 CatBoost 결과&quot;)
-print(&quot;=&quot;*50)
-print(f&quot;Train Accuracy: {train_acc_best:.4f}&quot;)
-print(f&quot;Test Accuracy: {test_acc_best:.4f}&quot;)
-print(f&quot;\n분류 리포트:\n{<span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-classification_report-20261009_195451')" data-step="step6" data-tab="step6-classification_report-20261009_195451" data-func="classification_report" title="클릭하여 우측 'classification_report' 해설 보기">classification_report</span>(y_test, y_pred_best)}&quot;)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>==================================================
+print("="*50)
+print("최적화된 CatBoost 결과")
+print("="*50)
+print(f"Train Accuracy: {train_acc_best:.4f}")
+print(f"Test Accuracy: {test_acc_best:.4f}")
+print(f"\n분류 리포트:\n{(y_test, y_pred_best)}")</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>==================================================
 최적화된 CatBoost 결과
 ==================================================
 Train Accuracy: 0.8225
@@ -3701,39 +3768,39 @@ Test Accuracy: 0.7532
 weighted avg       0.75      0.75      0.75       154
 
 </pre></div></div></div></div><div class="cell-markdown-box"><h2 class="note-h2">6. 성능 비교</h2></div><div class="code-cell-wrapper" id="cell-20"><div class="cell-header"><span class="cell-badge">In [20]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 성능 비교 데이터프레임
-comparison = <span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-pd_DataFrame-20261009_195457')" data-step="step6" data-tab="step6-pd_DataFrame-20261009_195457" data-func="pd.DataFrame" title="클릭하여 우측 'pd.DataFrame' 해설 보기">pd.DataFrame</span>({
-    &#x27;Model&#x27;: [&#x27;Default CatBoost&#x27;, &#x27;Tuned CatBoost&#x27;],
-    &#x27;Train Acc&#x27;: [train_acc, train_acc_best],
-    &#x27;Test Acc&#x27;: [test_acc, test_acc_best]
+comparison = ({
+    'Model': ['Default CatBoost', 'Tuned CatBoost'],
+    'Train Acc': [train_acc, train_acc_best],
+    'Test Acc': [test_acc, test_acc_best]
 })
 
-print(&quot;\n성능 비교:&quot;)
-print(<span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-comparison_to_string-20261009_195507')" data-step="step6" data-tab="step6-comparison_to_string-20261009_195507" data-func="comparison.to_string" title="클릭하여 우측 'comparison.to_string' 해설 보기">comparison.to_string</span>(index=False))
+print("\n성능 비교:")
+print((index=False))
 
 # 시각화
-fig, ax = <span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-plt_subplots-20261009_195516')" data-step="step6" data-tab="step6-plt_subplots-20261009_195516" data-func="plt.subplots" title="클릭하여 우측 'plt.subplots' 해설 보기">plt.subplots</span>(1, 1, figsize=(8, 5))
+fig, ax = (1, 1, figsize=(8, 5))
 
-x = <span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-np_arange-20261009_195522')" data-step="step6" data-tab="step6-np_arange-20261009_195522" data-func="np.arange" title="클릭하여 우측 'np.arange' 해설 보기">np.arange</span>(<span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-len-20261009_195527')" data-step="step6" data-tab="step6-len-20261009_195527" data-func="len" title="클릭하여 우측 'len' 해설 보기">len</span>(comparison))
+x = ((comparison))
 width = 0.35
 
-<span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-ax_bar-20261009_195532')" data-step="step6" data-tab="step6-ax_bar-20261009_195532" data-func="ax.bar" title="클릭하여 우측 'ax.bar' 해설 보기">ax.bar</span>(x - width/2, comparison[&#x27;Train Acc&#x27;], width, label=&#x27;Train&#x27;, alpha=0.8)
-<span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-ax_bar-20261009_195532')" data-step="step6" data-tab="step6-ax_bar-20261009_195532" data-func="ax.bar" title="클릭하여 우측 'ax.bar' 해설 보기">ax.bar</span>(x + width/2, comparison[&#x27;Test Acc&#x27;], width, label=&#x27;Test&#x27;, alpha=0.8)
+(x - width/2, comparison['Train Acc'], width, label='Train', alpha=0.8)
+(x + width/2, comparison['Test Acc'], width, label='Test', alpha=0.8)
 
-<span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-ax_set_ylabel-20261009_195558')" data-step="step6" data-tab="step6-ax_set_ylabel-20261009_195558" data-func="ax.set_ylabel" title="클릭하여 우측 'ax.set_ylabel' 해설 보기">ax.set_ylabel</span>(&#x27;Accuracy&#x27;)
-<span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-ax_set_title-20261009_195604')" data-step="step6" data-tab="step6-ax_set_title-20261009_195604" data-func="ax.set_title" title="클릭하여 우측 'ax.set_title' 해설 보기">ax.set_title</span>(&#x27;CatBoost Performance Comparison&#x27;)
-<span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-ax_set_xticks-20261009_195611')" data-step="step6" data-tab="step6-ax_set_xticks-20261009_195611" data-func="ax.set_xticks" title="클릭하여 우측 'ax.set_xticks' 해설 보기">ax.set_xticks</span>(x)
-<span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-ax_set_xticklabels-20261009_195618')" data-step="step6" data-tab="step6-ax_set_xticklabels-20261009_195618" data-func="ax.set_xticklabels" title="클릭하여 우측 'ax.set_xticklabels' 해설 보기">ax.set_xticklabels</span>(comparison[&#x27;Model&#x27;])
-<span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-ax_legend-20261009_195625')" data-step="step6" data-tab="step6-ax_legend-20261009_195625" data-func="ax.legend" title="클릭하여 우측 'ax.legend' 해설 보기">ax.legend</span>()
-<span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-ax_set_ylim-20261009_195632')" data-step="step6" data-tab="step6-ax_set_ylim-20261009_195632" data-func="ax.set_ylim" title="클릭하여 우측 'ax.set_ylim' 해설 보기">ax.set_ylim</span>([0.6, 1.0])
+('Accuracy')
+('CatBoost Performance Comparison')
+(x)
+(comparison['Model'])
+()
+([0.6, 1.0])
 
 # 값 표시
-for i, v in <span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-enumerate-20261009_195643')" data-step="step6" data-tab="step6-enumerate-20261009_195643" data-func="enumerate" title="클릭하여 우측 'enumerate' 해설 보기">enumerate</span>(comparison[&#x27;Train Acc&#x27;]):
-    <span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-ax_text-20261009_195651')" data-step="step6" data-tab="step6-ax_text-20261009_195651" data-func="ax.text" title="클릭하여 우측 'ax.text' 해설 보기">ax.text</span>(i - width/2, v + 0.01, f&#x27;{v:.4f}&#x27;, ha=&#x27;center&#x27;, va=&#x27;bottom&#x27;, fontsize=9)
-for i, v in <span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-enumerate-20261009_195643')" data-step="step6" data-tab="step6-enumerate-20261009_195643" data-func="enumerate" title="클릭하여 우측 'enumerate' 해설 보기">enumerate</span>(comparison[&#x27;Test Acc&#x27;]):
-    <span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-ax_text-20261009_195651')" data-step="step6" data-tab="step6-ax_text-20261009_195651" data-func="ax.text" title="클릭하여 우측 'ax.text' 해설 보기">ax.text</span>(i + width/2, v + 0.01, f&#x27;{v:.4f}&#x27;, ha=&#x27;center&#x27;, va=&#x27;bottom&#x27;, fontsize=9)
+for i, v in (comparison['Train Acc']):
+    (i - width/2, v + 0.01, f'{v:.4f}', ha='center', va='bottom', fontsize=9)
+for i, v in (comparison['Test Acc']):
+    (i + width/2, v + 0.01, f'{v:.4f}', ha='center', va='bottom', fontsize=9)
 
-<span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-plt_tight_layout-20261009_195709')" data-step="step6" data-tab="step6-plt_tight_layout-20261009_195709" data-func="plt.tight_layout" title="클릭하여 우측 'plt.tight_layout' 해설 보기">plt.tight_layout</span>()
-<span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-plt_show-20261009_195714')" data-step="step6" data-tab="step6-plt_show-20261009_195714" data-func="plt.show" title="클릭하여 우측 'plt.show' 해설 보기">plt.show</span>()</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (2)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>
+()
+()</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (2)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>
 성능 비교:
            Model  Train Acc  Test Acc
 Default CatBoost   0.866450  0.753247
@@ -5177,27 +5244,27 @@ plt.show()</code></pre>
 <li class="note-li">LossFunctionChange</li>
 <li class="note-li">FeatureImportance</li>
 </ul></div><div class="code-cell-wrapper" id="cell-22"><div class="cell-header"><span class="cell-badge">In [22]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 피처 중요도 추출
-importances = <span class="interactive-kw" onclick="activateNoteTab('step7', 'step7-best_clf_get_feature_importance-20261009_195722')" data-step="step7" data-tab="step7-best_clf_get_feature_importance-20261009_195722" data-func="best_clf.get_feature_importance" title="클릭하여 우측 'best_clf.get_feature_importance' 해설 보기">best_clf.get_feature_importance</span>()
-feature_names = <span class="interactive-kw" onclick="activateNoteTab('step7', 'step7-X_columns-20261009_195736')" data-step="step7" data-tab="step7-X_columns-20261009_195736" data-func="X.columns" title="클릭하여 우측 'X.columns' 해설 보기">X.columns</span>
-indices = <span class="interactive-kw" onclick="activateNoteTab('step7', 'step7-np_argsort-20261009_195742')" data-step="step7" data-tab="step7-np_argsort-20261009_195742" data-func="np.argsort" title="클릭하여 우측 'np.argsort' 해설 보기">np.argsort</span>(importances)[::-1]
+importances = ()
+feature_names = 
+indices = (importances)[::-1]
 
 # 중요도 정렬
-importance_df = <span class="interactive-kw" onclick="activateNoteTab('step7', 'step7-pd_DataFrame-20261009_195748')" data-step="step7" data-tab="step7-pd_DataFrame-20261009_195748" data-func="pd.DataFrame" title="클릭하여 우측 'pd.DataFrame' 해설 보기">pd.DataFrame</span>({
-    &#x27;Feature&#x27;: feature_names[indices],
-    &#x27;Importance&#x27;: importances[indices]
+importance_df = ({
+    'Feature': feature_names[indices],
+    'Importance': importances[indices]
 })
 
-print(&quot;\n피처 중요도 순위:&quot;)
-print(<span class="interactive-kw" onclick="activateNoteTab('step7', 'step7-importance_df_to_string-20261009_195753')" data-step="step7" data-tab="step7-importance_df_to_string-20261009_195753" data-func="importance_df.to_string" title="클릭하여 우측 'importance_df.to_string' 해설 보기">importance_df.to_string</span>(index=False))
+print("\n피처 중요도 순위:")
+print((index=False))
 
 # 시각화
-<span class="interactive-kw" onclick="activateNoteTab('step7', 'step7-plt_figure-20261009_195759')" data-step="step7" data-tab="step7-plt_figure-20261009_195759" data-func="plt.figure" title="클릭하여 우측 'plt.figure' 해설 보기">plt.figure</span>(figsize=(6, 4))
-<span class="interactive-kw" onclick="activateNoteTab('step7', 'step7-sns_barplot-20261009_195804')" data-step="step7" data-tab="step7-sns_barplot-20261009_195804" data-func="sns.barplot" title="클릭하여 우측 'sns.barplot' 해설 보기">sns.barplot</span>(x=importances[indices], y=feature_names[indices], palette=&#x27;viridis&#x27;)
-<span class="interactive-kw" onclick="activateNoteTab('step7', 'step7-plt_title-20261009_195811')" data-step="step7" data-tab="step7-plt_title-20261009_195811" data-func="plt.title" title="클릭하여 우측 'plt.title' 해설 보기">plt.title</span>(&quot;Feature Importances (CatBoost)&quot;)
-<span class="interactive-kw" onclick="activateNoteTab('step7', 'step7-plt_xlabel-20261009_195815')" data-step="step7" data-tab="step7-plt_xlabel-20261009_195815" data-func="plt.xlabel" title="클릭하여 우측 'plt.xlabel' 해설 보기">plt.xlabel</span>(&quot;Importance&quot;)
-<span class="interactive-kw" onclick="activateNoteTab('step7', 'step7-plt_ylabel-20261009_195820')" data-step="step7" data-tab="step7-plt_ylabel-20261009_195820" data-func="plt.ylabel" title="클릭하여 우측 'plt.ylabel' 해설 보기">plt.ylabel</span>(&quot;Features&quot;)
-<span class="interactive-kw" onclick="activateNoteTab('step7', 'step7-plt_tight_layout-20261009_195825')" data-step="step7" data-tab="step7-plt_tight_layout-20261009_195825" data-func="plt.tight_layout" title="클릭하여 우측 'plt.tight_layout' 해설 보기">plt.tight_layout</span>()
-<span class="interactive-kw" onclick="activateNoteTab('step7', 'step7-plt_show-20261009_195831')" data-step="step7" data-tab="step7-plt_show-20261009_195831" data-func="plt.show" title="클릭하여 우측 'plt.show' 해설 보기">plt.show</span>()</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (3)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>
+(figsize=(6, 4))
+(x=importances[indices], y=feature_names[indices], palette='viridis')
+("Feature Importances (CatBoost)")
+("Importance")
+("Features")
+()
+()</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (3)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>
 피처 중요도 순위:
 Feature  Importance
    plas   41.638948
@@ -5809,29 +5876,29 @@ plt.show()</code></pre>
 <li class="note-li">학습 시간 단축</li>
 <li class="note-li">최적 트리 개수 자동 선택</li>
 </ul></div><div class="code-cell-wrapper" id="cell-24"><div class="cell-header"><span class="cell-badge">In [24]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># Early Stopping with eval_set
-cat_early = <span class="interactive-kw" onclick="activateNoteTab('step8', 'step8-CatBoostClassifier-20261009_195837')" data-step="step8" data-tab="step8-CatBoostClassifier-20261009_195837" data-func="CatBoostClassifier" title="클릭하여 우측 'CatBoostClassifier' 해설 보기">CatBoostClassifier</span>(
-    **<span class="interactive-kw" onclick="activateNoteTab('step8', 'step8-grid_clf_best_params_-20261009_195844')" data-step="step8" data-tab="step8-grid_clf_best_params_-20261009_195844" data-func="grid_clf.best_params_" title="클릭하여 우측 'grid_clf.best_params_' 해설 보기">grid_clf.best_params_</span>,
+cat_early = (
+    **,
     early_stopping_rounds=10,
     random_state=42,
     verbose=0
 )
 
 # Validation set 분리
-X_tr, X_val, y_tr, y_val = <span class="interactive-kw" onclick="activateNoteTab('step8', 'step8-train_test_split-20261009_195853')" data-step="step8" data-tab="step8-train_test_split-20261009_195853" data-func="train_test_split" title="클릭하여 우측 'train_test_split' 해설 보기">train_test_split</span>(
+X_tr, X_val, y_tr, y_val = (
     X_train, y_train, test_size=0.2, random_state=42, stratify=y_train
 )
 
 # 학습 (eval_set 제공)
-<span class="interactive-kw" onclick="activateNoteTab('step8', 'step8-cat_early_fit-20261009_195901')" data-step="step8" data-tab="step8-cat_early_fit-20261009_195901" data-func="cat_early.fit" title="클릭하여 우측 'cat_early.fit' 해설 보기">cat_early.fit</span>(
+(
     X_tr, y_tr,
     eval_set=(X_val, y_val),
     verbose=False
 )
 
-print(f&quot;\nEarly Stopping:&quot;)
-print(f&quot;최적 트리 개수: {<span class="interactive-kw" onclick="activateNoteTab('step8', 'step8-cat_early_get_best_iteration-20261009_195908')" data-step="step8" data-tab="step8-cat_early_get_best_iteration-20261009_195908" data-func="cat_early.get_best_iteration" title="클릭하여 우측 'cat_early.get_best_iteration' 해설 보기">cat_early.get_best_iteration</span>() + 1}&quot;)
-print(f&quot;설정 트리 개수: {<span class="interactive-kw" onclick="activateNoteTab('step8', 'step8-grid_clf_best_params_-20261009_195844')" data-step="step8" data-tab="step8-grid_clf_best_params_-20261009_195844" data-func="grid_clf.best_params_" title="클릭하여 우측 'grid_clf.best_params_' 해설 보기">grid_clf.best_params_</span>[&#x27;iterations&#x27;]}&quot;)
-print(f&quot;Test Accuracy: {<span class="interactive-kw" onclick="activateNoteTab('step8', 'step8-cat_early_score-20261009_195919')" data-step="step8" data-tab="step8-cat_early_score-20261009_195919" data-func="cat_early.score" title="클릭하여 우측 'cat_early.score' 해설 보기">cat_early.score</span>(X_test, y_test):.4f}&quot;)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>
+print(f"\nEarly Stopping:")
+print(f"최적 트리 개수: {() + 1}")
+print(f"설정 트리 개수: {['iterations']}")
+print(f"Test Accuracy: {(X_test, y_test):.4f}")</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>
 Early Stopping:
 최적 트리 개수: 58
 설정 트리 개수: 100
@@ -6245,24 +6312,24 @@ print(f&quot;Test Accuracy: {cat_early.score(X_test, y_test):.4f}&quot;)</code><
 <li class="note-li">기본 모델도 경쟁력 있는 성능</li>
 <li class="note-li">GridSearch로 추가 성능 향상</li>
 <li class="note-li">Early Stopping으로 효율적 학습</li>
-</ul></div><div class="code-cell-wrapper" id="cell-26"><div class="cell-header"><span class="cell-badge">In [26]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">print(&quot;\n&quot; + &quot;=&quot;*50)
-print(&quot;CatBoost Classification 완료&quot;)
-print(&quot;=&quot;*50)
+</ul></div><div class="code-cell-wrapper" id="cell-26"><div class="cell-header"><span class="cell-badge">In [26]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">print("\n" + "="*50)
+print("CatBoost Classification 완료")
+print("="*50)
 
-print(f&quot;\n최종 성능:&quot;)
-print(f&quot;  - 기본 모델 정확도: {test_acc:.4f}&quot;)
-print(f&quot;  - 최적화 모델 정확도: {test_acc_best:.4f}&quot;)
-print(f&quot;  - 성능 향상: {(test_acc_best - test_acc)*100:+.2f}%p&quot;)
+print(f"\n최종 성능:")
+print(f"  - 기본 모델 정확도: {test_acc:.4f}")
+print(f"  - 최적화 모델 정확도: {test_acc_best:.4f}")
+print(f"  - 성능 향상: {(test_acc_best - test_acc)*100:+.2f}%p")
 
-print(f&quot;\n최적 파라미터:&quot;)
-for param, value in <span class="interactive-kw" onclick="activateNoteTab('step9', 'step9-grid_clf_best_params__items-20261009_195936')" data-step="step9" data-tab="step9-grid_clf_best_params__items-20261009_195936" data-func="grid_clf.best_params_.items" title="클릭하여 우측 'grid_clf.best_params_.items' 해설 보기">grid_clf.best_params_.items</span>():
-    print(f&quot;  - {param}: {value}&quot;)
+print(f"\n최적 파라미터:")
+for param, value in ():
+    print(f"  - {param}: {value}")
 
-print(f&quot;\nTop 3 중요 피처:&quot;)
-for i in <span class="interactive-kw" onclick="activateNoteTab('step9', 'step9-range-20261009_195943')" data-step="step9" data-tab="step9-range-20261009_195943" data-func="range" title="클릭하여 우측 'range' 해설 보기">range</span>(<span class="interactive-kw" onclick="activateNoteTab('step9', 'step9-min-20261009_195948')" data-step="step9" data-tab="step9-min-20261009_195948" data-func="min" title="클릭하여 우측 'min' 해설 보기">min</span>(3, <span class="interactive-kw" onclick="activateNoteTab('step9', 'step9-len-20261009_195954')" data-step="step9" data-tab="step9-len-20261009_195954" data-func="len" title="클릭하여 우측 'len' 해설 보기">len</span>(importance_df))):
-    print(f&quot;  {i+1}. {importance_df.iloc[i][&#x27;Feature&#x27;]}: {importance_df.iloc[i][&#x27;Importance&#x27;]:.4f}&quot;)
+print(f"\nTop 3 중요 피처:")
+for i in ((3, (importance_df))):
+    print(f"  {i+1}. {importance_df.iloc[i]['Feature']}: {importance_df.iloc[i]['Importance']:.4f}")
 
-print(&quot;\n&quot; + &quot;=&quot;*50)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>
+print("\n" + "="*50)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>
 ==================================================
 CatBoost Classification 완료
 ==================================================
@@ -6525,10 +6592,7 @@ for i in range(min(3, len(importance_df))):
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-  <!-- Prism KeepMarkup Plugin: 100% preserves pre-tagged .interactive-kw spans across Prism highlighting -->
-  <script>
-    "undefined"!=typeof Prism&&"undefined"!=typeof document&&document.createRange&&(Prism.plugins.KeepMarkup=!0,Prism.hooks.add("before-highlight",(function(e){if(e.element.children.length&&Prism.util.isActive(e.element,"keep-markup",!0)){var n=Prism.util.isActive(e.element,"drop-tokens",!1),t=0,o=[];r(e.element),o.length&&(e.keepMarkup=o)}function d(e){if(function(e){return!n||"span"!==e.nodeName.toLowerCase()||!e.classList.contains("token")}(e)){var d={element:e,posOpen:t};o.push(d),r(e),d.posClose=t}else r(e)}function r(e){for(var n=0,o=e.childNodes.length;n<o;n++){var r=e.childNodes[n];1===r.nodeType?d(r):3===r.nodeType&&(t+=r.data.length)}}})),Prism.hooks.add("after-highlight",(function(e){if(e.keepMarkup&&e.keepMarkup.length){var n=function(e,t){for(var o=0,d=e.childNodes.length;o<d;o++){var r=e.childNodes[o];if(1===r.nodeType){if(!n(r,t))return!1}else 3===r.nodeType&&(!t.nodeStart&&t.pos+r.data.length>t.node.posOpen&&(t.nodeStart=r,t.nodeStartPos=t.node.posOpen-t.pos),t.nodeStart&&t.pos+r.data.length>=t.node.posClose&&(t.nodeEnd=r,t.nodeEndPos=t.node.posClose-t.pos),t.pos+=r.data.length);if(t.nodeStart&&t.nodeEnd){var s=document.createRange();return s.setStart(t.nodeStart,t.nodeStartPos),s.setEnd(t.nodeEnd,t.nodeEndPos),t.node.element.innerHTML="",t.node.element.appendChild(s.extractContents()),s.insertNode(t.node.element),s.detach(),!1}}return!0};e.keepMarkup.forEach((function(t){n(e.element,{node:t,pos:0})})),e.highlightedCode=e.element.innerHTML}})));
-  </script>
+  
 
   <script>
     function toggleTheme() {
@@ -6677,6 +6741,8 @@ for i in range(min(3, len(importance_df))):
 
   
 
+  
+
   <!-- Golden Standard Split-Screen Architecture Script -->
   <script>
     // 1. Safe Theme Handler
@@ -6699,7 +6765,23 @@ for i in range(min(3, len(importance_df))):
       }
     })();
 
-    // 2. Universal Note Switcher
+    // 2. Enhance Prism Python Syntax Grammar to Match VS Code Dark+
+    if (window.Prism && Prism.languages.python) {
+      Prism.languages.insertBefore('python', 'keyword', {
+        'class-name': {
+          pattern: /\b[A-Z][a-zA-Z0-9_]*\b/,
+          lookbehind: false
+        },
+        'function': {
+          pattern: /\b[a-zA-Z_][a-zA-Z0-9_]*(?=\s*\()/,
+          lookbehind: false
+        }
+      });
+      // Tokenize all identifiers so every word is an interactive element
+      Prism.languages.python['identifier'] = /\b[a-zA-Z_][a-zA-Z0-9_]*\b/;
+    }
+
+    // 3. Universal Note Switcher
     let currentStepIdGlobal = '';
 
     window.switchTab = function(stepId, tabId) {
@@ -6770,124 +6852,70 @@ for i in range(min(3, len(importance_df))):
       if (targetStep) {
         targetStep.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
-      const allKws = leftPane.querySelectorAll('.interactive-kw');
-      for (const kw of allKws) {
-        if (kw.dataset.func === funcName || kw.textContent.trim() === funcName) {
-          kw.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          kw.classList.add('highlight-pulse');
-          setTimeout(() => kw.classList.remove('highlight-pulse'), 2500);
+      // Highlight matching token
+      const tokens = leftPane.querySelectorAll('.code-editor-look code span');
+      for (const tok of tokens) {
+        if (tok.textContent.trim() === funcName || funcName.endsWith('.' + tok.textContent.trim())) {
+          tok.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          tok.style.outline = '2px solid var(--accent-primary)';
+          tok.style.borderRadius = '3px';
+          setTimeout(() => { tok.style.outline = ''; }, 2500);
           break;
         }
       }
     };
 
-    // 3. Keyword Underline Restoration (Fallback for untagged keywords)
-    function rebindInteractiveKeywords() {
-      const allPanes = Array.from(document.querySelectorAll('.func-note-pane'));
-      if (allPanes.length === 0) return;
-
-      const funcMap = new Map();
-      allPanes.forEach(p => {
-        const badge = p.querySelector('.note-target-badge code') || p.querySelector('.target-func-name');
-        if (badge) {
-          const fn = badge.textContent.trim();
-          if (fn && fn.length >= 2 && !funcMap.has(fn)) {
-            funcMap.set(fn, { tabId: p.id, stepId: p.dataset.stepGroup || '' });
-          }
-        }
-      });
-
-      const sortedKeys = Array.from(funcMap.keys()).sort((a, b) => b.length - a.length);
-
-      document.querySelectorAll('.code-editor-look code').forEach(codeElem => {
-        sortedKeys.forEach(fn => {
-          const treeWalker = document.createTreeWalker(codeElem, NodeFilter.SHOW_TEXT, null, false);
-          const textNodes = [];
-          while (treeWalker.nextNode()) textNodes.push(treeWalker.currentNode);
-
-          textNodes.forEach(tNode => {
-            const parent = tNode.parentElement;
-            if (parent && (parent.classList.contains('interactive-kw') || parent.classList.contains('kw-clickable') || parent.closest('.interactive-kw'))) return;
-
-            const text = tNode.nodeValue;
-            const idx = text.indexOf(fn);
-            if (idx !== -1) {
-              const before = idx > 0 ? text[idx - 1] : ' ';
-              const after = (idx + fn.length < text.length) ? text[idx + fn.length] : ' ';
-              if (/^[a-zA-Z0-9_]$/.test(before) || /^[a-zA-Z0-9_]$/.test(after)) return;
-
-              const matchNode = tNode.splitText(idx);
-              matchNode.splitText(fn.length);
-
-              const span = document.createElement('span');
-              span.className = 'interactive-kw kw-clickable';
-              span.textContent = matchNode.nodeValue;
-              span.title = '클릭하여 우측 \'' + fn + '\' 해설 보기';
-              const info = funcMap.get(fn);
-              span.dataset.step = info.stepId;
-              span.dataset.tab = info.tabId;
-              span.dataset.func = fn;
-              span.onclick = function(e) {
-                e.stopPropagation();
-                switchTab(info.stepId, info.tabId);
-              };
-
-              matchNode.parentNode.replaceChild(span, matchNode);
-            }
-          });
-        });
-      });
-    }
-
-    // 4. Robust Intelligent Click Handler (Handles inner tokens, dotted methods, and plain text)
+    // 4. Intelligent Universal Click Handler on Code Tokens
     document.addEventListener('click', function(e) {
-      const codeWrapper = e.target.closest('.code-editor-look') || e.target.closest('code') || e.target.closest('pre');
-      if (!codeWrapper) return;
+      const tok = e.target.closest('.token');
+      if (!tok) return;
+      const codeBlock = tok.closest('.code-editor-look code');
+      if (!codeBlock) return;
 
-      // 4.1 Directly check if clicked element is or is inside an .interactive-kw
-      const interactiveEl = e.target.closest('.interactive-kw') || e.target.closest('.kw-clickable');
-      if (interactiveEl) {
-        const stepId = interactiveEl.dataset.step;
-        const tabId = interactiveEl.dataset.tab;
-        if (tabId) {
-          switchTab(stepId, tabId);
-          return;
-        }
+      let word = tok.textContent.trim().replace(/[^a-zA-Z0-9_.]/g, '');
+      if (!word) return;
+
+      // Expand if adjacent to dot (e.g. models.items, cat_clf.fit, pd.DataFrame)
+      let fullExpr = word;
+      const prev = tok.previousElementSibling;
+      const next = tok.nextElementSibling;
+      if (prev && prev.textContent === '.' && prev.previousElementSibling) {
+        fullExpr = prev.previousElementSibling.textContent.trim() + '.' + word;
+      } else if (next && next.textContent === '.' && next.nextElementSibling) {
+        fullExpr = word + '.' + next.nextElementSibling.textContent.trim();
       }
 
-      // 4.2 Intelligent keyword matching by text
-      let word = e.target.textContent.trim().replace(/[^a-zA-Z0-9_.]/g, '');
-      if (!word || word.length < 2) return;
-
       const allPanes = Array.from(document.querySelectorAll('.func-note-pane'));
-      
-      // Exact match
-      let foundPane = allPanes.find(p => {
+
+      // 1. Exact match on fullExpr
+      let targetPane = allPanes.find(p => {
         const badge = p.querySelector('.note-target-badge code') || p.querySelector('.target-func-name');
-        return badge && badge.textContent.trim() === word;
+        if (!badge) return false;
+        const bText = badge.textContent.trim().replace(/\(\)$/, '');
+        return bText === fullExpr || bText === word;
       });
 
-      // Dotted method matching (e.g. clicking 'models' or 'items' in 'models.items')
-      if (!foundPane) {
-        foundPane = allPanes.find(p => {
+      // 2. Dotted suffix/prefix match
+      if (!targetPane) {
+        targetPane = allPanes.find(p => {
           const badge = p.querySelector('.note-target-badge code') || p.querySelector('.target-func-name');
           if (!badge) return false;
-          const fn = badge.textContent.trim();
-          return fn === word || fn.endsWith('.' + word) || fn.startsWith(word + '.') || word.endsWith('.' + fn) || word.startsWith(fn + '.');
+          const bText = badge.textContent.trim().replace(/\(\)$/, '');
+          return bText === word || bText.endsWith('.' + word) || bText.startsWith(word + '.') || (fullExpr && bText === fullExpr);
         });
       }
 
-      if (foundPane) {
-        switchTab(foundPane.dataset.stepGroup || '', foundPane.id);
-        e.target.style.transition = 'all 0.25s ease';
-        e.target.style.outline = '2px solid var(--accent-primary)';
-        setTimeout(() => { e.target.style.outline = ''; }, 1200);
+      if (targetPane) {
+        switchTab(targetPane.dataset.stepGroup || '', targetPane.id);
+        tok.style.transition = 'all 0.25s ease';
+        tok.style.outline = '2px solid var(--accent-primary)';
+        setTimeout(() => { tok.style.outline = ''; }, 1200);
       }
     });
 
     // 5. Split-Screen Layout Initialization
     function initSplitWorkspace() {
-      const main = document.querySelector('.viewer-main') || document.querySelector('.main-wrapper');
+      const main = document.querySelector('.viewer-main') || document.querySelector('.main-wrapper') || document.querySelector('.main-content');
       if (!main || main.dataset.splitInit) return;
       main.dataset.splitInit = 'true';
 
@@ -6899,7 +6927,7 @@ for i in range(min(3, len(importance_df))):
       rightPane.className = 'split-pane-right';
       rightPane.id = 'split-right-pane';
 
-      // 우측 상단 고정 헤더 데스크 바 (단계 드롭다운 셀렉터 탑재)
+      // 우측 상단 고정 헤더 데스크 바
       const deskHeader = document.createElement('div');
       deskHeader.className = 'desk-header-bar';
       deskHeader.innerHTML = `
@@ -6912,23 +6940,19 @@ for i in range(min(3, len(importance_df))):
       `;
       rightPane.appendChild(deskHeader);
 
-      // 우측 탭 네비 영역
       const activeTabsArea = document.createElement('div');
       activeTabsArea.className = 'active-tabs-area';
       activeTabsArea.id = 'active-tabs-area';
       rightPane.appendChild(activeTabsArea);
 
-      // 우측 해설 본문 스크롤 영역
       const activePanesArea = document.createElement('div');
       activePanesArea.className = 'active-panes-area';
       activePanesArea.id = 'active-panes-area';
       rightPane.appendChild(activePanesArea);
 
-      // module-hero 최상단 배치
       const hero = main.querySelector('.module-hero');
       if (hero) leftPane.appendChild(hero);
 
-      // 스텝 섹션 재배치
       let firstStepId = '';
       let firstTabId = '';
       const stepOptions = [];
@@ -6942,7 +6966,6 @@ for i in range(min(3, len(importance_df))):
         const codeCol = sec.querySelector('.grid-col-code') || sec.querySelector('.code-column');
         const notesCol = sec.querySelector('.grid-col-notes') || sec.querySelector('.notes-column');
 
-        // 스텝 타이틀 추출
         let stepTitleText = '단계 ' + (idx + 1);
         const titleEl = sec.querySelector('.step-title-text') || sec.querySelector('.step-title');
         if (titleEl) stepTitleText = titleEl.textContent.trim().split(':')[0];
@@ -6994,7 +7017,6 @@ for i in range(min(3, len(importance_df))):
       main.appendChild(leftPane);
       main.appendChild(rightPane);
 
-      // 드롭다운 옵션 채우기
       const dropdown = document.getElementById('desk-step-dropdown');
       if (dropdown) {
         stepOptions.forEach(opt => {
@@ -7005,15 +7027,16 @@ for i in range(min(3, len(importance_df))):
         });
       }
 
-      // 첫 번째 노트 자동 오픈
       if (firstStepId && firstTabId) {
         switchTab(firstStepId, firstTabId);
       }
 
-      // 키워드 점선 밑줄 복원
-      setTimeout(rebindInteractiveKeywords, 150);
+      // Re-run Prism on cleaned code blocks
+      if (window.Prism) {
+        Prism.highlightAll();
+      }
 
-      // 상단 스텝 바 클릭 연동
+      // Quick Nav click
       document.querySelectorAll('.step-nav-item').forEach(btn => {
         btn.addEventListener('click', (e) => {
           e.preventDefault();
@@ -7026,7 +7049,7 @@ for i in range(min(3, len(importance_df))):
         });
       });
 
-      // 좌측 스크롤 시 우측 탭 실시간 ScrollSync 연동!
+      // ScrollSync
       leftPane.addEventListener('scroll', () => {
         const leftSecs = leftPane.querySelectorAll('.step-code-section');
         const navItems = document.querySelectorAll('.step-nav-item');
@@ -7050,7 +7073,6 @@ for i in range(min(3, len(importance_df))):
             }
           });
 
-          // 우측 탭 헤더 실시간 교체!
           document.querySelectorAll('.notes-tabs-header').forEach(hdr => {
             if (hdr.dataset.stepGroup === currentId) {
               hdr.style.display = 'block';
@@ -7064,7 +7086,6 @@ for i in range(min(3, len(importance_df))):
       });
     }
 
-    // 드롭다운 변경 시 실행 함수
     window.onDropdownStepChange = function(targetStepId) {
       const leftPane = document.getElementById('split-left-pane');
       const targetElem = leftPane ? leftPane.querySelector('#' + targetStepId) : null;

@@ -1149,6 +1149,73 @@
       }
     }
 
+  
+    /* ==========================================================================
+       Pure VS Code Dark+ Python Syntax Highlighting (No Blue Boxes, Vibrant Syntax)
+       ========================================================================== */
+    .code-editor-look {
+      background: #1e1e1e !important;
+      border: 1px solid #333333 !important;
+      border-radius: 8px;
+      padding: 1.1rem 1.35rem;
+      font-family: 'Fira Code', Consolas, Monaco, monospace;
+      font-size: 0.88rem;
+      line-height: 1.6;
+      overflow-x: auto;
+      margin-bottom: 0.85rem;
+    }
+    .code-editor-look pre {
+      margin: 0 !important;
+      padding: 0 !important;
+      background: transparent !important;
+    }
+    .code-editor-look code {
+      background: transparent !important;
+      font-family: 'Fira Code', Consolas, Monaco, monospace !important;
+      font-size: 0.88rem !important;
+      line-height: 1.6 !important;
+      color: #9cdcfe !important; /* VS Code Light Blue (Default Variable/Identifier) */
+    }
+
+    /* VS Code Dark+ Exact Token Palette */
+    .code-editor-look code .token.comment { color: #6a9955 !important; font-style: italic; }
+    .code-editor-look code .token.keyword { color: #c586c0 !important; font-weight: 500; }
+    .code-editor-look code .token.string, 
+    .code-editor-look code .token.string-interpolation { color: #ce9178 !important; }
+    .code-editor-look code .token.number { color: #b5cea8 !important; }
+    .code-editor-look code .token.function, 
+    .code-editor-look code .token.builtin { color: #dcdcaa !important; }
+    .code-editor-look code .token.class-name { color: #4ec9b0 !important; font-weight: 600; }
+    .code-editor-look code .token.operator { color: #d4d4d4 !important; }
+    .code-editor-look code .token.punctuation { color: #d4d4d4 !important; }
+    .code-editor-look code .token.identifier,
+    .code-editor-look code .token.variable,
+    .code-editor-look code .token.parameter { color: #9cdcfe !important; }
+
+    /* Interactive Hover on Code Tokens (Subtle Dashed Underline, NO Background Boxes) */
+    .code-editor-look code span[class*="token"] {
+      cursor: pointer;
+      transition: opacity 0.15s ease;
+    }
+    .code-editor-look code span[class*="token"]:hover {
+      text-decoration: underline dashed #38bdf8;
+      text-underline-offset: 3px;
+      opacity: 0.88;
+    }
+
+    .interactive-kw, .kw-clickable {
+      background: transparent !important;
+      color: inherit !important;
+      border: none !important;
+      border-bottom: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      cursor: pointer !important;
+      text-decoration: none !important;
+      font-weight: inherit !important;
+      box-shadow: none !important;
+    }
+
   </style>
 </head>
 <body>
@@ -1201,14 +1268,14 @@
     </section>
 
     <!-- Pipeline Step Sections -->
-    <section class="step-section" id="step1"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">1단계</span><h2 class="step-title-text">필수 라이브러리 임포트 및 분석 환경 구축</h2></div><p class="step-summary-desc">Pandas, NumPy, Matplotlib, Seaborn 및 Scikit-Learn 데이터셋(fetch_openml), 모델 분할(train_test_split, StratifiedKFold), 튜닝(GridSearchCV), 앙상블(ExtraTreesClassifier), 평가 지표 모듈을 임포트합니다.</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 주피터 노트북 실행 코드 및 결과</div><div class="cell-markdown-box"><h2 class="note-h2">라이브러리 임포트</h2></div><div class="code-cell-wrapper" id="cell-2"><div class="cell-header"><span class="cell-badge">In [2]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">import <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-pandas-20261009_173624')" data-step="step1" data-tab="step1-pandas-20261009_173624" data-func="pandas" title="클릭하여 우측 'pandas' 해설 보기">pandas</span> as pd
-import <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-numpy-20261009_173630')" data-step="step1" data-tab="step1-numpy-20261009_173630" data-func="numpy" title="클릭하여 우측 'numpy' 해설 보기">numpy</span> as np
-import <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-matplotlib_pyplot-20261009_173636')" data-step="step1" data-tab="step1-matplotlib_pyplot-20261009_173636" data-func="matplotlib.pyplot" title="클릭하여 우측 'matplotlib.pyplot' 해설 보기">matplotlib.pyplot</span> as plt
-import <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-seaborn-20261009_173642')" data-step="step1" data-tab="step1-seaborn-20261009_173642" data-func="seaborn" title="클릭하여 우측 'seaborn' 해설 보기">seaborn</span> as sns
-from <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-sklearn_datasets-20261009_173647')" data-step="step1" data-tab="step1-sklearn_datasets-20261009_173647" data-func="sklearn.datasets" title="클릭하여 우측 'sklearn.datasets' 해설 보기">sklearn.datasets</span> import fetch_openml
-from <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-sklearn_model_selection-20261009_173653')" data-step="step1" data-tab="step1-sklearn_model_selection-20261009_173653" data-func="sklearn.model_selection" title="클릭하여 우측 'sklearn.model_selection' 해설 보기">sklearn.model_selection</span> import <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-train_test_split-20261009_173658')" data-step="step1" data-tab="step1-train_test_split-20261009_173658" data-func="train_test_split" title="클릭하여 우측 'train_test_split' 해설 보기">train_test_split</span>, <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-StratifiedKFold-20261009_173703')" data-step="step1" data-tab="step1-StratifiedKFold-20261009_173703" data-func="StratifiedKFold" title="클릭하여 우측 'StratifiedKFold' 해설 보기">StratifiedKFold</span>, <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-GridSearchCV-20261009_173709')" data-step="step1" data-tab="step1-GridSearchCV-20261009_173709" data-func="GridSearchCV" title="클릭하여 우측 'GridSearchCV' 해설 보기">GridSearchCV</span>
-from <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-sklearn_ensemble-20261009_173716')" data-step="step1" data-tab="step1-sklearn_ensemble-20261009_173716" data-func="sklearn.ensemble" title="클릭하여 우측 'sklearn.ensemble' 해설 보기">sklearn.ensemble</span> import ExtraTreesClassifier
-from <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-sklearn_metrics-20261009_173730')" data-step="step1" data-tab="step1-sklearn_metrics-20261009_173730" data-func="sklearn.metrics" title="클릭하여 우측 'sklearn.metrics' 해설 보기">sklearn.metrics</span> import <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-accuracy_score-20261009_173742')" data-step="step1" data-tab="step1-accuracy_score-20261009_173742" data-func="accuracy_score" title="클릭하여 우측 'accuracy_score' 해설 보기">accuracy_score</span>, <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-classification_report-20261009_173748')" data-step="step1" data-tab="step1-classification_report-20261009_173748" data-func="classification_report" title="클릭하여 우측 'classification_report' 해설 보기">classification_report</span></code></pre></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (MARKDOWN)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (14)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step1" data-tab="step1-pandas-20261009_173624" onclick="switchTab('step1', 'step1-pandas-20261009_173624')"><span class="tab-func-name">import pandas as pd</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-numpy-20261009_173630" onclick="switchTab('step1', 'step1-numpy-20261009_173630')"><span class="tab-func-name">import numpy as np</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-matplotlib_pyplot-20261009_173636" onclick="switchTab('step1', 'step1-matplotlib_pyplot-20261009_173636')"><span class="tab-func-name">import matplotlib.pyplot as plt</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-seaborn-20261009_173642" onclick="switchTab('step1', 'step1-seaborn-20261009_173642')"><span class="tab-func-name">import seaborn as sns</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_datasets-20261009_173647" onclick="switchTab('step1', 'step1-sklearn_datasets-20261009_173647')"><span class="tab-func-name">from sklearn.datasets import fetch_openml</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_model_selection-20261009_173653" onclick="switchTab('step1', 'step1-sklearn_model_selection-20261009_173653')"><span class="tab-func-name">from sklearn.model_selection import ...</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-train_test_split-20261009_173658" onclick="switchTab('step1', 'step1-train_test_split-20261009_173658')"><span class="tab-func-name">train_test_split</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-StratifiedKFold-20261009_173703" onclick="switchTab('step1', 'step1-StratifiedKFold-20261009_173703')"><span class="tab-func-name">StratifiedKFold</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-GridSearchCV-20261009_173709" onclick="switchTab('step1', 'step1-GridSearchCV-20261009_173709')"><span class="tab-func-name">GridSearchCV</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_ensemble-20261009_173716" onclick="switchTab('step1', 'step1-sklearn_ensemble-20261009_173716')"><span class="tab-func-name">from sklearn.ensemble import ExtraTreesClassifier</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-RandomForestClassifier-20261009_173721" onclick="switchTab('step1', 'step1-RandomForestClassifier-20261009_173721')"><span class="tab-func-name">ExtraTreesClassifier</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_metrics-20261009_173730" onclick="switchTab('step1', 'step1-sklearn_metrics-20261009_173730')"><span class="tab-func-name">from sklearn.metrics import ...</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-accuracy_score-20261009_173742" onclick="switchTab('step1', 'step1-accuracy_score-20261009_173742')"><span class="tab-func-name">accuracy_score</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-classification_report-20261009_173748" onclick="switchTab('step1', 'step1-classification_report-20261009_173748')"><span class="tab-func-name">classification_report</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step1-pandas-20261009_173624"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>pandas</code></div><div class="note-time-badge">⏱ 2026-10-09 17:36:24</div></div><div class="note-body-content"><h1 class="note-h1">pandas - AI 파이썬 학습 노트</h1>
+    <section class="step-section" id="step1"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">1단계</span><h2 class="step-title-text">필수 라이브러리 임포트 및 분석 환경 구축</h2></div><p class="step-summary-desc">Pandas, NumPy, Matplotlib, Seaborn 및 Scikit-Learn 데이터셋(fetch_openml), 모델 분할(train_test_split, StratifiedKFold), 튜닝(GridSearchCV), 앙상블(ExtraTreesClassifier), 평가 지표 모듈을 임포트합니다.</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 주피터 노트북 실행 코드 및 결과</div><div class="cell-markdown-box"><h2 class="note-h2">라이브러리 임포트</h2></div><div class="code-cell-wrapper" id="cell-2"><div class="cell-header"><span class="cell-badge">In [2]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">import  as pd
+import  as np
+import  as plt
+import  as sns
+from  import fetch_openml
+from  import , , 
+from  import ExtraTreesClassifier
+from  import , </code></pre></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (MARKDOWN)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (14)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step1" data-tab="step1-pandas-20261009_173624" onclick="switchTab('step1', 'step1-pandas-20261009_173624')"><span class="tab-func-name">import pandas as pd</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-numpy-20261009_173630" onclick="switchTab('step1', 'step1-numpy-20261009_173630')"><span class="tab-func-name">import numpy as np</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-matplotlib_pyplot-20261009_173636" onclick="switchTab('step1', 'step1-matplotlib_pyplot-20261009_173636')"><span class="tab-func-name">import matplotlib.pyplot as plt</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-seaborn-20261009_173642" onclick="switchTab('step1', 'step1-seaborn-20261009_173642')"><span class="tab-func-name">import seaborn as sns</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_datasets-20261009_173647" onclick="switchTab('step1', 'step1-sklearn_datasets-20261009_173647')"><span class="tab-func-name">from sklearn.datasets import fetch_openml</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_model_selection-20261009_173653" onclick="switchTab('step1', 'step1-sklearn_model_selection-20261009_173653')"><span class="tab-func-name">from sklearn.model_selection import ...</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-train_test_split-20261009_173658" onclick="switchTab('step1', 'step1-train_test_split-20261009_173658')"><span class="tab-func-name">train_test_split</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-StratifiedKFold-20261009_173703" onclick="switchTab('step1', 'step1-StratifiedKFold-20261009_173703')"><span class="tab-func-name">StratifiedKFold</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-GridSearchCV-20261009_173709" onclick="switchTab('step1', 'step1-GridSearchCV-20261009_173709')"><span class="tab-func-name">GridSearchCV</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_ensemble-20261009_173716" onclick="switchTab('step1', 'step1-sklearn_ensemble-20261009_173716')"><span class="tab-func-name">from sklearn.ensemble import ExtraTreesClassifier</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-RandomForestClassifier-20261009_173721" onclick="switchTab('step1', 'step1-RandomForestClassifier-20261009_173721')"><span class="tab-func-name">ExtraTreesClassifier</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_metrics-20261009_173730" onclick="switchTab('step1', 'step1-sklearn_metrics-20261009_173730')"><span class="tab-func-name">from sklearn.metrics import ...</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-accuracy_score-20261009_173742" onclick="switchTab('step1', 'step1-accuracy_score-20261009_173742')"><span class="tab-func-name">accuracy_score</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-classification_report-20261009_173748" onclick="switchTab('step1', 'step1-classification_report-20261009_173748')"><span class="tab-func-name">classification_report</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step1-pandas-20261009_173624"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>pandas</code></div><div class="note-time-badge">⏱ 2026-10-09 17:36:24</div></div><div class="note-body-content"><h1 class="note-h1">pandas - AI 파이썬 학습 노트</h1>
 <div class="note-empty-line"></div>
 <ul class="note-ul">
 <li class="note-li">생성 일시: 2026-10-09 17:36:24</li>
@@ -1373,14 +1440,14 @@ from <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-sklea
 <ul class="note-ul">
 <li class="note-li">768개 샘플, 8개 피처</li>
 <li class="note-li">당뇨병 발병 여부 이진 분류</li>
-</ul></div><div class="code-cell-wrapper" id="cell-4"><div class="cell-header"><span class="cell-badge">In [4]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">print(&quot;Loading Pima Indians Diabetes Dataset...&quot;)
-pima = <span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-fetch_openml-20261009_173758')" data-step="step2" data-tab="step2-fetch_openml-20261009_173758" data-func="fetch_openml" title="클릭하여 우측 'fetch_openml' 해설 보기">fetch_openml</span>(name=&#x27;diabetes&#x27;, version=1, as_frame=True)
+</ul></div><div class="code-cell-wrapper" id="cell-4"><div class="cell-header"><span class="cell-badge">In [4]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">print("Loading Pima Indians Diabetes Dataset...")
+pima = (name='diabetes', version=1, as_frame=True)
 X = pima.data
-y = <span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-pima_target_astype-20261009_173807')" data-step="step2" data-tab="step2-pima_target_astype-20261009_173807" data-func="pima.target.astype" title="클릭하여 우측 'pima.target.astype' 해설 보기">pima.target.astype</span>(&#x27;category&#x27;).<span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-cat_codes-20261009_173814')" data-step="step2" data-tab="step2-cat_codes-20261009_173814" data-func="cat.codes" title="클릭하여 우측 'cat.codes' 해설 보기">cat.codes</span> # Convert categorical strings to numerical codes
+y = ('category'). # Convert categorical strings to numerical codes
 
-print(f&quot;데이터 크기: {X.shape}&quot;)
-print(f&quot;피처 목록: {<span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-list-20261009_173822')" data-step="step2" data-tab="step2-list-20261009_173822" data-func="list" title="클릭하여 우측 'list' 해설 보기">list</span>(X.columns)}&quot;)
-print(f&quot;\n클래스 분포:\n{<span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-y_value_counts-20261009_173835')" data-step="step2" data-tab="step2-y_value_counts-20261009_173835" data-func="y.value_counts" title="클릭하여 우측 'y.value_counts' 해설 보기">y.value_counts</span>()}&quot;)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>Loading Pima Indians Diabetes Dataset...
+print(f"데이터 크기: {X.shape}")
+print(f"피처 목록: {(X.columns)}")
+print(f"\n클래스 분포:\n{()}")</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>Loading Pima Indians Diabetes Dataset...
 데이터 크기: (768, 8)
 피처 목록: [&#x27;preg&#x27;, &#x27;plas&#x27;, &#x27;pres&#x27;, &#x27;skin&#x27;, &#x27;insu&#x27;, &#x27;mass&#x27;, &#x27;pedi&#x27;, &#x27;age&#x27;]
 
@@ -1389,11 +1456,11 @@ print(f&quot;\n클래스 분포:\n{<span class="interactive-kw" onclick="activat
 1    268
 Name: count, dtype: int64
 </pre></div></div></div></div><div class="cell-markdown-box"><p class="note-p"><strong>데이터 샘플 확인</strong></p></div><div class="code-cell-wrapper" id="cell-6"><div class="cell-header"><span class="cell-badge">In [6]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 데이터 샘플
-print(&quot;\n데이터 샘플:&quot;)
-print(<span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-X_head-20261009_173841')" data-step="step2" data-tab="step2-X_head-20261009_173841" data-func="X.head" title="클릭하여 우측 'X.head' 해설 보기">X.head</span>())
+print("\n데이터 샘플:")
+print(())
 
-print(&quot;\n기술 통계:&quot;)
-print(<span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-X_describe-20261009_173846')" data-step="step2" data-tab="step2-X_describe-20261009_173846" data-func="X.describe" title="클릭하여 우측 'X.describe' 해설 보기">X.describe</span>())</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>
+print("\n기술 통계:")
+print(())</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>
 데이터 샘플:
    preg  plas  pres  skin  insu  mass   pedi  age
 0     6   148    72    35     0  33.6  0.627   50
@@ -1861,13 +1928,13 @@ min    70.000000    60.000000
 max    95.000000    95.000000</code></pre>
 <div class="note-empty-line"></div>
 <p class="note-p">💡 <strong>초보자를 위한 한 줄 요약</strong>: 데이터 분석을 시작할 때 <code class="inline-code">X.describe()</code>를 치면, 데이터의 전체적인 성격(평균은 얼마고 범위는 어디서부터 어디까지인지)을 <strong>1초 만에 파악</strong>할 수 있는 효자 함수입니다!</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step2', 'X.describe')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section><section class="step-section" id="step3"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">3단계</span><h2 class="step-title-text">훈련 및 테스트 데이터 분할 (Stratified Train/Test Split)</h2></div><p class="step-summary-desc">클래스 비율(당뇨 음성 500 : 양성 268)을 균등하게 유지하기 위해 stratify=y 옵션으로 8:2 비율의 학습(614개) 및 테스트(154개) 세트로 분할합니다.</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 주피터 노트북 실행 코드 및 결과</div><div class="cell-markdown-box"><p class="note-p"><strong>학습/테스트 데이터 분리</strong></p></div><div class="code-cell-wrapper" id="cell-8"><div class="cell-header"><span class="cell-badge">In [8]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 데이터 분리 (stratify로 클래스 비율 유지)
-X_train, X_test, y_train, y_test = <span class="interactive-kw" onclick="activateNoteTab('step3', 'step3-train_test_split-20261009_173857')" data-step="step3" data-tab="step3-train_test_split-20261009_173857" data-func="train_test_split" title="클릭하여 우측 'train_test_split' 해설 보기">train_test_split</span>(
+X_train, X_test, y_train, y_test = (
     X, y, test_size=0.2, random_state=42, stratify=y
 )
 
-print(f&quot;Train: {<span class="interactive-kw" onclick="activateNoteTab('step3', 'step3-X_train_shape-20261009_173904')" data-step="step3" data-tab="step3-X_train_shape-20261009_173904" data-func="X_train.shape" title="클릭하여 우측 'X_train.shape' 해설 보기">X_train.shape</span>}, Test: {<span class="interactive-kw" onclick="activateNoteTab('step3', 'step3-X_test_shape-20261009_173909')" data-step="step3" data-tab="step3-X_test_shape-20261009_173909" data-func="X_test.shape" title="클릭하여 우측 'X_test.shape' 해설 보기">X_test.shape</span>}&quot;)
-print(f&quot;\nTrain 클래스 분포:\n{<span class="interactive-kw" onclick="activateNoteTab('step3', 'step3-y_train_value_counts-20261009_173915')" data-step="step3" data-tab="step3-y_train_value_counts-20261009_173915" data-func="y_train.value_counts" title="클릭하여 우측 'y_train.value_counts' 해설 보기">y_train.value_counts</span>()}&quot;)
-print(f&quot;\nTest 클래스 분포:\n{<span class="interactive-kw" onclick="activateNoteTab('step3', 'step3-y_test_value_counts-20261009_173929')" data-step="step3" data-tab="step3-y_test_value_counts-20261009_173929" data-func="y_test.value_counts" title="클릭하여 우측 'y_test.value_counts' 해설 보기">y_test.value_counts</span>()}&quot;)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>Train: (614, 8), Test: (154, 8)
+print(f"Train: {}, Test: {}")
+print(f"\nTrain 클래스 분포:\n{()}")
+print(f"\nTest 클래스 분포:\n{()}")</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>Train: (614, 8), Test: (154, 8)
 
 Train 클래스 분포:
 0    400
@@ -2121,21 +2188,21 @@ et_clf = ExtraTreesClassifier(random_state=42)
 
 # 하이퍼파라미터 그리드
 param_grid = {
-    &#x27;n_estimators&#x27;: [100, 200],
-    &#x27;max_depth&#x27;: [None, 10, 20],
-    &#x27;min_samples_split&#x27;: [2, 5],
-    &#x27;min_samples_leaf&#x27;: [1, 2]
+    'n_estimators': [100, 200],
+    'max_depth': [None, 10, 20],
+    'min_samples_split': [2, 5],
+    'min_samples_leaf': [1, 2]
 }
 
-print(&quot;Random Forest Classifier 생성&quot;)
-print(f&quot;\n파라미터 그리드:&quot;)
-for param, values in <span class="interactive-kw" onclick="activateNoteTab('step4', 'step4-param_grid_items-20261009_174006')" data-step="step4" data-tab="step4-param_grid_items-20261009_174006" data-func="param_grid.items" title="클릭하여 우측 'param_grid.items' 해설 보기">param_grid.items</span>():
-    print(f&quot;  {param}: {values}&quot;)
+print("Random Forest Classifier 생성")
+print(f"\n파라미터 그리드:")
+for param, values in ():
+    print(f"  {param}: {values}")
 
 total_combinations = 1
-for values in <span class="interactive-kw" onclick="activateNoteTab('step4', 'step4-param_grid_values-20261009_174021')" data-step="step4" data-tab="step4-param_grid_values-20261009_174021" data-func="param_grid.values" title="클릭하여 우측 'param_grid.values' 해설 보기">param_grid.values</span>():
-    total_combinations *= <span class="interactive-kw" onclick="activateNoteTab('step4', 'step4-len-20261009_174036')" data-step="step4" data-tab="step4-len-20261009_174036" data-func="len" title="클릭하여 우측 'len' 해설 보기">len</span>(values)
-print(f&quot;\n총 조합 수: {total_combinations}개&quot;)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>Random Forest Classifier 생성
+for values in ():
+    total_combinations *= (values)
+print(f"\n총 조합 수: {total_combinations}개")</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>Random Forest Classifier 생성
 
 파라미터 그리드:
   n_estimators: [100, 200]
@@ -2151,21 +2218,21 @@ print(f&quot;\n총 조합 수: {total_combinations}개&quot;)</code></pre></div>
 <li class="note-li">cv: StratifiedKFold(5) - 클래스 비율 유지</li>
 <li class="note-li">scoring: accuracy</li>
 <li class="note-li">n_jobs=-1: 모든 CPU 코어 사용</li>
-</ul></div><div class="code-cell-wrapper" id="cell-13"><div class="cell-header"><span class="cell-badge">In [13]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># <span class="interactive-kw" onclick="activateNoteTab('step4', 'step4-GridSearchCV-20261009_174100')" data-step="step4" data-tab="step4-GridSearchCV-20261009_174100" data-func="GridSearchCV" title="클릭하여 우측 'GridSearchCV' 해설 보기">GridSearchCV</span>
-print(&quot;Tuning RandomForest Classifier...&quot;)
-print(&quot;(교차검증 수행 중...)\n&quot;)
+</ul></div><div class="code-cell-wrapper" id="cell-13"><div class="cell-header"><span class="cell-badge">In [13]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 
+print("Tuning RandomForest Classifier...")
+print("(교차검증 수행 중...)\n")
 
-grid_clf = <span class="interactive-kw" onclick="activateNoteTab('step4', 'step4-GridSearchCV-20261009_174100')" data-step="step4" data-tab="step4-GridSearchCV-20261009_174100" data-func="GridSearchCV" title="클릭하여 우측 'GridSearchCV' 해설 보기">GridSearchCV</span>(
+grid_clf = (
     et_clf,
     param_grid,
-    cv=<span class="interactive-kw" onclick="activateNoteTab('step4', 'step4-StratifiedKFold-20261009_174108')" data-step="step4" data-tab="step4-StratifiedKFold-20261009_174108" data-func="StratifiedKFold" title="클릭하여 우측 'StratifiedKFold' 해설 보기">StratifiedKFold</span>(5),
-    scoring=&#x27;accuracy&#x27;,
+    cv=(5),
+    scoring='accuracy',
     n_jobs=-1,
     verbose=1
 )
 
-<span class="interactive-kw" onclick="activateNoteTab('step4', 'step4-grid_clf_fit-20261009_174127')" data-step="step4" data-tab="step4-grid_clf_fit-20261009_174127" data-func="grid_clf.fit" title="클릭하여 우측 'grid_clf.fit' 해설 보기">grid_clf.fit</span>(X_train, y_train)
-print(&quot;\nGridSearchCV 완료!&quot;)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>Tuning RandomForest Classifier...
+(X_train, y_train)
+print("\nGridSearchCV 완료!")</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>Tuning RandomForest Classifier...
 (교차검증 수행 중...)
 
 Fitting 5 folds for each of 24 candidates, totalling 120 fits
@@ -2571,13 +2638,13 @@ print(&quot;최고 교차 검증 점수:&quot;, grid_clf.best_score_)</code></pr
 <p class="note-p"><em>(설명: 10개, 50개, 100개의 나무를 심어본 결과, 나무를 <strong>50개</strong> 심었을 때 시험 성적(정확도)이 가장 높았다고 모델이 스스로 찾아내어 알려줍니다!)</em></p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step4', 'grid_clf.fit')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section><section class="step-section" id="step5"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">5단계</span><h2 class="step-title-text">최적 하이퍼파라미터 도출 및 GridSearchCV 상세 결과 분석</h2></div><p class="step-summary-desc">최적 모델(best_estimator_), 최고 교차 검증 정확도(best_score_), 최적 파라미터(best_params_)를 확인하고 전체 파라미터 조합 중 상위 5개 조합의 검증 결과를 정렬 분석합니다.</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 주피터 노트북 실행 코드 및 결과</div><div class="cell-markdown-box"><h2 class="note-h2">4. 최적화 결과 분석</h2>
 <div class="note-empty-line"></div>
 <p class="note-p"><strong>최적 모델 정보</strong></p></div><div class="code-cell-wrapper" id="cell-15"><div class="cell-header"><span class="cell-badge">In [15]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 최적 모델 추출
-best_clf = <span class="interactive-kw" onclick="activateNoteTab('step5', 'step5-grid_clf_best_estimator_-20261009_174150')" data-step="step5" data-tab="step5-grid_clf_best_estimator_-20261009_174150" data-func="grid_clf.best_estimator_" title="클릭하여 우측 'grid_clf.best_estimator_' 해설 보기">grid_clf.best_estimator_</span>
+best_clf = 
 
-print(&quot;[최적화 결과]&quot;)
-print(f&quot;Best Accuracy (Train CV): {<span class="interactive-kw" onclick="activateNoteTab('step5', 'step5-grid_clf_best_score_-20261009_174213')" data-step="step5" data-tab="step5-grid_clf_best_score_-20261009_174213" data-func="grid_clf.best_score_" title="클릭하여 우측 'grid_clf.best_score_' 해설 보기">grid_clf.best_score_</span>:.4f}&quot;)
-print(f&quot;\nBest Parameters:&quot;)
-for param, value in <span class="interactive-kw" onclick="activateNoteTab('step5', 'step5-grid_clf_best_params__items-20261009_174227')" data-step="step5" data-tab="step5-grid_clf_best_params__items-20261009_174227" data-func="grid_clf.best_params_.items" title="클릭하여 우측 'grid_clf.best_params_.items' 해설 보기">grid_clf.best_params_.items</span>():
-    print(f&quot;  {param}: {value}&quot;)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>[최적화 결과]
+print("[최적화 결과]")
+print(f"Best Accuracy (Train CV): {:.4f}")
+print(f"\nBest Parameters:")
+for param, value in ():
+    print(f"  {param}: {value}")</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>[최적화 결과]
 Best Accuracy (Train CV): 0.7916
 
 Best Parameters:
@@ -2586,18 +2653,18 @@ Best Parameters:
   min_samples_split: 5
   n_estimators: 200
 </pre></div></div></div></div><div class="cell-markdown-box"><p class="note-p"><strong>GridSearchCV 상위 결과</strong></p></div><div class="code-cell-wrapper" id="cell-17"><div class="cell-header"><span class="cell-badge">In [17]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 상위 5개 결과
-cv_results = <span class="interactive-kw" onclick="activateNoteTab('step5', 'step5-pd_DataFrame-20261009_174242')" data-step="step5" data-tab="step5-pd_DataFrame-20261009_174242" data-func="pd.DataFrame" title="클릭하여 우측 'pd.DataFrame' 해설 보기">pd.DataFrame</span>(grid_clf.cv_results_)
-top_results = <span class="interactive-kw" onclick="activateNoteTab('step5', 'step5-cv_results_nlargest-20261009_174258')" data-step="step5" data-tab="step5-cv_results_nlargest-20261009_174258" data-func="cv_results.nlargest" title="클릭하여 우측 'cv_results.nlargest' 해설 보기">cv_results.nlargest</span>(5, &#x27;mean_test_score&#x27;)[[
-    &#x27;param_n_estimators&#x27;,
-    &#x27;param_max_depth&#x27;,
-    &#x27;param_min_samples_split&#x27;,
-    &#x27;param_min_samples_leaf&#x27;,
-    &#x27;mean_test_score&#x27;,
-    &#x27;std_test_score&#x27;
+cv_results = (grid_clf.cv_results_)
+top_results = (5, 'mean_test_score')[[
+    'param_n_estimators',
+    'param_max_depth',
+    'param_min_samples_split',
+    'param_min_samples_leaf',
+    'mean_test_score',
+    'std_test_score'
 ]]
 
-print(&quot;\n상위 5개 파라미터 조합:&quot;)
-print(<span class="interactive-kw" onclick="activateNoteTab('step5', 'step5-top_results_to_string-20261009_174315')" data-step="step5" data-tab="step5-top_results_to_string-20261009_174315" data-func="top_results.to_string" title="클릭하여 우측 'top_results.to_string' 해설 보기">top_results.to_string</span>(index=False))</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>
+print("\n상위 5개 파라미터 조합:")
+print((index=False))</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>
 상위 5개 파라미터 조합:
  param_n_estimators param_max_depth  param_min_samples_split  param_min_samples_leaf  mean_test_score  std_test_score
                 200            None                        5                       2         0.791577        0.024098
@@ -2857,12 +2924,12 @@ print(top_results)</code></pre>
 <blockquote class="note-quote"><strong>💡 핵심 요약:</strong> <code class="inline-code">top_results.to_string(index=False)</code>는 데이터 분석 결과를 터미널이나 화면에 <strong>인덱스 번호 없이 깔끔하고 예쁜 텍스트 표 모양으로 출력</strong>하고 싶을 때 사용하는 매우 유용한 치트키 같은 함수입니다!</blockquote></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step5', 'top_results.to_string')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section><section class="step-section" id="step6"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">6단계</span><h2 class="step-title-text">테스트 데이터 최종 평가 및 Confusion Matrix 시각화</h2></div><p class="step-summary-desc">테스트 세트에 대한 일반화 성능(정확도 및 분류 보고서)을 평가하고 Seaborn Heatmap을 활용하여 혼동 행렬(Confusion Matrix)을 시각화합니다.</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 주피터 노트북 실행 코드 및 결과</div><div class="cell-markdown-box"><h2 class="note-h2">5. 테스트 데이터 평가</h2>
 <div class="note-empty-line"></div>
 <p class="note-p"><strong>예측 및 성능 평가</strong></p></div><div class="code-cell-wrapper" id="cell-19"><div class="cell-header"><span class="cell-badge">In [19]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 테스트 데이터 예측
-y_pred = <span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-best_clf_predict-20261009_174327')" data-step="step6" data-tab="step6-best_clf_predict-20261009_174327" data-func="best_clf.predict" title="클릭하여 우측 'best_clf.predict' 해설 보기">best_clf.predict</span>(X_test)
-test_accuracy = <span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-accuracy_score-20261009_174337')" data-step="step6" data-tab="step6-accuracy_score-20261009_174337" data-func="accuracy_score" title="클릭하여 우측 'accuracy_score' 해설 보기">accuracy_score</span>(y_test, y_pred)
+y_pred = (X_test)
+test_accuracy = (y_test, y_pred)
 
-print(f&quot;Test Accuracy: {test_accuracy:.4f}&quot;)
-print(&quot;\n--- Classification Report ---&quot;)
-print(<span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-classification_report-20261009_174349')" data-step="step6" data-tab="step6-classification_report-20261009_174349" data-func="classification_report" title="클릭하여 우측 'classification_report' 해설 보기">classification_report</span>(y_test, y_pred))</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>Test Accuracy: 0.7403
+print(f"Test Accuracy: {test_accuracy:.4f}")
+print("\n--- Classification Report ---")
+print((y_test, y_pred))</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>Test Accuracy: 0.7403
 
 --- Classification Report ---
               precision    recall  f1-score   support
@@ -2874,20 +2941,20 @@ print(<span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-clas
    macro avg       0.72      0.69      0.70       154
 weighted avg       0.73      0.74      0.73       154
 
-</pre></div></div></div></div><div class="cell-markdown-box"><p class="note-p"><strong>Confusion Matrix 시각화 (선택사항)</strong></p></div><div class="code-cell-wrapper" id="cell-21"><div class="cell-header"><span class="cell-badge">In [21]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">from <span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-sklearn_metrics-20261009_174402')" data-step="step6" data-tab="step6-sklearn_metrics-20261009_174402" data-func="sklearn.metrics" title="클릭하여 우측 'sklearn.metrics' 해설 보기">sklearn.metrics</span> import <span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-confusion_matrix-20261009_174409')" data-step="step6" data-tab="step6-confusion_matrix-20261009_174409" data-func="confusion_matrix" title="클릭하여 우측 'confusion_matrix' 해설 보기">confusion_matrix</span>
+</pre></div></div></div></div><div class="cell-markdown-box"><p class="note-p"><strong>Confusion Matrix 시각화 (선택사항)</strong></p></div><div class="code-cell-wrapper" id="cell-21"><div class="cell-header"><span class="cell-badge">In [21]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">from  import 
 
 # Confusion Matrix
-cm = <span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-confusion_matrix-20261009_174409')" data-step="step6" data-tab="step6-confusion_matrix-20261009_174409" data-func="confusion_matrix" title="클릭하여 우측 'confusion_matrix' 해설 보기">confusion_matrix</span>(y_test, y_pred)
+cm = (y_test, y_pred)
 
-<span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-plt_figure-20261009_174426')" data-step="step6" data-tab="step6-plt_figure-20261009_174426" data-func="plt.figure" title="클릭하여 우측 'plt.figure' 해설 보기">plt.figure</span>(figsize=(4, 3))
-<span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-sns_heatmap-20261009_174437')" data-step="step6" data-tab="step6-sns_heatmap-20261009_174437" data-func="sns.heatmap" title="클릭하여 우측 'sns.heatmap' 해설 보기">sns.heatmap</span>(cm, annot=True, fmt=&#x27;d&#x27;, cmap=&#x27;Blues&#x27;,
-            xticklabels=[&#x27;No Diabetes&#x27;, &#x27;Diabetes&#x27;],
-            yticklabels=[&#x27;No Diabetes&#x27;, &#x27;Diabetes&#x27;])
-<span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-plt_title-20261009_174449')" data-step="step6" data-tab="step6-plt_title-20261009_174449" data-func="plt.title" title="클릭하여 우측 'plt.title' 해설 보기">plt.title</span>(&#x27;Confusion Matrix&#x27;)
-<span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-plt_ylabel-20261009_174453')" data-step="step6" data-tab="step6-plt_ylabel-20261009_174453" data-func="plt.ylabel" title="클릭하여 우측 'plt.ylabel' 해설 보기">plt.ylabel</span>(&#x27;True Label&#x27;)
-<span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-plt_xlabel-20261009_174458')" data-step="step6" data-tab="step6-plt_xlabel-20261009_174458" data-func="plt.xlabel" title="클릭하여 우측 'plt.xlabel' 해설 보기">plt.xlabel</span>(&#x27;Predicted Label&#x27;)
-<span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-plt_tight_layout-20261009_174503')" data-step="step6" data-tab="step6-plt_tight_layout-20261009_174503" data-func="plt.tight_layout" title="클릭하여 우측 'plt.tight_layout' 해설 보기">plt.tight_layout</span>()
-<span class="interactive-kw" onclick="activateNoteTab('step6', 'step6-plt_show-20261009_174509')" data-step="step6" data-tab="step6-plt_show-20261009_174509" data-func="plt.show" title="클릭하여 우측 'plt.show' 해설 보기">plt.show</span>()</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item plot-image-output"><div class="output-type-tag">Visual Plot (Extra Trees Classification)</div><div class="plot-img-container"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAXoAAAEiCAYAAAD3fRkKAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90bGliIHZlcnNpb24zLjEwLjAsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvlHJYcgAAAAlwSFlzAAAPYQAAD2EBqD+naQAASCxJREFUeJzt3XlcjdkfB/DPvanb1XJbtNKqJEtChoQwJY29/GSYX2UdZM3aDNOCyTKExjJjqAZhjJ2xZie77LJFhopJi0r7+f3RrzuuiudW171d3/e87utVz3Oec773Tr6dznOec3iMMQZCCCFKiy/vAAghhMgWJXpCCFFylOgJIUTJUaInhBAlR4meEEKUHCV6QghRcpToCSFEyVGiJ4QQJUeJnhBClBwlelKrHjx4gB49ekAkEoHH42HXrl21Wv+TJ0/A4/EQHR1dq/XWZV27dkXXrl3lHQZRYJToldCjR4/w7bffwtraGurq6tDW1oaLiwuWL1+Ot2/fyrRtPz8/3Lx5E/Pnz8eGDRvg5OQk0/Y+JX9/f/B4PGhra1f6OT548AA8Hg88Hg8//fST1PW/ePECISEhSEhIqIVoCflXPXkHQGrX/v378Z///AcCgQC+vr5o0aIFCgsLcebMGUyfPh23b9/Gr7/+KpO23759i/j4eHz//fcYP368TNqwsLDA27dvoaqqKpP6P6ZevXrIy8vD3r17MWjQIIlzmzZtgrq6OvLz86tV94sXLxAaGgpLS0s4Ojpyvu7w4cPVao98PijRK5GkpCQMHjwYFhYWOHbsGExMTMTnAgIC8PDhQ+zfv19m7b969QoAoKOjI7M2eDwe1NXVZVb/xwgEAri4uGDz5s0VEn1sbCx69eqF7du3f5JY8vLyUL9+faipqX2S9kgdxojSGDNmDAPAzp49y6l8UVERCwsLY9bW1kxNTY1ZWFiwoKAglp+fL1HOwsKC9erVi50+fZq1a9eOCQQCZmVlxWJiYsRlgoODGQCJl4WFBWOMMT8/P/HX7yq/5l2HDx9mLi4uTCQSMQ0NDdakSRMWFBQkPp+UlMQAsKioKInr4uLiWKdOnVj9+vWZSCRiffv2ZXfu3Km0vQcPHjA/Pz8mEomYtrY28/f3Z7m5uR/9vPz8/JiGhgaLjo5mAoGAZWRkiM9dvHiRAWDbt29nANjixYvF59LT09nUqVNZixYtmIaGBtPS0mI9e/ZkCQkJ4jLHjx+v8Pm9+z5dXV1Z8+bN2eXLl1nnzp2ZUChkkyZNEp9zdXUV1+Xr68sEAkGF99+jRw+mo6PDnj9//tH3SpQLjdErkb1798La2hodO3bkVH7kyJH44Ycf0KZNG0RERMDV1RXh4eEYPHhwhbIPHz7EwIED4e7ujiVLlkBXVxf+/v64ffs2AMDLywsREREAgK+//hobNmzAsmXLpIr/9u3b6N27NwoKChAWFoYlS5agb9++OHv27AevO3r0KDw8PPDy5UuEhIQgMDAQ586dg4uLC548eVKh/KBBg/DmzRuEh4dj0KBBiI6ORmhoKOc4vby8wOPxsGPHDvGx2NhYNG3aFG3atKlQ/vHjx9i1axd69+6NpUuXYvr06bh58yZcXV3x4sULAIC9vT3CwsIAAKNHj8aGDRuwYcMGdOnSRVxPeno6PD094ejoiGXLlqFbt26Vxrd8+XIYGBjAz88PJSUlAIBffvkFhw8fRmRkJExNTTm/V6Ik5P2bhtSOrKwsBoD169ePU/mEhAQGgI0cOVLi+LRp0xgAduzYMfExCwsLBoCdOnVKfOzly5dMIBCwqVOnio+V97bf7c0yxr1HHxERwQCwV69eVRl3ZT16R0dHZmhoyNLT08XHrl+/zvh8PvP19a3Q3vDhwyXqHDBgANPX16+yzXffh4aGBmOMsYEDB7Ivv/ySMcZYSUkJMzY2ZqGhoZV+Bvn5+aykpKTC+xAIBCwsLEx87NKlS5X+tcJYWa8dAFuzZk2l597t0TPG2KFDhxgANm/ePPb48WOmqanJ+vfv/9H3SJQT9eiVRHZ2NgBAS0uLU/m//voLABAYGChxfOrUqQBQYSy/WbNm6Ny5s/h7AwMD2NnZ4fHjx9WO+X3lY/u7d+9GaWkpp2tSUlKQkJAAf39/6OnpiY87ODjA3d1d/D7fNWbMGInvO3fujPT0dPFnyMWQIUNw4sQJpKam4tixY0hNTcWQIUMqLSsQCMDnl/1TKykpQXp6OjQ1NWFnZ4erV69yblMgEGDYsGGcyvbo0QPffvstwsLC4OXlBXV1dfzyyy+c2yLKhRK9ktDW1gYAvHnzhlP5p0+fgs/nw8bGRuK4sbExdHR08PTpU4nj5ubmFerQ1dVFRkZGNSOuyMfHBy4uLhg5ciSMjIwwePBg/PHHHx9M+uVx2tnZVThnb2+Pf/75B7m5uRLH338vurq6ACDVe/nqq6+gpaWFrVu3YtOmTWjXrl2Fz7JcaWkpIiIiYGtrC4FAgAYNGsDAwAA3btxAVlYW5zYbNmwo1Y3Xn376CXp6ekhISMCKFStgaGjI+VqiXCjRKwltbW2Ympri1q1bUl3H4/E4lVNRUan0OOOwE2VVbZSPH5cTCoU4deoUjh49iv/+97+4ceMGfHx84O7uXqFsTdTkvZQTCATw8vJCTEwMdu7cWWVvHgB+/PFHBAYGokuXLti4cSMOHTqEI0eOoHnz5pz/cgHKPh9pXLt2DS9fvgQA3Lx5U6priXKhRK9EevfujUePHiE+Pv6jZS0sLFBaWooHDx5IHE9LS0NmZiYsLCxqLS5dXV1kZmZWOP7+Xw0AwOfz8eWXX2Lp0qW4c+cO5s+fj2PHjuH48eOV1l0eZ2JiYoVz9+7dQ4MGDaChoVGzN1CFIUOG4Nq1a3jz5k2lN7DL/fnnn+jWrRvWrVuHwYMHo0ePHnBzc6vwmXD9pctFbm4uhg0bhmbNmmH06NFYtGgRLl26VGv1k7qFEr0SmTFjBjQ0NDBy5EikpaVVOP/o0SMsX74cQNnQA4AKM2OWLl0KAOjVq1etxdW4cWNkZWXhxo0b4mMpKSnYuXOnRLnXr19XuLb8waGCgoJK6zYxMYGjoyNiYmIkEuetW7dw+PBh8fuUhW7dumHu3Ln4+eefYWxsXGU5FRWVCn8tbNu2Dc+fP5c4Vv4LqbJfitKaOXMmkpOTERMTg6VLl8LS0hJ+fn5Vfo5EudEDU0qkcePGiI2NhY+PD+zt7SWejD137hy2bdsGf39/AECrVq3g5+eHX3/9FZmZmXB1dcXFixcRExOD/v37Vzl1rzoGDx6MmTNnYsCAAZg4cSLy8vKwevVqNGnSROJmZFhYGE6dOoVevXrBwsICL1++xKpVq9CoUSN06tSpyvoXL14MT09PODs7Y8SIEXj79i0iIyMhEokQEhJSa+/jfXw+H7Nnz/5oud69eyMsLAzDhg1Dx44dcfPmTWzatAnW1tYS5Ro3bgwdHR2sWbMGWlpa0NDQQPv27WFlZSVVXMeOHcOqVasQHBwsnu4ZFRWFrl27Ys6cOVi0aJFU9RElIOdZP0QG7t+/z0aNGsUsLS2Zmpoa09LSYi4uLiwyMlLiYaiioiIWGhrKrKysmKqqKjMzM/vgA1Pve39aX1XTKxkrexCqRYsWTE1NjdnZ2bGNGzdWmF4ZFxfH+vXrx0xNTZmamhozNTVlX3/9Nbt//36FNt6fgnj06FHm4uLChEIh09bWZn369Knygan3p29GRUUxACwpKanKz5QxyemVValqeuXUqVOZiYkJEwqFzMXFhcXHx1c6LXL37t2sWbNmrF69epU+MFWZd+vJzs5mFhYWrE2bNqyoqEii3JQpUxifz2fx8fEffA9E+fAYk+IOFCGEkDqHxugJIUTJUaInhBAlR4meEEKUHCV6QghRcpToCSFEyVGiJ4QQJUeJnhBClJxSPhkrbC2b/UpJ3ZNx6Wd5h0AUhHoNsx3XvPL2muL9zClloieEkFrHq7sDIJToCSGEi1pcXfRTo0RPCCFcUI+eEEKUHL/yDWvqAkr0hBDCBQ3dEEKIkqOhG0IIUXLUoyeEECVHY/SEEKLk6vDQjcJFnp2djV27duHu3bvyDoUQQv7F43F7SaGkpARz5syBlZUVhEIhGjdujLlz50psJs8Yww8//AATExMIhUK4ubnhwYMHUrUj90Q/aNAg/Pxz2SPDb9++hZOTEwYNGgQHBwds375dztERQsj/8fjcXlJYuHAhVq9ejZ9//hl3797FwoULsWjRIkRGRorLLFq0CCtWrMCaNWtw4cIFaGhowMPDA/n5+ZzbkXuiP3XqFDp37gwA2LlzJxhjyMzMxIoVKzBv3jw5R0cIIf+nosLtJYVz586hX79+6NWrFywtLTFw4ED06NEDFy9eBFDWm1+2bBlmz56Nfv36wcHBAb///jtevHiBXbt2cW5H7ok+KysLenp6AICDBw/C29sb9evXR69evaT+84QQQmRGBj36jh07Ii4uDvfv3wcAXL9+HWfOnIGnpycAICkpCampqXBzcxNfIxKJ0L59e8THx3NuR+43Y83MzBAfHw89PT0cPHgQW7ZsAQBkZGRAXV1dztERQsj/cRx/LygoQEFBgcQxgUAAgUBQoeysWbOQnZ2Npk2bQkVFBSUlJZg/fz6GDh0KAEhNTQUAGBkZSVxnZGQkPseF3Hv0kydPxtChQ9GoUSOYmJiga9euAMqGdFq2bCnf4AghpBzHHn14eDhEIpHEKzw8vNIq//jjD2zatAmxsbG4evUqYmJi8NNPPyEmJqZWQ5d7j37cuHH44osv8OzZM7i7u4PPL/vdY21tTWP0hBDFwXEefVBQEAIDAyWOVdabB4Dp06dj1qxZGDx4MACgZcuWePr0KcLDw+Hn5wdjY2MAQFpaGkxMTMTXpaWlwdHRkXPock/0AODk5AQHBwckJSWhcePGqFevHnr16iXvsAgh5F8ch26qGqapTF5enrhzW05FRQWlpaUAACsrKxgbGyMuLk6c2LOzs3HhwgWMHTuWc+hyH7rJy8vDiBEjUL9+fTRv3hzJyckAgAkTJmDBggVyjo4QQv5PBjdj+/Tpg/nz52P//v148uQJdu7ciaVLl2LAgAFlTfJ4mDx5MubNm4c9e/bg5s2b8PX1hampKfr378+5Hbkn+qCgIFy/fh0nTpyQuPnq5uaGrVu3yjEyQgh5B1+F20sKkZGRGDhwIMaNGwd7e3tMmzYN3377LebOnSsuM2PGDEyYMAGjR49Gu3btkJOTg4MHD0o1WYXH3n0ESw4sLCywdetWdOjQAVpaWrh+/Tqsra3x8OFDtGnTBtnZ2VLXSXvGknK0ZywpV+M9Y3ut4FTu7f6JNWtIBuQ+Rv/q1SsYGhpWOJ6bmwteHV4tjhCiZGitm+pzcnLC/v37xd+XJ/fffvsNzs7O8gqLEEIkyWCM/lORe4/+xx9/hKenJ+7cuYPi4mIsX74cd+7cwblz53Dy5El5h0cIIWXq8DLFcv/106lTJyQkJKC4uBgtW7bE4cOHYWhoiPj4eLRt21be4RFCSBkZrF75qci9Rw8AjRs3xtq1a+UdBiGEVE1Bh2W4kHvkKioqePnyZYXj6enpUJFyJThCCJEZ6tFXX1WzOwsKCqCmpvaJoyGEkMq9/wRrXSK3RL9iRdmcVB6Ph99++w2ampricyUlJTh16hSaNm0qr/AIIUSSYnbWOZFboo+IiABQ1qNfs2aNxDCNmpoaLC0tsWbNGnmFRwghEurycz1yS/RJSUkAgG7dumHHjh3Q1dWVVyiEEPJRlOhr4Pjx4wCAwsJCidUrCSFEkdTlMXq5R/727VtavZIQovh4HF8KSO6JftasWbR6JSFE4fF4PE4vRST3MZJdu3aJV69890Nq3rw5Hj16JMfICCHkX4qaxLmQe6Kn1SsJIXUBjdHXAK1eSQipE+rwGL3ce/S0eiUhpC6oyyMMcu/R0+qVhJC6gG7G1hCtXkkIUXQ8vmImcS7k3qMHyta2+fPPPzF37lzMnTsX27dvR3FxsbzDIoQQMVn06C0tLSutIyAgAACQn5+PgIAA6OvrQ1NTE97e3khLS5M6drn36G/fvo2+ffsiNTUVdnZ2AICFCxfCwMAAe/fuRYsWLeQcISGEyGaM/tKlSygpKRF/f+vWLbi7u+M///kPAGDKlCnYv38/tm3bBpFIhPHjx8PLywtnz56Vqh25J/qRI0eiefPmuHz5sni9m4yMDPj7+2P06NE4d+6cnCMkhBDZJHoDAwOJ7xcsWIDGjRvD1dUVWVlZWLduHWJjY9G9e3cAQFRUFOzt7XH+/Hl06NCBcztyT/QJCQkSSR4AdHV1MX/+fLRr106OkRFCyL+4jtEXFBSgoKBA4phAIIBAIPjgdYWFhdi4cSMCAwPB4/Fw5coVFBUVwc3NTVymadOmMDc3R3x8vFSJXu5j9E2aNKl0zOnly5ewsbGRQ0SEEFIR1zH68PBwiEQiiVd4ePhH69+1axcyMzPh7+8PAEhNTYWamhp0dHQkyhkZGSE1NVWq2OXSo8/OzhZ/HR4ejokTJyIkJET8G+r8+fMICwvDwoUL5RFencHn8zB7zFf4+qt2MNLXRsqrLGzYewEL1h4Ul/k19Bv8t6/kb/7DZ++g3/hVnzpcIkNXLl9C9Pp1uHvnFl69eoWIFSvR/ct/e4JzvpuFPbt3SlzT0aUTVv+67lOHWmdxHboJCgpCYGCgxLGP9eYBYN26dfD09ISpqWm14vsQuSR6HR0diQ+NMYZBgwaJj5VvL9inTx+JGxVE0lR/d4wa2BmjftiAO49S0La5OX4J+QbZOW+xavO/D5sdOnsb3wZvFH9fUEgzmpTN27d5sLOzQ38vbwROGl9pGZdOnRE279+eJW3VKR2uiZ7LMM37nj59iqNHj2LHjh3iY8bGxigsLERmZqZErz4tLQ3GxsZS1S+XRF++Bj2pmQ6trLHv5A0cPHMbAJCc8hqDejrBqbmFRLnCwmKkpb+RR4jkE+nU2RWdOrt+sIyamhoavHfzj3Any3n0UVFRMDQ0RK9evcTH2rZtC1VVVcTFxcHb2xsAkJiYiOTkZKmXh5FLond1/fAPJOHm/PXHGOHtAhtzQzxMfomWTRrC2dEas5bskCjX2ckWT+PCkZmdhxOX7iN05T68zsqVU9REXi5fuoiunZ2hra2NL9p3wPiJk6GjQzu7cSWrp15LS0sRFRUFPz8/iU2XRCIRRowYgcDAQOjp6UFbWxsTJkyAs7OzVDdiAQWYdVMuLy8PycnJKCwslDju4OAgp4gU309RR6CtqY7rO2ejpIRBRYWH4JX7sOXAZXGZI+fuYvex63jyPB3WjRogdEIf7P55LFz9lqC0lMkxevIpdezUGV+6uaNho0Z49uwZIpctxbhvR2FD7FaJ/ZpJ1WSV6I8ePYrk5GQMHz68wrmIiAjw+Xx4e3ujoKAAHh4eWLVK+vtrck/0r169wrBhw3DgwIFKz39sjL6yqUystAQ8vvL/8A7s0QaDPdvB/7sY3HmUAge7hlg8bSBSXmVh094LAIBth66Iy99++AI3HzzH3X2h6OJkixMX78srdPKJeX7175CAbRM7NGlih1493XD50kW070CrxHIhq0Tfo0cP8X3J96mrq2PlypVYuXJljdqQ+/TKyZMnIzMzExcuXIBQKMTBgwcRExMDW1tb7Nmz56PXVzaVqTjtykevUwY/Tu6Pn6KOYNuhK7j98AU277+EyE3HMH2Ye5XXPHmejlcZb9DYjMZqP2eNzMygq6uL5OSn8g6lzuDxeZxeikjuPfpjx45h9+7dcHJyAp/Ph4WFBdzd3aGtrY3w8HCJmxOVqWwqk2HnmbIMWWEI1dVQykoljpWUsg9ukNDQUAf6Ig2k/pNdZRmi/NJSU5GZmQmDBvQLnytFXZmSC7kn+tzcXPEOU7q6unj16hWaNGmCli1b4urVqx+9vrKpTJ/DsA0A/HXqJmaO8MCzlAzceZQCx6aNMPGbbvh913kAgIZQDd9/+xV2xSUg9Z9sWJs1wPxJ/fHo2T84cu6unKMntSkvNxfJycni75///Tfu3b0r/it3zeqf4ebuAf0GDfD3s2eIWLIYZuYW6NipsxyjrlvqcJ6Xf6K3s7NDYmIiLC0t0apVK/zyyy+wtLTEmjVrYGJiIu/wFFrgwm0IHtcby7/zgYGuJlJeZWHdn2fx469l9ztKShla2DbE0D7toaMlRMqrLByNv4ewVftQWERz6ZXJ7du3MHKYr/j7nxaVzZfv228Avv8hBPcT72PP7l14k/0GhoaGcO7ogoAJk2guvRTqco+ex6q6C/CJbNy4EcXFxfD398eVK1fQs2dPvH79GmpqaoiOjoaPj4/UdQpbV/7ACPn8ZFz6Wd4hEAWhXsNurd3MQ5zKJS70qFlDMiD3Hv0333wj/rpt27Z4+vQp7t27B3NzczRo0ECOkRFCyL/qcIde/on+ffXr10ebNm3kHQYhhEjgK+iMGi7kkugDAwMxd+5caGhoVJgx876lS5d+oqgIIaRq1KOX0rVr11BUVCT+uip1+eYHIUS5UI9eSu8uakYLnBFC6oK63PFUiDF6xhjS09PB4/Ggr68v73AIIaSCupzo5boEQmpqKnx9faGrqwsjIyMYGhpCV1cXw4cPr9ZO54QQIis8HreXIpJbjz47OxsdO3ZETk4Ohg0bhqZNm4Ixhjt37mDz5s04c+YMrl69Ck1NTXmFSAghYjRGXw3Lly+HiooKbt++XWEn9NmzZ8PFxQUrVqzAd999J6cICSHkXzR0Uw379+/Hd999VyHJA4ChoSGCgoKwd+9eOURGCCEV1eWhG7kl+vv376Njx45Vnu/YsSMSExM/YUSEEFI1Ho/H6aWI5DpG/+6Gt+/T0dFBdjYtpUsIUQxKP0Z/48YNzhVy3fqPsQ+vm87j8arcdYUQQj41Be2sc8Ip0Ts6On4w8Zaf4/F4H936rxxjDE2aNKnyTx1K8oQQRSKrYZnnz59j5syZOHDgAPLy8mBjY4OoqCg4OTkBKMuFwcHBWLt2LTIzM+Hi4oLVq1fD1taWcxucEn1SUlL13sEHREVF1XqdhBAiK7LI8xkZGXBxcUG3bt1w4MABGBgY4MGDB9DV1RWXWbRoEVasWIGYmBhYWVlhzpw58PDwwJ07d6Curs4tdnmvRy8LtB49KUfr0ZNyNV2PvtNPpzmVOzON+65ds2bNwtmzZ3H6dOV1M8ZgamqKqVOnYtq0aQCArKwsGBkZITo6GoMHD+bUTrVm3WzYsAEuLi4wNTXF06dlmwsvW7YMu3fvrk51hBCi8LjOuikoKEB2drbEq6CgoNI69+zZAycnJ/znP/+BoaEhWrdujbVr14rPJyUlITU1FW5ubuJjIpEI7du3R3x8POfYpU70q1evRmBgIL766itkZmaKx+R1dHSwbNkyaasjhJA6gWuiDw8PF+/VW/4KDw+vtM7Hjx+Lx9sPHTqEsWPHYuLEiYiJiQFQtkwMABgZGUlcZ2RkJD7HhdSJPjIyEmvXrsX3338PFZV/N+F2cnLCzZs3pa2OEELqBK4PTAUFBSErK0viFRQUVGmdpaWlaNOmDX788Ue0bt0ao0ePxqhRo7BmzZpajV3qRJ+UlITWrVtXOC4QCJCbm1srQRFCiKLh83mcXgKBANra2hIvgUBQaZ0mJiZo1qyZxDF7e3skJycDAIyNjQGgwiKPaWlp4nOcYpfmjQKAlZUVEhISKhw/ePAg7O3tpa1OAmOMplUSQhSSLJ6MdXFxqbACwP3792FhYQGgLN8aGxsjLi5OfD47OxsXLlyAs7Mz53akTvSBgYEICAjA1q1bwRjDxYsXMX/+fAQFBWHGjBnSVgcA+P3339GyZUsIhUIIhUI4ODhgw4YN1aqLEEJkQRZr3UyZMgXnz5/Hjz/+iIcPHyI2Nha//vorAgIC/t8mD5MnT8a8efOwZ88e3Lx5E76+vjA1NUX//v05tyP1hKORI0dCKBRi9uzZyMvLw5AhQ2Bqaorly5dznurzrqVLl2LOnDkYP348XFxcAABnzpzBmDFj8M8//2DKlClS10kIIbWNL4OJ9O3atcPOnTsRFBSEsLAwWFlZYdmyZRg6dKi4zIwZM5Cbm4vRo0cjMzMTnTp1wsGDBznPoQdqOI8+Ly8POTk5MDQ0rG4VsLKyQmhoKHx9fSWOx8TEICQkpFoPa9E8elKO5tGTcjWdR++x6gKncofGta9ZQzJQ7bf+8uVL8dgSj8erdLlhLlJSUipdxbJjx45ISUmpbniEEFKr6vCaZtKP0b958wb//e9/YWpqCldXV7i6usLU1BTffPMNsrKypA7AxsYGf/zxR4XjW7dulWotB0IIkaXPapnikSNH4tq1a9i/f7/4rm98fDwmTZqEb7/9Flu2bJGqvtDQUPj4+ODUqVPiMfqzZ88iLi6u0l8AhBAiDwqawzmROtHv27cPhw4dQqdOncTHPDw8sHbtWvTs2VPqALy9vXHhwgVERERg165dAMrmkV68eLHS+fqEECIPKnU400ud6PX19SESiSocF4lEEiuuSaNt27bYuHFjta4lhJBPQVGHZbiQeox+9uzZCAwMlFhnITU1FdOnT8ecOXNqNThCCFEUdXnPWE49+tatW0v8Nnvw4AHMzc1hbm4OAEhOToZAIMCrV6/w7bffcmqYz+d/9Dckj8dDcXExp/oIIUSWZDGP/lPhlOileQKLq507d1Z5Lj4+HitWrEBpaWmtt0sIIdWh9HvGBgcH13rD/fr1q3AsMTERs2bNwt69ezF06FCEhYXVeruEEFIddbhDX72NR2rbixcvMGrUKLRs2RLFxcVISEhATEyMeGEfQgiRNz6Px+mliKRO9CUlJfjpp5/wxRdfwNjYGHp6ehIvaWRlZWHmzJmwsbHB7du3ERcXh71796JFixbShkUIITLF4/hSRFIn+tDQUCxduhQ+Pj7IyspCYGAgvLy8wOfzERISwrmeRYsWwdraGvv27cPmzZtx7tw5dO7Mfa9FQgj5lFT4PE4vRST1omaNGzfGihUr0KtXL2hpaSEhIUF87Pz584iNjeVUD5/Ph1AohJubm8ROVe/bsWOHNOEBoEXNyL9oUTNSrqaLmn2z8Tqnchu/aVWzhmRA6reempqKli1bAgA0NTXF69v07t1bqnn0vr6+dfoBBELI56UupyupE32jRo2QkpICc3NzNG7cGIcPH0abNm1w6dKlKrfLqkx0dLS0TRNCiNzU5Y6p1GP0AwYMEG9rNWHCBMyZMwe2trbw9fXF8OHDaz1AQghRBHV5jF7qHv2CBQvEX/v4+MDCwgLnzp2Dra0t+vTpU6vBEUKIolDMFM5NjefRd+jQAYGBgWjfvj1+/PHH2oiJEEIUzmc1j74qKSkptKgZIURpyWJRs5CQkAoblzRt2lR8Pj8/HwEBAdDX14empia8vb2RlpYmdewK8WQsIYQoOj6fx+klrebNmyMlJUX8OnPmjPjclClTsHfvXmzbtg0nT57Eixcv4OXlJXUbNZxZSgghnwdZDcvUq1cPxsbGFY5nZWVh3bp1iI2NRffu3QEAUVFRsLe3x/nz59GhQwfObVCPnhBCOJDVevQPHjyAqakprK2tMXToUCQnJwMArly5gqKiIri5uYnLNm3aFObm5oiPj5eqDc49+sDAwA+ef/XqlVQNE0JIXcJ1Hn1BQQEKCgokjgkEgkqfM2rfvj2io6NhZ2eHlJQUhIaGonPnzrh16xZSU1OhpqYGHR0diWuMjIwkNn7ignOiv3bt2kfLdOnSRarGZeXmocXyDoEoiMQXb+QdAlEQrcy1anQ91z1jw8PDERoaKnEsODi40rXAPD09xV87ODigffv2sLCwwB9//AGhUFijeN/FOdEfP3681holhJC6hut91qCgoAojIFxXDdDR0UGTJk3w8OFDuLu7o7CwEJmZmRK9+rS0tErH9D+ExugJIYQDPo/bSyAQQFtbW+LFNdHn5OTg0aNHMDExQdu2baGqqipeiQAo25wpOTkZzs7OUsVOs24IIYQDWax1M23aNPTp0wcWFhZ48eIFgoODoaKigq+//hoikQgjRoxAYGAg9PT0oK2tjQkTJsDZ2VmqGTcAJXpCCOFERQbjH3///Te+/vprpKenw8DAAJ06dcL58+dhYGAAAIiIiACfz4e3tzcKCgrg4eGBVatWSd2O1OvR1wUPX76VdwhEQeTmF8s7BKIganozdtZf9zmVW/BVkxq1IwvUoyeEEA7q8g3NasV++vRpfPPNN3B2dsbz588BABs2bJB4dJcQQpSJrB6Y+hSkTvTbt2+Hh4cHhEIhrl27Jn4wICsri1avJIQorbq8Hr3UiX7evHlYs2YN1q5dC1VVVfFxFxcXXL16tVaDI4QQRcF1eqUiknqMPjExsdInYEUiETIzM2sjJkIIUTiKutY8F1L36I2NjfHw4cMKx8+cOQNra+taCYoQQhTNZzVGP2rUKEyaNAkXLlwAj8fDixcvsGnTJkybNg1jx46VRYyEECJ3Kjwep5ciknroZtasWSgtLcWXX36JvLw8dOnSBQKBANOmTcOECRNkESMhhMidoo6/c1HtB6YKCwvx8OFD5OTkoFmzZtDU1Kzt2KqNHpgi5eiBKVKupg9MLTr+iFO5Gd0a16gdWaj2A1Nqampo1qxZbcZCCCEKS1GnTnIhdaLv1q3bBxf3OXbsWI0CIoQQRaSgw++cSJ3oHR0dJb4vKipCQkICbt26BT8/v9qKixBCFEpdnl4pdaKPiIio9HhISAhycnJqHBAhhCiiOjxyU3vr9HzzzTdYv359bVVHCCEK5bOaXlmV+Ph4qKur11Z1hBCiUBQ0h3MidaL38vKS+J4xhpSUFFy+fBlz5syptcAIIUSR1OWhG6kTvUgkkviez+fDzs4OYWFh6NGjR60FRgghiuSzuRlbUlKCYcOGoWXLltDV1ZVVTABQYedzQgiRp7o8j16qm7EqKiro0aNHra9SuXDhQmzdulX8/aBBg6Cvr4+GDRvi+vXrtdoWIYRUx6dY1GzBggXg8XiYPHmy+Fh+fj4CAgKgr68PTU1NeHt7Iy0tTap6pZ5106JFCzx+/Fjayz5ozZo1MDMzAwAcOXIER44cwYEDB+Dp6Ynp06fXaluEEFIdfI6v6rp06RJ++eUXODg4SByfMmUK9u7di23btuHkyZN48eJFhXulXGKXyrx58zBt2jTs27cPKSkpyM7OlnhVR2pqqjjR79u3D4MGDUKPHj0wY8YMXLp0qVp1EkJIbeLxeJxe1ZGTk4OhQ4di7dq1EsPiWVlZWLduHZYuXYru3bujbdu2iIqKwrlz53D+/HnO9XNO9GFhYcjNzcVXX32F69evo2/fvmjUqBF0dXWhq6sLHR2dao/b6+rq4tmzZwCAgwcPws3NDUDZjJ6SkpJq1UkIIbVJlvPoAwIC0KtXL3HuK3flyhUUFRVJHG/atCnMzc0RHx/PuX7ON2NDQ0MxZswYHD9+nHPlXHl5eWHIkCGwtbVFeno6PD09AQDXrl2DjY1NrbdHCCHS4prCCwoKxHtplxMIBBAIBJWW37JlC65evVrp6EVqairU1NQqTEwxMjJCamoqx4ikSPTlqxm7urpyrpyriIgIWFpa4tmzZ1i0aJF4yeOUlBSMGzeu1tsjhBBpce2sh4eHIzQ0VOJYcHAwQkJCKpR99uwZJk2ahCNHjsj0gVPO69Hz+XykpaXBwMBAZsHUFlqPnpSj9ehJuZquR7/52nNO5byaNeDco9+1axcGDBgAFRUV8bGSkhLweDzw+XwcOnQIbm5uyMjIkOjVW1hYYPLkyZgyZQqnmKSaR9+kSZOP3mx4/fq1NFWKbdiwAb/88gseP36M+Ph4WFhYYNmyZbCyskK/fv2qVSchhNQWruPvHxqmed+XX36JmzdvShwbNmwYmjZtipkzZ8LMzAyqqqqIi4uDt7c3ACAxMRHJyclwdnbmHLtUiT40NLTCk7G1YfXq1fjhhx8wefJkzJ8/X3wDVkdHB8uWLaNETwiRO1k8LqWlpYUWLVpIHNPQ0IC+vr74+IgRIxAYGAg9PT1oa2tjwoQJcHZ2RocOHTi3I1WiHzx4MAwNDaW5hJPIyEisXbsW/fv3x4IFC8THnZycMG3atFpvjxBCpFXdqZM1FRERAT6fD29vbxQUFMDDwwOrVq2Sqg7OiV6WbzIpKQmtW7eucFwgECA3N1dm7RJCCFe1tqb7R5w4cULie3V1daxcuRIrV66sdp2cY6/mHuKcWFlZISEhocLxgwcPwt7eXmbtEkIIV3wej9NLEXHu0ZeWlsosiMDAQAQEBCA/Px+MMVy8eBGbN29GeHg4fvvtN5m1SwghXCloDuek1jYeqYmRI0dCKBRi9uzZyMvLw5AhQ2Bqaorly5dj8ODB8g6PEELAl8nt2E+D8zz6TyUvLw85OTk1uulL8+hJOZpHT8rVdB79vlvcVozs3cKoRu3Iwqe6v/BB3bt3Fy99XL9+fXGSz87ORvfu3eUYGSGElPksxuhl6cSJEygsLKxwPD8/H6dPn5ZDRIQQIqkuD93INdHfuHFD/PWdO3ckFukpKSnBwYMH0bBhQ3mERgghEhS0s86JXBO9o6OjeA3nyoZohEIhIiMj5RAZIYRIokRfTUlJSWCMwdraGhcvXpRYME1NTQ2GhoYSi/0QQoi8VHeteUUg10RvYWEBQLZz9AkhpDbwaIy+5jZs2IA1a9YgKSlJvHplREQErK2taVGzKvyxYR3OnYrD30+fQE0ggH2LVhg2djIamVuKy8yaMAI3E65IXOfZbyDGT5v9iaMlsrJzcxQunjmO58/Kfg6aNHPANyMnwNTMUlwm9cXf2PDrMty7lYDioiK0cnLG8PHToaOrL7/A65g63KFXjOmVq1evRmBgIL766itkZmaKV6/U1dXFsmXL5BucAruZcAW9BvhgyS+/Y17EGhQXF2N24Fjkv5V8jsCjjxc27Doqfg0fO1k+AROZuHPjKjz6/gfzV0Rh9oKVKCkuxrxZ48U/B/lv32L+rADwwEPw4jWYu2wdiouLsHDOFPprWgo8jv8pIoVI9OWrV37//fcSY/JOTk4V1mom/5q7ZBXcv+oHCysbWNvYIfC7MLxKS8HDxDsS5dTV1aGn30D8qq+hKaeIiSx8Hx6Jrh59YGbZGJaNmyBgegj+eZmKxw/uAgASb1/Hy7QUjJseDHMrG5hb2WD8jFA8vn8XtxIqbl9HKifLPWNlTSESPa1eWTtyc3MAAJraknsGHD98AF/37opxvt6IXrMC+fn05LAyyyv/OdDSBgAUFRWCBx5UVdXEZVRV1cDj8XHvVoI8QqyTeDxuL0WkEGP05atXlt+cLUerV3JXWlqKX1csRrOWjrC0/ndDdVd3TxgamUK/gQGSHt1H1Jrl+PvZE8yev1SO0RJZKS0tRfTqJbBr3grmVmU/B03sW0Kgro5Nv0Xi6+EBYIwhdl0kSktLkPn6HzlHXHcoaA7nRCESfU1Wr6xsx/WCglLOW3kpi9VLw/E06SEWr4yWOO7Zd6D4a8vGttDTN8B3k0cj5fkzmDQ0+8RREllbF7kQz548QljEv/9utHV0EThnIX5bEY4Du7aAx+PDpVsPWNk2BY+nEH/U1wmKurwBFwqR6GuyemVlO65PmPYdJk7/fGaVrI4Ix8X4U1gYuR4NDD+8oJJds5YAgBd/U6JXNusiF+LqhTMIXfIr9A0kfw5aOXVA5O+7kZ2VCRUVFWhoamHUIA8YdaUnz7mqw3leMRI9AAwdOhRDhw6VevXKoKAgBAYGShx7lvV5zCRgjGHNsgWIP3UM4St+g7Hpx//RPn5wDwCgp99A1uGRT4QxhvU/L8LFsycQ8tMvMDSp+udAW6QDALh17RKyM1/DybnLJ4qy7lPUGTVcKNTfbS9fvsSVK1eQmJiIV69ecbpGIBBAW1tb4vW5DNusWvojjh/ej+k/hENYXwOv0//B6/R/UFCQDwBIef4Mm6N/xYPEO0hLeY7zZ05gyfw5aNGqLaxsmsg5elJb1kUuxOm4A5gUNA/C+vWR+fofZL7+B4X//zkAgOMH9+D+nZtIffE3Th39C0vnzkIvryESc+3Jh8niZuzq1avh4OAgzl3Ozs44cOCA+Hx+fj4CAgKgr68PTU1NeHt7Iy2N23LJErErwnr0b968wbhx47B582bxvF4VFRX4+Phg5cqVEIlEH6lB0ueyHn2vzo6VHp8cFAr3r/rhVVoqfpr7PZ4mPUR+/lsYGBrBuXN3DPYb9dlMsfwc1qMf5O5U6fFx04LR1aMPAGDTb5E4cXgfct5kwdDIFO69vdDLe6jcNryWh5quR3/pcRancu2sueervXv3QkVFBba2tmCMISYmBosXL8a1a9fQvHlzjB07Fvv370d0dDREIhHGjx8PPp+Ps2fPShW7QiR6Hx8fXLt2DZGRkXB2dgYAxMfHY9KkSXB0dMSWLVukqu9zSfTk4z6HRE+4qWmiv5yUzamck5V2jdrR09PD4sWLMXDgQBgYGCA2NhYDB5ZNqrh37x7s7e0RHx+PDh06cK5TIcbo9+3bh0OHDqFTp07iYx4eHli7di169uwpx8gIIaSMrP/4KSkpwbZt25CbmwtnZ2dcuXIFRUVFcHNzE5dp2rQpzM3N62ai19fXr3R4RiQSQVdXVw4REUKIJK55vrIp3wKBoMp7hzdv3oSzszPy8/OhqamJnTt3olmzZkhISICamhp0dHQkyhsZGUns3cGFQtyMnT17NgIDAyWCT01NxfTp0zFnzhw5RkYIIf/H4/YKDw+HSCSSeIWHh1dZrZ2dHRISEnDhwgWMHTsWfn5+uHPnTpXlqxW6vMboW7duLXEj6MGDBygoKIC5uTkAIDk5GQKBALa2trh69apUddMYPSlHY/SkXE3H6BOS33AqZ2+kJlWP/n1ubm5o3LgxfHx88OWXXyIjI0OiV29hYYHJkydjypQpnGOX29BN//795dU0IYRIjevQjTRJvTKlpaUoKChA27Ztoaqqiri4OHh7ewMAEhMTkZycLJ60wpXcEn1wcLC8miaEEOnJ4GZsUFAQPD09YW5ujjdv3iA2NhYnTpzAoUOHIBKJMGLECAQGBkJPTw/a2tqYMGECnJ2dpboRCyjIzVhCCFF0sngy9uXLl/D19UVKSgpEIhEcHBxw6NAhuLu7AwAiIiLA5/Ph7e2NgoICeHh4YNWqVVK3oxDz6EtKShAREYE//vgDycnJKCwslDj/+vVrqeqjMXpSjsboSbmajtHf+juHU7kWjRTvYUSFmHUTGhqKpUuXwsfHB1lZWQgMDISXlxf4fD5CQkLkHR4hhHCedaOIFKJH37hxY6xYsQK9evWClpYWEhISxMfOnz+P2NhYqeqjHj0pRz16Uq6mPfrbz7ltgtS8oUaN2pEFhejRp6amomXLsuVzNTU1kZVVtqZE7969sX//fnmGRgghAOr2DlMKkegbNWqElJQUAGW9+8OHDwMALl269NmsREkIUWyU6GtowIABiIuLAwBMmDABc+bMga2tLXx9fTF8+HA5R0cIIWWzbrj8p4gUYoz+ffHx8YiPj4etrS369Okj9fU0Rk/K0Rg9KVfTMfrE1DxO5eyM69eoHVlQyERfU5ToSTlK9KRcTRP9fY6JvokCJnq5PTC1Z88eeHp6QlVVFXv27Plg2b59+36iqAghpHJ1eZMWufXo+Xw+UlNTYWhoCD6/6lsFPB4PJSUlUtVNPXpSjnr0pFxNe/Rc84qNobBG7ciC3Hr05VsGvv81IYQoorrbn1eAtW5KS0sRHR2NHTt24MmTJ+DxeLC2toa3tzf++9//1uk/lwghSqQOpyK5Tq9kjKFv374YOXIknj9/jpYtW6J58+Z48uQJ/P39MWDAAHmGRwghYnwej9NLEcm1Rx8dHY1Tp04hLi4O3bp1kzh37Ngx9O/fH7///jt8fX3lFCEhhJRRzBTOjVx79Js3b8Z3331XIckDQPfu3TFr1ixs2rRJDpERQsh76vCiZnJN9Ddu3EDPnj2rPO/p6Ynr169/wogIIaRydfnJWLkO3bx+/RpGRkZVnjcyMkJGRsYnjIgQQirHV8wczolcE31JSQnq1as6BBUVFRQX0zxoQoj8Keh9Vk7kmugZY/D3969yhcr3d1InhBD5qbuZXq6J3s/P76NlaMYNIUQR1OUePS1qRpQaLYFAytV0CYSUrMKPFwJgIlLjXGd4eDh27NiBe/fuQSgUomPHjli4cCHs7OzEZfLz8zF16lRs2bJFYoPwD93ffJ9CrEdPCCGKThazbk6ePImAgACcP38eR44cQVFREXr06IHc3H+3LZwyZQr27t2Lbdu24eTJk3jx4gW8vLyki5169ESZUY+elKtpjz41u4hTOWNt1Wq38erVKxgaGuLkyZPo0qULsrKyYGBggNjYWAwcOBAAcO/ePdjb2yM+Ph4dOnTgVC/16AkhhAOuz0sVFBQgOztb4sV1Ykn5ftl6enoAgCtXrqCoqAhubm7iMk2bNoW5uTni4+M5x06JnhBCOOC61k14eDhEIpHEKzw8/KP1l5aWYvLkyXBxcUGLFi0AAKmpqVBTU4OOjo5EWSMjI6SmpnKOXe6rVxJCSJ3Acfg9KCgIgYGBEseqmkL+roCAANy6dQtnzpypTnQfRImeEEI44HqbVSAQcErs7xo/fjz27duHU6dOoVGjRuLjxsbGKCwsRGZmpkSvPi0tDcbGxpzrp6EbQgjhgMfj9pIGYwzjx4/Hzp07cezYMVhZWUmcb9u2LVRVVREXFyc+lpiYiOTkZDg7O3Nuh3r0hBDCgSzWmg8ICEBsbCx2794NLS0t8bi7SCSCUCiESCTCiBEjEBgYCD09PWhra2PChAlwdnbmPOMGoOmVRMnR9EpSrqbTKzPyuO1drVtfhXOdVe2gFxUVBX9/fwD/PjC1efNmiQempBm6oURPlBolelKupok+8y23RK8j5J7oPxUauiGEEA4Uda15LijRE0IIB7QePSGEKDtK9IQQotxo6IYQQpRcXV6PnhI9IYRwQImeEEKUHA3dEEKIkqvLPXqlfGCKlK2JHR4ejqCgIKkXWCLKg34OCECJXmllZ2dDJBIhKysL2tra8g6HyAn9HBCAVq8khBClR4meEEKUHCV6QghRcpTolZRAIEBwcDDdgPvM0c8BAehmLCGEKD3q0RNCiJKjRE8IIUqOEn0d1rVrV0yePJlz+RMnToDH4yEzM1NmMZHawePxsGvXLs7lQ0JC4OjoKLN4SN1Gib4a/P39wePxsGDBAonju3btqnIPSK6io6PB4/HA4/GgoqICXV1dtG/fHmFhYcjKypIou2PHDsydO7dG7VWHpaUlli1b9snbVQblPzs8Hg+qqqowMjKCu7s71q9fj9LSUnG5lJQUeHp6ftLYnjx5Ah6Ph4SEhE/aLpE9SvTVpK6ujoULFyIjI6PW69bW1kZKSgr+/vtvnDt3DqNHj8bvv/8OR0dHvHjxQlxOT08PWlo12weTfHo9e/ZESkoKnjx5ggMHDqBbt26YNGkSevfujeLisj1ujY2NaaYMqTWU6KvJzc0NxsbGCA8P/2C57du3o3nz5hAIBLC0tMSSJUs+WjePx4OxsTFMTExgb2+PESNG4Ny5c8jJycGMGTPE5d4futmwYQOcnJygpaUFY2NjDBkyBC9fvqxQ/9mzZ+Hg4AB1dXV06NABt27dkjh/5swZdO7cGUKhEGZmZpg4cSJyc3PFbT59+hRTpkwR90y5XAcAq1atgq2tLdTV1WFkZISBAwd+9LNQRgKBAMbGxmjYsCHatGmD7777Drt378aBAwcQHR0NoOLQzcyZM9GkSRPUr18f1tbWmDNnDoqKiirU/csvv8DMzAz169fHoEGDKvwV+Ntvv8He3h7q6upo2rQpVq1aJT5nZWUFAGjdujV4PB66du3K6brCwkKMHz8eJiYmUFdXh4WFxUf/XZBPjBGp+fn5sX79+rEdO3YwdXV19uzZM8YYYzt37mTvfqSXL19mfD6fhYWFscTERBYVFcWEQiGLioqqsu6oqCgmEokqPTdp0iSmpaXFiouLGWOMubq6skmTJonPr1u3jv3111/s0aNHLD4+njk7OzNPT0/x+ePHjzMAzN7enh0+fJjduHGD9e7dm1laWrLCwkLGGGMPHz5kGhoaLCIigt2/f5+dPXuWtW7dmvn7+zPGGEtPT2eNGjViYWFhLCUlhaWkpHC67tKlS0xFRYXFxsayJ0+esKtXr7Lly5dL98ErgfKfncq0atVK/P8LANu5c6f43Ny5c9nZs2dZUlIS27NnDzMyMmILFy4Unw8ODmYaGhqse/fu7Nq1a+zkyZPMxsaGDRkyRFxm48aNzMTEhG3fvp09fvyYbd++nenp6bHo6GjGGGMXL15kANjRo0dZSkoKS09P53Td4sWLmZmZGTt16hR78uQJO336NIuNja3Nj43UECX6anj3H2uHDh3Y8OHDGWMVE/2QIUOYu7u7xLXTp09nzZo1q7LuDyX61atXMwAsLS2NMVYx0b/v0qVLDAB78+YNY+zfRL9lyxZxmfT0dCYUCtnWrVsZY4yNGDGCjR49WqKe06dPMz6fz96+fcsYY8zCwoJFRERIlPnYddu3b2fa2tosOzu7yng/Bx9K9D4+Psze3p4xVjHRv2/x4sWsbdu24u+Dg4OZiooK+/vvv8XHDhw4wPh8vviXcePGjSsk4Llz5zJnZ2fGGGNJSUkMALt27ZpEmY9dN2HCBNa9e3dWWlpa9RsnckXr0dfQwoUL0b17d0ybNq3Cubt376Jfv34Sx1xcXLBs2TKUlJRARUVFqrbY/59tq+qG75UrVxASEoLr168jIyNDfHMvOTkZzZo1E5dzdnYWf62npwc7OzvcvXsXAHD9+nXcuHEDmzZtkmi3tLQUSUlJsLe3r7Ttj13n7u4OCwsLWFtbo2fPnujZsycGDBiA+vXrS/UZKDPGWJX/b7du3YoVK1bg0aNHyMnJQXFxcYXVKM3NzdGwYUPx987OzigtLUViYiK0tLTw6NEjjBgxAqNGjRKXKS4uhkgkqjKm3Nzcj17n7+8Pd3d32NnZoWfPnujduzd69OhRrc+AyAYl+hrq0qULPDw8EBQUBH9/f5m2dffuXWhra0NfX7/CudzcXHh4eMDDwwObNm2CgYEBkpOT4eHhgcLCQs5t5OTk4Ntvv8XEiRMrnDM3N6/2dWpqarh69SpOnDiBw4cP44cffkBISAguXboEHR0dzvEps7t374rHyd8VHx+PoUOHIjQ0FB4eHhCJRNiyZQun+z3lcnJyAABr165F+/btJc59qMPB5bo2bdogKSkJBw4cwNGjRzFo0CC4ubnhzz//5BwfkS1K9LVgwYIFcHR0hJ2dncRxe3t7nD17VuLY2bNn0aRJE6l78y9fvkRsbCz69+8PPr/iPfR79+4hPT0dCxYsgJmZGQDg8uXLldZ1/vx5cdLOyMjA/fv3xT31Nm3a4M6dO7CxsakyFjU1NZSUlEgc43JdvXr14ObmBjc3NwQHB0NHRwfHjh2Dl5fXh9/8Z+DYsWO4efMmpkyZUuHcuXPnYGFhge+//1587OnTpxXKJScn48WLFzA1NQVQ9v+Zz+fDzs4ORkZGMDU1xePHjzF06NBKY1BTUwMAif+3XK4DymaK+fj4wMfHBwMHDkTPnj3x+vVr6OnpcfsAiExRoq8FLVu2xNChQ7FixQqJ41OnTkW7du0wd+5c+Pj4ID4+Hj///LPEjIXKMMaQmpoKxhgyMzMRHx+PH3/8ESKRqMLc/XLlvebIyEiMGTMGt27dqnKOfVhYGPT19WFkZITvv/8eDRo0QP/+/QGUze7o0KEDxo8fj5EjR0JDQwN37tzBkSNH8PPPPwMom0d/6tQpDB48GAKBAA0aNPjodfv27cPjx4/RpUsX6Orq4q+//kJpaWmFX46fg4KCAqSmpqKkpARpaWk4ePAgwsPD0bt3b/j6+lYob2tri+TkZGzZsgXt2rXD/v37sXPnzgrl1NXV4efnh59++gnZ2dmYOHEiBg0aBGNjYwBAaGgoJk6cCJFIhJ49e6KgoACXL19GRkYGAgMDYWhoCKFQiIMHD6JRo0ZQV1eHSCT66HVLly6FiYkJWrduDT6fj23btsHY2Jj+UlMk8rxBUFdVdkMtKSmJqampsfc/0j///JM1a9aMqaqqMnNzc7Z48eIP1h0VFcUAMACMx+MxkUjEvvjiCxYWFsaysrIkyr5/MzY2NpZZWloygUDAnJ2d2Z49eyRurpXfjN27dy9r3rw5U1NTY1988QW7fv26RL0XL15k7u7uTFNTk2loaDAHBwc2f/588fn4+Hjm4ODABAKBxPv90HWnT59mrq6uTFdXlwmFQubg4CC+Afw58fPzE///rVevHjMwMGBubm5s/fr1rKSkRFwO792MnT59OtPX12eamprMx8eHRURESNy0Dw4OZq1atWKrVq1ipqamTF1dnQ0cOJC9fv1aov1NmzYxR0dHpqamxnR1dVmXLl3Yjh07xOfXrl3LzMzMGJ/PZ66urpyu+/XXX5mjoyPT0NBg2tra7Msvv2RXr16t3Q+O1AitXkkIIUqOHpgihBAlR4meEEKUHCV6QghRcpToCSFEyVGiJ4QQJUeJnhBClBwlekIIUXKU6AkhRMlRoidy4e/vL152AZB+/9va8in20X3/vVYH7fdLaoISPRF7dz9TNTU12NjYICwsTLy9nSxJs//tp056tEcuqetoUTMioWfPnoiKikJBQQH++usvBAQEQFVVFUFBQRXKFhYWilc8rCla5ZAQ2aEePZFQvp+phYUFxo4dCzc3N+zZswfAv0MQ8+fPh6mpqXjlyWfPnmHQoEHQ0dGBnp4e+vXrhydPnojrLCkpQWBgIHR0dKCvr48ZM2bg/SWW3h+6KSgowMyZM2FmZgaBQAAbGxusW7cOT548Qbdu3QAAurq64PF44n0ASktLER4eDisrKwiFQrRq1arCmuh//fUXmjRpAqFQiG7duknEWR0lJSUYMWKEuE07OzssX7680rKhoaEwMDCAtrY2xowZI7FPAJfYCaku6tGTDxIKhUhPTxd/HxcXB21tbRw5cgQAUFRUBA8PDzg7O+P06dOoV68e5s2bh549e+LGjRtQU1PDkiVLEB0djfXr18Pe3h5LlizBzp070b179yrb9fX1RXx8PFasWIFWrVohKSkJ//zzD8zMzLB9+3Z4e3sjMTER2traEAqFAIDw8HBs3LgRa9asga2tLU6dOoVvvvkGBgYGcHV1xbNnz+Dl5YWAgACMHj0aly9fxtSpU2v0+ZSWlqJRo0bYtm0b9PX1ce7cOYwePRomJiYYNGiQxOemrq6OEydO4MmTJxg2bBj09fUxf/58TrETUiNyXj2TKJB3l18uLS1lR44cYQKBgE2bNk183sjIiBUUFIiv2bBhA7Ozs5PYL7SgoIAJhUJ26NAhxhhjJiYmbNGiReLzRUVFrFGjRhJLPb+75HJiYiIDwI4cOVJpnOXLLWdkZIiP5efns/r167Nz585JlB0xYgT7+uuvGWOMBQUFVdivd+bMmRXqel9le+R+SEBAAPP29hZ/7+fnx/T09Fhubq742OrVq5mmpiYrKSnhFHtl75kQrqhHTyTs27cPmpqaKCoqQmlpKYYMGYKQkBDx+ZYtW0qMy1+/fh0PHz6ElpaWRD35+fl49OgRsrKykJKSIrENXb169eDk5FRh+KZcQkICVFRUpOrJPnz4EHl5eXB3d5c4XlhYiNatWwMo26rv/e3w3t0/t7pWrlyJ9evXIzk5GW/fvkVhYSEcHR0lyrRq1Upif1xnZ2fk5OTg2bNnyMnJ+WjshNQEJXoioVu3bli9ejXU1NRgamqKevUkf0Q0NDQkvs/JyUHbtm0lNgUvZ2BgUK0YyodipFG+t+n+/fslNsgGyu47yMqWLVswbdo0LFmyBM7OztDS0sLixYtx4cIFznXIK3by+aBETyRoaGh8cN/X97Vp0wZbt26FoaEhtLW1Ky1jYmKCCxcuoEuXLgCA4uJiXLlyBW3atKm0fMuWLVFaWoqTJ0/Czc2twvnK9jZt1qwZBAIBkpOTq/xLwN7eXnxjudz58+c//iY/4OzZs+jYsSPGjRsnPvbo0aMK5a5fv463b9+Kf4mdP38empqaMDMzg56e3kdjJ6QmaNYNqZGhQ4eiQYMG6NevH06fPo2kpCScOHECEydOxN9//w0AmDRpEhYsWIBdu3bh3r17GDdu3AfnwFtaWsLPzw/Dhw/Hrl27xHX+8ccfAAALCwvweDzs27cPr169Qk5ODrS0tDBt2jRMmTIFMTExePToEa5evYrIyEjExMQAAMaMGYMHDx5g+vTpSExMRGxsLKKjozm9z+fPnyMhIUHilZGRAVtbW1y+fBmHDh3C/fv3MWfOHFy6dKnC9YWFhRgxYgTu3LmDv/76C8HBwRg/fjz4fD6n2AmpEXnfJCCKo7K9cLmcT0lJYb6+vqxBgwZMIBAwa2trNmrUKPEet0VFRWzSpElMW1ub6ejosMDAQObr61vlzVjGGHv79i2bMmUKMzExYWpqaszGxoatX79efD4sLIwZGxszHo/H/Pz8GGNlN5CXLVvG7OzsmKqqKjMwMGAeHh7s5MmT4uv27t3LbGxsmEAgYJ07d2br16/ndDMW/9/n9d3Xhg0bWH5+PvP392cikYjp6OiwsWPHslmzZrFWrVpV+Nx++OEH8b6vo0aNYvn5+eIyH4udbsaSmqA9YwkhRMnR0A0hhCg5SvSEEKLkKNETQoiSo0RPCCFKjhI9IYQoOUr0hBCi5CjRE0KIkqNETwghSo4SPSGEKDlK9IQQouQo0RNCiJKjRE8IIUrufxsFBh4sNaH6AAAAAElFTkSuQmCC
+(figsize=(4, 3))
+(cm, annot=True, fmt='d', cmap='Blues',
+            xticklabels=['No Diabetes', 'Diabetes'],
+            yticklabels=['No Diabetes', 'Diabetes'])
+('Confusion Matrix')
+('True Label')
+('Predicted Label')
+()
+()</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item plot-image-output"><div class="output-type-tag">Visual Plot (Extra Trees Classification)</div><div class="plot-img-container"><img src="data:image/png;base64,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
 " class="zoomable-plot" alt="Visualization plot" onclick="openZoomModal(this)" /></div><div class="plot-caption">클릭 시 확대 보기 가능</div></div></div></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (MARKDOWN)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (13)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step6" data-tab="step6-best_clf_predict-20261009_174327" onclick="switchTab('step6', 'step6-best_clf_predict-20261009_174327')"><span class="tab-func-name">best_clf.predict(X_test)</span></button><button class="func-tab-btn " data-step="step6" data-tab="step6-accuracy_score-20261009_174337" onclick="switchTab('step6', 'step6-accuracy_score-20261009_174337')"><span class="tab-func-name">accuracy_score (테스트 정확도)</span></button><button class="func-tab-btn " data-step="step6" data-tab="step6-classification_report-20261009_174349" onclick="switchTab('step6', 'step6-classification_report-20261009_174349')"><span class="tab-func-name">classification_report (정밀도/재현율/F1)</span></button><button class="func-tab-btn " data-step="step6" data-tab="step6-sklearn_metrics-20261009_174402" onclick="switchTab('step6', 'step6-sklearn_metrics-20261009_174402')"><span class="tab-func-name">from sklearn.metrics import confusion_matrix</span></button><button class="func-tab-btn " data-step="step6" data-tab="step6-confusion_matrix-20261009_174409" onclick="switchTab('step6', 'step6-confusion_matrix-20261009_174409')"><span class="tab-func-name">confusion_matrix (오차행렬 계산)</span></button><button class="func-tab-btn " data-step="step6" data-tab="step6-confusion_matrix-20261009_174418" onclick="switchTab('step6', 'step6-confusion_matrix-20261009_174418')"><span class="tab-func-name">confusion_matrix (행렬 분석)</span></button><button class="func-tab-btn " data-step="step6" data-tab="step6-plt_figure-20261009_174426" onclick="switchTab('step6', 'step6-plt_figure-20261009_174426')"><span class="tab-func-name">plt.figure(figsize=(6, 4))</span></button><button class="func-tab-btn " data-step="step6" data-tab="step6-sns_heatmap-20261009_174437" onclick="switchTab('step6', 'step6-sns_heatmap-20261009_174437')"><span class="tab-func-name">sns.heatmap(cm, annot=True)</span></button><button class="func-tab-btn " data-step="step6" data-tab="step6-plt_title-20261009_174449" onclick="switchTab('step6', 'step6-plt_title-20261009_174449')"><span class="tab-func-name">plt.title('Confusion Matrix')</span></button><button class="func-tab-btn " data-step="step6" data-tab="step6-plt_ylabel-20261009_174453" onclick="switchTab('step6', 'step6-plt_ylabel-20261009_174453')"><span class="tab-func-name">plt.ylabel('True Label')</span></button><button class="func-tab-btn " data-step="step6" data-tab="step6-plt_xlabel-20261009_174458" onclick="switchTab('step6', 'step6-plt_xlabel-20261009_174458')"><span class="tab-func-name">plt.xlabel('Predicted Label')</span></button><button class="func-tab-btn " data-step="step6" data-tab="step6-plt_tight_layout-20261009_174503" onclick="switchTab('step6', 'step6-plt_tight_layout-20261009_174503')"><span class="tab-func-name">plt.tight_layout()</span></button><button class="func-tab-btn " data-step="step6" data-tab="step6-plt_show-20261009_174509" onclick="switchTab('step6', 'step6-plt_show-20261009_174509')"><span class="tab-func-name">plt.show()</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step6-best_clf_predict-20261009_174327"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>best_clf.predict</code></div><div class="note-time-badge">⏱ 2026-10-09 17:43:27</div></div><div class="note-body-content"><h1 class="note-h1">best_clf.predict - AI 파이썬 학습 노트</h1>
 <div class="note-empty-line"></div>
 <ul class="note-ul">
@@ -3548,18 +3615,18 @@ plt.show()</code></pre>
 <li class="note-li">값이 클수록 중요한 피처</li>
 <li class="note-li">Extra Trees 자체 계산 (별도 분석 불필요)</li>
 </ul></div><div class="code-cell-wrapper" id="cell-23"><div class="cell-header"><span class="cell-badge">In [23]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 피처 중요도 추출
-importances = <span class="interactive-kw" onclick="activateNoteTab('step7', 'step7-best_clf_feature_importances_-20261009_174523')" data-step="step7" data-tab="step7-best_clf_feature_importances_-20261009_174523" data-func="best_clf.feature_importances_" title="클릭하여 우측 'best_clf.feature_importances_' 해설 보기">best_clf.feature_importances_</span>
-feature_names = <span class="interactive-kw" onclick="activateNoteTab('step7', 'step7-X_columns-20261009_174533')" data-step="step7" data-tab="step7-X_columns-20261009_174533" data-func="X.columns" title="클릭하여 우측 'X.columns' 해설 보기">X.columns</span>
-indices = <span class="interactive-kw" onclick="activateNoteTab('step7', 'step7-np_argsort-20261009_174540')" data-step="step7" data-tab="step7-np_argsort-20261009_174540" data-func="np.argsort" title="클릭하여 우측 'np.argsort' 해설 보기">np.argsort</span>(importances)[::-1]
+importances = 
+feature_names = 
+indices = (importances)[::-1]
 
 # 중요도 정렬
-importance_df = <span class="interactive-kw" onclick="activateNoteTab('step7', 'step7-pd_DataFrame-20261009_174550')" data-step="step7" data-tab="step7-pd_DataFrame-20261009_174550" data-func="pd.DataFrame" title="클릭하여 우측 'pd.DataFrame' 해설 보기">pd.DataFrame</span>({
-    &#x27;Feature&#x27;: feature_names[indices],
-    &#x27;Importance&#x27;: importances[indices]
+importance_df = ({
+    'Feature': feature_names[indices],
+    'Importance': importances[indices]
 })
 
-print(&quot;\n피처 중요도 순위:&quot;)
-print(<span class="interactive-kw" onclick="activateNoteTab('step7', 'step7-importance_df_to_string-20261009_174607')" data-step="step7" data-tab="step7-importance_df_to_string-20261009_174607" data-func="importance_df.to_string" title="클릭하여 우측 'importance_df.to_string' 해설 보기">importance_df.to_string</span>(index=False))</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>
+print("\n피처 중요도 순위:")
+print((index=False))</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>
 피처 중요도 순위:
 Feature  Importance
    plas    0.339730
@@ -3571,13 +3638,13 @@ Feature  Importance
    skin    0.068390
    pres    0.067950
 </pre></div></div></div></div><div class="cell-markdown-box"><p class="note-p"><strong>피처 중요도 시각화</strong></p></div><div class="code-cell-wrapper" id="cell-25"><div class="cell-header"><span class="cell-badge">In [25]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 피처 중요도 시각화
-<span class="interactive-kw" onclick="activateNoteTab('step7', 'step7-plt_figure-20261009_174614')" data-step="step7" data-tab="step7-plt_figure-20261009_174614" data-func="plt.figure" title="클릭하여 우측 'plt.figure' 해설 보기">plt.figure</span>(figsize=(6, 4))
-<span class="interactive-kw" onclick="activateNoteTab('step7', 'step7-sns_barplot-20261009_174623')" data-step="step7" data-tab="step7-sns_barplot-20261009_174623" data-func="sns.barplot" title="클릭하여 우측 'sns.barplot' 해설 보기">sns.barplot</span>(x=importances[indices], y=feature_names[indices], palette=&#x27;viridis&#x27;)
-<span class="interactive-kw" onclick="activateNoteTab('step7', 'step7-plt_title-20261009_174635')" data-step="step7" data-tab="step7-plt_title-20261009_174635" data-func="plt.title" title="클릭하여 우측 'plt.title' 해설 보기">plt.title</span>(&quot;Feature Importances (Random Forest Classifier)&quot;)
-<span class="interactive-kw" onclick="activateNoteTab('step7', 'step7-plt_xlabel-20261009_174640')" data-step="step7" data-tab="step7-plt_xlabel-20261009_174640" data-func="plt.xlabel" title="클릭하여 우측 'plt.xlabel' 해설 보기">plt.xlabel</span>(&quot;Importance (Gini)&quot;)
-<span class="interactive-kw" onclick="activateNoteTab('step7', 'step7-plt_ylabel-20261009_174649')" data-step="step7" data-tab="step7-plt_ylabel-20261009_174649" data-func="plt.ylabel" title="클릭하여 우측 'plt.ylabel' 해설 보기">plt.ylabel</span>(&quot;Features&quot;)
-<span class="interactive-kw" onclick="activateNoteTab('step7', 'step7-plt_tight_layout-20261009_174655')" data-step="step7" data-tab="step7-plt_tight_layout-20261009_174655" data-func="plt.tight_layout" title="클릭하여 우측 'plt.tight_layout' 해설 보기">plt.tight_layout</span>()
-<span class="interactive-kw" onclick="activateNoteTab('step7', 'step7-plt_show-20261009_174701')" data-step="step7" data-tab="step7-plt_show-20261009_174701" data-func="plt.show" title="클릭하여 우측 'plt.show' 해설 보기">plt.show</span>()</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (2)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>/tmp/ipykernel_881/1131470680.py:3: FutureWarning: 
+(figsize=(6, 4))
+(x=importances[indices], y=feature_names[indices], palette='viridis')
+("Feature Importances (Random Forest Classifier)")
+("Importance (Gini)")
+("Features")
+()
+()</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (2)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>/tmp/ipykernel_881/1131470680.py:3: FutureWarning: 
 
 Passing `palette` without assigning `hue` is deprecated and will be removed in v0.14.0. Assign the `y` variable to `hue` and set `legend=False` for the same effect.
 
@@ -4180,7 +4247,7 @@ plt.show()</code></pre>
 <div class="note-empty-line"></div>
 <p class="note-p"><strong>상위 5개 피처로 재학습</strong></p></div><div class="code-cell-wrapper" id="cell-27"><div class="cell-header"><span class="cell-badge">In [27]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 상위 5개 피처 선택
 top_5_features = feature_names[indices[:5]]
-print(f&quot;상위 5개 피처: {<span class="interactive-kw" onclick="activateNoteTab('step8', 'step8-list-20261009_174713')" data-step="step8" data-tab="step8-list-20261009_174713" data-func="list" title="클릭하여 우측 'list' 해설 보기">list</span>(top_5_features)}&quot;)
+print(f"상위 5개 피처: {(top_5_features)}")
 
 # 상위 피처만으로 학습
 X_train_top5 = X_train[top_5_features]
@@ -4189,13 +4256,13 @@ X_test_top5 = X_test[top_5_features]
 et_top5 = ExtraTreesClassifier(**grid_clf.best_params_, random_state=42)
 et_top5.fit(X_train_top5, y_train)
 y_pred_top5 = et_top5.predict(X_test_top5)
-accuracy_top5 = <span class="interactive-kw" onclick="activateNoteTab('step8', 'step8-accuracy_score-20261009_174746')" data-step="step8" data-tab="step8-accuracy_score-20261009_174746" data-func="accuracy_score" title="클릭하여 우측 'accuracy_score' 해설 보기">accuracy_score</span>(y_test, y_pred_top5)
+accuracy_top5 = (y_test, y_pred_top5)
 
 # 비교
-print(&quot;\n성능 비교:&quot;)
-print(f&quot;모든 피처 (8개): Accuracy = {test_accuracy:.4f}&quot;)
-print(f&quot;상위 5개 피처: Accuracy = {accuracy_top5:.4f}&quot;)
-print(f&quot;\n정확도 차이: {test_accuracy - accuracy_top5:+.4f}&quot;)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>상위 5개 피처: [&#x27;plas&#x27;, &#x27;age&#x27;, &#x27;mass&#x27;, &#x27;preg&#x27;, &#x27;pedi&#x27;]
+print("\n성능 비교:")
+print(f"모든 피처 (8개): Accuracy = {test_accuracy:.4f}")
+print(f"상위 5개 피처: Accuracy = {accuracy_top5:.4f}")
+print(f"\n정확도 차이: {test_accuracy - accuracy_top5:+.4f}")</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>상위 5개 피처: [&#x27;plas&#x27;, &#x27;age&#x27;, &#x27;mass&#x27;, &#x27;preg&#x27;, &#x27;pedi&#x27;]
 
 성능 비교:
 모든 피처 (8개): Accuracy = 0.7403
@@ -4536,10 +4603,7 @@ print(f&quot;정확도: {accuracy_top5}&quot;)</code></pre>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-  <!-- Prism KeepMarkup Plugin: 100% preserves pre-tagged .interactive-kw spans across Prism highlighting -->
-  <script>
-    "undefined"!=typeof Prism&&"undefined"!=typeof document&&document.createRange&&(Prism.plugins.KeepMarkup=!0,Prism.hooks.add("before-highlight",(function(e){if(e.element.children.length&&Prism.util.isActive(e.element,"keep-markup",!0)){var n=Prism.util.isActive(e.element,"drop-tokens",!1),t=0,o=[];r(e.element),o.length&&(e.keepMarkup=o)}function d(e){if(function(e){return!n||"span"!==e.nodeName.toLowerCase()||!e.classList.contains("token")}(e)){var d={element:e,posOpen:t};o.push(d),r(e),d.posClose=t}else r(e)}function r(e){for(var n=0,o=e.childNodes.length;n<o;n++){var r=e.childNodes[n];1===r.nodeType?d(r):3===r.nodeType&&(t+=r.data.length)}}})),Prism.hooks.add("after-highlight",(function(e){if(e.keepMarkup&&e.keepMarkup.length){var n=function(e,t){for(var o=0,d=e.childNodes.length;o<d;o++){var r=e.childNodes[o];if(1===r.nodeType){if(!n(r,t))return!1}else 3===r.nodeType&&(!t.nodeStart&&t.pos+r.data.length>t.node.posOpen&&(t.nodeStart=r,t.nodeStartPos=t.node.posOpen-t.pos),t.nodeStart&&t.pos+r.data.length>=t.node.posClose&&(t.nodeEnd=r,t.nodeEndPos=t.node.posClose-t.pos),t.pos+=r.data.length);if(t.nodeStart&&t.nodeEnd){var s=document.createRange();return s.setStart(t.nodeStart,t.nodeStartPos),s.setEnd(t.nodeEnd,t.nodeEndPos),t.node.element.innerHTML="",t.node.element.appendChild(s.extractContents()),s.insertNode(t.node.element),s.detach(),!1}}return!0};e.keepMarkup.forEach((function(t){n(e.element,{node:t,pos:0})})),e.highlightedCode=e.element.innerHTML}})));
-  </script>
+  
 
   <script>
     function toggleTheme() {
@@ -4688,6 +4752,8 @@ print(f&quot;정확도: {accuracy_top5}&quot;)</code></pre>
 
   
 
+  
+
   <!-- Golden Standard Split-Screen Architecture Script -->
   <script>
     // 1. Safe Theme Handler
@@ -4710,7 +4776,23 @@ print(f&quot;정확도: {accuracy_top5}&quot;)</code></pre>
       }
     })();
 
-    // 2. Universal Note Switcher
+    // 2. Enhance Prism Python Syntax Grammar to Match VS Code Dark+
+    if (window.Prism && Prism.languages.python) {
+      Prism.languages.insertBefore('python', 'keyword', {
+        'class-name': {
+          pattern: /\b[A-Z][a-zA-Z0-9_]*\b/,
+          lookbehind: false
+        },
+        'function': {
+          pattern: /\b[a-zA-Z_][a-zA-Z0-9_]*(?=\s*\()/,
+          lookbehind: false
+        }
+      });
+      // Tokenize all identifiers so every word is an interactive element
+      Prism.languages.python['identifier'] = /\b[a-zA-Z_][a-zA-Z0-9_]*\b/;
+    }
+
+    // 3. Universal Note Switcher
     let currentStepIdGlobal = '';
 
     window.switchTab = function(stepId, tabId) {
@@ -4781,124 +4863,70 @@ print(f&quot;정확도: {accuracy_top5}&quot;)</code></pre>
       if (targetStep) {
         targetStep.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
-      const allKws = leftPane.querySelectorAll('.interactive-kw');
-      for (const kw of allKws) {
-        if (kw.dataset.func === funcName || kw.textContent.trim() === funcName) {
-          kw.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          kw.classList.add('highlight-pulse');
-          setTimeout(() => kw.classList.remove('highlight-pulse'), 2500);
+      // Highlight matching token
+      const tokens = leftPane.querySelectorAll('.code-editor-look code span');
+      for (const tok of tokens) {
+        if (tok.textContent.trim() === funcName || funcName.endsWith('.' + tok.textContent.trim())) {
+          tok.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          tok.style.outline = '2px solid var(--accent-primary)';
+          tok.style.borderRadius = '3px';
+          setTimeout(() => { tok.style.outline = ''; }, 2500);
           break;
         }
       }
     };
 
-    // 3. Keyword Underline Restoration (Fallback for untagged keywords)
-    function rebindInteractiveKeywords() {
-      const allPanes = Array.from(document.querySelectorAll('.func-note-pane'));
-      if (allPanes.length === 0) return;
-
-      const funcMap = new Map();
-      allPanes.forEach(p => {
-        const badge = p.querySelector('.note-target-badge code') || p.querySelector('.target-func-name');
-        if (badge) {
-          const fn = badge.textContent.trim();
-          if (fn && fn.length >= 2 && !funcMap.has(fn)) {
-            funcMap.set(fn, { tabId: p.id, stepId: p.dataset.stepGroup || '' });
-          }
-        }
-      });
-
-      const sortedKeys = Array.from(funcMap.keys()).sort((a, b) => b.length - a.length);
-
-      document.querySelectorAll('.code-editor-look code').forEach(codeElem => {
-        sortedKeys.forEach(fn => {
-          const treeWalker = document.createTreeWalker(codeElem, NodeFilter.SHOW_TEXT, null, false);
-          const textNodes = [];
-          while (treeWalker.nextNode()) textNodes.push(treeWalker.currentNode);
-
-          textNodes.forEach(tNode => {
-            const parent = tNode.parentElement;
-            if (parent && (parent.classList.contains('interactive-kw') || parent.classList.contains('kw-clickable') || parent.closest('.interactive-kw'))) return;
-
-            const text = tNode.nodeValue;
-            const idx = text.indexOf(fn);
-            if (idx !== -1) {
-              const before = idx > 0 ? text[idx - 1] : ' ';
-              const after = (idx + fn.length < text.length) ? text[idx + fn.length] : ' ';
-              if (/^[a-zA-Z0-9_]$/.test(before) || /^[a-zA-Z0-9_]$/.test(after)) return;
-
-              const matchNode = tNode.splitText(idx);
-              matchNode.splitText(fn.length);
-
-              const span = document.createElement('span');
-              span.className = 'interactive-kw kw-clickable';
-              span.textContent = matchNode.nodeValue;
-              span.title = '클릭하여 우측 \'' + fn + '\' 해설 보기';
-              const info = funcMap.get(fn);
-              span.dataset.step = info.stepId;
-              span.dataset.tab = info.tabId;
-              span.dataset.func = fn;
-              span.onclick = function(e) {
-                e.stopPropagation();
-                switchTab(info.stepId, info.tabId);
-              };
-
-              matchNode.parentNode.replaceChild(span, matchNode);
-            }
-          });
-        });
-      });
-    }
-
-    // 4. Robust Intelligent Click Handler (Handles inner tokens, dotted methods, and plain text)
+    // 4. Intelligent Universal Click Handler on Code Tokens
     document.addEventListener('click', function(e) {
-      const codeWrapper = e.target.closest('.code-editor-look') || e.target.closest('code') || e.target.closest('pre');
-      if (!codeWrapper) return;
+      const tok = e.target.closest('.token');
+      if (!tok) return;
+      const codeBlock = tok.closest('.code-editor-look code');
+      if (!codeBlock) return;
 
-      // 4.1 Directly check if clicked element is or is inside an .interactive-kw
-      const interactiveEl = e.target.closest('.interactive-kw') || e.target.closest('.kw-clickable');
-      if (interactiveEl) {
-        const stepId = interactiveEl.dataset.step;
-        const tabId = interactiveEl.dataset.tab;
-        if (tabId) {
-          switchTab(stepId, tabId);
-          return;
-        }
+      let word = tok.textContent.trim().replace(/[^a-zA-Z0-9_.]/g, '');
+      if (!word) return;
+
+      // Expand if adjacent to dot (e.g. models.items, cat_clf.fit, pd.DataFrame)
+      let fullExpr = word;
+      const prev = tok.previousElementSibling;
+      const next = tok.nextElementSibling;
+      if (prev && prev.textContent === '.' && prev.previousElementSibling) {
+        fullExpr = prev.previousElementSibling.textContent.trim() + '.' + word;
+      } else if (next && next.textContent === '.' && next.nextElementSibling) {
+        fullExpr = word + '.' + next.nextElementSibling.textContent.trim();
       }
 
-      // 4.2 Intelligent keyword matching by text
-      let word = e.target.textContent.trim().replace(/[^a-zA-Z0-9_.]/g, '');
-      if (!word || word.length < 2) return;
-
       const allPanes = Array.from(document.querySelectorAll('.func-note-pane'));
-      
-      // Exact match
-      let foundPane = allPanes.find(p => {
+
+      // 1. Exact match on fullExpr
+      let targetPane = allPanes.find(p => {
         const badge = p.querySelector('.note-target-badge code') || p.querySelector('.target-func-name');
-        return badge && badge.textContent.trim() === word;
+        if (!badge) return false;
+        const bText = badge.textContent.trim().replace(/\(\)$/, '');
+        return bText === fullExpr || bText === word;
       });
 
-      // Dotted method matching (e.g. clicking 'models' or 'items' in 'models.items')
-      if (!foundPane) {
-        foundPane = allPanes.find(p => {
+      // 2. Dotted suffix/prefix match
+      if (!targetPane) {
+        targetPane = allPanes.find(p => {
           const badge = p.querySelector('.note-target-badge code') || p.querySelector('.target-func-name');
           if (!badge) return false;
-          const fn = badge.textContent.trim();
-          return fn === word || fn.endsWith('.' + word) || fn.startsWith(word + '.') || word.endsWith('.' + fn) || word.startsWith(fn + '.');
+          const bText = badge.textContent.trim().replace(/\(\)$/, '');
+          return bText === word || bText.endsWith('.' + word) || bText.startsWith(word + '.') || (fullExpr && bText === fullExpr);
         });
       }
 
-      if (foundPane) {
-        switchTab(foundPane.dataset.stepGroup || '', foundPane.id);
-        e.target.style.transition = 'all 0.25s ease';
-        e.target.style.outline = '2px solid var(--accent-primary)';
-        setTimeout(() => { e.target.style.outline = ''; }, 1200);
+      if (targetPane) {
+        switchTab(targetPane.dataset.stepGroup || '', targetPane.id);
+        tok.style.transition = 'all 0.25s ease';
+        tok.style.outline = '2px solid var(--accent-primary)';
+        setTimeout(() => { tok.style.outline = ''; }, 1200);
       }
     });
 
     // 5. Split-Screen Layout Initialization
     function initSplitWorkspace() {
-      const main = document.querySelector('.viewer-main') || document.querySelector('.main-wrapper');
+      const main = document.querySelector('.viewer-main') || document.querySelector('.main-wrapper') || document.querySelector('.main-content');
       if (!main || main.dataset.splitInit) return;
       main.dataset.splitInit = 'true';
 
@@ -4910,7 +4938,7 @@ print(f&quot;정확도: {accuracy_top5}&quot;)</code></pre>
       rightPane.className = 'split-pane-right';
       rightPane.id = 'split-right-pane';
 
-      // 우측 상단 고정 헤더 데스크 바 (단계 드롭다운 셀렉터 탑재)
+      // 우측 상단 고정 헤더 데스크 바
       const deskHeader = document.createElement('div');
       deskHeader.className = 'desk-header-bar';
       deskHeader.innerHTML = `
@@ -4923,23 +4951,19 @@ print(f&quot;정확도: {accuracy_top5}&quot;)</code></pre>
       `;
       rightPane.appendChild(deskHeader);
 
-      // 우측 탭 네비 영역
       const activeTabsArea = document.createElement('div');
       activeTabsArea.className = 'active-tabs-area';
       activeTabsArea.id = 'active-tabs-area';
       rightPane.appendChild(activeTabsArea);
 
-      // 우측 해설 본문 스크롤 영역
       const activePanesArea = document.createElement('div');
       activePanesArea.className = 'active-panes-area';
       activePanesArea.id = 'active-panes-area';
       rightPane.appendChild(activePanesArea);
 
-      // module-hero 최상단 배치
       const hero = main.querySelector('.module-hero');
       if (hero) leftPane.appendChild(hero);
 
-      // 스텝 섹션 재배치
       let firstStepId = '';
       let firstTabId = '';
       const stepOptions = [];
@@ -4953,7 +4977,6 @@ print(f&quot;정확도: {accuracy_top5}&quot;)</code></pre>
         const codeCol = sec.querySelector('.grid-col-code') || sec.querySelector('.code-column');
         const notesCol = sec.querySelector('.grid-col-notes') || sec.querySelector('.notes-column');
 
-        // 스텝 타이틀 추출
         let stepTitleText = '단계 ' + (idx + 1);
         const titleEl = sec.querySelector('.step-title-text') || sec.querySelector('.step-title');
         if (titleEl) stepTitleText = titleEl.textContent.trim().split(':')[0];
@@ -5005,7 +5028,6 @@ print(f&quot;정확도: {accuracy_top5}&quot;)</code></pre>
       main.appendChild(leftPane);
       main.appendChild(rightPane);
 
-      // 드롭다운 옵션 채우기
       const dropdown = document.getElementById('desk-step-dropdown');
       if (dropdown) {
         stepOptions.forEach(opt => {
@@ -5016,15 +5038,16 @@ print(f&quot;정확도: {accuracy_top5}&quot;)</code></pre>
         });
       }
 
-      // 첫 번째 노트 자동 오픈
       if (firstStepId && firstTabId) {
         switchTab(firstStepId, firstTabId);
       }
 
-      // 키워드 점선 밑줄 복원
-      setTimeout(rebindInteractiveKeywords, 150);
+      // Re-run Prism on cleaned code blocks
+      if (window.Prism) {
+        Prism.highlightAll();
+      }
 
-      // 상단 스텝 바 클릭 연동
+      // Quick Nav click
       document.querySelectorAll('.step-nav-item').forEach(btn => {
         btn.addEventListener('click', (e) => {
           e.preventDefault();
@@ -5037,7 +5060,7 @@ print(f&quot;정확도: {accuracy_top5}&quot;)</code></pre>
         });
       });
 
-      // 좌측 스크롤 시 우측 탭 실시간 ScrollSync 연동!
+      // ScrollSync
       leftPane.addEventListener('scroll', () => {
         const leftSecs = leftPane.querySelectorAll('.step-code-section');
         const navItems = document.querySelectorAll('.step-nav-item');
@@ -5061,7 +5084,6 @@ print(f&quot;정확도: {accuracy_top5}&quot;)</code></pre>
             }
           });
 
-          // 우측 탭 헤더 실시간 교체!
           document.querySelectorAll('.notes-tabs-header').forEach(hdr => {
             if (hdr.dataset.stepGroup === currentId) {
               hdr.style.display = 'block';
@@ -5075,7 +5097,6 @@ print(f&quot;정확도: {accuracy_top5}&quot;)</code></pre>
       });
     }
 
-    // 드롭다운 변경 시 실행 함수
     window.onDropdownStepChange = function(targetStepId) {
       const leftPane = document.getElementById('split-left-pane');
       const targetElem = leftPane ? leftPane.querySelector('#' + targetStepId) : null;

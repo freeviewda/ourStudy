@@ -1149,6 +1149,73 @@
       }
     }
 
+  
+    /* ==========================================================================
+       Pure VS Code Dark+ Python Syntax Highlighting (No Blue Boxes, Vibrant Syntax)
+       ========================================================================== */
+    .code-editor-look {
+      background: #1e1e1e !important;
+      border: 1px solid #333333 !important;
+      border-radius: 8px;
+      padding: 1.1rem 1.35rem;
+      font-family: 'Fira Code', Consolas, Monaco, monospace;
+      font-size: 0.88rem;
+      line-height: 1.6;
+      overflow-x: auto;
+      margin-bottom: 0.85rem;
+    }
+    .code-editor-look pre {
+      margin: 0 !important;
+      padding: 0 !important;
+      background: transparent !important;
+    }
+    .code-editor-look code {
+      background: transparent !important;
+      font-family: 'Fira Code', Consolas, Monaco, monospace !important;
+      font-size: 0.88rem !important;
+      line-height: 1.6 !important;
+      color: #9cdcfe !important; /* VS Code Light Blue (Default Variable/Identifier) */
+    }
+
+    /* VS Code Dark+ Exact Token Palette */
+    .code-editor-look code .token.comment { color: #6a9955 !important; font-style: italic; }
+    .code-editor-look code .token.keyword { color: #c586c0 !important; font-weight: 500; }
+    .code-editor-look code .token.string, 
+    .code-editor-look code .token.string-interpolation { color: #ce9178 !important; }
+    .code-editor-look code .token.number { color: #b5cea8 !important; }
+    .code-editor-look code .token.function, 
+    .code-editor-look code .token.builtin { color: #dcdcaa !important; }
+    .code-editor-look code .token.class-name { color: #4ec9b0 !important; font-weight: 600; }
+    .code-editor-look code .token.operator { color: #d4d4d4 !important; }
+    .code-editor-look code .token.punctuation { color: #d4d4d4 !important; }
+    .code-editor-look code .token.identifier,
+    .code-editor-look code .token.variable,
+    .code-editor-look code .token.parameter { color: #9cdcfe !important; }
+
+    /* Interactive Hover on Code Tokens (Subtle Dashed Underline, NO Background Boxes) */
+    .code-editor-look code span[class*="token"] {
+      cursor: pointer;
+      transition: opacity 0.15s ease;
+    }
+    .code-editor-look code span[class*="token"]:hover {
+      text-decoration: underline dashed #38bdf8;
+      text-underline-offset: 3px;
+      opacity: 0.88;
+    }
+
+    .interactive-kw, .kw-clickable {
+      background: transparent !important;
+      color: inherit !important;
+      border: none !important;
+      border-bottom: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      cursor: pointer !important;
+      text-decoration: none !important;
+      font-weight: inherit !important;
+      box-shadow: none !important;
+    }
+
   </style>
 </head>
 <body>
@@ -1215,16 +1282,16 @@
     </section>
 
     <!-- Pipeline Step Sections -->
-    <section class="step-section" id="step1"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">1단계</span><h2 class="step-title-text">필수 라이브러리 임포트 및 분석 환경 구축</h2></div><p class="step-summary-desc">Pandas, NumPy, Matplotlib, OpenML 데이터셋 로더, Scikit-Learn 전처리 및 모델링 모듈(GridSearchCV, RandomForestClassifier 등)을 임포트합니다.</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 주피터 노트북 실행 코드 및 결과</div><div class="cell-markdown-box"><h2 class="note-h2">라이브러리 임포트</h2></div><div class="code-cell-wrapper" id="cell-2"><div class="cell-header"><span class="cell-badge">In [2]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">import <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-pandas-20261009_094537')" data-step="step1" data-tab="step1-pandas-20261009_094537" data-func="pandas" title="클릭하여 우측 'pandas' 해설 보기">pandas</span> as pd
-import <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-numpy-20261009_094553')" data-step="step1" data-tab="step1-numpy-20261009_094553" data-func="numpy" title="클릭하여 우측 'numpy' 해설 보기">numpy</span> as np
-import <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-matplotlib_pyplot-20261009_094602')" data-step="step1" data-tab="step1-matplotlib_pyplot-20261009_094602" data-func="matplotlib.pyplot" title="클릭하여 우측 'matplotlib.pyplot' 해설 보기">matplotlib.pyplot</span> as plt
-from <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-sklearn_datasets-20261009_094611')" data-step="step1" data-tab="step1-sklearn_datasets-20261009_094611" data-func="sklearn.datasets" title="클릭하여 우측 'sklearn.datasets' 해설 보기">sklearn.datasets</span> import <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-fetch_openml-20261009_094618')" data-step="step1" data-tab="step1-fetch_openml-20261009_094618" data-func="fetch_openml" title="클릭하여 우측 'fetch_openml' 해설 보기">fetch_openml</span>
-from <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-sklearn_model_selection-20261009_094644')" data-step="step1" data-tab="step1-sklearn_model_selection-20261009_094644" data-func="sklearn.model_selection" title="클릭하여 우측 'sklearn.model_selection' 해설 보기">sklearn.model_selection</span> import <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-train_test_split-20261009_094649')" data-step="step1" data-tab="step1-train_test_split-20261009_094649" data-func="train_test_split" title="클릭하여 우측 'train_test_split' 해설 보기">train_test_split</span>, <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-StratifiedKFold-20261009_094654')" data-step="step1" data-tab="step1-StratifiedKFold-20261009_094654" data-func="StratifiedKFold" title="클릭하여 우측 'StratifiedKFold' 해설 보기">StratifiedKFold</span>, <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-GridSearchCV-20261009_094659')" data-step="step1" data-tab="step1-GridSearchCV-20261009_094659" data-func="GridSearchCV" title="클릭하여 우측 'GridSearchCV' 해설 보기">GridSearchCV</span>
-from <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-sklearn_preprocessing-20261009_094717')" data-step="step1" data-tab="step1-sklearn_preprocessing-20261009_094717" data-func="sklearn.preprocessing" title="클릭하여 우측 'sklearn.preprocessing' 해설 보기">sklearn.preprocessing</span> import <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-StandardScaler-20261009_094723')" data-step="step1" data-tab="step1-StandardScaler-20261009_094723" data-func="StandardScaler" title="클릭하여 우측 'StandardScaler' 해설 보기">StandardScaler</span>
-from <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-sklearn_feature_selection-20261009_094729')" data-step="step1" data-tab="step1-sklearn_feature_selection-20261009_094729" data-func="sklearn.feature_selection" title="클릭하여 우측 'sklearn.feature_selection' 해설 보기">sklearn.feature_selection</span> import <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-RFECV-20261009_094755')" data-step="step1" data-tab="step1-RFECV-20261009_094755" data-func="RFECV" title="클릭하여 우측 'RFECV' 해설 보기">RFECV</span>
-from <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-sklearn_ensemble-20261009_094801')" data-step="step1" data-tab="step1-sklearn_ensemble-20261009_094801" data-func="sklearn.ensemble" title="클릭하여 우측 'sklearn.ensemble' 해설 보기">sklearn.ensemble</span> import <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-RandomForestClassifier-20261009_094809')" data-step="step1" data-tab="step1-RandomForestClassifier-20261009_094809" data-func="RandomForestClassifier" title="클릭하여 우측 'RandomForestClassifier' 해설 보기">RandomForestClassifier</span>
-from <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-sklearn_pipeline-20261009_094818')" data-step="step1" data-tab="step1-sklearn_pipeline-20261009_094818" data-func="sklearn.pipeline" title="클릭하여 우측 'sklearn.pipeline' 해설 보기">sklearn.pipeline</span> import <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-Pipeline-20261009_094828')" data-step="step1" data-tab="step1-Pipeline-20261009_094828" data-func="Pipeline" title="클릭하여 우측 'Pipeline' 해설 보기">Pipeline</span>
-from <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-sklearn_metrics-20261009_094839')" data-step="step1" data-tab="step1-sklearn_metrics-20261009_094839" data-func="sklearn.metrics" title="클릭하여 우측 'sklearn.metrics' 해설 보기">sklearn.metrics</span> import <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-accuracy_score-20261009_094918')" data-step="step1" data-tab="step1-accuracy_score-20261009_094918" data-func="accuracy_score" title="클릭하여 우측 'accuracy_score' 해설 보기">accuracy_score</span>, <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-classification_report-20261009_094923')" data-step="step1" data-tab="step1-classification_report-20261009_094923" data-func="classification_report" title="클릭하여 우측 'classification_report' 해설 보기">classification_report</span></code></pre></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (MARKDOWN)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (22)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step1" data-tab="step1-pandas-20261009_094537" onclick="switchTab('step1', 'step1-pandas-20261009_094537')"><span class="tab-func-name">import pandas as pd</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-numpy-20261009_094553" onclick="switchTab('step1', 'step1-numpy-20261009_094553')"><span class="tab-func-name">import numpy as np</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-matplotlib_pyplot-20261009_094602" onclick="switchTab('step1', 'step1-matplotlib_pyplot-20261009_094602')"><span class="tab-func-name">import matplotlib.pyplot</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_datasets-20261009_094611" onclick="switchTab('step1', 'step1-sklearn_datasets-20261009_094611')"><span class="tab-func-name">from sklearn.datasets</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-fetch_openml-20261009_094618" onclick="switchTab('step1', 'step1-fetch_openml-20261009_094618')"><span class="tab-func-name">import fetch_openml</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_model_selection-20261009_094644" onclick="switchTab('step1', 'step1-sklearn_model_selection-20261009_094644')"><span class="tab-func-name">from sklearn.model_selection</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-train_test_split-20261009_094649" onclick="switchTab('step1', 'step1-train_test_split-20261009_094649')"><span class="tab-func-name">import train_test_split</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-StratifiedKFold-20261009_094654" onclick="switchTab('step1', 'step1-StratifiedKFold-20261009_094654')"><span class="tab-func-name">import StratifiedKFold</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-GridSearchCV-20261009_094659" onclick="switchTab('step1', 'step1-GridSearchCV-20261009_094659')"><span class="tab-func-name">import GridSearchCV</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_preprocessing-20261009_094717" onclick="switchTab('step1', 'step1-sklearn_preprocessing-20261009_094717')"><span class="tab-func-name">from sklearn.preprocessing</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-StandardScaler-20261009_094723" onclick="switchTab('step1', 'step1-StandardScaler-20261009_094723')"><span class="tab-func-name">import StandardScaler (1)</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_feature_selection-20261009_094729" onclick="switchTab('step1', 'step1-sklearn_feature_selection-20261009_094729')"><span class="tab-func-name">from sklearn.feature_selection (1)</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-StandardScaler-20261009_094735" onclick="switchTab('step1', 'step1-StandardScaler-20261009_094735')"><span class="tab-func-name">import StandardScaler (2)</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_feature_selection-20261009_094749" onclick="switchTab('step1', 'step1-sklearn_feature_selection-20261009_094749')"><span class="tab-func-name">from sklearn.feature_selection (2)</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-RFECV-20261009_094755" onclick="switchTab('step1', 'step1-RFECV-20261009_094755')"><span class="tab-func-name">import RFECV</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_ensemble-20261009_094801" onclick="switchTab('step1', 'step1-sklearn_ensemble-20261009_094801')"><span class="tab-func-name">from sklearn.ensemble</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-RandomForestClassifier-20261009_094809" onclick="switchTab('step1', 'step1-RandomForestClassifier-20261009_094809')"><span class="tab-func-name">import RandomForestClassifier</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_pipeline-20261009_094818" onclick="switchTab('step1', 'step1-sklearn_pipeline-20261009_094818')"><span class="tab-func-name">from sklearn.pipeline</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-Pipeline-20261009_094828" onclick="switchTab('step1', 'step1-Pipeline-20261009_094828')"><span class="tab-func-name">import Pipeline</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_metrics-20261009_094839" onclick="switchTab('step1', 'step1-sklearn_metrics-20261009_094839')"><span class="tab-func-name">from sklearn.metrics</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-accuracy_score-20261009_094918" onclick="switchTab('step1', 'step1-accuracy_score-20261009_094918')"><span class="tab-func-name">import accuracy_score</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-classification_report-20261009_094923" onclick="switchTab('step1', 'step1-classification_report-20261009_094923')"><span class="tab-func-name">import classification_report</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step1-pandas-20261009_094537"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>pandas</code></div><div class="note-time-badge">⏱ 2026-10-09 09:45:37</div></div><div class="note-body-content"><h1 class="note-h1">pandas - AI 파이썬 학습 노트</h1>
+    <section class="step-section" id="step1"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">1단계</span><h2 class="step-title-text">필수 라이브러리 임포트 및 분석 환경 구축</h2></div><p class="step-summary-desc">Pandas, NumPy, Matplotlib, OpenML 데이터셋 로더, Scikit-Learn 전처리 및 모델링 모듈(GridSearchCV, RandomForestClassifier 등)을 임포트합니다.</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 주피터 노트북 실행 코드 및 결과</div><div class="cell-markdown-box"><h2 class="note-h2">라이브러리 임포트</h2></div><div class="code-cell-wrapper" id="cell-2"><div class="cell-header"><span class="cell-badge">In [2]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">import  as pd
+import  as np
+import  as plt
+from  import 
+from  import , , 
+from  import 
+from  import 
+from  import 
+from  import 
+from  import , </code></pre></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (MARKDOWN)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (22)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step1" data-tab="step1-pandas-20261009_094537" onclick="switchTab('step1', 'step1-pandas-20261009_094537')"><span class="tab-func-name">import pandas as pd</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-numpy-20261009_094553" onclick="switchTab('step1', 'step1-numpy-20261009_094553')"><span class="tab-func-name">import numpy as np</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-matplotlib_pyplot-20261009_094602" onclick="switchTab('step1', 'step1-matplotlib_pyplot-20261009_094602')"><span class="tab-func-name">import matplotlib.pyplot</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_datasets-20261009_094611" onclick="switchTab('step1', 'step1-sklearn_datasets-20261009_094611')"><span class="tab-func-name">from sklearn.datasets</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-fetch_openml-20261009_094618" onclick="switchTab('step1', 'step1-fetch_openml-20261009_094618')"><span class="tab-func-name">import fetch_openml</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_model_selection-20261009_094644" onclick="switchTab('step1', 'step1-sklearn_model_selection-20261009_094644')"><span class="tab-func-name">from sklearn.model_selection</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-train_test_split-20261009_094649" onclick="switchTab('step1', 'step1-train_test_split-20261009_094649')"><span class="tab-func-name">import train_test_split</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-StratifiedKFold-20261009_094654" onclick="switchTab('step1', 'step1-StratifiedKFold-20261009_094654')"><span class="tab-func-name">import StratifiedKFold</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-GridSearchCV-20261009_094659" onclick="switchTab('step1', 'step1-GridSearchCV-20261009_094659')"><span class="tab-func-name">import GridSearchCV</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_preprocessing-20261009_094717" onclick="switchTab('step1', 'step1-sklearn_preprocessing-20261009_094717')"><span class="tab-func-name">from sklearn.preprocessing</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-StandardScaler-20261009_094723" onclick="switchTab('step1', 'step1-StandardScaler-20261009_094723')"><span class="tab-func-name">import StandardScaler (1)</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_feature_selection-20261009_094729" onclick="switchTab('step1', 'step1-sklearn_feature_selection-20261009_094729')"><span class="tab-func-name">from sklearn.feature_selection (1)</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-StandardScaler-20261009_094735" onclick="switchTab('step1', 'step1-StandardScaler-20261009_094735')"><span class="tab-func-name">import StandardScaler (2)</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_feature_selection-20261009_094749" onclick="switchTab('step1', 'step1-sklearn_feature_selection-20261009_094749')"><span class="tab-func-name">from sklearn.feature_selection (2)</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-RFECV-20261009_094755" onclick="switchTab('step1', 'step1-RFECV-20261009_094755')"><span class="tab-func-name">import RFECV</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_ensemble-20261009_094801" onclick="switchTab('step1', 'step1-sklearn_ensemble-20261009_094801')"><span class="tab-func-name">from sklearn.ensemble</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-RandomForestClassifier-20261009_094809" onclick="switchTab('step1', 'step1-RandomForestClassifier-20261009_094809')"><span class="tab-func-name">import RandomForestClassifier</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_pipeline-20261009_094818" onclick="switchTab('step1', 'step1-sklearn_pipeline-20261009_094818')"><span class="tab-func-name">from sklearn.pipeline</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-Pipeline-20261009_094828" onclick="switchTab('step1', 'step1-Pipeline-20261009_094828')"><span class="tab-func-name">import Pipeline</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_metrics-20261009_094839" onclick="switchTab('step1', 'step1-sklearn_metrics-20261009_094839')"><span class="tab-func-name">from sklearn.metrics</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-accuracy_score-20261009_094918" onclick="switchTab('step1', 'step1-accuracy_score-20261009_094918')"><span class="tab-func-name">import accuracy_score</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-classification_report-20261009_094923" onclick="switchTab('step1', 'step1-classification_report-20261009_094923')"><span class="tab-func-name">import classification_report</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step1-pandas-20261009_094537"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>pandas</code></div><div class="note-time-badge">⏱ 2026-10-09 09:45:37</div></div><div class="note-body-content"><h1 class="note-h1">pandas - AI 파이썬 학습 노트</h1>
 <div class="note-empty-line"></div>
 <ul class="note-ul">
 <li class="note-li">생성 일시: 2026-10-09 09:45:37</li>
@@ -1482,15 +1549,15 @@ from <span class="interactive-kw" onclick="activateNoteTab('step1', 'step1-sklea
 <li class="note-li">768개 샘플, 8개 피처</li>
 <li class="note-li">당뇨병 발병 여부 이진 분류</li>
 <li class="note-li">피처: 임신 횟수, 혈당, BMI, 나이 등</li>
-</ul></div><div class="code-cell-wrapper" id="cell-4"><div class="cell-header"><span class="cell-badge">In [4]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">print(&quot;Loading Pima Indians Diabetes Dataset...&quot;)
-pima = <span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-fetch_openml-20261009_094951')" data-step="step2" data-tab="step2-fetch_openml-20261009_094951" data-func="fetch_openml" title="클릭하여 우측 'fetch_openml' 해설 보기">fetch_openml</span>(name=&#x27;diabetes&#x27;, version=1, as_frame=True)
-X = <span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-pima_data-20261009_095003')" data-step="step2" data-tab="step2-pima_data-20261009_095003" data-func="pima.data" title="클릭하여 우측 'pima.data' 해설 보기">pima.data</span>
+</ul></div><div class="code-cell-wrapper" id="cell-4"><div class="cell-header"><span class="cell-badge">In [4]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">print("Loading Pima Indians Diabetes Dataset...")
+pima = (name='diabetes', version=1, as_frame=True)
+X = 
 # Convert target labels from string to integer
-y = <span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-pima_target_map-20261009_095009')" data-step="step2" data-tab="step2-pima_target_map-20261009_095009" data-func="pima.target.map" title="클릭하여 우측 'pima.target.map' 해설 보기">pima.target.map</span>({&#x27;tested_negative&#x27;: 0, &#x27;tested_positive&#x27;: 1}).<span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-astype-20261009_095015')" data-step="step2" data-tab="step2-astype-20261009_095015" data-func="astype" title="클릭하여 우측 'astype' 해설 보기">astype</span>(int)
+y = ({'tested_negative': 0, 'tested_positive': 1}).(int)
 
-print(f&quot;데이터 크기: {<span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-X_shape-20261009_095052')" data-step="step2" data-tab="step2-X_shape-20261009_095052" data-func="X.shape" title="클릭하여 우측 'X.shape' 해설 보기">X.shape</span>}&quot;)
-print(f&quot;클래스 분포:\n{<span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-y_value_counts-20261009_095217')" data-step="step2" data-tab="step2-y_value_counts-20261009_095217" data-func="y.value_counts" title="클릭하여 우측 'y.value_counts' 해설 보기">y.value_counts</span>()}&quot;)
-print(f&quot;\n피처 목록:\n{<span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-list-20261009_095224')" data-step="step2" data-tab="step2-list-20261009_095224" data-func="list" title="클릭하여 우측 'list' 해설 보기">list</span>(X.columns)}&quot;)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>Loading Pima Indians Diabetes Dataset...
+print(f"데이터 크기: {}")
+print(f"클래스 분포:\n{()}")
+print(f"\n피처 목록:\n{(X.columns)}")</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>Loading Pima Indians Diabetes Dataset...
 데이터 크기: (768, 8)
 클래스 분포:
 class
@@ -1501,10 +1568,10 @@ Name: count, dtype: int64
 피처 목록:
 [&#x27;preg&#x27;, &#x27;plas&#x27;, &#x27;pres&#x27;, &#x27;skin&#x27;, &#x27;insu&#x27;, &#x27;mass&#x27;, &#x27;pedi&#x27;, &#x27;age&#x27;]
 </pre></div></div></div></div><div class="cell-markdown-box"><p class="note-p"><strong>데이터 샘플 확인</strong></p></div><div class="code-cell-wrapper" id="cell-6"><div class="cell-header"><span class="cell-badge">In [6]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 데이터 샘플
-print(&quot;데이터 샘플:&quot;)
-print(<span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-X_head-20261009_095229')" data-step="step2" data-tab="step2-X_head-20261009_095229" data-func="X.head" title="클릭하여 우측 'X.head' 해설 보기">X.head</span>())
-print(f&quot;\n기술 통계:&quot;)
-print(<span class="interactive-kw" onclick="activateNoteTab('step2', 'step2-X_describe-20261009_095235')" data-step="step2" data-tab="step2-X_describe-20261009_095235" data-func="X.describe" title="클릭하여 우측 'X.describe' 해설 보기">X.describe</span>())</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>데이터 샘플:
+print("데이터 샘플:")
+print(())
+print(f"\n기술 통계:")
+print(())</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>데이터 샘플:
    preg  plas  pres  skin  insu  mass   pedi  age
 0     6   148    72    35     0  33.6  0.627   50
 1     1    85    66    29     0  26.6  0.351   31
@@ -2056,13 +2123,13 @@ max    95.000000    95.000000</code></pre>
 <ul class="note-ul">
 <li class="note-li">stratify=y: 클래스 비율 유지</li>
 </ul></div><div class="code-cell-wrapper" id="cell-8"><div class="cell-header"><span class="cell-badge">In [8]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 데이터 분리
-X_train, X_test, y_train, y_test = <span class="interactive-kw" onclick="activateNoteTab('step3', 'step3-train_test_split-20261009_095243')" data-step="step3" data-tab="step3-train_test_split-20261009_095243" data-func="train_test_split" title="클릭하여 우측 'train_test_split' 해설 보기">train_test_split</span>(
+X_train, X_test, y_train, y_test = (
     X, y, test_size=0.2, random_state=42, stratify=y
 )
 
-print(f&quot;Train: {<span class="interactive-kw" onclick="activateNoteTab('step3', 'step3-X_train_shape-20261009_095251')" data-step="step3" data-tab="step3-X_train_shape-20261009_095251" data-func="X_train.shape" title="클릭하여 우측 'X_train.shape' 해설 보기">X_train.shape</span>}, Test: {<span class="interactive-kw" onclick="activateNoteTab('step3', 'step3-X_test_shape-20261009_095256')" data-step="step3" data-tab="step3-X_test_shape-20261009_095256" data-func="X_test.shape" title="클릭하여 우측 'X_test.shape' 해설 보기">X_test.shape</span>}&quot;)
-print(f&quot;\nTrain 클래스 분포:\n{<span class="interactive-kw" onclick="activateNoteTab('step3', 'step3-y_train_value_counts-20261009_095303')" data-step="step3" data-tab="step3-y_train_value_counts-20261009_095303" data-func="y_train.value_counts" title="클릭하여 우측 'y_train.value_counts' 해설 보기">y_train.value_counts</span>()}&quot;)
-print(f&quot;\nTest 클래스 분포:\n{<span class="interactive-kw" onclick="activateNoteTab('step3', 'step3-y_test_value_counts-20261009_095308')" data-step="step3" data-tab="step3-y_test_value_counts-20261009_095308" data-func="y_test.value_counts" title="클릭하여 우측 'y_test.value_counts' 해설 보기">y_test.value_counts</span>()}&quot;)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>Train: (614, 8), Test: (154, 8)
+print(f"Train: {}, Test: {}")
+print(f"\nTrain 클래스 분포:\n{()}")
+print(f"\nTest 클래스 분포:\n{()}")</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>Train: (614, 8), Test: (154, 8)
 
 Train 클래스 분포:
 class
@@ -2298,14 +2365,14 @@ print(y_test.value_counts())</code></pre>
 dtype: int64</code></pre>
 <blockquote class="note-quote"><strong>💡 초보자를 위한 한 줄 요약:</strong></blockquote>
 <blockquote class="note-quote"><code class="inline-code">&quot;선생님, 시험지(y_test)에 0번 문제가 3개 있고, 1번 문제가 2개 있어요!&quot;</code> 하고 데이터의 개수를 정확하게 세어서 보고해 주는 똑똑한 출석부 같은 함수입니다.</blockquote></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step3', 'y_test.value_counts')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section><section class="step-section" id="step4"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">4단계</span><h2 class="step-title-text">하이퍼파라미터 그리드 정의 및 GridSearchCV 탐색 학습 (5-Fold CV)</h2></div><p class="step-summary-desc">n_estimators, max_depth, min_samples_split, min_samples_leaf 총 144개 후보 조합(총 720 fits)을 5-Fold 계층적 교차 검증과 함께 병렬 격자 탐색합니다.</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 주피터 노트북 실행 코드 및 결과</div><div class="code-cell-wrapper" id="cell-9"><div class="cell-header"><span class="cell-badge">In [9]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">hp_grid = {
-    &#x27;n_estimators&#x27;: [10, 50, 100, 200],
-    &#x27;max_depth&#x27;: [None, 10, 20, 30],
-    &#x27;min_samples_split&#x27;: [2, 5, 10],
-    &#x27;min_samples_leaf&#x27;: [1, 2, 4],
-    # &#x27;bootstrap&#x27;: [True, False]
-}</code></pre></div></div><div class="cell-markdown-box"><h3 class="note-h3">Grid Search CV 적용</h3></div><div class="code-cell-wrapper" id="cell-11"><div class="cell-header"><span class="cell-badge">In [11]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">rf = <span class="interactive-kw" onclick="activateNoteTab('step4', 'step4-RandomForestClassifier-20261009_095315')" data-step="step4" data-tab="step4-RandomForestClassifier-20261009_095315" data-func="RandomForestClassifier" title="클릭하여 우측 'RandomForestClassifier' 해설 보기">RandomForestClassifier</span>(random_state=42)
-grid_search = <span class="interactive-kw" onclick="activateNoteTab('step4', 'step4-GridSearchCV-20261009_095322')" data-step="step4" data-tab="step4-GridSearchCV-20261009_095322" data-func="GridSearchCV" title="클릭하여 우측 'GridSearchCV' 해설 보기">GridSearchCV</span>(estimator=rf, param_grid=hp_grid, cv=5, n_jobs=-1, verbose=2)
-<span class="interactive-kw" onclick="activateNoteTab('step4', 'step4-grid_search_fit-20261009_095328')" data-step="step4" data-tab="step4-grid_search_fit-20261009_095328" data-func="grid_search.fit" title="클릭하여 우측 'grid_search.fit' 해설 보기">grid_search.fit</span>(X_train, y_train)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (2)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>Fitting 5 folds for each of 144 candidates, totalling 720 fits
+    'n_estimators': [10, 50, 100, 200],
+    'max_depth': [None, 10, 20, 30],
+    'min_samples_split': [2, 5, 10],
+    'min_samples_leaf': [1, 2, 4],
+    # 'bootstrap': [True, False]
+}</code></pre></div></div><div class="cell-markdown-box"><h3 class="note-h3">Grid Search CV 적용</h3></div><div class="code-cell-wrapper" id="cell-11"><div class="cell-header"><span class="cell-badge">In [11]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">rf = (random_state=42)
+grid_search = (estimator=rf, param_grid=hp_grid, cv=5, n_jobs=-1, verbose=2)
+(X_train, y_train)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (2)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>Fitting 5 folds for each of 144 candidates, totalling 720 fits
 </pre></div><div class="output-item html-table-output"><div class="output-type-tag">DataFrame Display</div><style>#sk-container-id-1 {
   /* Definition of color scheme common for light and dark mode */
   --sklearn-color-text: #000;
@@ -2993,11 +3060,11 @@ print(&#x27;📌 테스트 데이터 예측 결과:&#x27;, predictions[:5])</cod
 📌 테스트 데이터 예측 결과: [1 0 2 1 1]</code></pre>
 <div class="note-empty-line"></div>
 <p class="note-p">이제 <code class="inline-code">grid_search.fit(X_train, y_train)</code>이 무엇을 하는 친구인지 명확하게 감이 오셨죠? 궁금한 점이 있다면 언제든 다시 질문해 주세요!</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step4', 'grid_search.fit')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section><section class="step-section" id="step5"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">5단계</span><h2 class="step-title-text">최적 파라미터(best_params_) 및 최고 정확도 도출, 최적 모델(best_estimator_) 추출</h2></div><p class="step-summary-desc">교차 검증 최고 정확도(0.7834)를 달성한 최적 파라미터 조합을 확인하고, 완전히 학습된 최종 최적 모델(best_estimator_) 객체를 추출합니다.</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 주피터 노트북 실행 코드 및 결과</div><div class="code-cell-wrapper" id="cell-12"><div class="cell-header"><span class="cell-badge">In [12]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 결과 출력
-print(f&quot;최적 파라미터: {<span class="interactive-kw" onclick="activateNoteTab('step5', 'step5-grid_search_best_params_-20261009_095334')" data-step="step5" data-tab="step5-grid_search_best_params_-20261009_095334" data-func="grid_search.best_params_" title="클릭하여 우측 'grid_search.best_params_' 해설 보기">grid_search.best_params_</span>}&quot;)
-print(f&quot;최고 정확도: {<span class="interactive-kw" onclick="activateNoteTab('step5', 'step5-grid_search_best_score_-20261009_095340')" data-step="step5" data-tab="step5-grid_search_best_score_-20261009_095340" data-func="grid_search.best_score_" title="클릭하여 우측 'grid_search.best_score_' 해설 보기">grid_search.best_score_</span>:.4f}&quot;)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>최적 파라미터: {&#x27;max_depth&#x27;: None, &#x27;min_samples_leaf&#x27;: 4, &#x27;min_samples_split&#x27;: 10, &#x27;n_estimators&#x27;: 200}
+print(f"최적 파라미터: {}")
+print(f"최고 정확도: {:.4f}")</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>최적 파라미터: {&#x27;max_depth&#x27;: None, &#x27;min_samples_leaf&#x27;: 4, &#x27;min_samples_split&#x27;: 10, &#x27;n_estimators&#x27;: 200}
 최고 정확도: 0.7834
 </pre></div></div></div></div><div class="code-cell-wrapper" id="cell-13"><div class="cell-header"><span class="cell-badge">In [13]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 최적 모델 추출
-best_rf = <span class="interactive-kw" onclick="activateNoteTab('step5', 'step5-grid_search_best_estimator_-20261009_095347')" data-step="step5" data-tab="step5-grid_search_best_estimator_-20261009_095347" data-func="grid_search.best_estimator_" title="클릭하여 우측 'grid_search.best_estimator_' 해설 보기">grid_search.best_estimator_</span></code></pre></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (MARKDOWN)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (3)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step5" data-tab="step5-grid_search_best_params_-20261009_095334" onclick="switchTab('step5', 'step5-grid_search_best_params_-20261009_095334')"><span class="tab-func-name">grid_search.best_params_</span></button><button class="func-tab-btn " data-step="step5" data-tab="step5-grid_search_best_score_-20261009_095340" onclick="switchTab('step5', 'step5-grid_search_best_score_-20261009_095340')"><span class="tab-func-name">grid_search.best_score_</span></button><button class="func-tab-btn " data-step="step5" data-tab="step5-grid_search_best_estimator_-20261009_095347" onclick="switchTab('step5', 'step5-grid_search_best_estimator_-20261009_095347')"><span class="tab-func-name">grid_search.best_estimator_</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step5-grid_search_best_params_-20261009_095334"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>grid_search.best_params_</code></div><div class="note-time-badge">⏱ 2026-10-09 09:53:34</div></div><div class="note-body-content"><h1 class="note-h1">grid_search.best_params_ - AI 파이썬 학습 노트</h1>
+best_rf = </code></pre></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (MARKDOWN)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (3)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step5" data-tab="step5-grid_search_best_params_-20261009_095334" onclick="switchTab('step5', 'step5-grid_search_best_params_-20261009_095334')"><span class="tab-func-name">grid_search.best_params_</span></button><button class="func-tab-btn " data-step="step5" data-tab="step5-grid_search_best_score_-20261009_095340" onclick="switchTab('step5', 'step5-grid_search_best_score_-20261009_095340')"><span class="tab-func-name">grid_search.best_score_</span></button><button class="func-tab-btn " data-step="step5" data-tab="step5-grid_search_best_estimator_-20261009_095347" onclick="switchTab('step5', 'step5-grid_search_best_estimator_-20261009_095347')"><span class="tab-func-name">grid_search.best_estimator_</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step5-grid_search_best_params_-20261009_095334"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>grid_search.best_params_</code></div><div class="note-time-badge">⏱ 2026-10-09 09:53:34</div></div><div class="note-body-content"><h1 class="note-h1">grid_search.best_params_ - AI 파이썬 학습 노트</h1>
 <div class="note-empty-line"></div>
 <ul class="note-ul">
 <li class="note-li">생성 일시: 2026-10-09 09:53:34</li>
@@ -3046,10 +3113,7 @@ best_rf = <span class="interactive-kw" onclick="activateNoteTab('step5', 'step5-
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-  <!-- Prism KeepMarkup Plugin: 100% preserves pre-tagged .interactive-kw spans across Prism highlighting -->
-  <script>
-    "undefined"!=typeof Prism&&"undefined"!=typeof document&&document.createRange&&(Prism.plugins.KeepMarkup=!0,Prism.hooks.add("before-highlight",(function(e){if(e.element.children.length&&Prism.util.isActive(e.element,"keep-markup",!0)){var n=Prism.util.isActive(e.element,"drop-tokens",!1),t=0,o=[];r(e.element),o.length&&(e.keepMarkup=o)}function d(e){if(function(e){return!n||"span"!==e.nodeName.toLowerCase()||!e.classList.contains("token")}(e)){var d={element:e,posOpen:t};o.push(d),r(e),d.posClose=t}else r(e)}function r(e){for(var n=0,o=e.childNodes.length;n<o;n++){var r=e.childNodes[n];1===r.nodeType?d(r):3===r.nodeType&&(t+=r.data.length)}}})),Prism.hooks.add("after-highlight",(function(e){if(e.keepMarkup&&e.keepMarkup.length){var n=function(e,t){for(var o=0,d=e.childNodes.length;o<d;o++){var r=e.childNodes[o];if(1===r.nodeType){if(!n(r,t))return!1}else 3===r.nodeType&&(!t.nodeStart&&t.pos+r.data.length>t.node.posOpen&&(t.nodeStart=r,t.nodeStartPos=t.node.posOpen-t.pos),t.nodeStart&&t.pos+r.data.length>=t.node.posClose&&(t.nodeEnd=r,t.nodeEndPos=t.node.posClose-t.pos),t.pos+=r.data.length);if(t.nodeStart&&t.nodeEnd){var s=document.createRange();return s.setStart(t.nodeStart,t.nodeStartPos),s.setEnd(t.nodeEnd,t.nodeEndPos),t.node.element.innerHTML="",t.node.element.appendChild(s.extractContents()),s.insertNode(t.node.element),s.detach(),!1}}return!0};e.keepMarkup.forEach((function(t){n(e.element,{node:t,pos:0})})),e.highlightedCode=e.element.innerHTML}})));
-  </script>
+  
 
   <script>
     // Theme Switcher synchronized with index.html
@@ -3206,6 +3270,8 @@ best_rf = <span class="interactive-kw" onclick="activateNoteTab('step5', 'step5-
 
   
 
+  
+
   <!-- Golden Standard Split-Screen Architecture Script -->
   <script>
     // 1. Safe Theme Handler
@@ -3228,7 +3294,23 @@ best_rf = <span class="interactive-kw" onclick="activateNoteTab('step5', 'step5-
       }
     })();
 
-    // 2. Universal Note Switcher
+    // 2. Enhance Prism Python Syntax Grammar to Match VS Code Dark+
+    if (window.Prism && Prism.languages.python) {
+      Prism.languages.insertBefore('python', 'keyword', {
+        'class-name': {
+          pattern: /\b[A-Z][a-zA-Z0-9_]*\b/,
+          lookbehind: false
+        },
+        'function': {
+          pattern: /\b[a-zA-Z_][a-zA-Z0-9_]*(?=\s*\()/,
+          lookbehind: false
+        }
+      });
+      // Tokenize all identifiers so every word is an interactive element
+      Prism.languages.python['identifier'] = /\b[a-zA-Z_][a-zA-Z0-9_]*\b/;
+    }
+
+    // 3. Universal Note Switcher
     let currentStepIdGlobal = '';
 
     window.switchTab = function(stepId, tabId) {
@@ -3299,124 +3381,70 @@ best_rf = <span class="interactive-kw" onclick="activateNoteTab('step5', 'step5-
       if (targetStep) {
         targetStep.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
-      const allKws = leftPane.querySelectorAll('.interactive-kw');
-      for (const kw of allKws) {
-        if (kw.dataset.func === funcName || kw.textContent.trim() === funcName) {
-          kw.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          kw.classList.add('highlight-pulse');
-          setTimeout(() => kw.classList.remove('highlight-pulse'), 2500);
+      // Highlight matching token
+      const tokens = leftPane.querySelectorAll('.code-editor-look code span');
+      for (const tok of tokens) {
+        if (tok.textContent.trim() === funcName || funcName.endsWith('.' + tok.textContent.trim())) {
+          tok.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          tok.style.outline = '2px solid var(--accent-primary)';
+          tok.style.borderRadius = '3px';
+          setTimeout(() => { tok.style.outline = ''; }, 2500);
           break;
         }
       }
     };
 
-    // 3. Keyword Underline Restoration (Fallback for untagged keywords)
-    function rebindInteractiveKeywords() {
-      const allPanes = Array.from(document.querySelectorAll('.func-note-pane'));
-      if (allPanes.length === 0) return;
-
-      const funcMap = new Map();
-      allPanes.forEach(p => {
-        const badge = p.querySelector('.note-target-badge code') || p.querySelector('.target-func-name');
-        if (badge) {
-          const fn = badge.textContent.trim();
-          if (fn && fn.length >= 2 && !funcMap.has(fn)) {
-            funcMap.set(fn, { tabId: p.id, stepId: p.dataset.stepGroup || '' });
-          }
-        }
-      });
-
-      const sortedKeys = Array.from(funcMap.keys()).sort((a, b) => b.length - a.length);
-
-      document.querySelectorAll('.code-editor-look code').forEach(codeElem => {
-        sortedKeys.forEach(fn => {
-          const treeWalker = document.createTreeWalker(codeElem, NodeFilter.SHOW_TEXT, null, false);
-          const textNodes = [];
-          while (treeWalker.nextNode()) textNodes.push(treeWalker.currentNode);
-
-          textNodes.forEach(tNode => {
-            const parent = tNode.parentElement;
-            if (parent && (parent.classList.contains('interactive-kw') || parent.classList.contains('kw-clickable') || parent.closest('.interactive-kw'))) return;
-
-            const text = tNode.nodeValue;
-            const idx = text.indexOf(fn);
-            if (idx !== -1) {
-              const before = idx > 0 ? text[idx - 1] : ' ';
-              const after = (idx + fn.length < text.length) ? text[idx + fn.length] : ' ';
-              if (/^[a-zA-Z0-9_]$/.test(before) || /^[a-zA-Z0-9_]$/.test(after)) return;
-
-              const matchNode = tNode.splitText(idx);
-              matchNode.splitText(fn.length);
-
-              const span = document.createElement('span');
-              span.className = 'interactive-kw kw-clickable';
-              span.textContent = matchNode.nodeValue;
-              span.title = '클릭하여 우측 \'' + fn + '\' 해설 보기';
-              const info = funcMap.get(fn);
-              span.dataset.step = info.stepId;
-              span.dataset.tab = info.tabId;
-              span.dataset.func = fn;
-              span.onclick = function(e) {
-                e.stopPropagation();
-                switchTab(info.stepId, info.tabId);
-              };
-
-              matchNode.parentNode.replaceChild(span, matchNode);
-            }
-          });
-        });
-      });
-    }
-
-    // 4. Robust Intelligent Click Handler (Handles inner tokens, dotted methods, and plain text)
+    // 4. Intelligent Universal Click Handler on Code Tokens
     document.addEventListener('click', function(e) {
-      const codeWrapper = e.target.closest('.code-editor-look') || e.target.closest('code') || e.target.closest('pre');
-      if (!codeWrapper) return;
+      const tok = e.target.closest('.token');
+      if (!tok) return;
+      const codeBlock = tok.closest('.code-editor-look code');
+      if (!codeBlock) return;
 
-      // 4.1 Directly check if clicked element is or is inside an .interactive-kw
-      const interactiveEl = e.target.closest('.interactive-kw') || e.target.closest('.kw-clickable');
-      if (interactiveEl) {
-        const stepId = interactiveEl.dataset.step;
-        const tabId = interactiveEl.dataset.tab;
-        if (tabId) {
-          switchTab(stepId, tabId);
-          return;
-        }
+      let word = tok.textContent.trim().replace(/[^a-zA-Z0-9_.]/g, '');
+      if (!word) return;
+
+      // Expand if adjacent to dot (e.g. models.items, cat_clf.fit, pd.DataFrame)
+      let fullExpr = word;
+      const prev = tok.previousElementSibling;
+      const next = tok.nextElementSibling;
+      if (prev && prev.textContent === '.' && prev.previousElementSibling) {
+        fullExpr = prev.previousElementSibling.textContent.trim() + '.' + word;
+      } else if (next && next.textContent === '.' && next.nextElementSibling) {
+        fullExpr = word + '.' + next.nextElementSibling.textContent.trim();
       }
 
-      // 4.2 Intelligent keyword matching by text
-      let word = e.target.textContent.trim().replace(/[^a-zA-Z0-9_.]/g, '');
-      if (!word || word.length < 2) return;
-
       const allPanes = Array.from(document.querySelectorAll('.func-note-pane'));
-      
-      // Exact match
-      let foundPane = allPanes.find(p => {
+
+      // 1. Exact match on fullExpr
+      let targetPane = allPanes.find(p => {
         const badge = p.querySelector('.note-target-badge code') || p.querySelector('.target-func-name');
-        return badge && badge.textContent.trim() === word;
+        if (!badge) return false;
+        const bText = badge.textContent.trim().replace(/\(\)$/, '');
+        return bText === fullExpr || bText === word;
       });
 
-      // Dotted method matching (e.g. clicking 'models' or 'items' in 'models.items')
-      if (!foundPane) {
-        foundPane = allPanes.find(p => {
+      // 2. Dotted suffix/prefix match
+      if (!targetPane) {
+        targetPane = allPanes.find(p => {
           const badge = p.querySelector('.note-target-badge code') || p.querySelector('.target-func-name');
           if (!badge) return false;
-          const fn = badge.textContent.trim();
-          return fn === word || fn.endsWith('.' + word) || fn.startsWith(word + '.') || word.endsWith('.' + fn) || word.startsWith(fn + '.');
+          const bText = badge.textContent.trim().replace(/\(\)$/, '');
+          return bText === word || bText.endsWith('.' + word) || bText.startsWith(word + '.') || (fullExpr && bText === fullExpr);
         });
       }
 
-      if (foundPane) {
-        switchTab(foundPane.dataset.stepGroup || '', foundPane.id);
-        e.target.style.transition = 'all 0.25s ease';
-        e.target.style.outline = '2px solid var(--accent-primary)';
-        setTimeout(() => { e.target.style.outline = ''; }, 1200);
+      if (targetPane) {
+        switchTab(targetPane.dataset.stepGroup || '', targetPane.id);
+        tok.style.transition = 'all 0.25s ease';
+        tok.style.outline = '2px solid var(--accent-primary)';
+        setTimeout(() => { tok.style.outline = ''; }, 1200);
       }
     });
 
     // 5. Split-Screen Layout Initialization
     function initSplitWorkspace() {
-      const main = document.querySelector('.viewer-main') || document.querySelector('.main-wrapper');
+      const main = document.querySelector('.viewer-main') || document.querySelector('.main-wrapper') || document.querySelector('.main-content');
       if (!main || main.dataset.splitInit) return;
       main.dataset.splitInit = 'true';
 
@@ -3428,7 +3456,7 @@ best_rf = <span class="interactive-kw" onclick="activateNoteTab('step5', 'step5-
       rightPane.className = 'split-pane-right';
       rightPane.id = 'split-right-pane';
 
-      // 우측 상단 고정 헤더 데스크 바 (단계 드롭다운 셀렉터 탑재)
+      // 우측 상단 고정 헤더 데스크 바
       const deskHeader = document.createElement('div');
       deskHeader.className = 'desk-header-bar';
       deskHeader.innerHTML = `
@@ -3441,23 +3469,19 @@ best_rf = <span class="interactive-kw" onclick="activateNoteTab('step5', 'step5-
       `;
       rightPane.appendChild(deskHeader);
 
-      // 우측 탭 네비 영역
       const activeTabsArea = document.createElement('div');
       activeTabsArea.className = 'active-tabs-area';
       activeTabsArea.id = 'active-tabs-area';
       rightPane.appendChild(activeTabsArea);
 
-      // 우측 해설 본문 스크롤 영역
       const activePanesArea = document.createElement('div');
       activePanesArea.className = 'active-panes-area';
       activePanesArea.id = 'active-panes-area';
       rightPane.appendChild(activePanesArea);
 
-      // module-hero 최상단 배치
       const hero = main.querySelector('.module-hero');
       if (hero) leftPane.appendChild(hero);
 
-      // 스텝 섹션 재배치
       let firstStepId = '';
       let firstTabId = '';
       const stepOptions = [];
@@ -3471,7 +3495,6 @@ best_rf = <span class="interactive-kw" onclick="activateNoteTab('step5', 'step5-
         const codeCol = sec.querySelector('.grid-col-code') || sec.querySelector('.code-column');
         const notesCol = sec.querySelector('.grid-col-notes') || sec.querySelector('.notes-column');
 
-        // 스텝 타이틀 추출
         let stepTitleText = '단계 ' + (idx + 1);
         const titleEl = sec.querySelector('.step-title-text') || sec.querySelector('.step-title');
         if (titleEl) stepTitleText = titleEl.textContent.trim().split(':')[0];
@@ -3523,7 +3546,6 @@ best_rf = <span class="interactive-kw" onclick="activateNoteTab('step5', 'step5-
       main.appendChild(leftPane);
       main.appendChild(rightPane);
 
-      // 드롭다운 옵션 채우기
       const dropdown = document.getElementById('desk-step-dropdown');
       if (dropdown) {
         stepOptions.forEach(opt => {
@@ -3534,15 +3556,16 @@ best_rf = <span class="interactive-kw" onclick="activateNoteTab('step5', 'step5-
         });
       }
 
-      // 첫 번째 노트 자동 오픈
       if (firstStepId && firstTabId) {
         switchTab(firstStepId, firstTabId);
       }
 
-      // 키워드 점선 밑줄 복원
-      setTimeout(rebindInteractiveKeywords, 150);
+      // Re-run Prism on cleaned code blocks
+      if (window.Prism) {
+        Prism.highlightAll();
+      }
 
-      // 상단 스텝 바 클릭 연동
+      // Quick Nav click
       document.querySelectorAll('.step-nav-item').forEach(btn => {
         btn.addEventListener('click', (e) => {
           e.preventDefault();
@@ -3555,7 +3578,7 @@ best_rf = <span class="interactive-kw" onclick="activateNoteTab('step5', 'step5-
         });
       });
 
-      // 좌측 스크롤 시 우측 탭 실시간 ScrollSync 연동!
+      // ScrollSync
       leftPane.addEventListener('scroll', () => {
         const leftSecs = leftPane.querySelectorAll('.step-code-section');
         const navItems = document.querySelectorAll('.step-nav-item');
@@ -3579,7 +3602,6 @@ best_rf = <span class="interactive-kw" onclick="activateNoteTab('step5', 'step5-
             }
           });
 
-          // 우측 탭 헤더 실시간 교체!
           document.querySelectorAll('.notes-tabs-header').forEach(hdr => {
             if (hdr.dataset.stepGroup === currentId) {
               hdr.style.display = 'block';
@@ -3593,7 +3615,6 @@ best_rf = <span class="interactive-kw" onclick="activateNoteTab('step5', 'step5-
       });
     }
 
-    // 드롭다운 변경 시 실행 함수
     window.onDropdownStepChange = function(targetStepId) {
       const leftPane = document.getElementById('split-left-pane');
       const targetElem = leftPane ? leftPane.querySelector('#' + targetStepId) : null;
