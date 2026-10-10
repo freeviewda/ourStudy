@@ -1132,8 +1132,14 @@
     /* ==========================================================================
        Pure VS Code Dark+ Python Syntax Highlighting (No Blue Boxes, Vibrant Syntax)
        ========================================================================== */
+        /* ====================================================================
+       Antigravity Soft Charcoal Palette (#1f1f1f Background / #cccccc Text)
+       Ultra-Comfortable, Zero Glare, Low Eye Strain Architecture
+       ==================================================================== */
+
+    /* 1. Code Editor & Code Elements */
     .code-editor-look {
-      background: #1e1e1e !important;
+      background: #1f1f1f !important;
       border: 1px solid #333333 !important;
       border-radius: 8px;
       padding: 1.1rem 1.35rem;
@@ -1142,6 +1148,11 @@
       line-height: 1.6;
       overflow-x: auto;
       margin-bottom: 0.85rem;
+    }
+    :root[data-theme="light"] .code-editor-look {
+      background: #1f1f1f !important;
+      border-color: #333333 !important;
+      color: #cccccc !important;
     }
     .code-editor-look pre {
       margin: 0 !important;
@@ -1153,10 +1164,10 @@
       font-family: 'Fira Code', Consolas, Monaco, monospace !important;
       font-size: 0.88rem !important;
       line-height: 1.6 !important;
-      color: #9cdcfe !important; /* VS Code Light Blue (Default Variable/Identifier) */
+      color: #cccccc !important; /* Antigravity Warm Soft Gray */
     }
 
-    /* VS Code Dark+ Exact Token Palette */
+    /* VS Code Dark+ Exact Token Palette (Soft & Comfortable) */
     .code-editor-look code .token.comment { color: #6a9955 !important; font-style: italic; }
     .code-editor-look code .token.keyword { color: #c586c0 !important; font-weight: 500; }
     .code-editor-look code .token.string, 
@@ -1165,11 +1176,11 @@
     .code-editor-look code .token.function, 
     .code-editor-look code .token.builtin { color: #dcdcaa !important; }
     .code-editor-look code .token.class-name { color: #4ec9b0 !important; font-weight: 600; }
-    .code-editor-look code .token.operator { color: #d4d4d4 !important; }
-    .code-editor-look code .token.punctuation { color: #d4d4d4 !important; }
+    .code-editor-look code .token.operator { color: #cccccc !important; }
+    .code-editor-look code .token.punctuation { color: #cccccc !important; }
     .code-editor-look code .token.identifier,
     .code-editor-look code .token.variable,
-    .code-editor-look code .token.parameter { color: #9cdcfe !important; }
+    .code-editor-look code .token.parameter { color: #cccccc !important; }
 
     /* Interactive Hover on Code Tokens (Subtle Dashed Underline, NO Background Boxes) */
     .code-editor-look code span[class*="token"] {
@@ -1179,7 +1190,7 @@
     .code-editor-look code span[class*="token"]:hover {
       text-decoration: underline dashed #38bdf8;
       text-underline-offset: 3px;
-      opacity: 0.88;
+      opacity: 0.92;
     }
 
     .interactive-kw, .kw-clickable {
@@ -1193,6 +1204,138 @@
       text-decoration: none !important;
       font-weight: inherit !important;
       box-shadow: none !important;
+    }
+
+    /* 2. Console Outputs (#1f1f1f / #cccccc) */
+    .cell-outputs-container {
+      background: #1f1f1f !important;
+      border: 1px solid #333333 !important;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 0.75rem;
+    }
+    .outputs-header {
+      background: #252526 !important;
+      padding: 0.35rem 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #333333 !important;
+    }
+    .outputs-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #9d9d9d !important;
+    }
+    .toggle-output-btn {
+      background: transparent;
+      border: none;
+      color: #9d9d9d !important;
+      font-size: 0.7rem;
+      cursor: pointer;
+    }
+    .toggle-output-btn:hover {
+      color: #ffffff !important;
+    }
+
+    .outputs-body {
+      padding: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      background: #1f1f1f !important;
+    }
+
+    .output-item {
+      background: #1f1f1f !important;
+      border: 1px solid #2d2d2d !important;
+      border-radius: 8px;
+      padding: 0.75rem;
+      overflow-x: auto;
+    }
+    .output-type-tag {
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #858585 !important;
+      margin-bottom: 0.35rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .stream-output pre, .text-output pre {
+      font-family: 'Fira Code', Consolas, Monaco, monospace !important;
+      font-size: 0.82rem;
+      line-height: 1.55;
+      color: #cccccc !important;
+      background: transparent !important;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    /* Output Tables (DataFrames) */
+    .table-responsive-wrapper table {
+      background: #1f1f1f !important;
+      color: #cccccc !important;
+      border-collapse: collapse;
+    }
+    .table-responsive-wrapper th, .dataframe th {
+      background: #252526 !important;
+      color: #cccccc !important;
+      border: 1px solid #333333 !important;
+      padding: 0.45rem 0.75rem;
+    }
+    .table-responsive-wrapper td, .dataframe td {
+      background: #1f1f1f !important;
+      color: #cccccc !important;
+      border: 1px solid #2d2d2d !important;
+      padding: 0.45rem 0.75rem;
+    }
+
+    /* 3. AI Learning Notes Code Blocks (#1f1f1f / #cccccc) */
+    .note-code-block {
+      background: #1f1f1f !important;
+      border: 1px solid #333333 !important;
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+      overflow-x: auto;
+      margin: 0.85rem 0;
+      font-family: 'Fira Code', Consolas, Monaco, monospace !important;
+      font-size: 0.84rem;
+      line-height: 1.55;
+      color: #cccccc !important;
+    }
+    .note-code-block code, .note-code-block pre {
+      background: transparent !important;
+      color: #cccccc !important;
+    }
+    .note-body-content code.inline-code,
+    .note-body-content p code,
+    .note-body-content li code {
+      background: #282828 !important;
+      color: #e0e0e0 !important;
+      border: 1px solid #3c3c3c !important;
+      border-radius: 4px;
+      padding: 0.15rem 0.35rem;
+      font-size: 0.86rem;
+    }
+
+    /* 4. Dark Theme Surface Fine-Tuning (#181818 / #1f1f1f / #cccccc) */
+    :root[data-theme="dark"] .split-pane-left {
+      background: #181818 !important;
+    }
+    :root[data-theme="dark"] .split-pane-right,
+    :root[data-theme="dark"] .active-panes-area {
+      background: #1f1f1f !important;
+    }
+    :root[data-theme="dark"] .note-body-content {
+      color: #cccccc !important;
+    }
+    :root[data-theme="dark"] .desk-header-bar {
+      background: #252526 !important;
+      border-bottom: 1px solid #333333 !important;
+    }
+    :root[data-theme="dark"] .notes-tabs-header {
+      background: #252526 !important;
+      border-bottom: 1px solid #333333 !important;
     }
 
   </style>
