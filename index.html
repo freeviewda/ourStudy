@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" data-theme="light">
+<html lang="ko" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -991,7 +991,7 @@
           <span class="search-icon">🔍</span>
           <input type="text" id="module-search" class="search-input" placeholder="모듈 검색 (전처리, 회귀, 앙상블...)" oninput="filterModules(this.value)" />
         </div>
-        <button class="theme-btn" id="theme-btn" onclick="toggleTheme()">🌙 다크 모드</button>
+        <button class="theme-btn" id="theme-btn" onclick="toggleTheme()">☀️ 라이트 모드</button>
       </div>
     </div>
   </header>
@@ -2006,7 +2006,7 @@
 
     function toggleTheme() {
       const html = document.documentElement;
-      const current = html.getAttribute('data-theme') || 'light';
+      const current = html.getAttribute('data-theme') || 'dark';
       const next = current === 'dark' ? 'light' : 'dark';
       html.setAttribute('data-theme', next);
       localStorage.setItem('study_theme', next);
@@ -2019,7 +2019,7 @@
     }
 
     (function initTheme() {
-      let saved = localStorage.getItem('study_theme') || 'light';
+      let saved = localStorage.getItem('study_theme') || 'dark';
       if (!saved) {
         for (const num of ALL_MODULES) {
           const s = localStorage.getItem('study_theme_' + num);

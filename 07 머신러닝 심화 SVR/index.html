@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" data-theme="light">
+<html lang="ko" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1466,7 +1466,7 @@
       <div class="header-right">
         <span class="stats-pill">⚡ 11개 파이프라인 단계</span>
         <span class="stats-pill">📖 95개 AI 해설 노트 (시간순 완벽 정렬)</span>
-        <button class="theme-toggle-btn" id="theme-toggle-btn" onclick="toggleTheme()">🌙 다크 모드</button>
+        <button class="theme-toggle-btn" id="theme-toggle-btn" onclick="toggleTheme()">☀️ 라이트 모드</button>
       </div>
     </div>
   </header>
@@ -6446,10 +6446,10 @@ print(f&quot;최고 점수: {cv_results_df[&#x27;Neg_MSE&#x27;].max():.2f}&quot;
 
   <!-- Golden Standard Split-Screen Architecture Script -->
   <script>
-    // 1. Safe Theme Handler (Default: Light Mode)
+    // 1. Safe Theme Handler (Default: Dark Mode)
     function toggleTheme() {
       const html = document.documentElement;
-      const current = html.getAttribute('data-theme') || 'light';
+      const current = html.getAttribute('data-theme') || 'dark';
       const next = current === 'dark' ? 'light' : 'dark';
       html.setAttribute('data-theme', next);
       localStorage.setItem('study_theme', next);
@@ -6458,7 +6458,7 @@ print(f&quot;최고 점수: {cv_results_df[&#x27;Neg_MSE&#x27;].max():.2f}&quot;
     }
 
     (function initSafeTheme() {
-      const saved = localStorage.getItem('study_theme') || 'light';
+      const saved = localStorage.getItem('study_theme') || 'dark';
       document.documentElement.setAttribute('data-theme', saved);
       const btn = document.getElementById('theme-toggle-btn');
       if (btn) btn.textContent = saved === 'dark' ? '☀️ 라이트 모드' : '🌙 다크 모드';
