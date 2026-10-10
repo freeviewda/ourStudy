@@ -1408,6 +1408,15 @@
       -webkit-text-fill-color: transparent !important;
     }
 
+      /* Hide unnecessary footer in split-screen workspace */
+    footer, .viewer-footer, .portal-footer {
+      display: none !important;
+      height: 0 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      border: none !important;
+      visibility: hidden !important;
+    }
   </style>
 </head>
 <body>
@@ -3747,11 +3756,7 @@ plt.show()</code></pre></div><div class="cell-outputs-container"><div class="out
   </div>
 
   <!-- Footer -->
-  <footer class="viewer-footer">
-    <p>💡 OurStudy 머신러닝 심화 시리즈 • 01. Mean Shift 밀도 기반 군집화 & PCA 시각화 뷰어</p>
-  </footer>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
   
 

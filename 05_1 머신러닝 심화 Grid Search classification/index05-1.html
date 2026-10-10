@@ -1429,6 +1429,15 @@
       -webkit-text-fill-color: transparent !important;
     }
 
+      /* Hide unnecessary footer in split-screen workspace */
+    footer, .viewer-footer, .portal-footer {
+      display: none !important;
+      height: 0 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      border: none !important;
+      visibility: hidden !important;
+    }
   </style>
 </head>
 <body>
@@ -3320,11 +3329,7 @@ best_rf = grid_search.best_estimator_</code></pre></div></div></div><div class="
   </div>
 
   <!-- Footer -->
-  <footer class="viewer-footer">
-    <p>💡 OurStudy 머신러닝 심화 시리즈 • 05-1. 그리드 서치(GridSearchCV) 하이퍼파라미터 최적화 뷰어</p>
-  </footer>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
   
 

@@ -1405,6 +1405,15 @@
       -webkit-text-fill-color: transparent !important;
     }
 
+      /* Hide unnecessary footer in split-screen workspace */
+    footer, .viewer-footer, .portal-footer {
+      display: none !important;
+      height: 0 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      border: none !important;
+      visibility: hidden !important;
+    }
   </style>
 </head>
 <body>
@@ -3924,11 +3933,7 @@ print(cv_results_df.nlargest(5, &#x27;Mean_Score&#x27;))</code></pre></div><div 
   </div>
 
   <!-- Footer -->
-  <footer class="viewer-footer">
-    <p>💡 OurStudy 머신러닝 심화 시리즈 • 05. 분류 특성 공학 & RFECV 파이프라인 뷰어</p>
-  </footer>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
   
 

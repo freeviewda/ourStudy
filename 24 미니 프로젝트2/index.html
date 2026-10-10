@@ -1680,6 +1680,15 @@
       color: #ffffff;
     }
 
+      /* Hide unnecessary footer in split-screen workspace */
+    footer, .viewer-footer, .portal-footer {
+      display: none !important;
+      height: 0 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      border: none !important;
+      visibility: hidden !important;
+    }
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 </head>
@@ -14457,12 +14466,7 @@ plt.show()</code></pre>
   </main>
 
   <!-- Footer -->
-  <footer class="portal-footer">
-    <p>OurStudy Interactive Machine Learning Platform • Advanced Track CHAPTER 24 (미니 프로젝트 2)</p>
-    <p style="margin-top: 0.35rem; opacity: 0.7;">Cyber Violet & Magenta Golden Standard • Dual-Pane Interactive Architecture</p>
-  </footer>
-
-  <!-- Image Zoom Modal -->
+<!-- Image Zoom Modal -->
   <div id="zoom-modal" onclick="closeZoomModal()">
     <button class="zoom-close-btn" onclick="closeZoomModal()">✕</button>
     <img src="" id="zoom-img" class="zoom-content" alt="Enlarged Plot" onclick="event.stopPropagation()" />
