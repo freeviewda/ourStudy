@@ -3982,24 +3982,40 @@ print(cv_results_df.nlargest(5, &#x27;Mean_Score&#x27;))</code></pre></div><div 
     window.highlightMatchingKeyword = function(stepId, funcName) {
       const leftPane = document.getElementById('split-left-pane');
       if (!leftPane) return;
-      const targetStep = leftPane.querySelector('#' + stepId);
-      if (targetStep) {
+      const targetStep = (stepId ? leftPane.querySelector('#' + stepId) : null) || leftPane;
+      if (targetStep && targetStep !== leftPane) {
         targetStep.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
-      // Highlight matching token
-      const tokens = leftPane.querySelectorAll('.code-editor-look code span');
-      for (const tok of tokens) {
-        if (tok.textContent.trim() === funcName || funcName.endsWith('.' + tok.textContent.trim())) {
+      // Highlight matching token within targetStep first!
+      const stepTokens = targetStep.querySelectorAll('.code-editor-look code span');
+      let found = false;
+      for (const tok of stepTokens) {
+        const text = tok.textContent.trim();
+        if (text === funcName || funcName.endsWith('.' + text) || funcName.startsWith(text + '.')) {
           tok.scrollIntoView({ behavior: 'smooth', block: 'center' });
           tok.style.outline = '2px solid var(--accent-primary)';
           tok.style.borderRadius = '3px';
           setTimeout(() => { tok.style.outline = ''; }, 2500);
+          found = true;
           break;
+        }
+      }
+      if (!found && targetStep !== leftPane) {
+        const allTokens = leftPane.querySelectorAll('.code-editor-look code span');
+        for (const tok of allTokens) {
+          const text = tok.textContent.trim();
+          if (text === funcName || funcName.endsWith('.' + text) || funcName.startsWith(text + '.')) {
+            tok.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            tok.style.outline = '2px solid var(--accent-primary)';
+            tok.style.borderRadius = '3px';
+            setTimeout(() => { tok.style.outline = ''; }, 2500);
+            break;
+          }
         }
       }
     };
 
-    // 4. Intelligent Universal Click Handler on Code Tokens
+    // 4. Intelligent Universal Step-Scoped Click Handler on Code Tokens
     document.addEventListener('click', function(e) {
       const tok = e.target.closest('.token');
       if (!tok) return;
@@ -4013,34 +4029,95 @@ print(cv_results_df.nlargest(5, &#x27;Mean_Score&#x27;))</code></pre></div><div 
       let fullExpr = word;
       const prev = tok.previousElementSibling;
       const next = tok.nextElementSibling;
-      if (prev && prev.textContent === '.' && prev.previousElementSibling) {
+      if (prev && prev.textContent.trim() === '.' && prev.previousElementSibling) {
         fullExpr = prev.previousElementSibling.textContent.trim() + '.' + word;
-      } else if (next && next.textContent === '.' && next.nextElementSibling) {
+      } else if (next && next.textContent.trim() === '.' && next.nextElementSibling) {
         fullExpr = word + '.' + next.nextElementSibling.textContent.trim();
       }
 
+      // Determine the current step of the clicked token
+      const currentStepElem = tok.closest('.step-code-section') || tok.closest('.step-section');
+      const currentStepId = currentStepElem ? currentStepElem.id : (currentStepIdGlobal || '');
+
       const allPanes = Array.from(document.querySelectorAll('.func-note-pane'));
 
-      // 1. Exact match on fullExpr
-      let targetPane = allPanes.find(p => {
-        const badge = p.querySelector('.note-target-badge code') || p.querySelector('.target-func-name');
-        if (!badge) return false;
-        const bText = badge.textContent.trim().replace(/\(\)$/, '');
-        return bText === fullExpr || bText === word;
-      });
+      // Filter panes belonging to the current step
+      const stepPanes = currentStepId
+        ? allPanes.filter(p => {
+            if (p.dataset.stepGroup && p.dataset.stepGroup === currentStepId) return true;
+            if (p.id.startsWith(currentStepId + '-')) return true;
+            const parentSec = p.closest('.step-section') || p.closest('.step-code-section');
+            if (parentSec && parentSec.id === currentStepId) return true;
+            return false;
+          })
+        : [];
 
-      // 2. Dotted suffix/prefix match
-      if (!targetPane) {
-        targetPane = allPanes.find(p => {
-          const badge = p.querySelector('.note-target-badge code') || p.querySelector('.target-func-name');
-          if (!badge) return false;
-          const bText = badge.textContent.trim().replace(/\(\)$/, '');
-          return bText === word || bText.endsWith('.' + word) || bText.startsWith(word + '.') || (fullExpr && bText === fullExpr);
+      function getPaneTargetName(p) {
+        const badge = p.querySelector('.note-target-badge code') || p.querySelector('.target-func-name');
+        if (badge) return badge.textContent.trim().replace(/\(\)$/, '');
+        const btn = document.querySelector('.func-tab-btn[data-tab="' + p.id + '"] .tab-func-name');
+        if (btn) return btn.textContent.trim().replace(/\(\)$/, '');
+        return '';
+      }
+
+      function matchPane(panesList) {
+        if (!panesList || panesList.length === 0) return null;
+
+        // 1. Exact match on fullExpr
+        let match = panesList.find(p => {
+          const bText = getPaneTargetName(p);
+          return bText && (bText === fullExpr || bText.replace(/\(\)$/, '') === fullExpr);
         });
+        if (match) return match;
+
+        // 2. Exact match on word
+        match = panesList.find(p => {
+          const bText = getPaneTargetName(p);
+          return bText && (bText === word || bText.replace(/\(\)$/, '') === word);
+        });
+        if (match) return match;
+
+        // 3. Dotted suffix match (e.g. badge is 'pima.data', word is 'data')
+        match = panesList.find(p => {
+          const bText = getPaneTargetName(p);
+          return bText && bText.endsWith('.' + word);
+        });
+        if (match) return match;
+
+        // 4. Dotted prefix match (e.g. badge is 'models.items', word is 'models')
+        match = panesList.find(p => {
+          const bText = getPaneTargetName(p);
+          return bText && bText.startsWith(word + '.');
+        });
+        if (match) return match;
+
+        // 5. Infix / substring match (e.g. badge is 'pima.target.map', word is 'target')
+        match = panesList.find(p => {
+          const bText = getPaneTargetName(p);
+          return bText && (bText.includes('.' + word + '.') || (fullExpr && bText.includes(fullExpr)));
+        });
+        if (match) return match;
+
+        return null;
+      }
+
+      // 1순위: 현재 클릭한 코드 스텝(stepPanes) 내에서 우선 매칭!
+      let targetPane = matchPane(stepPanes);
+
+      // 2순위: 현재 스텝에 없을 경우 전체 스텝(allPanes)에서 폴백 매칭!
+      if (!targetPane) {
+        targetPane = matchPane(allPanes);
       }
 
       if (targetPane) {
-        switchTab(targetPane.dataset.stepGroup || '', targetPane.id);
+        let targetStep = targetPane.dataset.stepGroup;
+        if (!targetStep) {
+          const m = targetPane.id.match(/^(step-?[0-9]+)/);
+          if (m) targetStep = m[1];
+        }
+        if (!targetStep) targetStep = currentStepId;
+
+        switchTab(targetStep, targetPane.id);
         tok.style.transition = 'all 0.25s ease';
         tok.style.outline = '2px solid var(--accent-primary)';
         setTimeout(() => { tok.style.outline = ''; }, 1200);
