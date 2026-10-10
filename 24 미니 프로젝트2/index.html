@@ -524,15 +524,35 @@
     }
 
     /* Interactive Keyword Sparkle */
-    .interactive-kw {
-      background: rgba(56, 189, 248, 0.12);
-      color: #7dd3fc !important;
-      border-bottom: 1.5px dashed #38bdf8;
+        /* Clean Code Look (Natural Syntax Highlighting - No Blue Boxes, No Forced Colors) */
+    .interactive-kw, .kw-clickable {
+      background: transparent !important;
+      color: inherit !important;
+      border: none !important;
+      border-bottom: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      cursor: pointer !important;
+      text-decoration: none !important;
+      font-weight: inherit !important;
+      box-shadow: none !important;
+      transition: all 0.15s ease;
+    }
+    .interactive-kw:hover, .kw-clickable:hover {
+      background: rgba(255, 255, 255, 0.08) !important;
       border-radius: 3px;
-      padding: 0.05rem 0.25rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      font-weight: 600;
+      text-decoration: underline !important;
+      text-decoration-style: dashed !important;
+      text-underline-offset: 3px !important;
+      color: inherit !important;
+      box-shadow: none !important;
+    }
+    .interactive-kw.highlight-pulse {
+      animation: kwPulse 1.2s ease 2;
+    }
+    @keyframes kwPulse {
+      0%, 100% { background: transparent; }
+      50% { background: rgba(56, 189, 248, 0.25); border-radius: 3px; }
     }
     .interactive-kw:hover {
       background: #0284c7;
@@ -1133,20 +1153,35 @@
     }
 
     /* 코드 내 클릭 가능한 인터랙티브 키워드 스타일 */
+        /* Clean Code Look (Natural Syntax Highlighting - No Blue Boxes, No Forced Colors) */
     .interactive-kw, .kw-clickable {
-      border-bottom: 1.5px dashed var(--accent-primary) !important;
+      background: transparent !important;
+      color: inherit !important;
+      border: none !important;
+      border-bottom: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
       cursor: pointer !important;
-      transition: all 0.2s ease !important;
-      color: var(--accent-primary) !important;
-      font-weight: 600 !important;
-      padding: 0 1px;
-      border-radius: 2px;
+      text-decoration: none !important;
+      font-weight: inherit !important;
+      box-shadow: none !important;
+      transition: all 0.15s ease;
     }
     .interactive-kw:hover, .kw-clickable:hover {
-      background: var(--accent-glow) !important;
-      color: #ffffff !important;
-      border-bottom-style: solid !important;
-      box-shadow: 0 0 8px var(--accent-glow);
+      background: rgba(255, 255, 255, 0.08) !important;
+      border-radius: 3px;
+      text-decoration: underline !important;
+      text-decoration-style: dashed !important;
+      text-underline-offset: 3px !important;
+      color: inherit !important;
+      box-shadow: none !important;
+    }
+    .interactive-kw.highlight-pulse {
+      animation: kwPulse 1.2s ease 2;
+    }
+    @keyframes kwPulse {
+      0%, 100% { background: transparent; }
+      50% { background: rgba(56, 189, 248, 0.25); border-radius: 3px; }
     }
 
     /* 좌측 스텝 카드 스타일 */
