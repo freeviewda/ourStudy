@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" data-theme="dark">
+<html lang="ko" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -801,7 +801,7 @@
         <div class="stat-pill">
           <span>AI 해설 노트:</span> <strong>25개 (시간순)</strong>
         </div>
-        <button class="theme-toggle-btn" id="theme-btn" onclick="toggleTheme()">☀️ 테마 전환</button>
+        <button class="theme-toggle-btn" id="theme-btn" onclick="toggleTheme()">🌙 다크 모드</button>
       </div>
     </div>
   </header>
@@ -1963,7 +1963,7 @@ plt.show()</code></pre></div><div class="cell-outputs-container"><div class="out
     }
 
     (function initTheme() {
-      const saved = localStorage.getItem('study_theme_16') || localStorage.getItem('study_theme') || 'dark';
+      const saved = localStorage.getItem('study_theme_16') || localStorage.getItem('study_theme') || 'light';
       document.documentElement.setAttribute('data-theme', saved);
       const btn = document.getElementById('theme-btn');
       if (btn) btn.textContent = saved === 'dark' ? '☀️ 라이트 모드' : '🌙 다크 모드';

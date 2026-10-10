@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" data-theme="dark">
+<html lang="ko" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1218,7 +1218,7 @@
       <div class="header-right">
         <span class="stats-pill">⚡ 7개 파이프라인 단계</span>
         <span class="stats-pill">📖 64개 AI 해설 노트 (시간순 완벽 정렬)</span>
-        <button class="theme-toggle-btn" id="theme-toggle-btn" onclick="toggleTheme()">☀️ 테마 전환</button>
+        <button class="theme-toggle-btn" id="theme-toggle-btn" onclick="toggleTheme()">🌙 다크 모드</button>
       </div>
     </div>
   </header>
@@ -3701,12 +3701,14 @@ plt.show()</code></pre></div><div class="cell-outputs-container"><div class="out
 
   
 
+  
+
   <!-- Golden Standard Split-Screen Architecture Script -->
   <script>
-    // 1. Safe Theme Handler
+    // 1. Safe Theme Handler (Default: Light Mode)
     function toggleTheme() {
       const html = document.documentElement;
-      const current = html.getAttribute('data-theme') || 'dark';
+      const current = html.getAttribute('data-theme') || 'light';
       const next = current === 'dark' ? 'light' : 'dark';
       html.setAttribute('data-theme', next);
       localStorage.setItem('study_theme', next);
@@ -3715,12 +3717,10 @@ plt.show()</code></pre></div><div class="cell-outputs-container"><div class="out
     }
 
     (function initSafeTheme() {
-      const saved = localStorage.getItem('study_theme');
-      if (saved) {
-        document.documentElement.setAttribute('data-theme', saved);
-        const btn = document.getElementById('theme-toggle-btn');
-        if (btn) btn.textContent = saved === 'dark' ? '☀️ 라이트 모드' : '🌙 다크 모드';
-      }
+      const saved = localStorage.getItem('study_theme') || 'light';
+      document.documentElement.setAttribute('data-theme', saved);
+      const btn = document.getElementById('theme-toggle-btn');
+      if (btn) btn.textContent = saved === 'dark' ? '☀️ 라이트 모드' : '🌙 다크 모드';
     })();
 
     // 2. Enhance Prism Python Syntax Grammar to Match VS Code Dark+
@@ -3924,9 +3924,16 @@ plt.show()</code></pre></div><div class="cell-outputs-container"><div class="out
         const codeCol = sec.querySelector('.grid-col-code') || sec.querySelector('.code-column');
         const notesCol = sec.querySelector('.grid-col-notes') || sec.querySelector('.notes-column');
 
+        // Intelligent Step Title Extraction
         let stepTitleText = '단계 ' + (idx + 1);
         const titleEl = sec.querySelector('.step-title-text') || sec.querySelector('.step-title');
-        if (titleEl) stepTitleText = titleEl.textContent.trim().split(':')[0];
+        if (titleEl) {
+          let t = titleEl.textContent.trim();
+          if (t.includes(':')) {
+            t = t.split(':').slice(1).join(':').trim();
+          }
+          if (t) stepTitleText = t;
+        }
 
         const leftSec = document.createElement('section');
         leftSec.className = 'step-code-section';

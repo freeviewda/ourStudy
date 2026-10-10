@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" data-theme="dark">
+<html lang="ko" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1281,38 +1281,231 @@
       box-shadow: none !important;
     }
 
+  
+    /* Top Sticky Header & Quick Nav (Golden Standard identical to 01~21-1) */
+    .top-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(16, 23, 38, 0.9);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+      flex-shrink: 0;
+    }
+    :root[data-theme="light"] .top-header {
+      background: rgba(255, 255, 255, 0.95);
+    }
+    .header-content {
+      max-width: 1720px;
+      margin: 0 auto;
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .back-hub-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.45rem 0.9rem;
+      border-radius: 8px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      font-size: 0.84rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .back-hub-btn:hover {
+      color: var(--accent-primary);
+      border-color: var(--accent-primary);
+      background: var(--bg-card-hover);
+    }
+    .header-title-box h1 {
+      font-size: 1.12rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-main);
+    }
+    .header-title-box p {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+    }
+    .header-title-box .breadcrumb-nav {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      margin-bottom: 0.2rem;
+    }
+    .header-title-box .breadcrumb-nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+    .header-title-box .breadcrumb-nav a:hover {
+      color: var(--accent-primary);
+    }
+    .header-title-box .breadcrumb-nav .current {
+      color: var(--accent-primary);
+      font-weight: 600;
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .stats-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 20px;
+      background: var(--pill-bg);
+      border: 1px solid var(--pill-border);
+      color: var(--pill-text);
+      font-size: 0.78rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .theme-toggle-btn {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 0.4rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .theme-toggle-btn:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent-primary);
+    }
+    .step-quick-nav {
+      position: sticky;
+      top: 0 !important;
+      z-index: 900;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-subtle);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      flex-shrink: 0;
+    }
+    .nav-inner {
+      max-width: 1720px;
+      margin: 0 auto;
+      padding: 0.45rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      overflow-x: auto;
+      white-space: nowrap;
+      scrollbar-width: thin;
+    }
+    .step-nav-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-decoration: none;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    .step-nav-item:hover {
+      background: var(--bg-card-hover);
+      color: var(--text-main);
+    }
+    .step-nav-item.active {
+      background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+      color: #ffffff !important;
+      box-shadow: 0 2px 8px var(--accent-glow);
+    }
+    .step-nav-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      font-size: 0.7rem;
+      font-weight: 800;
+    }
+    .step-nav-label {
+      font-size: 0.8rem;
+    }
+    .nav-note-badge {
+      font-size: 0.7rem;
+      padding: 0.1rem 0.45rem;
+      border-radius: 10px;
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent-primary);
+      font-weight: 600;
+    }
+    .step-nav-item.active .nav-note-badge {
+      background: rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+    }
+
   </style>
 </head>
 <body>
 
   <!-- Top Navigation Header -->
-  <header class="viewer-header">
-    <div class="header-inner">
+  <!-- Top Sticky Header -->
+  <!-- Top Sticky Header -->
+  <header class="top-header">
+    <div class="header-content">
       <div class="header-left">
-        <a href="../index.html" class="portal-logo-link">
-          <span class="logo-badge">OurStudy</span>
-          <span>머신러닝 심화</span>
+        <a href="../index.html#advanced" class="back-hub-btn" title="머신러닝 심화 포털로 돌아가기">
+          <span>🏠 심화 포털 허브</span>
         </a>
-        <div class="breadcrumb-nav">
-          <span class="breadcrumb-sep">/</span>
-          <span>심화 트랙</span>
-          <span class="breadcrumb-sep">/</span>
-          <span class="breadcrumb-cur">Optuna 안정화</span>
+        <div class="header-title-box">
+          <div class="breadcrumb-nav">
+            <a href="../index.html">홈</a> &gt; 
+            <a href="../index.html#view-advanced">심화 트랙</a> &gt; 
+            <span class="current">22-1. Optuna 안정화</span>
+          </div>
+          <h1>
+            <span>🚀 CH 22-1. Optuna 하이퍼파라미터 베이지안 최적화 & 완전 재현성 안정화</span>
+            <span class="stats-pill">심화 22-1단계</span>
+          </h1>
+          <p>완전 시드 고정(set_all_seeds) 기반 XGBoost, LightGBM, CatBoost 목적 함수 설계 • 5회 반복 최적화 및 하이퍼파라미터 중요도 시각화</p>
         </div>
       </div>
+
       <div class="header-right">
-        <button class="theme-toggle-btn" onclick="toggleTheme()" title="다크/라이트 테마 전환">
-          <span class="theme-icon">🌓</span>
-          <span class="theme-label">테마 전환</span>
-        </button>
+        <span class="stats-pill">⚡ 9개 파이프라인 단계</span>
+        <span class="stats-pill">📖 258개 AI 해설 노트 (시간순 완벽 정렬)</span>
+        <button class="theme-toggle-btn" id="theme-toggle-btn" onclick="toggleTheme()">🌙 다크 모드</button>
       </div>
     </div>
   </header>
 
-  <!-- Sticky Step Navigation Bar -->
+  <!-- Sticky Step Quick Navigation Bar -->
   <nav class="step-quick-nav">
-    <div class="nav-container">
-      <a href="#step-1" class="step-nav-item" data-step="step-1"><span class="step-nav-num">STEP 01</span><span class="step-nav-label">1단계</span><span class="nav-note-badge">30개 해설</span></a><a href="#step-2" class="step-nav-item" data-step="step-2"><span class="step-nav-num">STEP 02</span><span class="step-nav-label">2단계</span><span class="nav-note-badge">18개 해설</span></a><a href="#step-3" class="step-nav-item" data-step="step-3"><span class="step-nav-num">STEP 03</span><span class="step-nav-label">3단계</span><span class="nav-note-badge">16개 해설</span></a><a href="#step-4" class="step-nav-item" data-step="step-4"><span class="step-nav-num">STEP 04</span><span class="step-nav-label">4단계</span><span class="nav-note-badge">34개 해설</span></a><a href="#step-5" class="step-nav-item" data-step="step-5"><span class="step-nav-num">STEP 05</span><span class="step-nav-label">5단계</span><span class="nav-note-badge">16개 해설</span></a><a href="#step-6" class="step-nav-item" data-step="step-6"><span class="step-nav-num">STEP 06</span><span class="step-nav-label">6단계</span><span class="nav-note-badge">40개 해설</span></a><a href="#step-7" class="step-nav-item" data-step="step-7"><span class="step-nav-num">STEP 07</span><span class="step-nav-label">7단계</span><span class="nav-note-badge">14개 해설</span></a><a href="#step-8" class="step-nav-item" data-step="step-8"><span class="step-nav-num">STEP 08</span><span class="step-nav-label">8단계</span><span class="nav-note-badge">34개 해설</span></a><a href="#step-9" class="step-nav-item" data-step="step-9"><span class="step-nav-num">STEP 09</span><span class="step-nav-label">9단계</span><span class="nav-note-badge">56개 해설</span></a>
+    <div class="nav-inner">
+      <a href="#step-1" class="step-nav-item" data-step="step-1"><span class="step-nav-num">1</span><span class="step-nav-label">필수 라이브러리 임포트 및 Optuna 분석 환경 구축</span><span class="nav-note-badge">30개 해설</span></a><a href="#step-2" class="step-nav-item" data-step="step-2"><span class="step-nav-num">2</span><span class="step-nav-label">완전 재현성 보장 및 Pima Indians 당뇨병 데이터 로드 / 분할</span><span class="nav-note-badge">18개 해설</span></a><a href="#step-3" class="step-nav-item" data-step="step-3"><span class="step-nav-num">3</span><span class="step-nav-label">XGBoost 목적 함수(objective_xgb) 정의 및 탐색 공간 설계</span><span class="nav-note-badge">16개 해설</span></a><a href="#step-4" class="step-nav-item" data-step="step-4"><span class="step-nav-num">4</span><span class="step-nav-label">XGBoost 5회 반복 최적화 및 하이퍼파라미터 중요도 시각화 분석</span><span class="nav-note-badge">34개 해설</span></a><a href="#step-5" class="step-nav-item" data-step="step-5"><span class="step-nav-num">5</span><span class="step-nav-label">LightGBM 목적 함수(objective_lgbm) 정의 및 탐색 공간 설계</span><span class="nav-note-badge">16개 해설</span></a><a href="#step-6" class="step-nav-item" data-step="step-6"><span class="step-nav-num">6</span><span class="step-nav-label">LightGBM 5회 반복 최적화 및 하이퍼파라미터 중요도 시각화 분석</span><span class="nav-note-badge">40개 해설</span></a><a href="#step-7" class="step-nav-item" data-step="step-7"><span class="step-nav-num">7</span><span class="step-nav-label">CatBoost 목적 함수(objective_catboost) 정의 및 탐색 공간 설계</span><span class="nav-note-badge">14개 해설</span></a><a href="#step-8" class="step-nav-item" data-step="step-8"><span class="step-nav-num">8</span><span class="step-nav-label">CatBoost 5회 반복 최적화 및 하이퍼파라미터 중요도 시각화 분석</span><span class="nav-note-badge">34개 해설</span></a><a href="#step-9" class="step-nav-item" data-step="step-9"><span class="step-nav-num">9</span><span class="step-nav-label">3개 모델 최고 Study 재생성, 테스트셋 최종 검증 및 파라미터 중요도 비교 시각화</span><span class="nav-note-badge">56개 해설</span></a>
     </div>
   </nav>
 
@@ -16521,12 +16714,16 @@ plt.show()</code></pre>
 
   
 
+  
+
+  
+
   <!-- Golden Standard Split-Screen Architecture Script -->
   <script>
-    // 1. Safe Theme Handler
+    // 1. Safe Theme Handler (Default: Light Mode)
     function toggleTheme() {
       const html = document.documentElement;
-      const current = html.getAttribute('data-theme') || 'dark';
+      const current = html.getAttribute('data-theme') || 'light';
       const next = current === 'dark' ? 'light' : 'dark';
       html.setAttribute('data-theme', next);
       localStorage.setItem('study_theme', next);
@@ -16535,12 +16732,10 @@ plt.show()</code></pre>
     }
 
     (function initSafeTheme() {
-      const saved = localStorage.getItem('study_theme');
-      if (saved) {
-        document.documentElement.setAttribute('data-theme', saved);
-        const btn = document.getElementById('theme-toggle-btn');
-        if (btn) btn.textContent = saved === 'dark' ? '☀️ 라이트 모드' : '🌙 다크 모드';
-      }
+      const saved = localStorage.getItem('study_theme') || 'light';
+      document.documentElement.setAttribute('data-theme', saved);
+      const btn = document.getElementById('theme-toggle-btn');
+      if (btn) btn.textContent = saved === 'dark' ? '☀️ 라이트 모드' : '🌙 다크 모드';
     })();
 
     // 2. Enhance Prism Python Syntax Grammar to Match VS Code Dark+
@@ -16744,9 +16939,16 @@ plt.show()</code></pre>
         const codeCol = sec.querySelector('.grid-col-code') || sec.querySelector('.code-column');
         const notesCol = sec.querySelector('.grid-col-notes') || sec.querySelector('.notes-column');
 
+        // Intelligent Step Title Extraction
         let stepTitleText = '단계 ' + (idx + 1);
         const titleEl = sec.querySelector('.step-title-text') || sec.querySelector('.step-title');
-        if (titleEl) stepTitleText = titleEl.textContent.trim().split(':')[0];
+        if (titleEl) {
+          let t = titleEl.textContent.trim();
+          if (t.includes(':')) {
+            t = t.split(':').slice(1).join(':').trim();
+          }
+          if (t) stepTitleText = t;
+        }
 
         const leftSec = document.createElement('section');
         leftSec.className = 'step-code-section';
