@@ -1268,14 +1268,14 @@
     </section>
 
     <!-- Pipeline Step Sections -->
-    <section class="step-section" id="step1"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">1단계</span><h2 class="step-title-text">필수 라이브러리 임포트 및 분석 환경 구축</h2></div><p class="step-summary-desc">Pandas, NumPy, Matplotlib, Seaborn 및 Scikit-Learn 데이터셋(fetch_openml), 분할(train_test_split, StratifiedKFold), 튜닝(GridSearchCV), CatBoost(CatBoostClassifier), 평가 지표 모듈을 임포트합니다.</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 주피터 노트북 실행 코드 및 결과</div><div class="cell-markdown-box"><h2 class="note-h2">라이브러리 임포트</h2></div><div class="code-cell-wrapper" id="cell-2"><div class="cell-header"><span class="cell-badge">In [2]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">import  as pd
-import  as np
-import  as plt
-import  as sns
-from  import 
-from  import , , 
-from  import 
-from  import , </code></pre></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (MARKDOWN)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (15)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step1" data-tab="step1-pandas-20261009_194459" onclick="switchTab('step1', 'step1-pandas-20261009_194459')"><span class="tab-func-name">import pandas as pd</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-numpy-20261009_194524" onclick="switchTab('step1', 'step1-numpy-20261009_194524')"><span class="tab-func-name">import numpy as np</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-matplotlib_pyplot-20261009_194529" onclick="switchTab('step1', 'step1-matplotlib_pyplot-20261009_194529')"><span class="tab-func-name">import matplotlib.pyplot as plt</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-seaborn-20261009_194535" onclick="switchTab('step1', 'step1-seaborn-20261009_194535')"><span class="tab-func-name">import seaborn as sns</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_datasets-20261009_194541" onclick="switchTab('step1', 'step1-sklearn_datasets-20261009_194541')"><span class="tab-func-name">from sklearn.datasets import fetch_openml</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-fetch_openml-20261009_194546" onclick="switchTab('step1', 'step1-fetch_openml-20261009_194546')"><span class="tab-func-name">fetch_openml</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_model_selection-20261009_194554" onclick="switchTab('step1', 'step1-sklearn_model_selection-20261009_194554')"><span class="tab-func-name">from sklearn.model_selection import ...</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-train_test_split-20261009_194557" onclick="switchTab('step1', 'step1-train_test_split-20261009_194557')"><span class="tab-func-name">train_test_split</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-StratifiedKFold-20261009_194602" onclick="switchTab('step1', 'step1-StratifiedKFold-20261009_194602')"><span class="tab-func-name">StratifiedKFold</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-GridSearchCV-20261009_194607" onclick="switchTab('step1', 'step1-GridSearchCV-20261009_194607')"><span class="tab-func-name">GridSearchCV</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-catboost-20261009_194617" onclick="switchTab('step1', 'step1-catboost-20261009_194617')"><span class="tab-func-name">import catboost</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-CatBoostClassifier-20261009_194622" onclick="switchTab('step1', 'step1-CatBoostClassifier-20261009_194622')"><span class="tab-func-name">CatBoostClassifier</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_metrics-20261009_194628" onclick="switchTab('step1', 'step1-sklearn_metrics-20261009_194628')"><span class="tab-func-name">from sklearn.metrics import ...</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-accuracy_score-20261009_194633" onclick="switchTab('step1', 'step1-accuracy_score-20261009_194633')"><span class="tab-func-name">accuracy_score</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-classification_report-20261009_194638" onclick="switchTab('step1', 'step1-classification_report-20261009_194638')"><span class="tab-func-name">classification_report</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step1-pandas-20261009_194459"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>pandas</code></div><div class="note-time-badge">⏱ 2026-10-09 19:44:59</div></div><div class="note-body-content"><h1 class="note-h1">pandas - AI 파이썬 학습 노트</h1>
+    <section class="step-section" id="step1"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">1단계</span><h2 class="step-title-text">필수 라이브러리 임포트 및 분석 환경 구축</h2></div><p class="step-summary-desc">Pandas, NumPy, Matplotlib, Seaborn 및 Scikit-Learn 데이터셋(fetch_openml), 분할(train_test_split, StratifiedKFold), 튜닝(GridSearchCV), CatBoost(CatBoostClassifier), 평가 지표 모듈을 임포트합니다.</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 주피터 노트북 실행 코드 및 결과</div><div class="cell-markdown-box"><h2 class="note-h2">라이브러리 임포트</h2></div><div class="code-cell-wrapper" id="cell-2"><div class="cell-header"><span class="cell-badge">In [2]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.datasets import fetch_openml
+from sklearn.model_selection import train_test_split, StratifiedKFold, GridSearchCV
+from catboost import CatBoostClassifier
+from sklearn.metrics import accuracy_score, classification_report</code></pre></div></div></div><div class="grid-col-notes"><div class="col-sticky-label">📝 AI 함수별 상세 해설 노트 (MARKDOWN)</div><div class="notes-panel-container"><div class="notes-tabs-header"><div class="tabs-label">📖 AI 학습 노트 (15)</div><div class="tabs-scroll-wrapper"><button class="func-tab-btn active" data-step="step1" data-tab="step1-pandas-20261009_194459" onclick="switchTab('step1', 'step1-pandas-20261009_194459')"><span class="tab-func-name">import pandas as pd</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-numpy-20261009_194524" onclick="switchTab('step1', 'step1-numpy-20261009_194524')"><span class="tab-func-name">import numpy as np</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-matplotlib_pyplot-20261009_194529" onclick="switchTab('step1', 'step1-matplotlib_pyplot-20261009_194529')"><span class="tab-func-name">import matplotlib.pyplot as plt</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-seaborn-20261009_194535" onclick="switchTab('step1', 'step1-seaborn-20261009_194535')"><span class="tab-func-name">import seaborn as sns</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_datasets-20261009_194541" onclick="switchTab('step1', 'step1-sklearn_datasets-20261009_194541')"><span class="tab-func-name">from sklearn.datasets import fetch_openml</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-fetch_openml-20261009_194546" onclick="switchTab('step1', 'step1-fetch_openml-20261009_194546')"><span class="tab-func-name">fetch_openml</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_model_selection-20261009_194554" onclick="switchTab('step1', 'step1-sklearn_model_selection-20261009_194554')"><span class="tab-func-name">from sklearn.model_selection import ...</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-train_test_split-20261009_194557" onclick="switchTab('step1', 'step1-train_test_split-20261009_194557')"><span class="tab-func-name">train_test_split</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-StratifiedKFold-20261009_194602" onclick="switchTab('step1', 'step1-StratifiedKFold-20261009_194602')"><span class="tab-func-name">StratifiedKFold</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-GridSearchCV-20261009_194607" onclick="switchTab('step1', 'step1-GridSearchCV-20261009_194607')"><span class="tab-func-name">GridSearchCV</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-catboost-20261009_194617" onclick="switchTab('step1', 'step1-catboost-20261009_194617')"><span class="tab-func-name">import catboost</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-CatBoostClassifier-20261009_194622" onclick="switchTab('step1', 'step1-CatBoostClassifier-20261009_194622')"><span class="tab-func-name">CatBoostClassifier</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-sklearn_metrics-20261009_194628" onclick="switchTab('step1', 'step1-sklearn_metrics-20261009_194628')"><span class="tab-func-name">from sklearn.metrics import ...</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-accuracy_score-20261009_194633" onclick="switchTab('step1', 'step1-accuracy_score-20261009_194633')"><span class="tab-func-name">accuracy_score</span></button><button class="func-tab-btn " data-step="step1" data-tab="step1-classification_report-20261009_194638" onclick="switchTab('step1', 'step1-classification_report-20261009_194638')"><span class="tab-func-name">classification_report</span></button></div></div><div class="notes-panes-wrapper"><div class="func-note-pane active" id="step1-pandas-20261009_194459"><div class="note-meta-header"><div class="note-target-badge">🎯 해설 대상: <code>pandas</code></div><div class="note-time-badge">⏱ 2026-10-09 19:44:59</div></div><div class="note-body-content"><h1 class="note-h1">pandas - AI 파이썬 학습 노트</h1>
 <div class="note-empty-line"></div>
 <ul class="note-ul">
 <li class="note-li">생성 일시: 2026-10-09 19:44:59</li>
@@ -1451,14 +1451,14 @@ from  import , </code></pre></div></div></div><div class="grid-col-notes"><div c
 <ul class="note-ul">
 <li class="note-li">768개 샘플, 8개 피처</li>
 <li class="note-li">당뇨병 발병 여부 이진 분류</li>
-</ul></div><div class="code-cell-wrapper" id="cell-4"><div class="cell-header"><span class="cell-badge">In [4]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">print("Loading Pima Indians Diabetes Dataset...")
-pima = (name='diabetes', version=1, as_frame=True)
-X = 
-y = ({'tested_negative': 0, 'tested_positive': 1}).(int)
+</ul></div><div class="code-cell-wrapper" id="cell-4"><div class="cell-header"><span class="cell-badge">In [4]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">print(&quot;Loading Pima Indians Diabetes Dataset...&quot;)
+pima = fetch_openml(name=&#x27;diabetes&#x27;, version=1, as_frame=True)
+X = pima.data
+y = pima.target.map({&#x27;tested_negative&#x27;: 0, &#x27;tested_positive&#x27;: 1}).astype(int)
 
-print(f"데이터 크기: {}")
-print(f"피처 목록: {(X.columns)}")
-print(f"\n클래스 분포:\n{()}")</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>Loading Pima Indians Diabetes Dataset...
+print(f&quot;데이터 크기: {X.shape}&quot;)
+print(f&quot;피처 목록: {list(X.columns)}&quot;)
+print(f&quot;\n클래스 분포:\n{y.value_counts()}&quot;)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>Loading Pima Indians Diabetes Dataset...
 데이터 크기: (768, 8)
 피처 목록: [&#x27;preg&#x27;, &#x27;plas&#x27;, &#x27;pres&#x27;, &#x27;skin&#x27;, &#x27;insu&#x27;, &#x27;mass&#x27;, &#x27;pedi&#x27;, &#x27;age&#x27;]
 
@@ -1468,11 +1468,11 @@ class
 1    268
 Name: count, dtype: int64
 </pre></div></div></div></div><div class="cell-markdown-box"><p class="note-p"><strong>데이터 샘플 확인</strong></p></div><div class="code-cell-wrapper" id="cell-6"><div class="cell-header"><span class="cell-badge">In [6]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 데이터 샘플
-print("\n데이터 샘플:")
-print(())
+print(&quot;\n데이터 샘플:&quot;)
+print(X.head())
 
-print("\n기술 통계:")
-print(())</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>
+print(&quot;\n기술 통계:&quot;)
+print(X.describe())</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>
 데이터 샘플:
    preg  plas  pres  skin  insu  mass   pedi  age
 0     6   148    72    35     0  33.6  0.627   50
@@ -2038,12 +2038,12 @@ min    70.000000    60.000000
 max    95.000000    95.000000</code></pre>
 <div class="note-empty-line"></div>
 <p class="note-p">💡 <strong>초보자를 위한 한 줄 요약</strong>: 데이터 분석을 시작할 때 <code class="inline-code">X.describe()</code>를 치면, 데이터의 전체적인 성격(평균은 얼마고 범위는 어디서부터 어디까지인지)을 <strong>1초 만에 파악</strong>할 수 있는 효자 함수입니다!</p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step2', 'X.describe')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section><section class="step-section" id="step3"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">3단계</span><h2 class="step-title-text">훈련 및 테스트 데이터 분할 (Stratified Train/Test Split)</h2></div><p class="step-summary-desc">타깃 클래스 비율(정상 65% : 당뇨 35%)을 균등 유지하기 위해 stratify=y 옵션으로 8:2 비율의 학습(614개) 및 테스트(154개) 세트로 분할합니다.</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 주피터 노트북 실행 코드 및 결과</div><div class="cell-markdown-box"><p class="note-p"><strong>학습/테스트 데이터 분리</strong></p></div><div class="code-cell-wrapper" id="cell-8"><div class="cell-header"><span class="cell-badge">In [8]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 데이터 분리 (stratify로 클래스 비율 유지)
-X_train, X_test, y_train, y_test = (
+X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42, stratify=y
 )
 
-print(f"Train: {}, Test: {}")
-print(f"\nTrain 클래스 분포:\n{()}")</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>Train: (614, 8), Test: (154, 8)
+print(f&quot;Train: {X_train.shape}, Test: {X_test.shape}&quot;)
+print(f&quot;\nTrain 클래스 분포:\n{y_train.value_counts()}&quot;)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>Train: (614, 8), Test: (154, 8)
 
 Train 클래스 분포:
 class
@@ -2233,7 +2233,7 @@ dtype: int64</code></pre>
 <li class="note-li">border_count: 수치형 특성 분할 수</li>
 <li class="note-li">bagging_temperature: 베이지안 부트스트랩</li>
 </ul></div><div class="cell-markdown-box"><h2 class="note-h2">3. 기본 CatBoost 학습</h2></div><div class="code-cell-wrapper" id="cell-11"><div class="cell-header"><span class="cell-badge">In [11]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 기본 모델 생성
-cat_clf = (
+cat_clf = CatBoostClassifier(
     iterations=100,
     learning_rate=0.1,
     depth=6,
@@ -2242,21 +2242,21 @@ cat_clf = (
 )
 
 # 학습
-(X_train, y_train)
+cat_clf.fit(X_train, y_train)
 
 # 예측
-y_pred = (X_test)
+y_pred = cat_clf.predict(X_test)
 
 # 평가
-train_acc = (X_train, y_train)
-test_acc = (y_test, y_pred)
+train_acc = cat_clf.score(X_train, y_train)
+test_acc = accuracy_score(y_test, y_pred)
 
-print("="*50)
-print("기본 CatBoost Classifier 결과")
-print("="*50)
-print(f"Train Accuracy: {train_acc:.4f}")
-print(f"Test Accuracy: {test_acc:.4f}")
-print(f"\n분류 리포트:\n{(y_test, y_pred)}")</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>==================================================
+print(&quot;=&quot;*50)
+print(&quot;기본 CatBoost Classifier 결과&quot;)
+print(&quot;=&quot;*50)
+print(f&quot;Train Accuracy: {train_acc:.4f}&quot;)
+print(f&quot;Test Accuracy: {test_acc:.4f}&quot;)
+print(f&quot;\n분류 리포트:\n{classification_report(y_test, y_pred)}&quot;)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>==================================================
 기본 CatBoost Classifier 결과
 ==================================================
 Train Accuracy: 0.8664
@@ -2715,42 +2715,42 @@ weighted avg       0.75      0.75      0.75         8</code></pre>
 <li class="note-li">클래스 비율 유지</li>
 </ul></div><div class="code-cell-wrapper" id="cell-13"><div class="cell-header"><span class="cell-badge">In [13]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 하이퍼파라미터 그리드 정의
 param_grid = {
-    'iterations': [100, 150, 200],
-    'learning_rate': [0.01, 0.05, 0.1],
-    'depth': [4, 6, 8],
-    'l2_leaf_reg': [1, 3, 5]
+    &#x27;iterations&#x27;: [100, 150, 200],
+    &#x27;learning_rate&#x27;: [0.01, 0.05, 0.1],
+    &#x27;depth&#x27;: [4, 6, 8],
+    &#x27;l2_leaf_reg&#x27;: [1, 3, 5]
 }
 
-print("파라미터 그리드:")
-for key, value in ():
-    print(f"  {key}: {value}")
+print(&quot;파라미터 그리드:&quot;)
+for key, value in param_grid.items():
+    print(f&quot;  {key}: {value}&quot;)
 
 # 총 조합 수
-total_combinations = ([(v) for v in ()])
-print(f"\n총 파라미터 조합: {total_combinations}개")</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>파라미터 그리드:
+total_combinations = np.prod([len(v) for v in param_grid.values()])
+print(f&quot;\n총 파라미터 조합: {total_combinations}개&quot;)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>파라미터 그리드:
   iterations: [100, 150, 200]
   learning_rate: [0.01, 0.05, 0.1]
   depth: [4, 6, 8]
   l2_leaf_reg: [1, 3, 5]
 
 총 파라미터 조합: 81개
-</pre></div></div></div></div><div class="code-cell-wrapper" id="cell-14"><div class="cell-header"><span class="cell-badge">In [14]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">#  설정
-skf = (n_splits=3, shuffle=True, random_state=42)
+</pre></div></div></div></div><div class="code-cell-wrapper" id="cell-14"><div class="cell-header"><span class="cell-badge">In [14]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># StratifiedKFold 설정
+skf = StratifiedKFold(n_splits=3, shuffle=True, random_state=42)
 
-#  생성
-grid_clf = (
-    estimator=(random_state=42, verbose=0),
+# GridSearchCV 생성
+grid_clf = GridSearchCV(
+    estimator=CatBoostClassifier(random_state=42, verbose=0),
     param_grid=param_grid,
     cv=skf,
-    scoring='accuracy',
+    scoring=&#x27;accuracy&#x27;,
     n_jobs=-1,
     verbose=1
 )
 
-print(" 생성완료...\n")</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>GridSearchCV 생성완료...
+print(&quot;GridSearchCV 생성완료...\n&quot;)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>GridSearchCV 생성완료...
 
 </pre></div></div></div></div><div class="code-cell-wrapper" id="cell-15"><div class="cell-header"><span class="cell-badge">In [15]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">
-(X_train, y_train)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (2)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>Fitting 3 folds for each of 81 candidates, totalling 243 fits
+grid_clf.fit(X_train, y_train)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (2)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>Fitting 3 folds for each of 81 candidates, totalling 243 fits
 </pre></div><div class="output-item html-table-output"><div class="output-type-tag">DataFrame Display</div><style>#sk-container-id-1 {
   /* Definition of color scheme common for light and dark mode */
   --sklearn-color-text: #000;
@@ -3721,13 +3721,13 @@ print(&quot;최고 교차 검증 점수:&quot;, grid_clf.best_score_)</code></pr
 <pre class="note-code-block"><code class="language-text">가장 좋았던 설정값: {&#x27;n_estimators&#x27;: 50}
 최고 교차 검증 점수: 0.9555...</code></pre>
 <p class="note-p"><em>(설명: 10개, 50개, 100개의 나무를 심어본 결과, 나무를 <strong>50개</strong> 심었을 때 시험 성적(정확도)이 가장 높았다고 모델이 스스로 찾아내어 알려줍니다!)</em></p></div><div class="note-footer-actions"><button class="jump-to-code-btn" onclick="highlightMatchingKeyword('step5', 'grid_clf.fit')">👈 좌측 코드 위치 보기</button></div></div></div></div></div></div></section><section class="step-section" id="step6"><div class="step-section-header"><div class="step-title-wrap"><span class="step-number-badge">6단계</span><h2 class="step-title-text">최적 모델 평가 및 기본 모델 vs 튜닝 모델 성능 비교</h2></div><p class="step-summary-desc">최적 파라미터로 학습된 best_estimator_의 테스트 정확도를 측정하고, 기본 모델과의 성능 비교 데이터프레임 및 막대 그래프를 시각화합니다.</p></div><div class="step-dual-grid"><div class="grid-col-code"><div class="col-sticky-label">💻 주피터 노트북 실행 코드 및 결과</div><div class="cell-markdown-box"><h2 class="note-h2">5. 최적 모델 결과</h2></div><div class="code-cell-wrapper" id="cell-17"><div class="cell-header"><span class="cell-badge">In [17]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 최적 파라미터 출력
-print("="*50)
-print("최적 하이퍼파라미터")
-print("="*50)
-for param, value in ():
-    print(f"{param:20s}: {value}")
+print(&quot;=&quot;*50)
+print(&quot;최적 하이퍼파라미터&quot;)
+print(&quot;=&quot;*50)
+for param, value in grid_clf.best_params_.items():
+    print(f&quot;{param:20s}: {value}&quot;)
 
-print(f"\n최적 CV Score: {grid_clf.best_score_:.4f}")</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>==================================================
+print(f&quot;\n최적 CV Score: {grid_clf.best_score_:.4f}&quot;)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>==================================================
 최적 하이퍼파라미터
 ==================================================
 depth               : 4
@@ -3737,21 +3737,21 @@ learning_rate       : 0.1
 
 최적 CV Score: 0.7834
 </pre></div></div></div></div><div class="code-cell-wrapper" id="cell-18"><div class="cell-header"><span class="cell-badge">In [18]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 최적 모델 저장
-best_clf = 
+best_clf = grid_clf.best_estimator_
 
 # 테스트 데이터 예측
-y_pred_best = (X_test)
+y_pred_best = best_clf.predict(X_test)
 
 # 성능 평가
-train_acc_best = (X_train, y_train)
-test_acc_best = (y_test, y_pred_best)
+train_acc_best = best_clf.score(X_train, y_train)
+test_acc_best = accuracy_score(y_test, y_pred_best)
 
-print("="*50)
-print("최적화된 CatBoost 결과")
-print("="*50)
-print(f"Train Accuracy: {train_acc_best:.4f}")
-print(f"Test Accuracy: {test_acc_best:.4f}")
-print(f"\n분류 리포트:\n{(y_test, y_pred_best)}")</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>==================================================
+print(&quot;=&quot;*50)
+print(&quot;최적화된 CatBoost 결과&quot;)
+print(&quot;=&quot;*50)
+print(f&quot;Train Accuracy: {train_acc_best:.4f}&quot;)
+print(f&quot;Test Accuracy: {test_acc_best:.4f}&quot;)
+print(f&quot;\n분류 리포트:\n{classification_report(y_test, y_pred_best)}&quot;)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>==================================================
 최적화된 CatBoost 결과
 ==================================================
 Train Accuracy: 0.8225
@@ -3768,39 +3768,39 @@ Test Accuracy: 0.7532
 weighted avg       0.75      0.75      0.75       154
 
 </pre></div></div></div></div><div class="cell-markdown-box"><h2 class="note-h2">6. 성능 비교</h2></div><div class="code-cell-wrapper" id="cell-20"><div class="cell-header"><span class="cell-badge">In [20]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 성능 비교 데이터프레임
-comparison = ({
-    'Model': ['Default CatBoost', 'Tuned CatBoost'],
-    'Train Acc': [train_acc, train_acc_best],
-    'Test Acc': [test_acc, test_acc_best]
+comparison = pd.DataFrame({
+    &#x27;Model&#x27;: [&#x27;Default CatBoost&#x27;, &#x27;Tuned CatBoost&#x27;],
+    &#x27;Train Acc&#x27;: [train_acc, train_acc_best],
+    &#x27;Test Acc&#x27;: [test_acc, test_acc_best]
 })
 
-print("\n성능 비교:")
-print((index=False))
+print(&quot;\n성능 비교:&quot;)
+print(comparison.to_string(index=False))
 
 # 시각화
-fig, ax = (1, 1, figsize=(8, 5))
+fig, ax = plt.subplots(1, 1, figsize=(8, 5))
 
-x = ((comparison))
+x = np.arange(len(comparison))
 width = 0.35
 
-(x - width/2, comparison['Train Acc'], width, label='Train', alpha=0.8)
-(x + width/2, comparison['Test Acc'], width, label='Test', alpha=0.8)
+ax.bar(x - width/2, comparison[&#x27;Train Acc&#x27;], width, label=&#x27;Train&#x27;, alpha=0.8)
+ax.bar(x + width/2, comparison[&#x27;Test Acc&#x27;], width, label=&#x27;Test&#x27;, alpha=0.8)
 
-('Accuracy')
-('CatBoost Performance Comparison')
-(x)
-(comparison['Model'])
-()
-([0.6, 1.0])
+ax.set_ylabel(&#x27;Accuracy&#x27;)
+ax.set_title(&#x27;CatBoost Performance Comparison&#x27;)
+ax.set_xticks(x)
+ax.set_xticklabels(comparison[&#x27;Model&#x27;])
+ax.legend()
+ax.set_ylim([0.6, 1.0])
 
 # 값 표시
-for i, v in (comparison['Train Acc']):
-    (i - width/2, v + 0.01, f'{v:.4f}', ha='center', va='bottom', fontsize=9)
-for i, v in (comparison['Test Acc']):
-    (i + width/2, v + 0.01, f'{v:.4f}', ha='center', va='bottom', fontsize=9)
+for i, v in enumerate(comparison[&#x27;Train Acc&#x27;]):
+    ax.text(i - width/2, v + 0.01, f&#x27;{v:.4f}&#x27;, ha=&#x27;center&#x27;, va=&#x27;bottom&#x27;, fontsize=9)
+for i, v in enumerate(comparison[&#x27;Test Acc&#x27;]):
+    ax.text(i + width/2, v + 0.01, f&#x27;{v:.4f}&#x27;, ha=&#x27;center&#x27;, va=&#x27;bottom&#x27;, fontsize=9)
 
-()
-()</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (2)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>
+plt.tight_layout()
+plt.show()</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (2)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>
 성능 비교:
            Model  Train Acc  Test Acc
 Default CatBoost   0.866450  0.753247
@@ -5244,27 +5244,27 @@ plt.show()</code></pre>
 <li class="note-li">LossFunctionChange</li>
 <li class="note-li">FeatureImportance</li>
 </ul></div><div class="code-cell-wrapper" id="cell-22"><div class="cell-header"><span class="cell-badge">In [22]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># 피처 중요도 추출
-importances = ()
-feature_names = 
-indices = (importances)[::-1]
+importances = best_clf.get_feature_importance()
+feature_names = X.columns
+indices = np.argsort(importances)[::-1]
 
 # 중요도 정렬
-importance_df = ({
-    'Feature': feature_names[indices],
-    'Importance': importances[indices]
+importance_df = pd.DataFrame({
+    &#x27;Feature&#x27;: feature_names[indices],
+    &#x27;Importance&#x27;: importances[indices]
 })
 
-print("\n피처 중요도 순위:")
-print((index=False))
+print(&quot;\n피처 중요도 순위:&quot;)
+print(importance_df.to_string(index=False))
 
 # 시각화
-(figsize=(6, 4))
-(x=importances[indices], y=feature_names[indices], palette='viridis')
-("Feature Importances (CatBoost)")
-("Importance")
-("Features")
-()
-()</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (3)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>
+plt.figure(figsize=(6, 4))
+sns.barplot(x=importances[indices], y=feature_names[indices], palette=&#x27;viridis&#x27;)
+plt.title(&quot;Feature Importances (CatBoost)&quot;)
+plt.xlabel(&quot;Importance&quot;)
+plt.ylabel(&quot;Features&quot;)
+plt.tight_layout()
+plt.show()</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (3)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>
 피처 중요도 순위:
 Feature  Importance
    plas   41.638948
@@ -5876,29 +5876,29 @@ plt.show()</code></pre>
 <li class="note-li">학습 시간 단축</li>
 <li class="note-li">최적 트리 개수 자동 선택</li>
 </ul></div><div class="code-cell-wrapper" id="cell-24"><div class="cell-header"><span class="cell-badge">In [24]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python"># Early Stopping with eval_set
-cat_early = (
-    **,
+cat_early = CatBoostClassifier(
+    **grid_clf.best_params_,
     early_stopping_rounds=10,
     random_state=42,
     verbose=0
 )
 
 # Validation set 분리
-X_tr, X_val, y_tr, y_val = (
+X_tr, X_val, y_tr, y_val = train_test_split(
     X_train, y_train, test_size=0.2, random_state=42, stratify=y_train
 )
 
 # 학습 (eval_set 제공)
-(
+cat_early.fit(
     X_tr, y_tr,
     eval_set=(X_val, y_val),
     verbose=False
 )
 
-print(f"\nEarly Stopping:")
-print(f"최적 트리 개수: {() + 1}")
-print(f"설정 트리 개수: {['iterations']}")
-print(f"Test Accuracy: {(X_test, y_test):.4f}")</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>
+print(f&quot;\nEarly Stopping:&quot;)
+print(f&quot;최적 트리 개수: {cat_early.get_best_iteration() + 1}&quot;)
+print(f&quot;설정 트리 개수: {grid_clf.best_params_[&#x27;iterations&#x27;]}&quot;)
+print(f&quot;Test Accuracy: {cat_early.score(X_test, y_test):.4f}&quot;)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>
 Early Stopping:
 최적 트리 개수: 58
 설정 트리 개수: 100
@@ -6312,24 +6312,24 @@ print(f&quot;Test Accuracy: {cat_early.score(X_test, y_test):.4f}&quot;)</code><
 <li class="note-li">기본 모델도 경쟁력 있는 성능</li>
 <li class="note-li">GridSearch로 추가 성능 향상</li>
 <li class="note-li">Early Stopping으로 효율적 학습</li>
-</ul></div><div class="code-cell-wrapper" id="cell-26"><div class="cell-header"><span class="cell-badge">In [26]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">print("\n" + "="*50)
-print("CatBoost Classification 완료")
-print("="*50)
+</ul></div><div class="code-cell-wrapper" id="cell-26"><div class="cell-header"><span class="cell-badge">In [26]</span><div class="cell-actions"><button class="copy-code-btn" onclick="copyCode(this)" title="코드 복사">📋 복사</button></div></div><div class="code-editor-look"><pre><code class="language-python">print(&quot;\n&quot; + &quot;=&quot;*50)
+print(&quot;CatBoost Classification 완료&quot;)
+print(&quot;=&quot;*50)
 
-print(f"\n최종 성능:")
-print(f"  - 기본 모델 정확도: {test_acc:.4f}")
-print(f"  - 최적화 모델 정확도: {test_acc_best:.4f}")
-print(f"  - 성능 향상: {(test_acc_best - test_acc)*100:+.2f}%p")
+print(f&quot;\n최종 성능:&quot;)
+print(f&quot;  - 기본 모델 정확도: {test_acc:.4f}&quot;)
+print(f&quot;  - 최적화 모델 정확도: {test_acc_best:.4f}&quot;)
+print(f&quot;  - 성능 향상: {(test_acc_best - test_acc)*100:+.2f}%p&quot;)
 
-print(f"\n최적 파라미터:")
-for param, value in ():
-    print(f"  - {param}: {value}")
+print(f&quot;\n최적 파라미터:&quot;)
+for param, value in grid_clf.best_params_.items():
+    print(f&quot;  - {param}: {value}&quot;)
 
-print(f"\nTop 3 중요 피처:")
-for i in ((3, (importance_df))):
-    print(f"  {i+1}. {importance_df.iloc[i]['Feature']}: {importance_df.iloc[i]['Importance']:.4f}")
+print(f&quot;\nTop 3 중요 피처:&quot;)
+for i in range(min(3, len(importance_df))):
+    print(f&quot;  {i+1}. {importance_df.iloc[i][&#x27;Feature&#x27;]}: {importance_df.iloc[i][&#x27;Importance&#x27;]:.4f}&quot;)
 
-print("\n" + "="*50)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>
+print(&quot;\n&quot; + &quot;=&quot;*50)</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>
 ==================================================
 CatBoost Classification 완료
 ==================================================
