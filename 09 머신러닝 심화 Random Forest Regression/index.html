@@ -5422,6 +5422,10 @@ print(f&quot;R2 점수: {r2_default}&quot;)</code></pre>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <!-- Prism KeepMarkup Plugin: 100% preserves pre-tagged .interactive-kw spans across Prism highlighting -->
+  <script>
+    "undefined"!=typeof Prism&&"undefined"!=typeof document&&document.createRange&&(Prism.plugins.KeepMarkup=!0,Prism.hooks.add("before-highlight",(function(e){if(e.element.children.length&&Prism.util.isActive(e.element,"keep-markup",!0)){var n=Prism.util.isActive(e.element,"drop-tokens",!1),t=0,o=[];r(e.element),o.length&&(e.keepMarkup=o)}function d(e){if(function(e){return!n||"span"!==e.nodeName.toLowerCase()||!e.classList.contains("token")}(e)){var d={element:e,posOpen:t};o.push(d),r(e),d.posClose=t}else r(e)}function r(e){for(var n=0,o=e.childNodes.length;n<o;n++){var r=e.childNodes[n];1===r.nodeType?d(r):3===r.nodeType&&(t+=r.data.length)}}})),Prism.hooks.add("after-highlight",(function(e){if(e.keepMarkup&&e.keepMarkup.length){var n=function(e,t){for(var o=0,d=e.childNodes.length;o<d;o++){var r=e.childNodes[o];if(1===r.nodeType){if(!n(r,t))return!1}else 3===r.nodeType&&(!t.nodeStart&&t.pos+r.data.length>t.node.posOpen&&(t.nodeStart=r,t.nodeStartPos=t.node.posOpen-t.pos),t.nodeStart&&t.pos+r.data.length>=t.node.posClose&&(t.nodeEnd=r,t.nodeEndPos=t.node.posClose-t.pos),t.pos+=r.data.length);if(t.nodeStart&&t.nodeEnd){var s=document.createRange();return s.setStart(t.nodeStart,t.nodeStartPos),s.setEnd(t.nodeEnd,t.nodeEndPos),t.node.element.innerHTML="",t.node.element.appendChild(s.extractContents()),s.insertNode(t.node.element),s.detach(),!1}}return!0};e.keepMarkup.forEach((function(t){n(e.element,{node:t,pos:0})})),e.highlightedCode=e.element.innerHTML}})));
+  </script>
 
   <script>
     function toggleTheme() {
@@ -5568,6 +5572,8 @@ print(f&quot;R2 점수: {r2_default}&quot;)</code></pre>
   
 
 
+  
+
   <!-- Golden Standard Split-Screen Architecture Script -->
   <script>
     // 1. Safe Theme Handler
@@ -5593,7 +5599,7 @@ print(f&quot;R2 점수: {r2_default}&quot;)</code></pre>
     // 2. Universal Note Switcher
     let currentStepIdGlobal = '';
 
-    function switchTab(stepId, tabId) {
+    window.switchTab = function(stepId, tabId) {
       if (!tabId) return;
 
       if (stepId) {
@@ -5648,13 +5654,31 @@ print(f&quot;R2 점수: {r2_default}&quot;)</code></pre>
       // 우측 본문 스크롤 상단 리셋
       const panesArea = document.getElementById('active-panes-area');
       if (panesArea) panesArea.scrollTop = 0;
-    }
+    };
 
-    function activateNoteTab(stepId, tabId) {
+    window.activateNoteTab = function(stepId, tabId) {
       switchTab(stepId, tabId);
-    }
+    };
 
-    // 3. Keyword Underline Restoration
+    window.highlightMatchingKeyword = function(stepId, funcName) {
+      const leftPane = document.getElementById('split-left-pane');
+      if (!leftPane) return;
+      const targetStep = leftPane.querySelector('#' + stepId);
+      if (targetStep) {
+        targetStep.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      const allKws = leftPane.querySelectorAll('.interactive-kw');
+      for (const kw of allKws) {
+        if (kw.dataset.func === funcName || kw.textContent.trim() === funcName) {
+          kw.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          kw.classList.add('highlight-pulse');
+          setTimeout(() => kw.classList.remove('highlight-pulse'), 2500);
+          break;
+        }
+      }
+    };
+
+    // 3. Keyword Underline Restoration (Fallback for untagged keywords)
     function rebindInteractiveKeywords() {
       const allPanes = Array.from(document.querySelectorAll('.func-note-pane'));
       if (allPanes.length === 0) return;
@@ -5680,7 +5704,7 @@ print(f&quot;R2 점수: {r2_default}&quot;)</code></pre>
 
           textNodes.forEach(tNode => {
             const parent = tNode.parentElement;
-            if (parent && (parent.classList.contains('interactive-kw') || parent.classList.contains('kw-clickable'))) return;
+            if (parent && (parent.classList.contains('interactive-kw') || parent.classList.contains('kw-clickable') || parent.closest('.interactive-kw'))) return;
 
             const text = tNode.nodeValue;
             const idx = text.indexOf(fn);
@@ -5699,6 +5723,7 @@ print(f&quot;R2 점수: {r2_default}&quot;)</code></pre>
               const info = funcMap.get(fn);
               span.dataset.step = info.stepId;
               span.dataset.tab = info.tabId;
+              span.dataset.func = fn;
               span.onclick = function(e) {
                 e.stopPropagation();
                 switchTab(info.stepId, info.tabId);
@@ -5711,40 +5736,41 @@ print(f&quot;R2 점수: {r2_default}&quot;)</code></pre>
       });
     }
 
-    // 4. Intelligent Click Handler
+    // 4. Robust Intelligent Click Handler (Handles inner tokens, dotted methods, and plain text)
     document.addEventListener('click', function(e) {
       const codeWrapper = e.target.closest('.code-editor-look') || e.target.closest('code') || e.target.closest('pre');
       if (!codeWrapper) return;
 
-      let word = '';
-      if (e.target.classList.contains('interactive-kw') || e.target.classList.contains('kw-clickable')) {
-        const stepId = e.target.dataset.step;
-        const tabId = e.target.dataset.tab;
+      // 4.1 Directly check if clicked element is or is inside an .interactive-kw
+      const interactiveEl = e.target.closest('.interactive-kw') || e.target.closest('.kw-clickable');
+      if (interactiveEl) {
+        const stepId = interactiveEl.dataset.step;
+        const tabId = interactiveEl.dataset.tab;
         if (tabId) {
           switchTab(stepId, tabId);
           return;
         }
       }
 
-      const targetTxt = e.target.textContent.trim().replace(/[^a-zA-Z0-9_.]/g, '');
-      if (targetTxt && targetTxt.length >= 2) {
-        word = targetTxt;
-      }
-
-      if (!word) return;
+      // 4.2 Intelligent keyword matching by text
+      let word = e.target.textContent.trim().replace(/[^a-zA-Z0-9_.]/g, '');
+      if (!word || word.length < 2) return;
 
       const allPanes = Array.from(document.querySelectorAll('.func-note-pane'));
+      
+      // Exact match
       let foundPane = allPanes.find(p => {
         const badge = p.querySelector('.note-target-badge code') || p.querySelector('.target-func-name');
         return badge && badge.textContent.trim() === word;
       });
 
+      // Dotted method matching (e.g. clicking 'models' or 'items' in 'models.items')
       if (!foundPane) {
         foundPane = allPanes.find(p => {
           const badge = p.querySelector('.note-target-badge code') || p.querySelector('.target-func-name');
           if (!badge) return false;
           const fn = badge.textContent.trim();
-          return fn === word || fn.endsWith('.' + word) || word.endsWith('.' + fn);
+          return fn === word || fn.endsWith('.' + word) || fn.startsWith(word + '.') || word.endsWith('.' + fn) || word.startsWith(fn + '.');
         });
       }
 
