@@ -890,6 +890,9 @@
     
 
   
+    
+
+  
     /* ==========================================================================
        Golden Standard Split-Screen Architecture (방안 2: 좌우 50% 완전 독립 분할 뷰)
        ========================================================================== */
@@ -953,10 +956,17 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0.75rem 1.25rem;
+      padding: 0.65rem 1.25rem;
       background: var(--bg-card);
       border-bottom: 1px solid var(--border-subtle);
       flex-shrink: 0;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .desk-header-left-box {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
     }
     .desk-header-title {
       font-size: 0.86rem;
@@ -964,7 +974,7 @@
       color: var(--accent-primary);
       display: flex;
       align-items: center;
-      gap: 0.6rem;
+      gap: 0.4rem;
     }
     .desk-status-pill {
       font-size: 0.74rem;
@@ -980,6 +990,23 @@
       background: rgba(52, 211, 153, 0.18);
       border-color: rgba(52, 211, 153, 0.4);
       color: #34d399;
+    }
+
+    /* 우측 상단 단계 원터치 셀렉터 */
+    .desk-step-dropdown {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 0.28rem 0.65rem;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+    .desk-step-dropdown:hover, .desk-step-dropdown:focus {
+      border-color: var(--accent-primary);
     }
 
     /* 우측 탭 네비게이션 영역 (다중행 래핑으로 모든 탭 한눈에 노출) */
@@ -2749,6 +2776,9 @@ for label, color in <span class="interactive-kw" onclick="activateNoteTab('step6
   
 
 
+  
+
+
   <!-- Golden Standard Split-Screen Architecture Script -->
   <script>
     // 1. Safe Theme Handler
@@ -2772,11 +2802,14 @@ for label, color in <span class="interactive-kw" onclick="activateNoteTab('step6
     })();
 
     // 2. Universal Note Switcher
+    let currentStepIdGlobal = '';
+
     function switchTab(stepId, tabId) {
       if (!tabId) return;
 
-      // Step Group 헤더 전환
       if (stepId) {
+        currentStepIdGlobal = stepId;
+        // Step Group 헤더 전환
         document.querySelectorAll('.notes-tabs-header').forEach(hdr => {
           if (hdr.dataset.stepGroup === stepId) {
             hdr.style.display = 'block';
@@ -2784,6 +2817,9 @@ for label, color in <span class="interactive-kw" onclick="activateNoteTab('step6
             hdr.style.display = 'none';
           }
         });
+        // 드롭다운 값 동기화
+        const dropdown = document.getElementById('desk-step-dropdown');
+        if (dropdown) dropdown.value = stepId;
       }
 
       // 탭 버튼 active 전환
@@ -2816,7 +2852,7 @@ for label, color in <span class="interactive-kw" onclick="activateNoteTab('step6
       // 상태 뱃지 업데이트
       const statusPill = document.getElementById('desk-status-pill');
       if (statusPill && targetName) {
-        statusPill.textContent = '열림: ' + targetName;
+        statusPill.textContent = targetName;
         statusPill.classList.add('active');
       }
 
@@ -2829,12 +2865,11 @@ for label, color in <span class="interactive-kw" onclick="activateNoteTab('step6
       switchTab(stepId, tabId);
     }
 
-    // 3. Keyword Underline Restoration & Click Attachment
+    // 3. Keyword Underline Restoration
     function rebindInteractiveKeywords() {
       const allPanes = Array.from(document.querySelectorAll('.func-note-pane'));
       if (allPanes.length === 0) return;
 
-      // Map function names to pane info
       const funcMap = new Map();
       allPanes.forEach(p => {
         const badge = p.querySelector('.note-target-badge code') || p.querySelector('.target-func-name');
@@ -2846,11 +2881,9 @@ for label, color in <span class="interactive-kw" onclick="activateNoteTab('step6
         }
       });
 
-      // Sort by length descending to match longer keywords first
       const sortedKeys = Array.from(funcMap.keys()).sort((a, b) => b.length - a.length);
 
       document.querySelectorAll('.code-editor-look code').forEach(codeElem => {
-        // Find text nodes or span tokens
         sortedKeys.forEach(fn => {
           const treeWalker = document.createTreeWalker(codeElem, NodeFilter.SHOW_TEXT, null, false);
           const textNodes = [];
@@ -2863,7 +2896,6 @@ for label, color in <span class="interactive-kw" onclick="activateNoteTab('step6
             const text = tNode.nodeValue;
             const idx = text.indexOf(fn);
             if (idx !== -1) {
-              // Ensure word boundary
               const before = idx > 0 ? text[idx - 1] : ' ';
               const after = (idx + fn.length < text.length) ? text[idx + fn.length] : ' ';
               if (/^[a-zA-Z0-9_]$/.test(before) || /^[a-zA-Z0-9_]$/.test(after)) return;
@@ -2890,12 +2922,11 @@ for label, color in <span class="interactive-kw" onclick="activateNoteTab('step6
       });
     }
 
-    // 4. Intelligent Click Handler (Fallback for any word clicked inside code)
+    // 4. Intelligent Click Handler
     document.addEventListener('click', function(e) {
       const codeWrapper = e.target.closest('.code-editor-look') || e.target.closest('code') || e.target.closest('pre');
       if (!codeWrapper) return;
 
-      // Extract clicked word
       let word = '';
       if (e.target.classList.contains('interactive-kw') || e.target.classList.contains('kw-clickable')) {
         const stepId = e.target.dataset.step;
@@ -2906,7 +2937,6 @@ for label, color in <span class="interactive-kw" onclick="activateNoteTab('step6
         }
       }
 
-      // Fallback: check target text
       const targetTxt = e.target.textContent.trim().replace(/[^a-zA-Z0-9_.]/g, '');
       if (targetTxt && targetTxt.length >= 2) {
         word = targetTxt;
@@ -2914,7 +2944,6 @@ for label, color in <span class="interactive-kw" onclick="activateNoteTab('step6
 
       if (!word) return;
 
-      // Find matching pane
       const allPanes = Array.from(document.querySelectorAll('.func-note-pane'));
       let foundPane = allPanes.find(p => {
         const badge = p.querySelector('.note-target-badge code') || p.querySelector('.target-func-name');
@@ -2952,14 +2981,16 @@ for label, color in <span class="interactive-kw" onclick="activateNoteTab('step6
       rightPane.className = 'split-pane-right';
       rightPane.id = 'split-right-pane';
 
-      // 우측 상단 고정 헤더 바
+      // 우측 상단 고정 헤더 데스크 바 (단계 드롭다운 셀렉터 탑재)
       const deskHeader = document.createElement('div');
       deskHeader.className = 'desk-header-bar';
       deskHeader.innerHTML = `
-        <div class="desk-header-title">
-          <span>📖 AI 학습 노트 데스크</span>
+        <div class="desk-header-left-box">
+          <span class="desk-header-title">📖 AI 학습 노트 데스크</span>
           <span class="desk-status-pill" id="desk-status-pill">선택 대기</span>
         </div>
+        <select class="desk-step-dropdown" id="desk-step-dropdown" onchange="onDropdownStepChange(this.value)">
+        </select>
       `;
       rightPane.appendChild(deskHeader);
 
@@ -2982,6 +3013,7 @@ for label, color in <span class="interactive-kw" onclick="activateNoteTab('step6
       // 스텝 섹션 재배치
       let firstStepId = '';
       let firstTabId = '';
+      const stepOptions = [];
 
       const sections = Array.from(main.querySelectorAll('.step-section'));
       sections.forEach((sec, idx) => {
@@ -2992,6 +3024,11 @@ for label, color in <span class="interactive-kw" onclick="activateNoteTab('step6
         const codeCol = sec.querySelector('.grid-col-code') || sec.querySelector('.code-column');
         const notesCol = sec.querySelector('.grid-col-notes') || sec.querySelector('.notes-column');
 
+        // 스텝 타이틀 추출
+        let stepTitleText = '단계 ' + (idx + 1);
+        const titleEl = sec.querySelector('.step-title-text') || sec.querySelector('.step-title');
+        if (titleEl) stepTitleText = titleEl.textContent.trim().split(':')[0];
+
         const leftSec = document.createElement('section');
         leftSec.className = 'step-code-section';
         leftSec.id = stepId;
@@ -2999,6 +3036,7 @@ for label, color in <span class="interactive-kw" onclick="activateNoteTab('step6
         if (codeCol) leftSec.appendChild(codeCol);
         leftPane.appendChild(leftSec);
 
+        let noteCountInStep = 0;
         if (notesCol) {
           const tabsHeader = notesCol.querySelector('.notes-tabs-header');
           const panesWrapper = notesCol.querySelector('.notes-panes-wrapper') || notesCol.querySelector('.notes-content-wrapper');
@@ -3009,7 +3047,9 @@ for label, color in <span class="interactive-kw" onclick="activateNoteTab('step6
             activeTabsArea.appendChild(tabsHeader);
           }
           if (panesWrapper) {
-            Array.from(panesWrapper.children).forEach((pane, pIdx) => {
+            const panes = Array.from(panesWrapper.children);
+            noteCountInStep = panes.length;
+            panes.forEach((pane, pIdx) => {
               pane.dataset.stepGroup = stepId;
               if (idx === 0 && pIdx === 0) {
                 firstTabId = pane.id;
@@ -3024,6 +3064,11 @@ for label, color in <span class="interactive-kw" onclick="activateNoteTab('step6
           }
         }
 
+        stepOptions.push({
+          id: stepId,
+          text: (idx + 1) + '단계: ' + stepTitleText + ' (' + noteCountInStep + '개 MD)'
+        });
+
         sec.remove();
       });
 
@@ -3031,15 +3076,26 @@ for label, color in <span class="interactive-kw" onclick="activateNoteTab('step6
       main.appendChild(leftPane);
       main.appendChild(rightPane);
 
+      // 드롭다운 옵션 채우기
+      const dropdown = document.getElementById('desk-step-dropdown');
+      if (dropdown) {
+        stepOptions.forEach(opt => {
+          const opEl = document.createElement('option');
+          opEl.value = opt.id;
+          opEl.textContent = opt.text;
+          dropdown.appendChild(opEl);
+        });
+      }
+
       // 첫 번째 노트 자동 오픈
       if (firstStepId && firstTabId) {
         switchTab(firstStepId, firstTabId);
       }
 
-      // 키워드 점선 밑줄 복원 실행
+      // 키워드 점선 밑줄 복원
       setTimeout(rebindInteractiveKeywords, 150);
 
-      // 상단 스텝 바 클릭 시 좌측 패널 스무스 스크롤 & 해당 스텝 탭 헤더 전환
+      // 상단 스텝 바 클릭 연동
       document.querySelectorAll('.step-nav-item').forEach(btn => {
         btn.addEventListener('click', (e) => {
           e.preventDefault();
@@ -3048,23 +3104,11 @@ for label, color in <span class="interactive-kw" onclick="activateNoteTab('step6
           if (targetElem) {
             targetElem.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
-          // 해당 스텝의 탭 헤더 전환
-          document.querySelectorAll('.notes-tabs-header').forEach(hdr => {
-            if (hdr.dataset.stepGroup === targetId) {
-              hdr.style.display = 'block';
-              const firstBtn = hdr.querySelector('.func-tab-btn');
-              if (firstBtn) {
-                const tabId = firstBtn.getAttribute('data-tab');
-                switchTab(targetId, tabId);
-              }
-            } else {
-              hdr.style.display = 'none';
-            }
-          });
+          changeStepTabs(targetId);
         });
       });
 
-      // 좌측 패널 스크롤 감지
+      // 좌측 스크롤 시 우측 탭 실시간 ScrollSync 연동!
       leftPane.addEventListener('scroll', () => {
         const leftSecs = leftPane.querySelectorAll('.step-code-section');
         const navItems = document.querySelectorAll('.step-nav-item');
@@ -3072,12 +3116,14 @@ for label, color in <span class="interactive-kw" onclick="activateNoteTab('step6
         const paneTop = leftPane.scrollTop;
 
         leftSecs.forEach(sec => {
-          if (sec.offsetTop - 180 <= paneTop) {
+          if (sec.offsetTop - 200 <= paneTop) {
             currentId = sec.id;
           }
         });
 
-        if (currentId) {
+        if (currentId && currentId !== currentStepIdGlobal) {
+          currentStepIdGlobal = currentId;
+
           navItems.forEach(item => {
             if (item.getAttribute('data-step') === currentId) {
               item.classList.add('active');
@@ -3085,8 +3131,47 @@ for label, color in <span class="interactive-kw" onclick="activateNoteTab('step6
               item.classList.remove('active');
             }
           });
+
+          // 우측 탭 헤더 실시간 교체!
+          document.querySelectorAll('.notes-tabs-header').forEach(hdr => {
+            if (hdr.dataset.stepGroup === currentId) {
+              hdr.style.display = 'block';
+            } else {
+              hdr.style.display = 'none';
+            }
+          });
+
+          if (dropdown) dropdown.value = currentId;
         }
       });
+    }
+
+    // 드롭다운 변경 시 실행 함수
+    window.onDropdownStepChange = function(targetStepId) {
+      const leftPane = document.getElementById('split-left-pane');
+      const targetElem = leftPane ? leftPane.querySelector('#' + targetStepId) : null;
+      if (targetElem) {
+        targetElem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      changeStepTabs(targetStepId);
+    };
+
+    function changeStepTabs(targetStepId) {
+      currentStepIdGlobal = targetStepId;
+      document.querySelectorAll('.notes-tabs-header').forEach(hdr => {
+        if (hdr.dataset.stepGroup === targetStepId) {
+          hdr.style.display = 'block';
+          const firstBtn = hdr.querySelector('.func-tab-btn');
+          if (firstBtn) {
+            const tabId = firstBtn.getAttribute('data-tab');
+            switchTab(targetStepId, tabId);
+          }
+        } else {
+          hdr.style.display = 'none';
+        }
+      });
+      const dropdown = document.getElementById('desk-step-dropdown');
+      if (dropdown) dropdown.value = targetStepId;
     }
 
     if (document.readyState === 'loading') {
