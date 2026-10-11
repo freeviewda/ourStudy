@@ -4472,14 +4472,14 @@ plt.show()</code></pre>
       const next = current === 'dark' ? 'light' : 'dark';
       html.setAttribute('data-theme', next);
       localStorage.setItem('study_theme', next);
-      localStorage.setItem(cfg['theme_key'], next);
+      // cfg theme key save removed
       
       const btn = document.getElementById('theme-toggle-btn');
       if (btn) btn.textContent = next === 'dark' ? '☀️ 라이트 모드' : '🌙 다크 모드';
     }
 
     (function initTheme() {
-      let saved = localStorage.getItem('study_theme') || localStorage.getItem(cfg['theme_key']);
+      let saved = localStorage.getItem('study_theme') || 'dark';
       if (saved) {
         document.documentElement.setAttribute('data-theme', saved);
         const btn = document.getElementById('theme-toggle-btn');
@@ -4544,15 +4544,15 @@ plt.show()</code></pre>
     if (window.Prism && Prism.languages.python) {
       Prism.languages.insertBefore('python', 'keyword', {
         'class-name': {
-          pattern: /[A-Z][a-zA-Z0-9_]*/,
+          pattern: /\b[A-Z][a-zA-Z0-9_]*\b/,
           lookbehind: false
         },
         'function': {
-          pattern: /[a-zA-Z_][a-zA-Z0-9_]*(?=\s*\()/,
+          pattern: /\b[a-zA-Z_][a-zA-Z0-9_]*(?=\s*\()/,
           lookbehind: false
         }
       });
-      Prism.languages.python['identifier'] = /[a-zA-Z_][a-zA-Z0-9_]*/;
+      Prism.languages.python['identifier'] = /\b[a-zA-Z_][a-zA-Z0-9_]*\b/;
     }
 
     // 3. Universal Note Switcher
@@ -4650,10 +4650,10 @@ plt.show()</code></pre>
 
     // 4. Intelligent Universal Step-Scoped Click Handler on Code Tokens
     document.addEventListener('click', function(e) {
-      const tok = e.target.closest('.token');
-      if (!tok) return;
-      const codeBlock = tok.closest('.code-editor-look code');
+      const codeBlock = e.target.closest('.code-editor-look code') || e.target.closest('code');
       if (!codeBlock) return;
+      const tok = e.target.closest('.token') || e.target;
+      if (!tok) return;
 
       let word = tok.textContent.trim().replace(/[^a-zA-Z0-9_.]/g, '');
       if (!word) return;
