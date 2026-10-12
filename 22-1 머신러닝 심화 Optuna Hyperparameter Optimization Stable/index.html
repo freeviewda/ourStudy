@@ -834,14 +834,19 @@
       color: var(--accent-secondary);
       font-weight: 700;
     }
-    .note-body-content code.inline-code {
-      background: var(--bg-elevated);
-      color: var(--accent-primary);
-      padding: 0.1rem 0.35rem;
-      border-radius: 4px;
-      font-family: var(--font-mono);
-      font-size: 0.84rem;
+        .inline-code, .note-body-content code:not([class*="language-"]), .func-note-pane code:not([class*="language-"]) {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.84em;
+      background: var(--bg-card);
       border: 1px solid var(--border-subtle);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      color: #f59e0b !important;
+    }
+    :root[data-theme="light"] .inline-code,
+    :root[data-theme="light"] .note-body-content code:not([class*="language-"]),
+    :root[data-theme="light"] .func-note-pane code:not([class*="language-"]) {
+      color: #d97706 !important;
     }
     .note-code-block {
       background: #2d2d2d !important;
