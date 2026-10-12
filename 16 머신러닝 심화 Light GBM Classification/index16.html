@@ -1141,7 +1141,84 @@
       }
     }
 
-  </style>
+  
+    /* === Golden Standard AI Learning Notes Styling (Module 16 Identity) === */
+    .note-body-content code.inline-code,
+    .note-body-content p code,
+    .note-body-content li code,
+    .inline-code,
+    .func-note-pane code:not([class*="language-"]) {
+      background: var(--bg-card) !important;
+      color: #f59e0b !important;
+      border: 1px solid var(--border-subtle) !important;
+      border-radius: 4px;
+      padding: 0.15rem 0.4rem;
+      font-size: 0.86rem;
+      font-family: 'Fira Code', monospace;
+      font-weight: 500;
+    }
+    :root[data-theme="light"] .note-body-content code.inline-code,
+    :root[data-theme="light"] .note-body-content p code,
+    :root[data-theme="light"] .note-body-content li code,
+    :root[data-theme="light"] .inline-code,
+    :root[data-theme="light"] .func-note-pane code:not([class*="language-"]) {
+      background: #f1f5f9 !important;
+      color: #d97706 !important;
+      border: 1px solid #cbd5e1 !important;
+    }
+
+    .note-body-content strong,
+    .note-body-content b {
+      color: var(--text-main) !important;
+      font-weight: 700 !important;
+    }
+
+    .note-h1 {
+      color: var(--text-main) !important;
+      font-size: 1.4rem !important;
+      font-weight: 800 !important;
+      border-bottom: 1px solid var(--border-subtle) !important;
+      padding-bottom: 0.4rem;
+    }
+    .note-h3 {
+      color: var(--text-main) !important;
+      font-size: 1.05rem !important;
+      font-weight: 700 !important;
+    }
+    .note-h4 {
+      color: var(--text-muted) !important;
+      font-weight: 700 !important;
+    }
+
+    /* 우측 패널 딥 네이비 (#101726) 배경 및 데스크 헤더 (#172136) 완벽 동기화 */
+    :root[data-theme="dark"] .split-pane-right,
+    :root[data-theme="dark"] .active-panes-area {
+      background: var(--bg-surface) !important;
+    }
+    :root[data-theme="dark"] .split-pane-left {
+      background: var(--bg-base) !important;
+    }
+    :root[data-theme="dark"] .desk-header-bar,
+    :root[data-theme="dark"] .notes-tabs-header,
+    :root[data-theme="dark"] .active-tabs-area {
+      background: var(--bg-card) !important;
+      border-bottom: 1px solid var(--border-subtle) !important;
+    }
+
+    /* 탭 활성 버튼: 세련된 쿨 블루 그라데이션 */
+    .func-tab-btn.active {
+      background: linear-gradient(135deg, #0284c7 0%, #6366f1 100%) !important;
+      border-color: transparent !important;
+      color: #ffffff !important;
+      font-weight: 600 !important;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3) !important;
+    }
+    .func-tab-btn.active .tab-func-name {
+      color: #ffffff !important;
+    }
+
+    /* === End Golden Standard === */
+</style>
 </head>
 <body>
 

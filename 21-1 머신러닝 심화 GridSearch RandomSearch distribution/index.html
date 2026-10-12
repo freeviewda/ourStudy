@@ -1336,101 +1336,30 @@
       background: transparent !important;
       color: #cccccc !important;
     }
-    .note-body-content code.inline-code,
+        .note-body-content code.inline-code,
     .note-body-content p code,
-    .note-body-content li code {
-      background: #282828 !important;
-      color: #e0e0e0 !important;
-      border: 1px solid #3c3c3c !important;
+    .note-body-content li code,
+    .inline-code,
+    .func-note-pane code:not([class*="language-"]) {
+      background: var(--bg-card) !important;
+      color: #f59e0b !important;
+      border: 1px solid var(--border-subtle) !important;
       border-radius: 4px;
       padding: 0.15rem 0.35rem;
       font-size: 0.86rem;
+      font-family: 'Fira Code', monospace;
+    }
+    :root[data-theme="light"] .note-body-content code.inline-code,
+    :root[data-theme="light"] .note-body-content p code,
+    :root[data-theme="light"] .note-body-content li code,
+    :root[data-theme="light"] .inline-code,
+    :root[data-theme="light"] .func-note-pane code:not([class*="language-"]) {
+      background: #f1f5f9 !important;
+      color: #d97706 !important;
+      border: 1px solid #cbd5e1 !important;
     }
 
-    /* 4. Dark Theme Surface Fine-Tuning (#181818 / #1f1f1f / #cccccc) */
-    :root[data-theme="dark"] .split-pane-left {
-      background: #181818 !important;
-    }
-    :root[data-theme="dark"] .split-pane-right,
-    :root[data-theme="dark"] .active-panes-area {
-      background: #1f1f1f !important;
-    }
-    :root[data-theme="dark"] .note-body-content {
-      color: #cccccc !important;
-    }
-    :root[data-theme="dark"] .desk-header-bar {
-      background: #252526 !important;
-      border-bottom: 1px solid #333333 !important;
-    }
-    :root[data-theme="dark"] .notes-tabs-header {
-      background: #252526 !important;
-      border-bottom: 1px solid #333333 !important;
-    }
-
-    /* 5. Antigravity Soft White & Header Palette (No Glare, Calmer Highlights) */
-    /* (1) Active Tab Button: Softer Sky-Indigo Gradient & Off-White Text */
-    .func-tab-btn.active {
-      background: linear-gradient(135deg, #0284c7 0%, #6366f1 100%) !important;
-      border-color: transparent !important;
-      color: #f1f5f9 !important;
-      font-weight: 600 !important;
-      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.25) !important;
-    }
-    .func-tab-btn.active .tab-func-name {
-      color: #f1f5f9 !important;
-    }
-
-    /* (2) AI Learning Notes Headings: Soft Silver-Gray H1 (#d4d4d4) */
-    .note-h1 {
-      color: #d4d4d4 !important;
-      font-size: 1.35rem !important;
-      font-weight: 700 !important;
-      border-bottom: 1px solid #333333 !important;
-      letter-spacing: -0.01em;
-    }
-    .note-h2 {
-      color: #38bdf8 !important;
-      font-weight: 700 !important;
-    }
-    .note-h3 {
-      color: #d4d4d4 !important;
-      font-weight: 600 !important;
-    }
-    .note-h4 {
-      color: #a3a3a3 !important;
-      font-weight: 600 !important;
-    }
-    .note-body-content strong,
-    .note-body-content b {
-      color: #e0e0e0 !important;
-      font-weight: 600 !important;
-    }
-    .note-target-badge {
-      color: #d4d4d4 !important;
-    }
-    .note-time-badge {
-      color: #858585 !important;
-    }
-
-    /* (3) Nav Pill & UI Buttons: Gentle off-white (#f1f5f9 / #e2e8f0) */
-    .step-nav-item.active {
-      background: linear-gradient(135deg, #0284c7 0%, #6366f1 100%) !important;
-      color: #f1f5f9 !important;
-      font-weight: 600 !important;
-      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.25) !important;
-    }
-    .step-nav-item.active .nav-note-badge {
-      background: rgba(255, 255, 255, 0.18) !important;
-      color: #f1f5f9 !important;
-    }
-    .copy-code-btn:hover,
-    .toggle-output-btn:hover {
-      color: #e2e8f0 !important;
-    }
-    .desk-header-title {
-      color: #38bdf8 !important;
-      font-weight: 700 !important;
-    }
+    
     .module-hero h2 {
       background: linear-gradient(135deg, #e0e0e0 30%, #38bdf8 80%, #818cf8 100%) !important;
       -webkit-background-clip: text !important;
@@ -1446,7 +1375,84 @@
       border: none !important;
       visibility: hidden !important;
     }
-  </style>
+  
+    /* === Golden Standard AI Learning Notes Styling (Module 16 Identity) === */
+    .note-body-content code.inline-code,
+    .note-body-content p code,
+    .note-body-content li code,
+    .inline-code,
+    .func-note-pane code:not([class*="language-"]) {
+      background: var(--bg-card) !important;
+      color: #f59e0b !important;
+      border: 1px solid var(--border-subtle) !important;
+      border-radius: 4px;
+      padding: 0.15rem 0.4rem;
+      font-size: 0.86rem;
+      font-family: 'Fira Code', monospace;
+      font-weight: 500;
+    }
+    :root[data-theme="light"] .note-body-content code.inline-code,
+    :root[data-theme="light"] .note-body-content p code,
+    :root[data-theme="light"] .note-body-content li code,
+    :root[data-theme="light"] .inline-code,
+    :root[data-theme="light"] .func-note-pane code:not([class*="language-"]) {
+      background: #f1f5f9 !important;
+      color: #d97706 !important;
+      border: 1px solid #cbd5e1 !important;
+    }
+
+    .note-body-content strong,
+    .note-body-content b {
+      color: var(--text-main) !important;
+      font-weight: 700 !important;
+    }
+
+    .note-h1 {
+      color: var(--text-main) !important;
+      font-size: 1.4rem !important;
+      font-weight: 800 !important;
+      border-bottom: 1px solid var(--border-subtle) !important;
+      padding-bottom: 0.4rem;
+    }
+    .note-h3 {
+      color: var(--text-main) !important;
+      font-size: 1.05rem !important;
+      font-weight: 700 !important;
+    }
+    .note-h4 {
+      color: var(--text-muted) !important;
+      font-weight: 700 !important;
+    }
+
+    /* 우측 패널 딥 네이비 (#101726) 배경 및 데스크 헤더 (#172136) 완벽 동기화 */
+    :root[data-theme="dark"] .split-pane-right,
+    :root[data-theme="dark"] .active-panes-area {
+      background: var(--bg-surface) !important;
+    }
+    :root[data-theme="dark"] .split-pane-left {
+      background: var(--bg-base) !important;
+    }
+    :root[data-theme="dark"] .desk-header-bar,
+    :root[data-theme="dark"] .notes-tabs-header,
+    :root[data-theme="dark"] .active-tabs-area {
+      background: var(--bg-card) !important;
+      border-bottom: 1px solid var(--border-subtle) !important;
+    }
+
+    /* 탭 활성 버튼: 세련된 쿨 블루 그라데이션 */
+    .func-tab-btn.active {
+      background: linear-gradient(135deg, #0284c7 0%, #6366f1 100%) !important;
+      border-color: transparent !important;
+      color: #ffffff !important;
+      font-weight: 600 !important;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3) !important;
+    }
+    .func-tab-btn.active .tab-func-name {
+      color: #ffffff !important;
+    }
+
+    /* === End Golden Standard === */
+</style>
 </head>
 <body>
 
