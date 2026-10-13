@@ -2092,7 +2092,7 @@ def set_all_seeds(seed=42):
     - 환경 변수 (재현성 확보)
     &quot;&quot;&quot;
     random.seed(seed)
-    random.seed&gt;np.random.seed(seed)
+    np.random.seed(seed)
 
     # 환경 변수 설정 (일부 라이브러리에서 사용)
     import os
