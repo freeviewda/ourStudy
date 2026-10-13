@@ -2298,7 +2298,7 @@ axes[1, 0].set_title(&#x27;Gender vs Target&#x27;)
 axes[1, 0].set_xticklabels([&#x27;Female (0)&#x27;, &#x27;Male (1)&#x27;], rotation=0)
 
 corr_with_target = df.corr()[&#x27;target&#x27;].drop(&#x27;target&#x27;).sort_values()
-plot&gt;corr_with_target.plot(kind=&#x27;barh&#x27;, ax=axes[1, 1], alpha=0.7, color=&#x27;steelblue&#x27;)
+corr_with_target.plot(kind=&#x27;barh&#x27;, ax=axes[1, 1], alpha=0.7, color=&#x27;steelblue&#x27;)
 axes[1, 1].set_title(&#x27;Correlation with Target&#x27;)
 
 plt.tight_layout()

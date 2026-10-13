@@ -5319,7 +5319,7 @@ improvement_df = pd.DataFrame(improvement_data)
 print(&quot;\n&quot; + &quot;=&quot;*80)
 print(&quot;성능 개선률 (Baseline 대비 %)&quot;)
 print(&quot;=&quot;*80)
-print(to_string&gt;improvement_df.to_string(index=False))</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>
+print(improvement_df.to_string(index=False))</code></pre></div><div class="cell-outputs-container"><div class="outputs-header"><span class="outputs-title">⚡ 실행 결과 (1)</span><button class="toggle-output-btn" onclick="toggleOutput(this)">접기 ▲</button></div><div class="outputs-body"><div class="output-item stream-output"><div class="output-type-tag">Console Output</div><pre>
 ================================================================================
 성능 개선률 (Baseline 대비 %)
 ================================================================================
@@ -5332,7 +5332,7 @@ fig, axes = plt.subplots(2, 2, figsize=(8, 6))
 
 # 1. Test Accuracy 비교
 ax1 = axes[0, 0]
-pivot_acc = pivot_table&gt;summary_df.pivot_table(values=&#x27;Test Accuracy&#x27;, index=&#x27;Model&#x27;, columns=&#x27;Method&#x27;)
+pivot_acc = summary_df.pivot_table(values=&#x27;Test Accuracy&#x27;, index=&#x27;Model&#x27;, columns=&#x27;Method&#x27;)
 pivot_acc[[&#x27;Baseline&#x27;, &#x27;GridSearch&#x27;, &#x27;RandomSearch&#x27;]].plot(kind=&#x27;bar&#x27;, ax=ax1, color=[&#x27;lightgray&#x27;, &#x27;orange&#x27;, &#x27;lightgreen&#x27;])
 ax1.set_title(&#x27;Test Accuracy 비교&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
 ax1.set_ylabel(&#x27;Accuracy&#x27;)
@@ -5343,7 +5343,7 @@ ax1.set_xticklabels(ax1.get_xticklabels(), rotation=0)
 
 # 2. F1-Score 비교
 ax2 = axes[0, 1]
-pivot_f1 = pivot_table&gt;summary_df.pivot_table(values=&#x27;Test F1-Score&#x27;, index=&#x27;Model&#x27;, columns=&#x27;Method&#x27;)
+pivot_f1 = summary_df.pivot_table(values=&#x27;Test F1-Score&#x27;, index=&#x27;Model&#x27;, columns=&#x27;Method&#x27;)
 pivot_f1[[&#x27;Baseline&#x27;, &#x27;GridSearch&#x27;, &#x27;RandomSearch&#x27;]].plot(kind=&#x27;bar&#x27;, ax=ax2, color=[&#x27;lightgray&#x27;, &#x27;orange&#x27;, &#x27;lightgreen&#x27;])
 ax2.set_title(&#x27;F1-Score 비교&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
 ax2.set_ylabel(&#x27;F1-Score&#x27;)
@@ -5355,7 +5355,7 @@ ax2.set_xticklabels(ax2.get_xticklabels(), rotation=0)
 # 3. 탐색 시간 비교
 ax3 = axes[1, 0]
 pivot_time = summary_df[summary_df[&#x27;Method&#x27;] != &#x27;Baseline&#x27;].pivot_table(values=&#x27;Search Time&#x27;, index=&#x27;Model&#x27;, columns=&#x27;Method&#x27;)
-plot&gt;pivot_time.plot(kind=&#x27;bar&#x27;, ax=ax3, color=[&#x27;orange&#x27;, &#x27;lightgreen&#x27;])
+pivot_time.plot(kind=&#x27;bar&#x27;, ax=ax3, color=[&#x27;orange&#x27;, &#x27;lightgreen&#x27;])
 ax3.set_title(&#x27;탐색 시간 비교 (GridSearch vs RandomSearch)&#x27;, fontsize=12, fontweight=&#x27;bold&#x27;)
 ax3.set_ylabel(&#x27;Time (seconds)&#x27;)
 ax3.set_xlabel(&#x27;&#x27;)
@@ -8311,7 +8311,7 @@ ax1.set_title(&#x27;Test Accuracy Heatmap: All Models × Methods&#x27;, fontsize
 ax2 = fig.add_subplot(gs[1, 0])
 method_avg = summary_df.groupby(&#x27;Method&#x27;)[&#x27;Test Accuracy&#x27;].mean().sort_values(ascending=False)
 colors = [&#x27;lightgray&#x27;, &#x27;lightgreen&#x27;, &#x27;orange&#x27;]
-plot&gt;method_avg.plot(kind=&#x27;barh&#x27;, ax=ax2, color=colors)
+method_avg.plot(kind=&#x27;barh&#x27;, ax=ax2, color=colors)
 ax2.set_xlabel(&#x27;Average Test Accuracy&#x27;)
 ax2.set_title(&#x27;Average Performance by Method&#x27;, fontweight=&#x27;bold&#x27;)
 ax2.grid(axis=&#x27;x&#x27;, alpha=0.3)
@@ -8319,7 +8319,7 @@ ax2.grid(axis=&#x27;x&#x27;, alpha=0.3)
 # 3. 모델별 평균 정확도
 ax3 = fig.add_subplot(gs[1, 1])
 model_avg = summary_df.groupby(&#x27;Model&#x27;)[&#x27;Test Accuracy&#x27;].mean().sort_values(ascending=False)
-plot&gt;model_avg.plot(kind=&#x27;barh&#x27;, ax=ax3, color=&#x27;skyblue&#x27;)
+model_avg.plot(kind=&#x27;barh&#x27;, ax=ax3, color=&#x27;skyblue&#x27;)
 ax3.set_xlabel(&#x27;Average Test Accuracy&#x27;)
 ax3.set_title(&#x27;Average Performance by Model&#x27;, fontweight=&#x27;bold&#x27;)
 ax3.grid(axis=&#x27;x&#x27;, alpha=0.3)
@@ -8328,7 +8328,7 @@ ax3.grid(axis=&#x27;x&#x27;, alpha=0.3)
 ax4 = fig.add_subplot(gs[1, 2])
 time_data = summary_df[summary_df[&#x27;Method&#x27;] != &#x27;Baseline&#x27;]
 time_avg = time_data.groupby(&#x27;Method&#x27;)[&#x27;Search Time&#x27;].mean().sort_values(ascending=True)
-plotime_avg.plot(kind=&#x27;barh&#x27;, ax=ax4, color=[&#x27;lightgreen&#x27;, &#x27;orange&#x27;])
+time_avg.plot(kind=&#x27;barh&#x27;, ax=ax4, color=[&#x27;lightgreen&#x27;, &#x27;orange&#x27;])
 ax4.set_xlabel(&#x27;Average Time (seconds)&#x27;)
 ax4.set_title(&#x27;Average Time by Method&#x27;, fontweight=&#x27;bold&#x27;)
 ax4.grid(axis=&#x27;x&#x27;, alpha=0.3)
